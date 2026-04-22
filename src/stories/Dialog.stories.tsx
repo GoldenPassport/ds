@@ -9,14 +9,27 @@ const meta = {
   component: Dialog,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    title:     { control: 'text',   description: 'Dialog heading' },
+    size:      { control: 'select', options: ['sm', 'md', 'lg'], description: 'Max-width of the dialog panel' },
+    open:      { control: false,    description: 'Controlled open state' },
+    onClose:   { control: false,    description: 'Called when the dialog requests to close' },
+    children:  { control: false,    description: 'Dialog body content' },
+    className: { control: 'text',   description: 'Extra CSS class on the panel' },
   },
 } satisfies Meta<typeof Dialog>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function DialogDemo({ title, size, children }: { title: string; size?: 'sm' | 'md' | 'lg'; children: React.ReactNode }) {
+function DialogDemo({
+  title,
+  size,
+  children,
+}: {
+  title: string;
+  size?: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+}) {
   const [open, setOpen] = React.useState(false);
   return (
     <>
@@ -28,11 +41,34 @@ function DialogDemo({ title, size, children }: { title: string; size?: 'sm' | 'm
   );
 }
 
+export const Playground: Story = {
+  args: { title: 'Dialog Title', size: 'md' },
+  render: (args) => {
+    const [open, setOpen] = React.useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Open Dialog</Button>
+        <Dialog {...args} open={open} onClose={setOpen}>
+          <p className="text-ink-600 dark:text-ink-300">
+            This is the dialog body. Use the controls panel to change the title and size.
+          </p>
+          <Dialog.Footer>
+            <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="primary" onClick={() => setOpen(false)}>Confirm</Button>
+          </Dialog.Footer>
+        </Dialog>
+      </>
+    );
+  },
+};
+
 export const Confirmation: Story = {
   render: () => (
     <DialogDemo title="Delete Workflow" size="sm">
       <p className="text-ink-600 dark:text-ink-300">
-        This will permanently delete <strong className="text-ink-900 dark:text-ink-50">Invoice Approval</strong> and all its run history. This action cannot be undone.
+        This will permanently delete{' '}
+        <strong className="text-ink-900 dark:text-ink-50">Invoice Approval</strong> and all its run
+        history. This action cannot be undone.
       </p>
       <Dialog.Footer>
         <Button variant="ghost">Cancel</Button>
@@ -47,12 +83,23 @@ export const FormDialog: Story = {
     <DialogDemo title="New Workflow" size="md">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-[13px] font-semibold font-body text-ink-900 dark:text-ink-50">Workflow Name</label>
-          <input className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700 text-sm font-body text-ink-900 dark:text-ink-50 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25 transition-all" placeholder="e.g. Invoice Approval Flow" />
+          <label className="text-[13px] font-semibold font-body text-ink-900 dark:text-ink-50">
+            Workflow Name
+          </label>
+          <input
+            className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700 text-sm font-body text-ink-900 dark:text-ink-50 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25 transition-all"
+            placeholder="e.g. Invoice Approval Flow"
+          />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-[13px] font-semibold font-body text-ink-900 dark:text-ink-50">Description</label>
-          <textarea rows={3} className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700 text-sm font-body text-ink-900 dark:text-ink-50 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25 transition-all resize-none" placeholder="Optional description…" />
+          <label className="text-[13px] font-semibold font-body text-ink-900 dark:text-ink-50">
+            Description
+          </label>
+          <textarea
+            rows={3}
+            className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700 text-sm font-body text-ink-900 dark:text-ink-50 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25 transition-all resize-none"
+            placeholder="Optional description…"
+          />
         </div>
       </div>
       <Dialog.Footer>
@@ -67,7 +114,8 @@ export const InfoDialog: Story = {
   render: () => (
     <DialogDemo title="Run Complete" size="sm">
       <p className="text-ink-600 dark:text-ink-300">
-        <strong className="text-ink-900 dark:text-ink-50">Employee Onboarding</strong> completed successfully in 2m 14s across 8 steps.
+        <strong className="text-ink-900 dark:text-ink-50">Employee Onboarding</strong> completed
+        successfully in 2m 14s across 8 steps.
       </p>
       <Dialog.Footer>
         <Button variant="primary">View Run Log</Button>

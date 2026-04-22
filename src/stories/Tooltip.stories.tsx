@@ -9,12 +9,31 @@ const meta = {
   component: Tooltip,
   tags: ['autodocs'],
   argTypes: {
-    placement: { control: 'select', options: ['top', 'bottom', 'left', 'right'] },
+    content:   { control: 'text',   description: 'Text or ReactNode shown inside the tooltip' },
+    placement: { control: 'select', options: ['top', 'bottom', 'left', 'right'], description: 'Preferred placement relative to the trigger' },
+    delay:     { control: 'number', description: 'Hover delay before the tooltip appears (ms)' },
+    children:  { control: false,    description: 'The element that triggers the tooltip on hover' },
+    className: { control: 'text',   description: 'Extra CSS class on the tooltip bubble' },
   },
 } satisfies Meta<typeof Tooltip>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
+  args: {
+    content:   'Run this workflow immediately',
+    placement: 'top',
+    delay:     0,
+  },
+  render: (args) => (
+    <div className="flex justify-center pt-16">
+      <Tooltip {...args}>
+        <Button variant="primary"><Play className="w-4 h-4" /> Deploy</Button>
+      </Tooltip>
+    </div>
+  ),
+};
 
 export const OnButton: Story = {
   render: () => (
@@ -60,6 +79,22 @@ export const AllPlacements: Story = {
           <Badge label="Hover me (right)" variant="ai" />
         </Tooltip>
       </div>
+    </div>
+  ),
+};
+
+export const WithDelay: Story = {
+  render: () => (
+    <div className="flex justify-center gap-6 pt-16">
+      <Tooltip content="No delay" delay={0} placement="top">
+        <Badge label="Instant" variant="neutral" />
+      </Tooltip>
+      <Tooltip content="300ms delay" delay={300} placement="top">
+        <Badge label="300ms" variant="neutral" />
+      </Tooltip>
+      <Tooltip content="800ms delay" delay={800} placement="top">
+        <Badge label="800ms" variant="neutral" />
+      </Tooltip>
     </div>
   ),
 };
