@@ -29,11 +29,12 @@
     "build-storybook": "storybook build"
   },
   "peerDependencies": {
-    "react":             ">=18",
-    "react-dom":         ">=18",
-    "@headlessui/react": ">=2",
-    "lucide-react":      ">=0.400",
-    "tailwindcss":       ">=4"
+    "react":               ">=18",
+    "react-dom":           ">=18",
+    "@headlessui/react":   ">=2",
+    "@floating-ui/react":  ">=0.26",
+    "lucide-react":        ">=0.400",
+    "tailwindcss":         ">=4"
   },
   "devDependencies": {
     "@floating-ui/react":                    "^0.26.0",

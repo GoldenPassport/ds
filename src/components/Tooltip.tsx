@@ -1,12 +1,3 @@
-/**
- * Tooltip — lightweight floating label using @floating-ui/react
- * Shows on hover/focus; accessible via aria-describedby.
- *
- * Usage:
- *   <Tooltip content="Run this workflow now">
- *     <Button variant="primary">Deploy</Button>
- *   </Tooltip>
- */
 import React from 'react';
 import {
   useFloating,
@@ -54,7 +45,7 @@ export function Tooltip({
     ],
   });
 
-  const hover   = useHover(context,   { move: false, delay: { open: delay, close: 100 } });
+  const hover   = useHover(context, { move: false, delay: { open: delay, close: 100 } });
   const focus   = useFocus(context);
   const dismiss = useDismiss(context);
   const role    = useRole(context, { role: 'tooltip' });
@@ -63,15 +54,22 @@ export function Tooltip({
     hover, focus, dismiss, role,
   ]);
 
-  const trigger = React.cloneElement(children, {
-    ref: refs.setReference,
-    'aria-describedby': open ? id : undefined,
-    ...getReferenceProps(),
-  });
-
   return (
     <>
-      {trigger}
+      {/*
+        Wrap in a span so any child (including ones that don't forwardRef)
+        gets the floating-ui reference and interaction props.
+        display:contents keeps the wrapper invisible to layout.
+      */}
+      <span
+        ref={refs.setReference}
+        aria-describedby={open ? id : undefined}
+        style={{ display: 'contents' }}
+        {...getReferenceProps()}
+      >
+        {children}
+      </span>
+
       {open && (
         <FloatingPortal>
           <div
