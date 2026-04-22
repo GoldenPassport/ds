@@ -1,7 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { Play, Copy, Trash2, ExternalLink } from 'lucide-react';
 import { DataTable } from '../components/DataTable';
 import { Badge } from '../components/Badge';
+import { Button } from '../components/Button';
+import { Menu } from '../components/Menu';
 
 const meta = {
   title: 'Components/DataTable',
@@ -172,6 +175,103 @@ export const NoPaginationSizeSelector: Story = {
       pagination={{ pageSize: 5, pageSizeOptions: [], showSummary: true }}
     />
   ),
+};
+
+// ── Action columns ────────────────────────────────────────
+
+export const WithActionButton: Story = {
+  name: 'Actions — single button',
+  render: () => {
+    const columnsWithAction = [
+      ...columns,
+      {
+        key: 'actions',
+        header: '',
+        width: '80px',
+        align: 'right' as const,
+        render: (row: Workflow) => (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={e => { e.stopPropagation(); alert(`Run: ${row.name}`); }}
+          >
+            <Play className="w-3.5 h-3.5" /> Run
+          </Button>
+        ),
+      },
+    ];
+    return <DataTable columns={columnsWithAction} data={ALL_WORKFLOWS.slice(0, 6)} />;
+  },
+};
+
+export const WithActionMenu: Story = {
+  name: 'Actions — overflow menu',
+  render: () => {
+    const columnsWithMenu = [
+      ...columns,
+      {
+        key: 'actions',
+        header: '',
+        width: '48px',
+        align: 'right' as const,
+        render: (row: Workflow) => (
+          <Menu
+            align="right"
+            trigger={
+              <button
+                onClick={e => e.stopPropagation()}
+                className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none"
+              >
+                ···
+              </button>
+            }
+            items={[
+              { label: 'View details', icon: <ExternalLink className="w-4 h-4" />, onClick: () => alert(`View: ${row.name}`) },
+              { label: 'Run now',      icon: <Play className="w-4 h-4" />,         onClick: () => alert(`Run: ${row.name}`) },
+              { label: 'Duplicate',    icon: <Copy className="w-4 h-4" />,         onClick: () => alert(`Dupe: ${row.name}`) },
+              { label: 'Delete',       icon: <Trash2 className="w-4 h-4" />,       onClick: () => alert(`Delete: ${row.name}`), destructive: true, dividerAbove: true },
+            ]}
+          />
+        ),
+      },
+    ];
+    return <DataTable columns={columnsWithMenu} data={ALL_WORKFLOWS.slice(0, 6)} onRowClick={row => alert(`Row: ${row.name}`)} />;
+  },
+};
+
+export const WithBothActions: Story = {
+  name: 'Actions — button + menu',
+  render: () => {
+    const columnsWithBoth = [
+      ...columns,
+      {
+        key: 'actions',
+        header: '',
+        width: '120px',
+        align: 'right' as const,
+        render: (row: Workflow) => (
+          <div className="flex items-center justify-end gap-1" onClick={e => e.stopPropagation()}>
+            <Button variant="ghost" size="sm" onClick={() => alert(`Run: ${row.name}`)}>
+              <Play className="w-3.5 h-3.5" /> Run
+            </Button>
+            <Menu
+              align="right"
+              trigger={
+                <button className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none">
+                  ···
+                </button>
+              }
+              items={[
+                { label: 'Duplicate', icon: <Copy className="w-4 h-4" />,   onClick: () => alert(`Dupe: ${row.name}`) },
+                { label: 'Delete',    icon: <Trash2 className="w-4 h-4" />, onClick: () => alert(`Delete: ${row.name}`), destructive: true },
+              ]}
+            />
+          </div>
+        ),
+      },
+    ];
+    return <DataTable columns={columnsWithBoth} data={ALL_WORKFLOWS.slice(0, 6)} onRowClick={row => alert(`Row: ${row.name}`)} />;
+  },
 };
 
 // ── Other states ──────────────────────────────────────────
