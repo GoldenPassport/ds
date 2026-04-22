@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Golden Passport — Web App UI Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style type="text/tailwindcss">
+  @custom-variant dark (&:where(.dark, .dark *));
+
+  @theme {
+    /* ── Gold ── */
+    --color-gold-50:  #FFFBEB;
+    --color-gold-100: #FEF3C7;
+    --color-gold-200: #FDE68A;
+    --color-gold-300: #FCD34D;
+    --color-gold-400: #FBBF24;
+    --color-gold-500: #F5C200;
+    --color-gold-600: #D4A500;
+    --color-gold-700: #A37C00;
+    --color-gold-800: #725600;
+    --color-gold-900: #3D2E00;
+
+    /* ── Ink ── */
+    --color-ink-50:  #F8F7F4;
+    --color-ink-100: #EDECEA;
+    --color-ink-200: #D6D4CF;
+    --color-ink-300: #B0ADA6;
+    --color-ink-400: #7E7A72;
+    --color-ink-500: #55524C;
+    --color-ink-600: #3A3733;
+    --color-ink-700: #27241F;
+    --color-ink-800: #1A1714;
+    --color-ink-900: #0E0D0B;
+
+    /* ── Slate ── */
+    --color-slate-50:  #F1F4F9;
+    --color-slate-100: #E1E8F2;
+    --color-slate-300: #93AECF;
+    --color-slate-400: #5A82B4;
+    --color-slate-500: #3460A0;
+    --color-slate-600: #254A82;
+    --color-slate-700: #1A3564;
+    --color-slate-800: #112247;
+
+    /* ── Fonts ── */
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+    --font-body:    'DM Sans', sans-serif;
+    --font-mono:    'JetBrains Mono', monospace;
+
+    /* ── Radius (mapped to GP scale) ── */
+    --radius-sm:   0.25rem;   /* 4px */
+    --radius-md:   0.5rem;    /* 8px */
+    --radius-lg:   0.75rem;   /* 12px */
+    --radius-xl:   1rem;      /* 16px */
+    --radius-2xl:  1.5rem;    /* 24px */
+
+    /* ── Shadows ── */
+    --shadow-sm:   0 1px 2px 0 rgb(14 13 11 / 0.06);
+    --shadow-md:   0 4px 12px 0 rgb(14 13 11 / 0.08), 0 1px 3px 0 rgb(14 13 11 / 0.04);
+    --shadow-lg:   0 12px 32px 0 rgb(14 13 11 / 0.10), 0 3px 8px 0 rgb(14 13 11 / 0.06);
+    --shadow-gold: 0 0 0 3px rgb(245 194 0 / 0.25), 0 0 20px rgb(245 194 0 / 0.10);
+    --shadow-dark-sm: 0 1px 2px 0 rgb(0 0 0 / 0.30);
+    --shadow-dark-md: 0 4px 12px 0 rgb(0 0 0 / 0.40), 0 1px 3px 0 rgb(0 0 0 / 0.20);
+  }
+
+  @layer base {
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body, #root { height: 100%; }
+    body { font-family: var(--font-body); }
+  }
+
+  @layer utilities {
+    .gp-focus { @apply focus:outline-none focus:ring-2 focus:ring-gold-500/40 focus:border-gold-500; }
+    .gp-row-hover { @apply hover:bg-ink-50 dark:hover:bg-ink-700 transition-colors duration-100 cursor-pointer; }
+  }
+
+  @keyframes gpPulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+  @keyframes gpFadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  .animate-gp-pulse { animation: gpPulse 2s ease-in-out infinite; }
+  .animate-gp-fade  { animation: gpFadeIn 0.2s ease-out; }
+</style>
+<style>
+  /* Tweaks panel (not Tailwind so it works before TW loads) */
+  #tweaks-panel {
+    display:none; position:fixed; bottom:20px; right:20px; z-index:9999;
+    background:#1A1714; border:1px solid #3A3733; border-radius:14px;
+    padding:18px 20px; width:240px; box-shadow:0 12px 32px rgb(0 0 0/.5);
+    font-family:'DM Sans',sans-serif; animation: gpFadeIn 0.2s ease-out;
+  }
+  #tweaks-panel.visible { display:block; }
+  #tweaks-panel h3 { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#7E7A72; margin-bottom:14px; }
+  #tweaks-panel label { display:block; font-size:12px; color:#B0ADA6; margin-bottom:6px; }
+  #tweaks-panel select { width:100%; margin-bottom:14px; background:#27241F; border:1px solid #3A3733; border-radius:6px; color:#F8F7F4; padding:6px 8px; font-family:'DM Sans',sans-serif; font-size:13px; }
+  .tw-row { display:flex; gap:8px; margin-bottom:12px; }
+  .tw-btn { flex:1; padding:7px; border-radius:8px; border:1.5px solid #3A3733; background:transparent; color:#B0ADA6; font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; }
+  .tw-btn.active { border-color:#F5C200; color:#F5C200; background:rgb(245 194 0/.08); }
+</style>
+</head>
+<body>
+<!-- Viewport stage -->
+<div id="vp-stage" style="width:100%;height:100vh;display:flex;align-items:stretch;background:#0A0908;overflow:auto;position:relative;transition:padding 0.3s">
+  <div id="vp-frame" style="width:100%;height:100%;position:relative;flex-shrink:0;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);overflow:hidden">
+    <div id="root" style="width:100%;height:100%"></div>
+  </div>
+</div>
+<div id="vp-label" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:#55524C;letter-spacing:0.08em;pointer-events:none;z-index:9998"></div>
+
+<div id="tweaks-panel">
+  <h3>Tweaks</h3>
+  <label>Theme</label>
+  <div class="tw-row">
+    <button class="tw-btn active" id="tw-light" onclick="setTheme('light')">Light</button>
+    <button class="tw-btn" id="tw-dark" onclick="setTheme('dark')">Dark</button>
+  </div>
+  <label>Screen</label>
+  <select id="tw-screen" onchange="setScreen(this.value)">
+    <option value="dashboard">Dashboard</option>
+    <option value="builder">Workflow Builder</option>
+    <option value="runs">Run Logs</option>
+    <option value="settings">Settings</option>
+  </select>
+  <label>Sidebar</label>
+  <div class="tw-row">
+    <button class="tw-btn active" id="tw-exp" onclick="setSidebar(false)">Expanded</button>
+    <button class="tw-btn" id="tw-col" onclick="setSidebar(true)">Collapsed</button>
+  </div>
+  <label>Viewport</label>
+  <div class="tw-row" style="flex-wrap:wrap;gap:6px">
+    <button class="tw-btn" id="vp-mobile"  onclick="setViewport('mobile')"  style="flex:none;padding:5px 10px;font-size:11px">📱 375</button>
+    <button class="tw-btn" id="vp-tablet"  onclick="setViewport('tablet')"  style="flex:none;padding:5px 10px;font-size:11px">⬜ 768</button>
+    <button class="tw-btn active" id="vp-desktop" onclick="setViewport('desktop')" style="flex:none;padding:5px 10px;font-size:11px">🖥 Full</button>
+  </div>
+</div>
+
+<script>
+  function setTheme(v) {
+    document.getElementById('tw-light').className = 'tw-btn'+(v==='light'?' active':'');
+    document.getElementById('tw-dark').className  = 'tw-btn'+(v==='dark' ?' active':'');
+    // Toggle Tailwind dark class on root
+    document.documentElement.classList.toggle('dark', v === 'dark');
+    window.__setTheme && window.__setTheme(v);
+    window.parent.postMessage({ type:'__edit_mode_set_keys', edits:{ theme:v } },'*');
+  }
+  function setScreen(v) { window.__setScreen && window.__setScreen(v); }
+  function setSidebar(v) {
+    document.getElementById('tw-exp').className = 'tw-btn'+(!v?' active':'');
+    document.getElementById('tw-col').className = 'tw-btn'+(v?' active':'');
+    window.__setSidebar && window.__setSidebar(v);
+  }
+
+  const VP = { mobile: 375, tablet: 768, desktop: null };
+  function setViewport(v) {
+    ['mobile','tablet','desktop'].forEach(k => {
+      document.getElementById('vp-'+k).className = 'tw-btn'+(v===k?' active':'');
+    });
+    const frame = document.getElementById('vp-frame');
+    const w = VP[v];
+    if (!w) {
+      frame.style.width = '100%';
+      frame.style.maxWidth = 'none';
+      frame.style.margin = '0';
+      frame.style.boxShadow = 'none';
+      frame.style.borderRadius = '0';
+      frame.style.height = '100%';
+      document.getElementById('vp-stage').style.alignItems = 'stretch';
+      document.getElementById('vp-stage').style.padding = '0';
+    } else {
+      frame.style.width = w + 'px';
+      frame.style.maxWidth = '100%';
+      frame.style.margin = '0 auto';
+      frame.style.boxShadow = '0 0 0 1px #3A3733, 0 24px 64px rgb(0 0 0/.6)';
+      frame.style.borderRadius = v === 'mobile' ? '32px' : '16px';
+      frame.style.height = v === 'mobile' ? '812px' : '1024px';
+      frame.style.overflow = 'hidden';
+      document.getElementById('vp-stage').style.alignItems = 'center';
+      document.getElementById('vp-stage').style.padding = '32px 16px';
+    }
+    document.getElementById('vp-label').textContent = w ? `${w}px` : '';
+
+    // Auto-collapse sidebar on mobile, restore on larger viewports
+    if (v === 'mobile') {
+      document.getElementById('tw-exp').className = 'tw-btn';
+      document.getElementById('tw-col').className = 'tw-btn active';
+      window.__setSidebar && window.__setSidebar(true);
+    } else {
+      document.getElementById('tw-exp').className = 'tw-btn active';
+      document.getElementById('tw-col').className = 'tw-btn';
+      window.__setSidebar && window.__setSidebar(false);
+    }
+  }
+  window.addEventListener('message', e => {
+    if (e.data?.type === '__activate_edit_mode')   document.getElementById('tweaks-panel').classList.add('visible');
+    if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').classList.remove('visible');
+  });
+  window.parent.postMessage({ type:'__edit_mode_available' },'*');
+
+  // Restore saved theme
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "theme": "dark",
+    "collapsed": false
+  }/*EDITMODE-END*/;
+  if (TWEAK_DEFAULTS.theme === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('tw-light').className='tw-btn';
+    document.getElementById('tw-dark').className='tw-btn active';
+  }
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="Tokens.jsx"></script>
+<script type="text/babel" src="Sidebar.jsx"></script>
+<script type="text/babel" src="Dashboard.jsx"></script>
+<script type="text/babel" src="WorkflowBuilder.jsx"></script>
+<script type="text/babel" src="RunLogs.jsx"></script>
+<script type="text/babel" src="Settings.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  const [theme, setThemeState]  = React.useState(TWEAK_DEFAULTS.theme);
+  const [screen, setScreen]     = React.useState('dashboard');
+  const [collapsed, setCollapsed] = React.useState(TWEAK_DEFAULTS.collapsed);
+
+  React.useEffect(() => {
+    window.__setTheme = (v) => {
+      setThemeState(v);
+      document.documentElement.classList.toggle('dark', v === 'dark');
+    };
+    window.__setScreen  = setScreen;
+    window.__setSidebar = setCollapsed;
+  }, []);
+
+  React.useEffect(() => {
+    const sel = document.getElementById('tw-screen');
+    if (sel) sel.value = screen;
+  }, [screen]);
+
+  const handleNav = (id) => {
+    if (['builder','runs','settings'].includes(id)) setScreen(id);
+    else setScreen('dashboard');
+  };
+
+  return (
+    <ThemeContext.Provider value={theme}>
+      <div className="flex bg-ink-50 dark:bg-ink-900 overflow-hidden" style={{height:'100%',minHeight:'100%'}}>
+        <Sidebar
+          active={screen}
+          onNav={handleNav}
+          collapsed={collapsed}
+        />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {screen === 'dashboard' && <Dashboard onOpenBuilder={() => setScreen('builder')} onOpenWorkflow={() => setScreen('builder')} />}
+          {screen === 'builder'   && <WorkflowBuilder onBack={() => setScreen('dashboard')} />}
+          {screen === 'runs'      && <RunLogs onBack={() => setScreen('dashboard')} />}
+          {screen === 'settings'  && <Settings onBack={() => setScreen('dashboard')} />}
+        </div>
+      </div>
+    </ThemeContext.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
