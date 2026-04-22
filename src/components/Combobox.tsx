@@ -89,56 +89,56 @@ export function Combobox<T extends string | number>({
           <ComboboxButton className="absolute inset-y-0 right-3 flex items-center text-ink-400 bg-transparent border-0 cursor-pointer">
             <ChevronDown className="h-4 w-4" />
           </ComboboxButton>
+
+          <Transition
+            as={React.Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100 translate-y-0"
+            leaveTo="opacity-0 -translate-y-1"
+            enter="transition ease-out duration-150"
+            enterFrom="opacity-0 -translate-y-1"
+            enterTo="opacity-100 translate-y-0"
+            afterLeave={() => setQuery('')}
+          >
+            <ComboboxOptions className={[
+              'absolute top-full left-0 z-50 mt-1 w-full overflow-auto rounded-xl py-1',
+              'bg-white dark:bg-ink-800 shadow-lg dark:shadow-dark-md',
+              'border border-ink-200 dark:border-ink-700',
+              'focus:outline-none text-sm font-body max-h-60',
+            ].join(' ')}>
+              {filtered.length === 0 ? (
+                <div className="px-3.5 py-3 text-ink-400 dark:text-ink-500 text-sm font-body">
+                  No results for &ldquo;{query}&rdquo;
+                </div>
+              ) : (
+                filtered.map(option => (
+                  <ComboboxOption
+                    key={String(option.value)}
+                    value={option.value}
+                    disabled={option.disabled}
+                    className={({ active, selected: sel }) => [
+                      'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
+                      active   ? 'bg-ink-50 dark:bg-ink-700' : '',
+                      sel      ? 'text-gold-600 dark:text-gold-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
+                      option.disabled ? 'opacity-40 cursor-not-allowed' : '',
+                    ].join(' ')}
+                  >
+                    {({ selected: sel }) => (
+                      <span className="flex items-center justify-between">
+                        <span className="truncate">{option.label}</span>
+                        {sel && <Check className="h-4 w-4 text-gold-500 shrink-0" />}
+                      </span>
+                    )}
+                  </ComboboxOption>
+                ))
+              )}
+            </ComboboxOptions>
+          </Transition>
         </div>
 
         {hint && (
           <p className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
         )}
-
-        <Transition
-          as={React.Fragment}
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100 translate-y-0"
-          leaveTo="opacity-0 -translate-y-1"
-          enter="transition ease-out duration-150"
-          enterFrom="opacity-0 -translate-y-1"
-          enterTo="opacity-100 translate-y-0"
-          afterLeave={() => setQuery('')}
-        >
-          <ComboboxOptions className={[
-            'absolute z-50 mt-1 w-full overflow-auto rounded-xl py-1',
-            'bg-white dark:bg-ink-800 shadow-lg dark:shadow-dark-md',
-            'border border-ink-200 dark:border-ink-700',
-            'focus:outline-none text-sm font-body max-h-60',
-          ].join(' ')}>
-            {filtered.length === 0 ? (
-              <div className="px-3.5 py-3 text-ink-400 dark:text-ink-500 text-sm font-body">
-                No results for &ldquo;{query}&rdquo;
-              </div>
-            ) : (
-              filtered.map(option => (
-                <ComboboxOption
-                  key={String(option.value)}
-                  value={option.value}
-                  disabled={option.disabled}
-                  className={({ active, selected: sel }) => [
-                    'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
-                    active   ? 'bg-ink-50 dark:bg-ink-700' : '',
-                    sel      ? 'text-gold-600 dark:text-gold-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
-                    option.disabled ? 'opacity-40 cursor-not-allowed' : '',
-                  ].join(' ')}
-                >
-                  {({ selected: sel }) => (
-                    <span className="flex items-center justify-between">
-                      <span className="truncate">{option.label}</span>
-                      {sel && <Check className="h-4 w-4 text-gold-500 shrink-0" />}
-                    </span>
-                  )}
-                </ComboboxOption>
-              ))
-            )}
-          </ComboboxOptions>
-        </Transition>
       </div>
     </HLCombobox>
   );
