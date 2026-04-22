@@ -51,8 +51,8 @@ export function Tabs({
             disabled={tab.disabled}
             className={({ selected }) => [
               'inline-flex items-center gap-2 text-sm font-medium font-body transition-all duration-150',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/50 rounded-md',
-              'disabled:opacity-40 disabled:cursor-not-allowed',
+              'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/50 disabled:opacity-40 disabled:cursor-not-allowed',
+              variant === 'underline' ? 'rounded-t-md' : 'rounded-md',
               variant === 'underline'
                 ? [
                     'px-4 py-2.5 -mb-px border-b-2',
