@@ -3,9 +3,10 @@ export { Button }      from './Button';
 export { Badge }       from './Badge';
 export { Avatar }      from './Avatar';
 export { Input }       from './Input';
-export { Textarea }    from './Textarea';
-export { Checkbox }    from './Checkbox';
-export { OptionGroup } from './OptionGroup';
+export { Textarea }     from './Textarea';
+export { Checkbox }     from './Checkbox';
+export { OptionGroup }  from './OptionGroup';
+export { ButtonGroup }  from './ButtonGroup';
 
 // Headless UI components
 export { Toggle }    from './Toggle';
@@ -28,6 +29,7 @@ export type { InputProps }                                                  from
 export type { TextareaProps }                                               from './Textarea';
 export type { CheckboxProps }                                               from './Checkbox';
 export type { OptionGroupProps, OptionGroupItem }                           from './OptionGroup';
+export type { ButtonGroupProps, ButtonGroupItem }                           from './ButtonGroup';
 export type { ToggleProps }                                                 from './Toggle';
 export type { SelectProps, SelectOption }                                   from './Select';
 export type { MenuProps, MenuItem }                                         from './Menu';
