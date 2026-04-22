@@ -1,0 +1,165 @@
+import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+// ── Types ─────────────────────────────────────────────────
+
+export interface PaginationProps {
+  /** Current page, 1-indexed */
+  page:              number;
+  /** Number of rows per page */
+  pageSize:          number;
+  /** Total number of items across all pages */
+  total:             number;
+  /** Called when page or pageSize changes */
+  onChange:          (page: number, pageSize: number) => void;
+  /** Available page-size options. Set to [] to hide the selector. */
+  pageSizeOptions?:  number[];
+  /** Show "Showing X–Y of Z" summary label */
+  showSummary?:      boolean;
+  className?:        string;
+}
+
+// ── Helpers ───────────────────────────────────────────────
+
+function pageNumbers(page: number, totalPages: number): (number | '…')[] {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  const pages: (number | '…')[] = [1];
+  if (page > 3) pages.push('…');
+
+  const start = Math.max(2, page - 1);
+  const end   = Math.min(totalPages - 1, page + 1);
+  for (let i = start; i <= end; i++) pages.push(i);
+
+  if (page < totalPages - 2) pages.push('…');
+  pages.push(totalPages);
+
+  return pages;
+}
+
+// ── Sub-components ────────────────────────────────────────
+
+function PageBtn({
+  children,
+  active,
+  disabled,
+  onClick,
+}: {
+  children: React.ReactNode;
+  active?:  boolean;
+  disabled?: boolean;
+  onClick?:  () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={[
+        'inline-flex items-center justify-center w-8 h-8 rounded-lg text-[13px] font-medium font-body',
+        'transition-colors duration-100 border-0 cursor-pointer',
+        'disabled:opacity-40 disabled:cursor-not-allowed',
+        active
+          ? 'bg-gold-500 text-ink-900'
+          : 'bg-transparent text-ink-500 dark:text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-700',
+      ].join(' ')}
+    >
+      {children}
+    </button>
+  );
+}
+
+// ── Component ─────────────────────────────────────────────
+
+export function Pagination({
+  page,
+  pageSize,
+  total,
+  onChange,
+  pageSizeOptions = [10, 25, 50, 100],
+  showSummary     = true,
+  className       = '',
+}: PaginationProps) {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const from       = Math.min((page - 1) * pageSize + 1, total);
+  const to         = Math.min(page * pageSize, total);
+
+  const goTo = (p: number) => {
+    if (p < 1 || p > totalPages || p === page) return;
+    onChange(p, pageSize);
+  };
+
+  const changePageSize = (newSize: number) => {
+    // Keep the user on a sensible page after resize
+    const newPage = Math.min(page, Math.ceil(total / newSize));
+    onChange(newPage, newSize);
+  };
+
+  const pages = pageNumbers(page, totalPages);
+
+  return (
+    <div className={`flex flex-wrap items-center justify-between gap-3 ${className}`}>
+
+      {/* Left: page-size picker + summary */}
+      <div className="flex items-center gap-3">
+        {pageSizeOptions.length > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-[13px] text-ink-400 dark:text-ink-500 font-body whitespace-nowrap">
+              Rows per page
+            </span>
+            <select
+              value={pageSize}
+              onChange={e => changePageSize(Number(e.target.value))}
+              className={[
+                'text-[13px] font-body font-medium rounded-lg px-2.5 py-1.5',
+                'bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700',
+                'text-ink-900 dark:text-ink-50',
+                'focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25',
+                'transition-all duration-150 cursor-pointer',
+              ].join(' ')}
+            >
+              {pageSizeOptions.map(o => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {showSummary && total > 0 && (
+          <span className="text-[13px] text-ink-400 dark:text-ink-500 font-body whitespace-nowrap">
+            {from}–{to} of {total.toLocaleString()}
+          </span>
+        )}
+      </div>
+
+      {/* Right: prev / page numbers / next */}
+      <div className="flex items-center gap-1">
+        <PageBtn onClick={() => goTo(page - 1)} disabled={page <= 1}>
+          <ChevronLeft className="w-4 h-4" />
+        </PageBtn>
+
+        {pages.map((p, i) =>
+          p === '…' ? (
+            <span
+              key={`ellipsis-${i}`}
+              className="w-8 h-8 inline-flex items-center justify-center text-[13px] text-ink-300 dark:text-ink-600 select-none"
+            >
+              …
+            </span>
+          ) : (
+            <PageBtn
+              key={p}
+              active={p === page}
+              onClick={() => goTo(p)}
+            >
+              {p}
+            </PageBtn>
+          )
+        )}
+
+        <PageBtn onClick={() => goTo(page + 1)} disabled={page >= totalPages}>
+          <ChevronRight className="w-4 h-4" />
+        </PageBtn>
+      </div>
+    </div>
+  );
+}

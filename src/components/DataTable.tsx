@@ -1,21 +1,19 @@
 /**
- * DataTable — generic sortable table component
+ * DataTable — generic sortable table with optional pagination
  *
- * Usage:
+ * Client-side pagination (DataTable slices data internally):
+ *   <DataTable columns={cols} data={allRows} pagination={{ pageSize: 10 }} />
+ *
+ * Server-side pagination (consumer owns page state):
  *   <DataTable
- *     columns={[
- *       { key: 'name',    header: 'Workflow',  sortable: true },
- *       { key: 'status',  header: 'Status',    render: row => <Badge label={row.status} variant={row.status} /> },
- *       { key: 'runs',    header: 'Runs',      sortable: true, align: 'right' },
- *       { key: 'lastRun', header: 'Last Run',  align: 'right' },
- *     ]}
- *     data={workflows}
- *     onRowClick={row => navigate(`/workflows/${row.id}`)}
- *     emptyState={<p>No workflows yet.</p>}
+ *     columns={cols}
+ *     data={pageOfRows}
+ *     pagination={{ page, pageSize, total, onPageChange: (p, ps) => fetch(p, ps) }}
  *   />
  */
 import React from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import { Pagination } from './Pagination';
 
 export type SortDirection = 'asc' | 'desc' | null;
 
@@ -28,14 +26,33 @@ export interface DataTableColumn<T> {
   width?:    string;
 }
 
+export interface DataTablePaginationConfig {
+  /** Default/initial page size (default: 10) */
+  pageSize?:       number;
+  /** Page size options shown in the selector. Pass [] to hide. */
+  pageSizeOptions?: number[];
+  /** Show "X–Y of Z" summary (default: true) */
+  showSummary?:    boolean;
+
+  // ── Controlled / server-side mode ──────────────────────
+  /** Current page (1-indexed). When set, DataTable is in controlled mode. */
+  page?:           number;
+  /** Total item count across all pages. Required for controlled mode. */
+  total?:          number;
+  /** Called when the user changes page or page size (controlled mode). */
+  onPageChange?:   (page: number, pageSize: number) => void;
+}
+
 export interface DataTableProps<T extends { id: string | number }> {
-  columns:      DataTableColumn<T>[];
-  data:         T[];
-  onRowClick?:  (row: T) => void;
-  emptyState?:  React.ReactNode;
-  loading?:     boolean;
-  className?:   string;
+  columns:       DataTableColumn<T>[];
+  data:          T[];
+  onRowClick?:   (row: T) => void;
+  emptyState?:   React.ReactNode;
+  loading?:      boolean;
+  className?:    string;
   stickyHeader?: boolean;
+  /** Attach pagination below the table. Omit to disable. */
+  pagination?:   DataTablePaginationConfig;
 }
 
 type SortState = { key: string; direction: SortDirection };
@@ -51,12 +68,33 @@ export function DataTable<T extends { id: string | number }>({
   data,
   onRowClick,
   emptyState,
-  loading = false,
-  className = '',
+  loading      = false,
+  className    = '',
   stickyHeader = false,
+  pagination,
 }: DataTableProps<T>) {
-  const [sort, setSort] = React.useState<SortState>({ key: '', direction: null });
+  const [sort, setSort]               = React.useState<SortState>({ key: '', direction: null });
+  const [internalPage, setInternalPage]     = React.useState(1);
+  const [internalPageSize, setInternalPageSize] = React.useState(pagination?.pageSize ?? 10);
 
+  const controlled    = pagination !== undefined && pagination.total !== undefined;
+  const hasPagination = pagination !== undefined;
+
+  // Resolve effective page / pageSize
+  const page     = controlled ? (pagination.page ?? 1) : internalPage;
+  const pageSize = controlled ? (pagination.pageSize ?? internalPageSize) : internalPageSize;
+  const total    = controlled ? (pagination.total ?? 0) : data.length;
+
+  const handlePageChange = (p: number, ps: number) => {
+    if (controlled) {
+      pagination.onPageChange?.(p, ps);
+    } else {
+      setInternalPage(p);
+      setInternalPageSize(ps);
+    }
+  };
+
+  // Sort
   const handleSort = (col: DataTableColumn<T>) => {
     if (!col.sortable) return;
     const key = String(col.key);
@@ -78,10 +116,17 @@ export function DataTable<T extends { id: string | number }>({
     });
   }, [data, sort]);
 
+  // Slice for client-side pagination
+  const visibleRows = React.useMemo(() => {
+    if (!hasPagination || controlled) return sorted;
+    const start = (page - 1) * pageSize;
+    return sorted.slice(start, start + pageSize);
+  }, [sorted, hasPagination, controlled, page, pageSize]);
+
   const alignClass = { left: 'text-left', center: 'text-center', right: 'text-right' };
 
   return (
-    <div className={`bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700 rounded-2xl overflow-hidden shadow-sm ${className}`}>
+    <div className={`flex flex-col gap-0 bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700 rounded-2xl overflow-hidden shadow-sm ${className}`}>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead className={stickyHeader ? 'sticky top-0 z-10' : ''}>
@@ -114,14 +159,14 @@ export function DataTable<T extends { id: string | number }>({
                   <div className="inline-block w-6 h-6 border-2 border-gold-500 border-t-transparent rounded-full animate-spin" />
                 </td>
               </tr>
-            ) : sorted.length === 0 ? (
+            ) : visibleRows.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className="px-5 py-12 text-center text-sm text-ink-400 dark:text-ink-500 font-body">
                   {emptyState ?? 'No data available'}
                 </td>
               </tr>
             ) : (
-              sorted.map((row, i) => (
+              visibleRows.map((row, i) => (
                 <tr
                   key={row.id}
                   onClick={() => onRowClick?.(row)}
@@ -147,6 +192,19 @@ export function DataTable<T extends { id: string | number }>({
           </tbody>
         </table>
       </div>
+
+      {hasPagination && (
+        <div className="px-5 py-3.5 border-t border-ink-100 dark:border-ink-700 bg-ink-50/50 dark:bg-ink-700/20">
+          <Pagination
+            page={page}
+            pageSize={pageSize}
+            total={total}
+            onChange={handlePageChange}
+            pageSizeOptions={pagination.pageSizeOptions ?? [10, 25, 50]}
+            showSummary={pagination.showSummary ?? true}
+          />
+        </div>
+      )}
     </div>
   );
 }
