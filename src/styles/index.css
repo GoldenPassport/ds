@@ -1,0 +1,95 @@
+/*
+ * Golden Passport Design System — Base CSS
+ * Import this once in your app root:
+ *   import '@golden-passport/ds/styles';
+ *
+ * Requires Tailwind v4 processing.
+ */
+
+@import "tailwindcss";
+
+/* ── Class-based dark mode (not prefers-color-scheme) ── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Gold */
+  --color-gold-50:  #FFFBEB;
+  --color-gold-100: #FEF3C7;
+  --color-gold-200: #FDE68A;
+  --color-gold-300: #FCD34D;
+  --color-gold-400: #FBBF24;
+  --color-gold-500: #F5C200;
+  --color-gold-600: #D4A500;
+  --color-gold-700: #A37C00;
+  --color-gold-800: #725600;
+  --color-gold-900: #3D2E00;
+
+  /* Ink */
+  --color-ink-50:  #F8F7F4;
+  --color-ink-100: #EDECEA;
+  --color-ink-200: #D6D4CF;
+  --color-ink-300: #B0ADA6;
+  --color-ink-400: #7E7A72;
+  --color-ink-500: #55524C;
+  --color-ink-600: #3A3733;
+  --color-ink-700: #27241F;
+  --color-ink-800: #1A1714;
+  --color-ink-900: #0E0D0B;
+
+  /* Slate (AI / accent) */
+  --color-slate-50:  #F1F4F9;
+  --color-slate-100: #E1E8F2;
+  --color-slate-200: #C3D1E5;
+  --color-slate-300: #93AECF;
+  --color-slate-400: #5A82B4;
+  --color-slate-500: #3460A0;
+  --color-slate-600: #254A82;
+  --color-slate-700: #1A3564;
+  --color-slate-800: #112247;
+  --color-slate-900: #0A1428;
+
+  /* Fonts */
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* Radius */
+  --radius-sm:  0.25rem;
+  --radius-md:  0.5rem;
+  --radius-lg:  0.75rem;
+  --radius-xl:  1rem;
+  --radius-2xl: 1.5rem;
+
+  /* Shadows */
+  --shadow-sm:        0 1px 2px 0 rgb(14 13 11 / 0.06);
+  --shadow-md:        0 4px 12px 0 rgb(14 13 11 / 0.08), 0 1px 3px 0 rgb(14 13 11 / 0.04);
+  --shadow-lg:        0 12px 32px 0 rgb(14 13 11 / 0.10), 0 3px 8px 0 rgb(14 13 11 / 0.06);
+  --shadow-gold:      0 0 0 3px rgb(245 194 0 / 0.25), 0 0 20px rgb(245 194 0 / 0.10);
+  --shadow-dark-sm:   0 1px 2px 0 rgb(0 0 0 / 0.30);
+  --shadow-dark-md:   0 4px 12px 0 rgb(0 0 0 / 0.40);
+
+  /* Animations */
+  --animate-gp-pulse:    gpPulse 2s ease-in-out infinite;
+  --animate-gp-fade-in:  gpFadeIn 0.2s ease-out;
+  --animate-gp-slide-up: gpSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes gpPulse    { 0%,100%{ opacity:1 } 50%{ opacity:.35 } }
+@keyframes gpFadeIn   { from{ opacity:0; transform:translateY(6px) } to{ opacity:1; transform:translateY(0) } }
+@keyframes gpSlideUp  { from{ opacity:0; transform:translateY(8px) } to{ opacity:1; transform:translateY(0) } }
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  body { font-family: var(--font-body); }
+}
+
+@layer utilities {
+  /* Focus ring — gold */
+  .gp-focus {
+    @apply outline-none ring-2 ring-gold-500/40 border-gold-500;
+  }
+  /* AI pulse dot */
+  .gp-ai-dot {
+    @apply w-1.5 h-1.5 rounded-full bg-gold-500 animate-gp-pulse inline-block shrink-0;
+  }
+}
