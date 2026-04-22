@@ -1,8 +1,11 @@
 // Primitive components
-export { Button }    from './Button';
-export { Badge }     from './Badge';
-export { Avatar }    from './Avatar';
-export { Input }     from './Input';
+export { Button }      from './Button';
+export { Badge }       from './Badge';
+export { Avatar }      from './Avatar';
+export { Input }       from './Input';
+export { Textarea }    from './Textarea';
+export { Checkbox }    from './Checkbox';
+export { OptionGroup } from './OptionGroup';
 
 // Headless UI components
 export { Toggle }    from './Toggle';
@@ -22,6 +25,9 @@ export type { ButtonProps, ButtonVariant, ButtonSize }                      from
 export type { BadgeProps, BadgeVariant }                                    from './Badge';
 export type { AvatarProps }                                                 from './Avatar';
 export type { InputProps }                                                  from './Input';
+export type { TextareaProps }                                               from './Textarea';
+export type { CheckboxProps }                                               from './Checkbox';
+export type { OptionGroupProps, OptionGroupItem }                           from './OptionGroup';
 export type { ToggleProps }                                                 from './Toggle';
 export type { SelectProps, SelectOption }                                   from './Select';
 export type { MenuProps, MenuItem }                                         from './Menu';
