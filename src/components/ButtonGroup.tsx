@@ -149,7 +149,7 @@ export function ButtonGroup<T extends string | number = string>({
           const dividerClass = isFirst
             ? ''
             : active && prevActive
-              ? 'border-l border-gold-400 dark:border-gold-600'
+              ? 'border-l border-primary-400 dark:border-primary-600'
               : active
                 ? 'border-l border-transparent'
                 : 'border-l border-ink-200 dark:border-ink-600';
@@ -167,14 +167,14 @@ export function ButtonGroup<T extends string | number = string>({
                 'inline-flex items-center font-medium font-body cursor-pointer',
                 btnFlexClass,
                 'transition-colors duration-150 outline-none border-0',
-                'focus-visible:ring-2 focus-visible:ring-gold-500/40 focus-visible:z-10 relative',
+                'focus-visible:ring-2 focus-visible:ring-primary-500/40 focus-visible:z-10 relative',
                 'disabled:opacity-40 disabled:cursor-not-allowed',
                 sizes[size],
                 dividerClass,
                 isFirst ? 'rounded-l-lg' : '',
                 isLast  ? 'rounded-r-lg' : '',
                 active
-                  ? 'bg-gold-500 text-ink-900 dark:bg-gold-500'
+                  ? 'bg-primary-500 text-ink-900 dark:bg-primary-500'
                   : variant === 'default'
                     ? 'bg-white dark:bg-ink-800 text-ink-700 dark:text-ink-200 hover:bg-ink-50 dark:hover:bg-ink-700'
                     : 'bg-transparent text-ink-500 dark:text-ink-400 hover:bg-ink-50 dark:hover:bg-ink-700/60 hover:text-ink-900 dark:hover:text-ink-100',

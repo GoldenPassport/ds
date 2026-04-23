@@ -48,11 +48,11 @@ export function Toggle({
         className={[
           'relative inline-flex h-[22px] w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent',
           'transition-colors duration-200 ease-in-out',
-          'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/60 focus-visible:ring-offset-2',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/60 focus-visible:ring-offset-2',
           'dark:focus-visible:ring-offset-ink-900',
           'disabled:opacity-40 disabled:cursor-not-allowed',
           checked
-            ? 'bg-gold-500'
+            ? 'bg-primary-500'
             : 'bg-ink-200 dark:bg-ink-600',
         ].join(' ')}
       >

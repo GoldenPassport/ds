@@ -4,7 +4,7 @@ import { Menu } from '../components/Menu';
 import { Button } from '../components/Button';
 
 const meta = {
-  title: 'Components/Menu',
+  title: 'Elements/Dropdowns',
   component: Menu,
   tags: ['autodocs'],
   argTypes: {

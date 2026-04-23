@@ -3,8 +3,8 @@
 
 const GP = {
   colors: {
-    gold500: '#F5C200', gold600: '#D4A500', gold400: '#FBBF24',
-    gold100: '#FEF3C7', gold900: '#3D2E00',
+    primary500: '#F5C200', primary600: '#D4A500', primary400: '#FBBF24',
+    primary100: '#FEF3C7', primary900: '#3D2E00',
     ink50: '#F8F7F4', ink100: '#EDECEA', ink200: '#D6D4CF',
     ink300: '#B0ADA6', ink400: '#7E7A72', ink500: '#55524C',
     ink600: '#3A3733', ink700: '#27241F', ink800: '#1A1714', ink900: '#0E0D0B',
@@ -31,7 +31,7 @@ const useTheme = () => React.useContext(ThemeContext);
 function Badge({ label, variant = 'neutral' }) {
   const variants = {
     active:  { wrap: 'bg-green-100 text-green-700',             dot: 'bg-green-500' },
-    running: { wrap: 'bg-gold-100 text-gold-700',               dot: 'bg-gold-500' },
+    running: { wrap: 'bg-primary-100 text-primary-700',               dot: 'bg-primary-500' },
     pending: { wrap: 'bg-blue-100 text-blue-700',               dot: 'bg-blue-500' },
     draft:   { wrap: 'bg-ink-100 text-ink-500 dark:bg-ink-700 dark:text-ink-300', dot: 'bg-ink-300' },
     failed:  { wrap: 'bg-red-100 text-red-700',                 dot: 'bg-red-500' },
@@ -50,7 +50,7 @@ function Badge({ label, variant = 'neutral' }) {
 // ── Button ────────────────────────────────────────────────
 function Btn({ children, variant = 'primary', size = 'md', onClick, disabled, className = '' }) {
   const variants = {
-    primary:   'bg-gold-500 text-ink-900 hover:bg-gold-600 border-0',
+    primary:   'bg-primary-500 text-ink-900 hover:bg-primary-600 border-0',
     secondary: 'bg-ink-100 text-ink-900 hover:bg-ink-200 dark:bg-ink-700 dark:text-ink-50 dark:hover:bg-ink-600 border-0',
     ghost:     'bg-transparent text-ink-500 border border-ink-200 hover:border-ink-400 dark:text-ink-300 dark:border-ink-600 dark:hover:border-ink-400',
     danger:    'bg-red-100 text-red-700 hover:bg-red-200 border-0',

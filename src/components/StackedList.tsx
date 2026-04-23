@@ -56,7 +56,7 @@ function DefaultRow({ item, showLeading }: { item: StackedListItem; showLeading:
           <p className={[
             'text-sm font-semibold font-body truncate',
             interactive
-              ? 'text-ink-900 dark:text-ink-50 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors duration-100'
+              ? 'text-ink-900 dark:text-ink-50 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-100'
               : 'text-ink-900 dark:text-ink-50',
           ].join(' ')}>
             {item.title}

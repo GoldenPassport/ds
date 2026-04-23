@@ -15,7 +15,7 @@ const gpPreset = {
   theme: {
     extend: {
       colors: {
-        gold: {
+        primary: {
           50:  '#FFFBEB',
           100: '#FEF3C7',
           200: '#FDE68A',
@@ -68,7 +68,7 @@ const gpPreset = {
         sm:        '0 1px 2px 0 rgb(14 13 11 / 0.06)',
         md:        '0 4px 12px 0 rgb(14 13 11 / 0.08), 0 1px 3px 0 rgb(14 13 11 / 0.04)',
         lg:        '0 12px 32px 0 rgb(14 13 11 / 0.10), 0 3px 8px 0 rgb(14 13 11 / 0.06)',
-        gold:      '0 0 0 3px rgb(245 194 0 / 0.25), 0 0 20px rgb(245 194 0 / 0.10)',
+        primary:   '0 0 0 3px rgb(245 194 0 / 0.25), 0 0 20px rgb(245 194 0 / 0.10)',
         'dark-sm': '0 1px 2px 0 rgb(0 0 0 / 0.30)',
         'dark-md': '0 4px 12px 0 rgb(0 0 0 / 0.40)',
       },

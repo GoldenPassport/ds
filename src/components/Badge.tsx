@@ -13,7 +13,7 @@ export interface BadgeProps {
 // ── Config ────────────────────────────────────────────────
 const cfg: Record<BadgeVariant, { wrap: string; dot?: string }> = {
   active:  { wrap: 'bg-green-100 text-green-700',                                    dot: 'bg-green-500' },
-  running: { wrap: 'bg-gold-100 text-gold-700',                                      dot: 'bg-gold-500'  },
+  running: { wrap: 'bg-primary-100 text-primary-700',                                      dot: 'bg-primary-500'  },
   pending: { wrap: 'bg-blue-100 text-blue-700',                                      dot: 'bg-blue-500'  },
   warning: { wrap: 'bg-amber-100 text-amber-700',                                    dot: 'bg-amber-500' },
   failed:  { wrap: 'bg-red-100 text-red-700',                                        dot: 'bg-red-500'   },

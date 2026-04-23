@@ -5,7 +5,7 @@ import { Dialog } from '../components/Dialog';
 import { Button } from '../components/Button';
 
 const meta = {
-  title: 'Components/Dialog',
+  title: 'Overlays/Modal Dialogs',
   component: Dialog,
   tags: ['autodocs'],
   argTypes: {
@@ -89,7 +89,7 @@ export const FormDialog: Story = {
             Workflow Name
           </label>
           <input
-            className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700 text-sm font-body text-ink-900 dark:text-ink-50 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25 transition-all"
+            className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700 text-sm font-body text-ink-900 dark:text-ink-50 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25 transition-all"
             placeholder="e.g. Invoice Approval Flow"
           />
         </div>
@@ -99,7 +99,7 @@ export const FormDialog: Story = {
           </label>
           <textarea
             rows={3}
-            className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700 text-sm font-body text-ink-900 dark:text-ink-50 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25 transition-all resize-none"
+            className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700 text-sm font-body text-ink-900 dark:text-ink-50 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25 transition-all resize-none"
             placeholder="Optional description…"
           />
         </div>

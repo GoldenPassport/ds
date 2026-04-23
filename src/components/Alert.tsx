@@ -62,14 +62,14 @@ const variants: Record<AlertVariant, VariantConfig> = {
     DefaultIcon:  CheckCircle2,
   },
   warning: {
-    tinted:       'bg-gold-50 border border-gold-200 dark:bg-gold-900/20 dark:border-gold-800',
-    outline:      'bg-white border border-ink-200 border-l-4 border-l-gold-500 dark:bg-ink-800 dark:border-ink-600 dark:border-l-gold-400',
-    accentBorder: 'border-l-gold-500 dark:border-l-gold-400',
-    icon:         'text-gold-600 dark:text-gold-400',
-    title:        'text-gold-900 dark:text-gold-100',
-    body:         'text-gold-800 dark:text-gold-300',
-    dismiss:      'text-gold-500 hover:text-gold-700 dark:text-gold-600 dark:hover:text-gold-400',
-    actionBtn:    'text-gold-800 font-semibold hover:text-gold-900 dark:text-gold-300 dark:hover:text-gold-100',
+    tinted:       'bg-primary-50 border border-primary-200 dark:bg-primary-900/20 dark:border-primary-800',
+    outline:      'bg-white border border-ink-200 border-l-4 border-l-primary-500 dark:bg-ink-800 dark:border-ink-600 dark:border-l-primary-400',
+    accentBorder: 'border-l-primary-500 dark:border-l-primary-400',
+    icon:         'text-primary-600 dark:text-primary-400',
+    title:        'text-primary-900 dark:text-primary-100',
+    body:         'text-primary-800 dark:text-primary-300',
+    dismiss:      'text-primary-500 hover:text-primary-700 dark:text-primary-600 dark:hover:text-primary-400',
+    actionBtn:    'text-primary-800 font-semibold hover:text-primary-900 dark:text-primary-300 dark:hover:text-primary-100',
     DefaultIcon:  AlertTriangle,
   },
   error: {
@@ -161,7 +161,7 @@ export function Alert({
             aria-label="Dismiss"
             className={[
               'shrink-0 mt-0.5 rounded transition-colors duration-150',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/40',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40',
               cfg.dismiss,
             ].join(' ')}
           >

@@ -21,7 +21,7 @@ function StatCard({ label, value, delta }) {
     <div className="flex-1 bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700 rounded-xl px-5 py-4 shadow-sm">
       <div className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-500 font-body mb-2">{label}</div>
       <div className="text-3xl font-extrabold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-none">{value}</div>
-      <div className="text-xs text-gold-600 dark:text-gold-400 font-body mt-1.5 font-medium">{delta}</div>
+      <div className="text-xs text-primary-600 dark:text-primary-400 font-body mt-1.5 font-medium">{delta}</div>
     </div>
   );
 }

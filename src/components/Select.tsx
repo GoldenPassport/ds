@@ -63,7 +63,7 @@ export function Select<T extends string | number>({
             'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
             error
               ? 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/25'
-              : 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25',
+              : 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25',
             'disabled:opacity-40 disabled:cursor-not-allowed',
             'transition-all duration-150',
           ].join(' ')}>
@@ -97,14 +97,14 @@ export function Select<T extends string | number>({
                   className={({ active, selected: sel }) => [
                     'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
                     active   ? 'bg-ink-50 dark:bg-ink-700' : '',
-                    sel      ? 'text-gold-600 dark:text-gold-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
+                    sel      ? 'text-primary-600 dark:text-primary-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
                     option.disabled ? 'opacity-40 cursor-not-allowed' : '',
                   ].join(' ')}
                 >
                   {({ selected: sel }) => (
                     <span className="flex items-center justify-between">
                       <span className="block truncate">{option.label}</span>
-                      {sel && <Check className="h-4 w-4 text-gold-500 shrink-0" />}
+                      {sel && <Check className="h-4 w-4 text-primary-500 shrink-0" />}
                     </span>
                   )}
                 </Listbox.Option>

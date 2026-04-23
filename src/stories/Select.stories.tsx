@@ -18,7 +18,7 @@ const DEPT_OPTIONS = [
 ];
 
 const meta = {
-  title: 'Components/Select',
+  title: 'Forms/Select Menus',
   component: Select,
   tags: ['autodocs'],
   argTypes: {

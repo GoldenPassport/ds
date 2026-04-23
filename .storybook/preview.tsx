@@ -51,7 +51,7 @@ const preview: Preview = {
     a11y: {
       config: {
         rules: [
-          // colour contrast is intentional on gold buttons (dark text on gold)
+          // colour contrast is intentional on primary buttons (dark text on primary)
           { id: 'color-contrast', enabled: true },
         ],
       },

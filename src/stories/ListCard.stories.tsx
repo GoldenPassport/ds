@@ -7,7 +7,7 @@ import { Avatar } from '../components/Avatar';
 import { Badge } from '../components/Badge';
 
 const meta = {
-  title: 'Components/ListCard',
+  title: 'Layout/Media Objects',
   component: ListCard,
   tags: ['autodocs'],
   argTypes: {

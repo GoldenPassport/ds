@@ -51,7 +51,7 @@ const variantIconColor: Record<NotificationVariant, string> = {
   default: '',
   info:    'text-slate-500 dark:text-slate-400',
   success: 'text-green-500 dark:text-green-400',
-  warning: 'text-gold-500 dark:text-gold-400',
+  warning: 'text-primary-500 dark:text-primary-400',
   error:   'text-red-500 dark:text-red-400',
 };
 
@@ -150,9 +150,9 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
                   onClick={action.onClick}
                   className={[
                     'text-sm font-semibold font-body transition-colors duration-150',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/40 rounded',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded',
                     i === 0
-                      ? 'text-gold-600 hover:text-gold-700 dark:text-gold-400 dark:hover:text-gold-300'
+                      ? 'text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300'
                       : 'text-ink-400 hover:text-ink-600 dark:text-ink-500 dark:hover:text-ink-300',
                   ].join(' ')}
                 >
@@ -171,7 +171,7 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
             'shrink-0 -mr-1 -mt-1 p-1 rounded',
             'text-ink-300 hover:text-ink-500 dark:text-ink-600 dark:hover:text-ink-400',
             'transition-colors duration-150',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/40',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40',
           ].join(' ')}
         >
           <X className="w-4 h-4" aria-hidden />

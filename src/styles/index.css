@@ -12,17 +12,17 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Gold */
-  --color-gold-50:  #FFFBEB;
-  --color-gold-100: #FEF3C7;
-  --color-gold-200: #FDE68A;
-  --color-gold-300: #FCD34D;
-  --color-gold-400: #FBBF24;
-  --color-gold-500: #F5C200;
-  --color-gold-600: #D4A500;
-  --color-gold-700: #A37C00;
-  --color-gold-800: #725600;
-  --color-gold-900: #3D2E00;
+  /* Primary */
+  --color-primary-50:  #FFFBEB;
+  --color-primary-100: #FEF3C7;
+  --color-primary-200: #FDE68A;
+  --color-primary-300: #FCD34D;
+  --color-primary-400: #FBBF24;
+  --color-primary-500: #F5C200;
+  --color-primary-600: #D4A500;
+  --color-primary-700: #A37C00;
+  --color-primary-800: #725600;
+  --color-primary-900: #3D2E00;
 
   /* Ink */
   --color-ink-50:  #F8F7F4;
@@ -64,7 +64,7 @@
   --shadow-sm:        0 1px 2px 0 rgb(14 13 11 / 0.06);
   --shadow-md:        0 4px 12px 0 rgb(14 13 11 / 0.08), 0 1px 3px 0 rgb(14 13 11 / 0.04);
   --shadow-lg:        0 12px 32px 0 rgb(14 13 11 / 0.10), 0 3px 8px 0 rgb(14 13 11 / 0.06);
-  --shadow-gold:      0 0 0 3px rgb(245 194 0 / 0.25), 0 0 20px rgb(245 194 0 / 0.10);
+  --shadow-primary:   0 0 0 3px rgb(245 194 0 / 0.25), 0 0 20px rgb(245 194 0 / 0.10);
   --shadow-dark-sm:   0 1px 2px 0 rgb(0 0 0 / 0.30);
   --shadow-dark-md:   0 4px 12px 0 rgb(0 0 0 / 0.40);
 
@@ -105,12 +105,12 @@
 .dark .tippy-box[data-theme~='gp'] .tippy-arrow { color: var(--color-ink-700); }
 
 @layer utilities {
-  /* Focus ring — gold */
+  /* Focus ring — primary */
   .gp-focus {
-    @apply outline-none ring-2 ring-gold-500/40 border-gold-500;
+    @apply outline-none ring-2 ring-primary-500/40 border-primary-500;
   }
   /* AI pulse dot */
   .gp-ai-dot {
-    @apply w-1.5 h-1.5 rounded-full bg-gold-500 animate-gp-pulse inline-block shrink-0;
+    @apply w-1.5 h-1.5 rounded-full bg-primary-500 animate-gp-pulse inline-block shrink-0;
   }
 }

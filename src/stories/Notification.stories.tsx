@@ -74,7 +74,7 @@ function NotificationDemo({
               : undefined,
           })
         }
-        className="px-4 py-2 rounded-lg bg-gold-500 text-ink-900 text-sm font-semibold font-body hover:bg-gold-600 transition-colors"
+        className="px-4 py-2 rounded-lg bg-primary-500 text-ink-900 text-sm font-semibold font-body hover:bg-primary-600 transition-colors"
       >
         Show notification
       </button>
@@ -92,7 +92,7 @@ function NotificationDemo({
 // ── Meta ──────────────────────────────────────────────────
 
 const meta = {
-  title:     'Components/Notification',
+  title:     'Overlays/Notifications',
   component: NotificationDemo,
   tags:      ['autodocs'],
   parameters: { layout: 'padded' },
@@ -236,7 +236,7 @@ export const CustomIcon: Story = {
         onDismiss={noop}
         item={{
           id:    '1',
-          icon:  <Bell className="w-5 h-5 text-gold-500 shrink-0" />,
+          icon:  <Bell className="w-5 h-5 text-primary-500 shrink-0" />,
           title: 'Reminder',
           body:  'Your scheduled report runs in 15 minutes.',
         }}
@@ -254,7 +254,7 @@ export const CustomIcon: Story = {
         onDismiss={noop}
         item={{
           id:    '3',
-          icon:  <Star className="w-5 h-5 text-gold-500 shrink-0" />,
+          icon:  <Star className="w-5 h-5 text-primary-500 shrink-0" />,
           title: 'Milestone reached',
           body:  'Your workflow has processed 10,000 records.',
         }}
@@ -326,7 +326,7 @@ function LiveDemoWrapper() {
             add({ ...EXAMPLES[counter.current % EXAMPLES.length], duration: 5000 });
             counter.current++;
           }}
-          className="px-4 py-2 rounded-lg bg-gold-500 text-ink-900 text-sm font-semibold font-body hover:bg-gold-600 transition-colors"
+          className="px-4 py-2 rounded-lg bg-primary-500 text-ink-900 text-sm font-semibold font-body hover:bg-primary-600 transition-colors"
         >
           Show next notification
         </button>

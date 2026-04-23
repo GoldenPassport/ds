@@ -37,7 +37,7 @@ export function Input({
           'transition-all duration-150 outline-none',
           error
             ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/30'
-            : 'border-ink-200 dark:border-ink-600 focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25',
+            : 'border-ink-200 dark:border-ink-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25',
           className,
         ].join(' ')}
         aria-invalid={!!error}

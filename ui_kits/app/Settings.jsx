@@ -5,7 +5,7 @@ function Toggle({ on }) {
   return (
     <button
       onClick={() => setActive(!active)}
-      className={`relative w-10 h-[22px] rounded-full cursor-pointer border-0 transition-colors duration-200 shrink-0 ${active ? 'bg-gold-500' : 'bg-ink-200 dark:bg-ink-600'}`}
+      className={`relative w-10 h-[22px] rounded-full cursor-pointer border-0 transition-colors duration-200 shrink-0 ${active ? 'bg-primary-500' : 'bg-ink-200 dark:bg-ink-600'}`}
     >
       <span className={`absolute top-[3px] w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200 ${active ? 'left-[21px]' : 'left-[3px]'}`} />
     </button>
@@ -35,8 +35,8 @@ function Section({ title, children }) {
   );
 }
 
-const inputCls = "bg-ink-50 dark:bg-ink-700 border border-ink-200 dark:border-ink-600 rounded-lg px-3 py-1.5 text-[13px] font-body text-ink-900 dark:text-ink-50 outline-none w-52 focus:border-gold-500 transition-colors";
-const selectCls = "bg-ink-50 dark:bg-ink-700 border border-ink-200 dark:border-ink-600 rounded-lg px-3 py-1.5 text-[13px] font-body text-ink-900 dark:text-ink-50 outline-none focus:border-gold-500 transition-colors";
+const inputCls = "bg-ink-50 dark:bg-ink-700 border border-ink-200 dark:border-ink-600 rounded-lg px-3 py-1.5 text-[13px] font-body text-ink-900 dark:text-ink-50 outline-none w-52 focus:border-primary-500 transition-colors";
+const selectCls = "bg-ink-50 dark:bg-ink-700 border border-ink-200 dark:border-ink-600 rounded-lg px-3 py-1.5 text-[13px] font-body text-ink-900 dark:text-ink-50 outline-none focus:border-primary-500 transition-colors";
 
 function Settings({ onBack }) {
   return (

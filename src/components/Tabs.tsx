@@ -58,7 +58,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
     'px-4 py-2.5 -mb-px border-b-2 border-transparent',
     'text-ink-400 dark:text-ink-500',
     'hover:text-ink-700 dark:hover:text-ink-300',
-    'data-[selected]:border-gold-500 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50',
+    'data-[selected]:border-primary-500 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50',
   ].join(' '),
 
   pills: [
@@ -66,7 +66,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
     'px-4 py-1.5 rounded-full',
     'text-ink-500 dark:text-ink-400',
     'hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200',
-    'data-[selected]:bg-gold-500 data-[selected]:text-ink-900',
+    'data-[selected]:bg-primary-500 data-[selected]:text-ink-900',
   ].join(' '),
 
   pill: [
@@ -82,7 +82,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
     'flex-1 justify-center px-4 py-3 -mb-px border-b-2 border-transparent',
     'text-ink-400 dark:text-ink-500',
     'hover:text-ink-700 dark:hover:text-ink-300',
-    'data-[selected]:border-gold-500 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50',
+    'data-[selected]:border-primary-500 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50',
   ].join(' '),
 };
 
@@ -129,7 +129,7 @@ export function Tabs({
         {tabs.map((tab, i) => (
           <TabPanel
             key={i}
-            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/50 rounded-lg"
+            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 rounded-lg"
           >
             {tab.content}
           </TabPanel>

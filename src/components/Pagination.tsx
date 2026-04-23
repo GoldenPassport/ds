@@ -63,7 +63,7 @@ function PageBtn({
         'transition-colors duration-100 border-0 cursor-pointer',
         'disabled:opacity-40 disabled:cursor-not-allowed',
         active
-          ? 'bg-gold-500 text-ink-900'
+          ? 'bg-primary-500 text-ink-900'
           : 'bg-transparent text-ink-500 dark:text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-700',
       ].join(' ')}
     >
@@ -118,7 +118,7 @@ export function Pagination({
                 'text-[13px] font-body font-medium rounded-lg px-2.5 py-1.5',
                 'bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700',
                 'text-ink-900 dark:text-ink-50',
-                'focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25',
+                'focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25',
                 'transition-all duration-150 cursor-pointer',
               ].join(' ')}
             >

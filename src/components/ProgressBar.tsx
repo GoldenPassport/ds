@@ -31,7 +31,7 @@ const trackH: Record<ProgressBarSize, string> = {
 };
 
 const fillColor: Record<ProgressBarVariant, string> = {
-  default: 'bg-gold-500',
+  default: 'bg-primary-500',
   success: 'bg-green-500',
   warning: 'bg-amber-500',
   error:   'bg-red-500',
@@ -61,7 +61,7 @@ const circularTextSize: Record<ProgressBarSize, string> = {
 };
 
 const strokeColor: Record<ProgressBarVariant, string> = {
-  default: 'text-gold-500',
+  default: 'text-primary-500',
   success: 'text-green-500',
   warning: 'text-amber-500',
   error:   'text-red-500',

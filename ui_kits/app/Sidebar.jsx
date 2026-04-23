@@ -19,11 +19,11 @@ function Sidebar({ active, onNav, collapsed }) {
           flex items-center gap-2.5 rounded-xl cursor-pointer transition-all duration-150 mb-0.5
           ${collapsed ? 'justify-center px-0 py-2.5' : 'px-3.5 py-2.5'}
           ${isActive
-            ? 'bg-ink-100 dark:bg-ink-700 border-l-2 border-gold-500 text-ink-900 dark:text-ink-50'
+            ? 'bg-ink-100 dark:bg-ink-700 border-l-2 border-primary-500 text-ink-900 dark:text-ink-50'
             : 'border-l-2 border-transparent text-ink-400 dark:text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200'}
         `}
       >
-        <span className={`text-base leading-none shrink-0 ${isActive ? 'text-gold-500' : 'text-ink-300 dark:text-ink-500'}`}>
+        <span className={`text-base leading-none shrink-0 ${isActive ? 'text-primary-500' : 'text-ink-300 dark:text-ink-500'}`}>
           {item.icon}
         </span>
         {!collapsed && (

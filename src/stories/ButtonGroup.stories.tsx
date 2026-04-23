@@ -13,7 +13,7 @@ import {
 import { ButtonGroup } from '../components/ButtonGroup';
 
 const meta = {
-  title: 'Components/ButtonGroup',
+  title: 'Elements/Button Groups',
   component: ButtonGroup,
   tags: ['autodocs'],
   argTypes: {

@@ -62,8 +62,8 @@ export interface DataTableProps<T extends { id: string | number }> {
 type SortState = { key: string; direction: SortDirection };
 
 function SortIcon({ state }: { state: SortDirection }) {
-  if (state === 'asc')  return <ChevronUp   className="w-3.5 h-3.5 text-gold-500" />;
-  if (state === 'desc') return <ChevronDown  className="w-3.5 h-3.5 text-gold-500" />;
+  if (state === 'asc')  return <ChevronUp   className="w-3.5 h-3.5 text-primary-500" />;
+  if (state === 'desc') return <ChevronDown  className="w-3.5 h-3.5 text-primary-500" />;
   return <ChevronsUpDown className="w-3.5 h-3.5 text-ink-300 dark:text-ink-600" />;
 }
 
@@ -173,7 +173,7 @@ export function DataTable<T extends { id: string | number }>({
             {loading ? (
               <tr>
                 <td colSpan={columns.length} className="px-5 py-12 text-center">
-                  <div className="inline-block w-6 h-6 border-2 border-gold-500 border-t-transparent rounded-full animate-spin" />
+                  <div className="inline-block w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 </td>
               </tr>
             ) : visibleRows.length === 0 ? (
@@ -193,7 +193,7 @@ export function DataTable<T extends { id: string | number }>({
                   className={[
                     'border-b border-ink-100 dark:border-ink-700 last:border-0',
                     'transition-colors duration-100',
-                    onRowClick ? 'cursor-pointer hover:bg-ink-50 dark:hover:bg-ink-700/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold-500/40' : '',
+                    onRowClick ? 'cursor-pointer hover:bg-ink-50 dark:hover:bg-ink-700/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500/40' : '',
                   ].join(' ')}
                 >
                   {columns.map(col => (

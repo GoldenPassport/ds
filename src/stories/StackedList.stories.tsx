@@ -6,7 +6,7 @@ import { Badge } from '../components/Badge';
 import { Menu } from '../components/Menu';
 
 const meta = {
-  title: 'Components/StackedList',
+  title: 'Lists/Stacked Lists',
   component: StackedList,
   tags: ['autodocs'],
   argTypes: {

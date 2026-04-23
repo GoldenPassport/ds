@@ -23,7 +23,7 @@ const INTEGRATIONS = [
 ];
 
 const meta = {
-  title: 'Components/Combobox',
+  title: 'Navigation/Command Palettes',
   component: Combobox,
   tags: ['autodocs'],
   argTypes: {

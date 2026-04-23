@@ -132,7 +132,7 @@ function StepBarInner({
         className={[
           'h-1 w-full rounded-sm transition-colors duration-150',
           active
-            ? 'bg-gold-500 group-hover:bg-gold-600'
+            ? 'bg-primary-500 group-hover:bg-primary-600'
             : isUpcoming
               ? 'bg-ink-200 dark:bg-ink-700 group-hover:bg-ink-300 dark:group-hover:bg-ink-600'
               : 'bg-ink-200 dark:bg-ink-700',
@@ -145,7 +145,7 @@ function StepBarInner({
           className={[
             'text-sm font-semibold font-body truncate transition-colors duration-150',
             active
-              ? 'text-gold-600 dark:text-gold-400 group-hover:text-gold-700 dark:group-hover:text-gold-300'
+              ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
               : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
           ].join(' ')}
         >
@@ -210,9 +210,9 @@ function PanelsVariant({
                   'shrink-0 flex items-center justify-center w-9 h-9 rounded-full',
                   'text-sm font-semibold font-body transition-all duration-150',
                   isComplete
-                    ? 'bg-gold-500 text-ink-900 group-hover:bg-gold-600'
+                    ? 'bg-primary-500 text-ink-900 group-hover:bg-primary-600'
                     : isCurrent
-                      ? 'border-2 border-gold-500 text-gold-600 dark:text-gold-400 group-hover:border-gold-600 group-hover:text-gold-700 dark:group-hover:text-gold-300'
+                      ? 'border-2 border-primary-500 text-primary-600 dark:text-primary-400 group-hover:border-primary-600 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                       : 'border-2 border-ink-300 dark:border-ink-600 text-ink-400 dark:text-ink-500 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
@@ -226,7 +226,7 @@ function PanelsVariant({
                 className={[
                   'text-sm font-semibold font-body leading-snug truncate transition-colors duration-150',
                   isCurrent
-                    ? 'text-gold-600 dark:text-gold-400 group-hover:text-gold-700 dark:group-hover:text-gold-300'
+                    ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                     : isComplete
                       ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                       : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
@@ -312,15 +312,15 @@ function PanelsVariant({
 function CircleIndicator({ isComplete, isCurrent }: { isComplete: boolean; isCurrent: boolean }) {
   if (isComplete) {
     return (
-      <span className="flex w-8 h-8 rounded-full bg-gold-500 items-center justify-center shrink-0 transition-colors duration-150 group-hover:bg-gold-600">
+      <span className="flex w-8 h-8 rounded-full bg-primary-500 items-center justify-center shrink-0 transition-colors duration-150 group-hover:bg-primary-600">
         <Check className="w-4 h-4 text-ink-900 stroke-[2.5]" aria-hidden />
       </span>
     );
   }
   if (isCurrent) {
     return (
-      <span className="flex w-8 h-8 rounded-full border-2 border-gold-500 items-center justify-center shrink-0 transition-colors duration-150 group-hover:border-gold-600">
-        <span className="w-3 h-3 rounded-full bg-gold-500 transition-colors duration-150 group-hover:bg-gold-600" />
+      <span className="flex w-8 h-8 rounded-full border-2 border-primary-500 items-center justify-center shrink-0 transition-colors duration-150 group-hover:border-primary-600">
+        <span className="w-3 h-3 rounded-full bg-primary-500 transition-colors duration-150 group-hover:bg-primary-600" />
       </span>
     );
   }
@@ -367,7 +367,7 @@ function CirclesVariant({
                   <div
                     className={[
                       'flex-1 h-0.5 transition-colors duration-300',
-                      prevComplete ? 'bg-gold-500' : 'bg-ink-200 dark:bg-ink-700',
+                      prevComplete ? 'bg-primary-500' : 'bg-ink-200 dark:bg-ink-700',
                     ].join(' ')}
                   />
                 )}
@@ -382,7 +382,7 @@ function CirclesVariant({
                   <div
                     className={[
                       'flex-1 h-0.5 transition-colors duration-300',
-                      isComplete ? 'bg-gold-500' : 'bg-ink-200 dark:bg-ink-700',
+                      isComplete ? 'bg-primary-500' : 'bg-ink-200 dark:bg-ink-700',
                     ].join(' ')}
                   />
                 )}
@@ -395,7 +395,7 @@ function CirclesVariant({
                     className={[
                       'text-xs font-semibold font-body transition-colors duration-150',
                       isCurrent
-                        ? 'text-gold-600 dark:text-gold-400 group-hover:text-gold-700 dark:group-hover:text-gold-300'
+                        ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                         : isComplete
                           ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                           : 'text-ink-400 dark:text-ink-500',
@@ -471,12 +471,12 @@ function VerticalVariant({
           const isLast = i === steps.length - 1;
 
           const circleNode = isComplete ? (
-            <span className="flex w-8 h-8 rounded-full bg-gold-500 items-center justify-center shrink-0 transition-colors duration-150 group-hover:bg-gold-600">
+            <span className="flex w-8 h-8 rounded-full bg-primary-500 items-center justify-center shrink-0 transition-colors duration-150 group-hover:bg-primary-600">
               <Check className="w-4 h-4 text-ink-900 stroke-[2.5]" aria-hidden />
             </span>
           ) : isCurrent ? (
-            <span className="flex w-8 h-8 rounded-full border-2 border-gold-500 items-center justify-center shrink-0 transition-colors duration-150 group-hover:border-gold-600">
-              <span className="w-3 h-3 rounded-full bg-gold-500 transition-colors duration-150 group-hover:bg-gold-600" />
+            <span className="flex w-8 h-8 rounded-full border-2 border-primary-500 items-center justify-center shrink-0 transition-colors duration-150 group-hover:border-primary-600">
+              <span className="w-3 h-3 rounded-full bg-primary-500 transition-colors duration-150 group-hover:bg-primary-600" />
             </span>
           ) : (
             <span className="flex w-8 h-8 items-center justify-center shrink-0">
@@ -529,7 +529,7 @@ function VerticalVariant({
                     <div
                       className={[
                         'w-0.5 min-h-[1.5rem] my-1 transition-colors duration-300',
-                        isComplete ? 'bg-gold-500' : 'bg-ink-200 dark:bg-ink-700',
+                        isComplete ? 'bg-primary-500' : 'bg-ink-200 dark:bg-ink-700',
                       ].join(' ')}
                     />
                   </div>
@@ -556,7 +556,7 @@ function StepVerticalLabel({
         className={[
           'text-sm font-semibold font-body leading-snug transition-colors duration-150',
           isCurrent
-            ? 'text-gold-600 dark:text-gold-400 group-hover:text-gold-700 dark:group-hover:text-gold-300'
+            ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
             : isComplete
               ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
               : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
@@ -606,9 +606,9 @@ function MobilePanelsList({
                   'shrink-0 flex items-center justify-center w-9 h-9 rounded-full',
                   'text-sm font-semibold font-body transition-all duration-150',
                   isComplete
-                    ? 'bg-gold-500 text-ink-900 group-hover:bg-gold-600'
+                    ? 'bg-primary-500 text-ink-900 group-hover:bg-primary-600'
                     : isCurrent
-                      ? 'border-2 border-gold-500 text-gold-600 dark:text-gold-400 group-hover:border-gold-600 group-hover:text-gold-700 dark:group-hover:text-gold-300'
+                      ? 'border-2 border-primary-500 text-primary-600 dark:text-primary-400 group-hover:border-primary-600 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                       : 'border-2 border-ink-300 dark:border-ink-600 text-ink-400 dark:text-ink-500 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
@@ -621,7 +621,7 @@ function MobilePanelsList({
                 className={[
                   'text-sm font-semibold font-body leading-snug transition-colors duration-150',
                   isCurrent
-                    ? 'text-gold-600 dark:text-gold-400 group-hover:text-gold-700 dark:group-hover:text-gold-300'
+                    ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                     : isComplete
                       ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                       : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
@@ -709,7 +709,7 @@ function MobileList({
                 className={[
                   'text-sm font-semibold font-body leading-snug transition-colors duration-150',
                   active
-                    ? 'text-gold-600 dark:text-gold-400 group-hover:text-gold-700 dark:group-hover:text-gold-300'
+                    ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                     : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
@@ -741,7 +741,7 @@ function MobileList({
               className={[
                 'group border-l-4 rounded-r-md transition-colors duration-150 cursor-pointer',
                 active
-                  ? 'border-gold-500 hover:border-gold-600'
+                  ? 'border-primary-500 hover:border-primary-600'
                   : 'border-ink-200 dark:border-ink-700 hover:border-ink-300 dark:hover:border-ink-500',
               ].join(' ')}
             >

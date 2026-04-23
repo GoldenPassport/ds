@@ -47,10 +47,10 @@ function RadioDot({ selected, disabled, size = 'sm' }: { selected: boolean; disa
         'flex items-center justify-center transition-all duration-150',
         size === 'lg' ? 'mt-0.5 w-6 h-6' : 'mt-0.5 w-4 h-4',
         selected
-          ? 'border-gold-500 bg-gold-500'
+          ? 'border-primary-500 bg-primary-500'
           : disabled
             ? 'border-ink-200 dark:border-ink-600 bg-white dark:bg-ink-700'
-            : 'border-ink-300 dark:border-ink-600 bg-white dark:bg-ink-700 group-hover:border-gold-400',
+            : 'border-ink-300 dark:border-ink-600 bg-white dark:bg-ink-700 group-hover:border-primary-400',
       ].join(' ')}
     >
       {selected && (
@@ -70,7 +70,7 @@ function CheckBadge({ selected }: { selected: boolean }) {
         'shrink-0 w-5 h-5 rounded-full flex items-center justify-center',
         'transition-all duration-150',
         selected
-          ? 'bg-gold-500'
+          ? 'bg-primary-500'
           : 'border-2 border-ink-200 dark:border-ink-600',
       ].join(' ')}
     >
@@ -188,16 +188,16 @@ export function RadioGroup<T extends string | number = string>({
                   'transition-all duration-150',
                   dividers
                     ? ''
-                    : 'rounded-xl border-2 focus-within:ring-2 focus-within:ring-gold-500/30 focus-within:ring-offset-1',
+                    : 'rounded-xl border-2 focus-within:ring-2 focus-within:ring-primary-500/30 focus-within:ring-offset-1',
                   dividers
-                    ? isSelected ? 'bg-gold-50 dark:bg-gold-900/10' : 'bg-white dark:bg-ink-800'
+                    ? isSelected ? 'bg-primary-50 dark:bg-primary-900/10' : 'bg-white dark:bg-ink-800'
                     : isSelected
-                      ? 'border-gold-500 bg-gold-50 dark:bg-gold-900/10'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
                       : 'border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800',
                   isDisabled
                     ? 'cursor-not-allowed opacity-40'
                     : isSelected
-                      ? 'cursor-pointer hover:bg-gold-100 dark:hover:bg-gold-900/20'
+                      ? 'cursor-pointer hover:bg-primary-100 dark:hover:bg-primary-900/20'
                       : 'cursor-pointer hover:bg-ink-50 dark:hover:bg-ink-700/30',
                 ].filter(Boolean).join(' ')}
               >
@@ -256,14 +256,14 @@ export function RadioGroup<T extends string | number = string>({
                 className={[
                   'flex flex-col rounded-xl border-2 p-4',
                   'transition-all duration-150',
-                  'focus-within:ring-2 focus-within:ring-gold-500/30 focus-within:ring-offset-1',
+                  'focus-within:ring-2 focus-within:ring-primary-500/30 focus-within:ring-offset-1',
                   isSelected
-                    ? 'border-gold-500 bg-gold-50 dark:bg-gold-900/10'
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
                     : 'border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800',
                   isDisabled
                     ? 'cursor-not-allowed opacity-40'
                     : isSelected
-                      ? 'cursor-pointer hover:bg-gold-100 dark:hover:bg-gold-900/20'
+                      ? 'cursor-pointer hover:bg-primary-100 dark:hover:bg-primary-900/20'
                       : 'cursor-pointer hover:border-ink-300 dark:hover:border-ink-600',
                 ].join(' ')}
               >
@@ -326,14 +326,14 @@ export function RadioGroup<T extends string | number = string>({
                   'flex items-center justify-center py-3 rounded-xl border-2',
                   'text-sm font-semibold font-body text-center',
                   'transition-all duration-150',
-                  'focus-within:ring-2 focus-within:ring-gold-500/30 focus-within:ring-offset-1',
+                  'focus-within:ring-2 focus-within:ring-primary-500/30 focus-within:ring-offset-1',
                   isSelected
-                    ? 'bg-gold-500 border-gold-500 text-ink-900'
+                    ? 'bg-primary-500 border-primary-500 text-ink-900'
                     : 'bg-white dark:bg-ink-800 border-ink-200 dark:border-ink-700 text-ink-700 dark:text-ink-200',
                   isDisabled
                     ? 'cursor-not-allowed opacity-40'
                     : isSelected
-                      ? 'cursor-pointer hover:bg-gold-400 hover:border-gold-400'
+                      ? 'cursor-pointer hover:bg-primary-400 hover:border-primary-400'
                       : 'cursor-pointer hover:border-ink-300 dark:hover:border-ink-600',
                 ].join(' ')}
               >
@@ -400,12 +400,12 @@ export function RadioGroup<T extends string | number = string>({
                 isFirst  && 'rounded-t-xl',
                 isLast   && 'rounded-b-xl',
                 isSelected
-                  ? 'border-gold-500 bg-gold-50 dark:bg-gold-900/10 relative z-10'
+                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10 relative z-10'
                   : 'border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800',
                 isDisabled
                   ? 'cursor-not-allowed opacity-40'
                   : isSelected
-                    ? 'cursor-pointer hover:bg-gold-100 dark:hover:bg-gold-900/20'
+                    ? 'cursor-pointer hover:bg-primary-100 dark:hover:bg-primary-900/20'
                     : 'cursor-pointer hover:bg-ink-50 dark:hover:bg-ink-700/40',
               ].filter(Boolean).join(' ')}
             >

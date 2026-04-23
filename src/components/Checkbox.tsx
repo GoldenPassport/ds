@@ -58,10 +58,10 @@ export function Checkbox({
         className={[
           'mt-0.5 shrink-0 w-4 h-4 rounded flex items-center justify-center',
           'border transition-all duration-150',
-          'focus-within:ring-2 focus-within:ring-gold-500/25',
+          'focus-within:ring-2 focus-within:ring-primary-500/25',
           isChecked
-            ? 'bg-gold-500 border-gold-500'
-            : 'bg-white dark:bg-ink-700 border-ink-300 dark:border-ink-600 group-hover:border-gold-400',
+            ? 'bg-primary-500 border-primary-500'
+            : 'bg-white dark:bg-ink-700 border-ink-300 dark:border-ink-600 group-hover:border-primary-400',
         ].join(' ')}
       >
         {indeterminate

@@ -4,7 +4,7 @@ import { useArgs } from 'storybook/preview-api';
 import { Checkbox } from '../components/Checkbox';
 
 const meta = {
-  title: 'Components/Checkbox',
+  title: 'Forms/Checkboxes',
   component: Checkbox,
   tags: ['autodocs'],
   argTypes: {

@@ -17,7 +17,7 @@ const sampleTabs = [
 ];
 
 const meta = {
-  title: 'Components/Tabs',
+  title: 'Navigation/Tabs',
   component: Tabs,
   tags: ['autodocs'],
   args: {

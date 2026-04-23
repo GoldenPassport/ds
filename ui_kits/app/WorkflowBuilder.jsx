@@ -97,7 +97,7 @@ function WorkflowBuilder({ onBack }) {
       {/* AI Prompt */}
       <div className="px-6 py-4 border-b border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shrink-0">
         <div className="flex items-center gap-2 mb-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold-500 animate-gp-pulse inline-block" />
+          <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-gp-pulse inline-block" />
           <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-500 font-body">AI Workflow Builder</span>
         </div>
         <div className="relative">
@@ -107,17 +107,17 @@ function WorkflowBuilder({ onBack }) {
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             className="w-full pr-12 pl-4 py-3 bg-ink-50 dark:bg-ink-700 border border-ink-200 dark:border-ink-600 rounded-xl text-sm font-body text-ink-900 dark:text-ink-50 placeholder-ink-400 dark:placeholder-ink-500 outline-none transition-all duration-200"
-            style={{ boxShadow: focused ? GP.shadow.gold : 'none', borderColor: focused ? '#F5C200' : undefined }}
+            style={{ boxShadow: focused ? GP.shadow.primary : 'none', borderColor: focused ? '#F5C200' : undefined }}
             placeholder="Describe your workflow in plain language…"
           />
-          <button className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-gold-500 hover:bg-gold-600 border-0 rounded-lg w-8 h-8 flex items-center justify-center text-ink-900 cursor-pointer transition-colors text-sm font-bold">
+          <button className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-primary-500 hover:bg-primary-600 border-0 rounded-lg w-8 h-8 flex items-center justify-center text-ink-900 cursor-pointer transition-colors text-sm font-bold">
             →
           </button>
         </div>
         <div className="flex gap-2 mt-2.5 flex-wrap">
           {SUGGESTIONS.map(s => (
             <button key={s} onClick={() => setPrompt(s)}
-              className="bg-ink-50 dark:bg-ink-700 border border-ink-200 dark:border-ink-600 rounded-lg px-3 py-1.5 text-xs text-ink-500 dark:text-ink-400 cursor-pointer font-body transition-all duration-150 hover:border-gold-500 hover:text-gold-600 dark:hover:text-gold-400">
+              className="bg-ink-50 dark:bg-ink-700 border border-ink-200 dark:border-ink-600 rounded-lg px-3 py-1.5 text-xs text-ink-500 dark:text-ink-400 cursor-pointer font-body transition-all duration-150 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
               {s}
             </button>
           ))}
