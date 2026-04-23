@@ -12,6 +12,7 @@ export { ContainerList }  from './ContainerList';
 export { PageContainer }  from './PageContainer';
 export { PageHeading }    from './PageHeading';
 export { SectionHeading } from './SectionHeading';
+export { Stats }          from './Stats';
 export { Alert }       from './Alert';
 export { Divider }     from './Divider';
 export { Button }      from './Button';
@@ -57,6 +58,7 @@ export type { ContainerListProps, ContainerListVariant }                        
 export type { PageContainerProps, PageContainerWidth, PageContainerPadding, PageContainerAlign }         from './PageContainer';
 export type { PageHeadingProps, PageHeadingTab }                                                          from './PageHeading';
 export type { SectionHeadingProps, SectionHeadingTab }                                                    from './SectionHeading';
+export type { StatsProps, StatItem, StatsVariant }                                                        from './Stats';
 export type { AlertProps, AlertVariant, AlertAppearance, AlertAction } from './Alert';
 export type { DividerProps, DividerOrientation, DividerAlign }         from './Divider';
 export type { ButtonProps, ButtonVariant, ButtonSize }                      from './Button';
