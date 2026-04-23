@@ -78,7 +78,7 @@ export function Dialog({
                       className="text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 bg-transparent border-0 cursor-pointer transition-colors p-0.5 rounded"
                       aria-label="Close"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </div>
                 )}

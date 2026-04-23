@@ -35,6 +35,7 @@ export interface ComboboxProps<T = string> {
   options:      ComboboxOption<T>[];
   label?:       string;
   hint?:        string;
+  error?:       string;
   placeholder?: string;
   disabled?:    boolean;
   className?:   string;
@@ -46,10 +47,12 @@ export function Combobox<T extends string | number>({
   options,
   label,
   hint,
+  error,
   placeholder = 'Search…',
   disabled = false,
   className = '',
 }: ComboboxProps<T>) {
+  const id    = React.useId();
   const [query, setQuery] = React.useState('');
 
   const filtered = query === ''
@@ -74,11 +77,15 @@ export function Combobox<T extends string | number>({
             <Search className="h-4 w-4" />
           </span>
           <ComboboxInput
+            id={id}
+            aria-describedby={hint ? `${id}-hint` : error ? `${id}-error` : undefined}
+            aria-invalid={!!error}
             className={[
               'w-full pl-9 pr-9 py-2.5 rounded-lg border text-sm font-body',
               'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
-              'border-ink-200 dark:border-ink-600 placeholder:text-ink-400 dark:placeholder:text-ink-500',
-              'focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25',
+              error
+                ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/25'
+                : 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25',
               'disabled:opacity-40 disabled:cursor-not-allowed',
               'transition-all duration-150',
             ].join(' ')}
@@ -136,8 +143,11 @@ export function Combobox<T extends string | number>({
           </Transition>
         </div>
 
-        {hint && (
-          <p className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+        {hint && !error && (
+          <p id={`${id}-hint`} className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+        )}
+        {error && (
+          <p id={`${id}-error`} role="alert" className="text-xs text-red-500 dark:text-red-400 font-body">{error}</p>
         )}
       </div>
     </HLCombobox>

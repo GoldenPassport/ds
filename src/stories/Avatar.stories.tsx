@@ -27,6 +27,7 @@ export const Large: Story = {
 };
 
 export const Sizes: Story = {
+  args: { name: '' },
   render: () => (
     <div className="flex items-end gap-4">
       {[24, 32, 40, 56, 80].map(s => (
@@ -37,6 +38,7 @@ export const Sizes: Story = {
 };
 
 export const MultipleUsers: Story = {
+  args: { name: '' },
   render: () => (
     <div className="flex -space-x-2">
       {['Alex Morgan', 'Sarah Kim', 'Tom Richards', 'Maya Patel'].map(n => (

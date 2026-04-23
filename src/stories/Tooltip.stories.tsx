@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Info, Trash2, Copy, Play } from 'lucide-react';
 import { Tooltip } from '../components/Tooltip';
@@ -11,6 +12,7 @@ const meta = {
   argTypes: {
     content:   { control: 'text',   description: 'Text or ReactNode shown inside the tooltip' },
     placement: { control: 'select', options: ['top', 'bottom', 'left', 'right'], description: 'Preferred placement relative to the trigger' },
+    radius:    { control: 'select', options: ['sm', 'md', 'lg', 'full'], description: 'Border radius of the tooltip bubble' },
     delay:     { control: 'number', description: 'Hover delay before the tooltip appears (ms)' },
     children:  { control: false,    description: 'The element that triggers the tooltip on hover' },
     className: { control: 'text',   description: 'Extra CSS class on the tooltip bubble' },
@@ -25,6 +27,7 @@ export const Playground: Story = {
     content:   'Run this workflow immediately',
     placement: 'top',
     delay:     0,
+    children:  React.createElement('span'),
   },
   render: (args) => (
     <div className="flex justify-center pt-16">
@@ -36,6 +39,7 @@ export const Playground: Story = {
 };
 
 export const OnButton: Story = {
+  args: { content: null, children: React.createElement('span') },
   render: () => (
     <div className="flex justify-center pt-16">
       <Tooltip content="Run this workflow immediately" placement="top">
@@ -46,6 +50,7 @@ export const OnButton: Story = {
 };
 
 export const OnIconButton: Story = {
+  args: { content: null, children: React.createElement('span') },
   render: () => (
     <div className="flex justify-center gap-4 pt-16">
       <Tooltip content="Copy workflow" placement="top">
@@ -63,6 +68,7 @@ export const OnIconButton: Story = {
 };
 
 export const AllPlacements: Story = {
+  args: { content: null, children: React.createElement('span') },
   render: () => (
     <div className="flex flex-col items-center gap-6 py-16">
       <Tooltip content="Appears on top" placement="top">
@@ -84,6 +90,7 @@ export const AllPlacements: Story = {
 };
 
 export const WithDelay: Story = {
+  args: { content: null, children: React.createElement('span') },
   render: () => (
     <div className="flex justify-center gap-6 pt-16">
       <Tooltip content="No delay" delay={0} placement="top">
@@ -99,7 +106,22 @@ export const WithDelay: Story = {
   ),
 };
 
+export const Radius: Story = {
+  name: 'Radius options',
+  args: { content: null, children: React.createElement('span') },
+  render: () => (
+    <div className="flex flex-wrap justify-center gap-6 pt-16">
+      {(['sm', 'md', 'lg', 'full'] as const).map(r => (
+        <Tooltip key={r} content="Tooltip text" placement="top" radius={r} delay={0}>
+          <Badge label={r} variant="neutral" />
+        </Tooltip>
+      ))}
+    </div>
+  ),
+};
+
 export const WithRichContent: Story = {
+  args: { content: null, children: React.createElement('span') },
   render: () => (
     <div className="flex justify-center pt-16">
       <Tooltip

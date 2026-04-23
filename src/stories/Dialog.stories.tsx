@@ -42,7 +42,7 @@ function DialogDemo({
 }
 
 export const Playground: Story = {
-  args: { title: 'Dialog Title', size: 'md' },
+  args: { title: 'Dialog Title', size: 'md', open: false, onClose: () => {}, children: null },
   render: (args) => {
     const [open, setOpen] = React.useState(false);
     return (
@@ -63,6 +63,7 @@ export const Playground: Story = {
 };
 
 export const Confirmation: Story = {
+  args: { open: false, onClose: () => {}, children: null },
   render: () => (
     <DialogDemo title="Delete Workflow" size="sm">
       <p className="text-ink-600 dark:text-ink-300">
@@ -79,6 +80,7 @@ export const Confirmation: Story = {
 };
 
 export const FormDialog: Story = {
+  args: { open: false, onClose: () => {}, children: null },
   render: () => (
     <DialogDemo title="New Workflow" size="md">
       <div className="flex flex-col gap-4">
@@ -111,6 +113,7 @@ export const FormDialog: Story = {
 };
 
 export const InfoDialog: Story = {
+  args: { open: false, onClose: () => {}, children: null },
   render: () => (
     <DialogDemo title="Run Complete" size="sm">
       <p className="text-ink-600 dark:text-ink-300">
@@ -125,6 +128,7 @@ export const InfoDialog: Story = {
 };
 
 export const LargeDialog: Story = {
+  args: { open: false, onClose: () => {}, children: null },
   render: () => (
     <DialogDemo title="Workflow Settings" size="lg">
       <div className="space-y-4 text-ink-600 dark:text-ink-300 text-sm">

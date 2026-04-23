@@ -83,6 +83,27 @@
   body { font-family: var(--font-body); }
 }
 
+/* ── Tippy tooltip — Golden Passport theme ─────────────── */
+.tippy-box[data-theme~='gp'] {
+  background-color: var(--color-ink-900);
+  color:            var(--color-ink-50);
+  border-radius:    0.5rem;
+  font-size:        0.75rem;
+  font-weight:      500;
+  font-family:      var(--font-body);
+  box-shadow:       var(--shadow-lg);
+  padding:          0.375rem 0.625rem;
+  max-width:        20rem;
+}
+
+.tippy-box[data-theme~='gp'] .tippy-arrow { color: var(--color-ink-900); }
+
+/* Dark mode — applied when the .dark class is present on an ancestor */
+.dark .tippy-box[data-theme~='gp'] {
+  background-color: var(--color-ink-700);
+}
+.dark .tippy-box[data-theme~='gp'] .tippy-arrow { color: var(--color-ink-700); }
+
 @layer utilities {
   /* Focus ring — gold */
   .gp-focus {

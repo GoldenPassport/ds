@@ -13,7 +13,7 @@ import '../src/styles/index.css';
 
 /** Wrap every story in a surface-coloured background that respects theme */
 const withBackground: Decorator = (Story, context) => {
-  const isDark = context.globals.theme === 'dark';
+  const isDark = context.globals.theme === 'Dark';
   return (
     <div
       className={`min-h-screen p-8 font-body ${
@@ -26,6 +26,18 @@ const withBackground: Decorator = (Story, context) => {
 };
 
 const preview: Preview = {
+  globalTypes: {
+    theme: {
+      description: 'Global theme for all stories',
+      toolbar: {
+        title: 'Theme',
+        icon: 'paintbrush',
+        items: ['Light', 'Dark'],
+        dynamicTitle: true,
+        ariaLabel: 'Toggle light/dark theme',
+      },
+    },
+  },
   decorators: [
     withThemeByClassName({
       themes: { Light: '', Dark: 'dark' },
@@ -34,7 +46,7 @@ const preview: Preview = {
     withBackground,
   ],
   parameters: {
-    backgrounds: { disable: true },   // use addon-themes instead
+    backgrounds: { disabled: true },   // use addon-themes instead
     layout: 'fullscreen',
     a11y: {
       config: {

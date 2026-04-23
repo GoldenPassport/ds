@@ -51,6 +51,10 @@ export interface DataTableProps<T extends { id: string | number }> {
   loading?:      boolean;
   className?:    string;
   stickyHeader?: boolean;
+  /** Accessible name for the table element */
+  ariaLabel?:    string;
+  /** Strips the outer card wrapper — use when DataTable lives inside ListCard */
+  flat?:         boolean;
   /** Attach pagination below the table. Omit to disable. */
   pagination?:   DataTablePaginationConfig;
 }
@@ -71,6 +75,8 @@ export function DataTable<T extends { id: string | number }>({
   loading      = false,
   className    = '',
   stickyHeader = false,
+  ariaLabel,
+  flat         = false,
   pagination,
 }: DataTableProps<T>) {
   const [sort, setSort]               = React.useState<SortState>({ key: '', direction: null });
@@ -125,17 +131,27 @@ export function DataTable<T extends { id: string | number }>({
 
   const alignClass = { left: 'text-left', center: 'text-center', right: 'text-right' };
 
-  return (
-    <div className={`flex flex-col gap-0 bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700 rounded-2xl overflow-hidden shadow-sm ${className}`}>
+  const inner = (
+    <>
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
+        <table aria-label={ariaLabel} className="w-full border-collapse">
           <thead className={stickyHeader ? 'sticky top-0 z-10' : ''}>
             <tr className="bg-ink-50 dark:bg-ink-700/50 border-b border-ink-100 dark:border-ink-700">
-              {columns.map(col => (
+              {columns.map(col => {
+                const colKey = String(col.key);
+                const sortDir = sort.key === colKey ? sort.direction : null;
+                const ariaSortValue =
+                  col.sortable
+                    ? sortDir === 'asc'  ? 'ascending'
+                    : sortDir === 'desc' ? 'descending'
+                    : 'none'
+                    : undefined;
+                return (
                 <th
-                  key={String(col.key)}
+                  key={colKey}
                   style={col.width ? { width: col.width } : undefined}
                   onClick={() => handleSort(col)}
+                  aria-sort={ariaSortValue}
                   className={[
                     'px-5 py-3 text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-500 font-body',
                     alignClass[col.align ?? 'left'],
@@ -149,7 +165,8 @@ export function DataTable<T extends { id: string | number }>({
                     )}
                   </span>
                 </th>
-              ))}
+              );
+              })}
             </tr>
           </thead>
           <tbody>
@@ -170,10 +187,13 @@ export function DataTable<T extends { id: string | number }>({
                 <tr
                   key={row.id}
                   onClick={() => onRowClick?.(row)}
+                  tabIndex={onRowClick ? 0 : undefined}
+                  role={onRowClick ? 'button' : undefined}
+                  onKeyDown={onRowClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRowClick(row); } } : undefined}
                   className={[
                     'border-b border-ink-100 dark:border-ink-700 last:border-0',
                     'transition-colors duration-100',
-                    onRowClick ? 'cursor-pointer hover:bg-ink-50 dark:hover:bg-ink-700/50' : '',
+                    onRowClick ? 'cursor-pointer hover:bg-ink-50 dark:hover:bg-ink-700/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold-500/40' : '',
                   ].join(' ')}
                 >
                   {columns.map(col => (
@@ -205,6 +225,14 @@ export function DataTable<T extends { id: string | number }>({
           />
         </div>
       )}
+    </>
+  );
+
+  if (flat) return inner;
+
+  return (
+    <div aria-busy={loading || undefined} className={`flex flex-col gap-0 bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700 rounded-2xl overflow-hidden shadow-sm ${className}`}>
+      {inner}
     </div>
   );
 }

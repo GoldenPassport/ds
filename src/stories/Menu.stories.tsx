@@ -28,7 +28,7 @@ const workflowItems = [
 ];
 
 export const Playground: Story = {
-  args: { align: 'right' },
+  args: { align: 'right', trigger: null, items: [] },
   render: (args) => (
     <div className="flex justify-center pt-20">
       <Menu
@@ -41,6 +41,7 @@ export const Playground: Story = {
 };
 
 export const WorkflowActions: Story = {
+  args: { trigger: null, items: [] },
   render: () => (
     <div className="flex justify-center pt-20">
       <Menu
@@ -53,6 +54,7 @@ export const WorkflowActions: Story = {
 };
 
 export const AlignLeft: Story = {
+  args: { trigger: null, items: [] },
   render: () => (
     <div className="flex justify-center pt-20">
       <Menu
@@ -69,6 +71,7 @@ export const AlignLeft: Story = {
 };
 
 export const IconTrigger: Story = {
+  args: { trigger: null, items: [] },
   render: () => (
     <div className="flex justify-center pt-20">
       <Menu

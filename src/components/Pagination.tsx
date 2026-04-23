@@ -44,16 +44,20 @@ function PageBtn({
   active,
   disabled,
   onClick,
+  ariaLabel,
 }: {
-  children: React.ReactNode;
-  active?:  boolean;
+  children:  React.ReactNode;
+  active?:   boolean;
   disabled?: boolean;
   onClick?:  () => void;
+  ariaLabel?: string;
 }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
+      aria-label={ariaLabel}
+      aria-current={active ? 'page' : undefined}
       className={[
         'inline-flex items-center justify-center w-8 h-8 rounded-lg text-[13px] font-medium font-body',
         'transition-colors duration-100 border-0 cursor-pointer',
@@ -109,6 +113,7 @@ export function Pagination({
             <select
               value={pageSize}
               onChange={e => changePageSize(Number(e.target.value))}
+              aria-label="Rows per page"
               className={[
                 'text-[13px] font-body font-medium rounded-lg px-2.5 py-1.5',
                 'bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700',
@@ -132,8 +137,8 @@ export function Pagination({
       </div>
 
       {/* Right: prev / page numbers / next */}
-      <div className="flex items-center gap-1">
-        <PageBtn onClick={() => goTo(page - 1)} disabled={page <= 1}>
+      <nav aria-label="Pagination" className="flex items-center gap-1">
+        <PageBtn onClick={() => goTo(page - 1)} disabled={page <= 1} ariaLabel="Go to previous page">
           <ChevronLeft className="w-4 h-4" />
         </PageBtn>
 
@@ -141,6 +146,7 @@ export function Pagination({
           p === '…' ? (
             <span
               key={`ellipsis-${i}`}
+              aria-hidden="true"
               className="w-8 h-8 inline-flex items-center justify-center text-[13px] text-ink-300 dark:text-ink-600 select-none"
             >
               …
@@ -150,16 +156,17 @@ export function Pagination({
               key={p}
               active={p === page}
               onClick={() => goTo(p)}
+              ariaLabel={`Page ${p}`}
             >
               {p}
             </PageBtn>
           )
         )}
 
-        <PageBtn onClick={() => goTo(page + 1)} disabled={page >= totalPages}>
+        <PageBtn onClick={() => goTo(page + 1)} disabled={page >= totalPages} ariaLabel="Go to next page">
           <ChevronRight className="w-4 h-4" />
         </PageBtn>
-      </div>
+      </nav>
     </div>
   );
 }

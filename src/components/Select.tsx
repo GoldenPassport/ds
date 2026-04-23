@@ -26,6 +26,7 @@ export interface SelectProps<T = string> {
   options:   SelectOption<T>[];
   label?:    string;
   hint?:     string;
+  error?:    string;
   disabled?: boolean;
   className?: string;
 }
@@ -36,9 +37,11 @@ export function Select<T extends string | number>({
   options,
   label,
   hint,
+  error,
   disabled = false,
   className = '',
 }: SelectProps<T>) {
+  const id       = React.useId();
   const selected = options.find(o => o.value === value) ?? options[0];
 
   return (
@@ -52,11 +55,15 @@ export function Select<T extends string | number>({
 
         {/* Trigger + panel anchored together */}
         <div className="relative">
-          <Listbox.Button className={[
+          <Listbox.Button
+            aria-describedby={hint ? `${id}-hint` : error ? `${id}-error` : undefined}
+            aria-invalid={!!error || undefined}
+            className={[
             'relative w-full cursor-pointer rounded-lg border px-3 py-2.5 pr-9 text-left text-sm font-body',
             'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
-            'border-ink-200 dark:border-ink-600',
-            'focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25',
+            error
+              ? 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/25'
+              : 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/25',
             'disabled:opacity-40 disabled:cursor-not-allowed',
             'transition-all duration-150',
           ].join(' ')}>
@@ -106,8 +113,11 @@ export function Select<T extends string | number>({
           </Transition>
         </div>
 
-        {hint && (
-          <p className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+        {hint && !error && (
+          <p id={`${id}-hint`} className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+        )}
+        {error && (
+          <p id={`${id}-error`} role="alert" className="text-xs text-red-500 dark:text-red-400 font-body">{error}</p>
         )}
       </div>
     </Listbox>

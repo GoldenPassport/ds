@@ -21,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
-  args: { page: 1, pageSize: 10, total: 200, showSummary: true },
+  args: { page: 1, pageSize: 10, total: 200, showSummary: true, onChange: () => {} },
   render: (args) => {
     const [page, setPage]         = React.useState(args.page);
     const [pageSize, setPageSize] = React.useState(args.pageSize);
@@ -41,6 +41,7 @@ export const Playground: Story = {
 };
 
 export const FewPages: Story = {
+  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
   render: () => {
     const [page, setPage]         = React.useState(1);
     const [pageSize, setPageSize] = React.useState(10);
@@ -54,6 +55,7 @@ export const FewPages: Story = {
 };
 
 export const ManyPages: Story = {
+  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
   render: () => {
     const [page, setPage]         = React.useState(5);
     const [pageSize, setPageSize] = React.useState(10);
@@ -67,6 +69,7 @@ export const ManyPages: Story = {
 };
 
 export const NearStart: Story = {
+  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
   render: () => {
     const [page, setPage]         = React.useState(2);
     const [pageSize, setPageSize] = React.useState(10);
@@ -80,6 +83,7 @@ export const NearStart: Story = {
 };
 
 export const NearEnd: Story = {
+  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
   render: () => {
     const [page, setPage]         = React.useState(29);
     const [pageSize, setPageSize] = React.useState(10);
@@ -93,6 +97,7 @@ export const NearEnd: Story = {
 };
 
 export const NoPageSizeSelector: Story = {
+  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
   render: () => {
     const [page, setPage] = React.useState(1);
     return (
@@ -105,6 +110,7 @@ export const NoPageSizeSelector: Story = {
 };
 
 export const NoSummary: Story = {
+  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
   render: () => {
     const [page, setPage]         = React.useState(3);
     const [pageSize, setPageSize] = React.useState(10);
@@ -118,6 +124,7 @@ export const NoSummary: Story = {
 };
 
 export const SinglePage: Story = {
+  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
   render: () => (
     <div className="w-full max-w-2xl">
       <Pagination page={1} pageSize={25} total={8} onChange={() => {}} />

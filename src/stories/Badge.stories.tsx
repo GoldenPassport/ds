@@ -31,6 +31,7 @@ export const AI:      Story = { args: { label: 'AI-Generated', variant: 'ai'    
 export const Neutral: Story = { args: { label: 'Neutral',      variant: 'neutral' } };
 
 export const AllVariants: Story = {
+  args: { label: 'Active', variant: 'active' },
   render: () => (
     <div className="flex flex-wrap gap-2">
       {(['active', 'running', 'pending', 'draft', 'failed', 'warning', 'ai', 'neutral'] as const).map(v => (

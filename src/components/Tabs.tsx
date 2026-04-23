@@ -23,9 +23,80 @@ export interface TabsProps {
   tabs:          TabItem[];
   defaultIndex?: number;
   onChange?:     (index: number) => void;
-  variant?:      'underline' | 'pill';
+  /**
+   * underline  — gold bottom-border indicator (default)
+   * pills      — each tab is an independent pill button
+   * pill       — segmented control in a rounded container
+   * bar        — full-width tabs with underline indicator
+   */
+  variant?:      'underline' | 'pills' | 'pill' | 'bar';
   className?:    string;
 }
+
+// ── Per-variant TabList wrapper classes ───────────────────
+
+const listClass: Record<NonNullable<TabsProps['variant']>, string> = {
+  underline: 'flex gap-0 border-b border-ink-200 dark:border-ink-700',
+  pills:     'flex gap-2 flex-wrap',
+  pill:      'flex gap-0.5 bg-ink-100 dark:bg-ink-700 p-1 rounded-xl',
+  bar:       'flex border-b border-ink-200 dark:border-ink-700',
+};
+
+// ── Per-variant Tab button classes ────────────────────────
+// Uses Headless UI v2 data-[selected] attributes — no render-prop className needed.
+
+const BASE_TAB = [
+  'group inline-flex items-center gap-2 text-sm font-medium font-body',
+  'transition-all duration-150 cursor-pointer',
+  'focus:outline-none',
+  'data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed',
+].join(' ');
+
+const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
+  underline: [
+    BASE_TAB,
+    'px-4 py-2.5 -mb-px border-b-2 border-transparent',
+    'text-ink-400 dark:text-ink-500',
+    'hover:text-ink-700 dark:hover:text-ink-300',
+    'data-[selected]:border-gold-500 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50',
+  ].join(' '),
+
+  pills: [
+    BASE_TAB,
+    'px-4 py-1.5 rounded-full',
+    'text-ink-500 dark:text-ink-400',
+    'hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200',
+    'data-[selected]:bg-gold-500 data-[selected]:text-ink-900',
+  ].join(' '),
+
+  pill: [
+    BASE_TAB,
+    'px-3.5 py-1.5 rounded-lg',
+    'text-ink-500 dark:text-ink-400',
+    'hover:text-ink-700 dark:hover:text-ink-200',
+    'data-[selected]:bg-white dark:data-[selected]:bg-ink-800 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50 data-[selected]:shadow-sm',
+  ].join(' '),
+
+  bar: [
+    BASE_TAB,
+    'flex-1 justify-center px-4 py-3 -mb-px border-b-2 border-transparent',
+    'text-ink-400 dark:text-ink-500',
+    'hover:text-ink-700 dark:hover:text-ink-300',
+    'data-[selected]:border-gold-500 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50',
+  ].join(' '),
+};
+
+// ── Badge classes ─────────────────────────────────────────
+// group-data-[selected]: targets the badge when the parent Tab button is selected.
+// The Tab gets a `group` class via tabClass so Tailwind can apply these modifiers.
+
+const BADGE_BASE = [
+  'inline-flex items-center justify-center text-[11px] font-semibold',
+  'px-1.5 py-0.5 rounded-full min-w-[20px]',
+  'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-400',
+].join(' ');
+
+// ── Component ─────────────────────────────────────────────
 
 export function Tabs({
   tabs,
@@ -36,45 +107,17 @@ export function Tabs({
 }: TabsProps) {
   return (
     <TabGroup defaultIndex={defaultIndex} onChange={onChange} className={className}>
-      {/* Tab list */}
-      <TabList
-        className={[
-          'flex gap-0.5',
-          variant === 'underline'
-            ? 'border-b border-ink-200 dark:border-ink-700'
-            : 'bg-ink-100 dark:bg-ink-700 p-1 rounded-xl',
-        ].join(' ')}
-      >
+      <TabList className={listClass[variant]}>
         {tabs.map((tab, i) => (
           <Tab
             key={i}
             disabled={tab.disabled}
-            className={({ selected }) => [
-              'inline-flex items-center gap-2 text-sm font-medium font-body transition-all duration-150',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/50 disabled:opacity-40 disabled:cursor-not-allowed',
-              variant === 'underline' ? 'rounded-t-md' : 'rounded-md',
-              variant === 'underline'
-                ? [
-                    'px-4 py-2.5 -mb-px border-b-2',
-                    selected
-                      ? 'border-gold-500 text-ink-900 dark:text-ink-50'
-                      : 'border-transparent text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-300',
-                  ].join(' ')
-                : [
-                    'px-3.5 py-1.5 rounded-lg',
-                    selected
-                      ? 'bg-white dark:bg-ink-800 text-ink-900 dark:text-ink-50 shadow-sm'
-                      : 'text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200',
-                  ].join(' '),
-            ].join(' ')}
+            className={tabClass[variant]}
           >
             {tab.icon && <span className="shrink-0">{tab.icon}</span>}
             {tab.label}
             {tab.badge !== undefined && (
-              <span className={[
-                'inline-flex items-center justify-center text-[11px] font-semibold px-1.5 py-0.5 rounded-full min-w-[20px]',
-                'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-400',
-              ].join(' ')}>
+              <span className={BADGE_BASE}>
                 {tab.badge}
               </span>
             )}
@@ -82,7 +125,6 @@ export function Tabs({
         ))}
       </TabList>
 
-      {/* Panels */}
       <TabPanels className="mt-4">
         {tabs.map((tab, i) => (
           <TabPanel

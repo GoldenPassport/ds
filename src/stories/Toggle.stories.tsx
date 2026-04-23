@@ -34,6 +34,7 @@ export const Standalone: Story = {
 };
 
 export const SettingsList: Story = {
+  args: { checked: false, onChange: () => {} },
   render: () => {
     const [vals, setVals] = React.useState({
       suggestions: true,

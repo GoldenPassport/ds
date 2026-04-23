@@ -40,6 +40,9 @@ export const Playground: Story = {
     label:    'AI Model',
     hint:     'Used for workflow generation',
     disabled: false,
+    value:    '',
+    onChange: () => {},
+    options:  [],
   },
   render: (args) => {
     const [val, setVal] = React.useState('claude-35-sonnet');
@@ -53,6 +56,7 @@ export const Playground: Story = {
 };
 
 export const Default: Story = {
+  args: { value: '', onChange: () => {}, options: [] },
   render: () => {
     const [val, setVal] = React.useState('claude-35-sonnet');
     return (
@@ -64,6 +68,7 @@ export const Default: Story = {
 };
 
 export const WithDisabledOption: Story = {
+  args: { value: '', onChange: () => {}, options: [] },
   render: () => {
     const [val, setVal] = React.useState('claude-35-sonnet');
     return (
@@ -75,6 +80,7 @@ export const WithDisabledOption: Story = {
 };
 
 export const DepartmentPicker: Story = {
+  args: { value: '', onChange: () => {}, options: [] },
   render: () => {
     const [val, setVal] = React.useState('finance');
     return (
@@ -86,6 +92,7 @@ export const DepartmentPicker: Story = {
 };
 
 export const Disabled: Story = {
+  args: { value: '', onChange: () => {}, options: [] },
   render: () => (
     <div className="w-72">
       <Select

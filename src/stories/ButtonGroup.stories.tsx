@@ -7,6 +7,8 @@ import {
   ChevronLeft, ChevronRight,
   ZoomIn, ZoomOut, RotateCcw,
   Play, Pause, SkipForward,
+  Monitor, Tablet, Smartphone,
+  Sun, Moon,
 } from 'lucide-react';
 import { ButtonGroup } from '../components/ButtonGroup';
 
@@ -15,10 +17,16 @@ const meta = {
   component: ButtonGroup,
   tags: ['autodocs'],
   argTypes: {
-    size:      { control: 'select', options: ['sm', 'md', 'lg'],          description: 'Button size' },
-    variant:   { control: 'select', options: ['default', 'ghost'],         description: '"default" has a background + border; "ghost" is borderless' },
-    showLabel: { control: 'boolean',                                        description: 'Render button labels (set false for icon-only groups)' },
-    items:     { control: false,                                            description: 'Array of { label, onClick, icon?, disabled?, active?, ariaLabel? }' },
+    size:      { control: 'select', options: ['sm', 'md', 'lg'],            description: 'Button size' },
+    variant:   { control: 'select', options: ['default', 'ghost'],           description: '"default" has a background + border; "ghost" is borderless' },
+    showLabel: { control: 'boolean',                                          description: 'Render button labels (set false for icon-only groups)' },
+    multiple:  { control: 'boolean',                                          description: 'Allow selecting multiple items (requires value/onChange)' },
+    fullWidth: { control: 'select', options: ['never', 'always', 'mobile'],  description: '"never" shrink-wraps (default), "always" fills container, "mobile" full-width on small screens' },
+    label:     { control: 'text',                                             description: 'Label rendered above the group' },
+    hint:      { control: 'text',                                             description: 'Helper text rendered below the group' },
+    items:     { control: false,                                              description: 'Array of { label, value?, onClick?, icon?, disabled?, active?, ariaLabel? }' },
+    value:     { control: false,                                              description: 'Controlled selected value (T) or values (T[])' },
+    onChange:  { control: false,                                              description: 'Called with the new value or values array' },
     className: { control: 'text' },
   },
 } satisfies Meta<typeof ButtonGroup>;
@@ -26,7 +34,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// ── Basic ─────────────────────────────────────────────────
+// ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
   args: { size: 'md', variant: 'default', showLabel: true },
@@ -42,16 +50,18 @@ export const Playground: Story = {
   ),
 };
 
+// ── Action groups (uncontrolled / onClick) ────────────────
+
 export const TextOnly: Story = {
-  name: 'Text — time period',
+  name: 'Action — text buttons',
   render: () => {
     const [active, setActive] = React.useState('months');
     const periods = ['Years', 'Months', 'Days'] as const;
     return (
       <ButtonGroup
         items={periods.map(p => ({
-          label:  p,
-          active: active === p.toLowerCase(),
+          label:   p,
+          active:  active === p.toLowerCase(),
           onClick: () => setActive(p.toLowerCase()),
         }))}
       />
@@ -59,54 +69,8 @@ export const TextOnly: Story = {
   },
 };
 
-export const WithActiveState: Story = {
-  name: 'Text — active item highlighted',
-  render: () => {
-    const [active, setActive] = React.useState('all');
-    const filters = [
-      { value: 'all',     label: 'All'     },
-      { value: 'active',  label: 'Active'  },
-      { value: 'draft',   label: 'Draft'   },
-      { value: 'failed',  label: 'Failed'  },
-    ];
-    return (
-      <ButtonGroup
-        items={filters.map(f => ({
-          label:  f.label,
-          active: active === f.value,
-          onClick: () => setActive(f.value),
-        }))}
-      />
-    );
-  },
-};
-
-// ── Icons + text ──────────────────────────────────────────
-
-export const AlignmentGroup: Story = {
-  name: 'Icons + text — alignment',
-  render: () => {
-    const [align, setAlign] = React.useState('left');
-    const opts = [
-      { value: 'left',   label: 'Left',   icon: <AlignLeft   className="w-4 h-4" /> },
-      { value: 'center', label: 'Center', icon: <AlignCenter className="w-4 h-4" /> },
-      { value: 'right',  label: 'Right',  icon: <AlignRight  className="w-4 h-4" /> },
-    ];
-    return (
-      <ButtonGroup
-        items={opts.map(o => ({
-          label:  o.label,
-          icon:   o.icon,
-          active: align === o.value,
-          onClick: () => setAlign(o.value),
-        }))}
-      />
-    );
-  },
-};
-
 export const ViewToggle: Story = {
-  name: 'Icons + text — view toggle',
+  name: 'Action — view toggle',
   render: () => {
     const [view, setView] = React.useState('list');
     return (
@@ -120,27 +84,8 @@ export const ViewToggle: Story = {
   },
 };
 
-// ── Icon-only ─────────────────────────────────────────────
-
-export const IconOnlyAlignment: Story = {
-  name: 'Icon only — alignment toolbar',
-  render: () => {
-    const [align, setAlign] = React.useState('left');
-    return (
-      <ButtonGroup
-        showLabel={false}
-        items={[
-          { label: 'Left',   ariaLabel: 'Align left',   icon: <AlignLeft   className="w-4 h-4" />, active: align === 'left',   onClick: () => setAlign('left')   },
-          { label: 'Center', ariaLabel: 'Align center', icon: <AlignCenter className="w-4 h-4" />, active: align === 'center', onClick: () => setAlign('center') },
-          { label: 'Right',  ariaLabel: 'Align right',  icon: <AlignRight  className="w-4 h-4" />, active: align === 'right',  onClick: () => setAlign('right')  },
-        ]}
-      />
-    );
-  },
-};
-
 export const IconOnlyFormatting: Story = {
-  name: 'Icon only — text formatting',
+  name: 'Action — icon only (multi-toggle)',
   render: () => {
     const [fmt, setFmt] = React.useState<string[]>(['bold']);
     const toggle = (v: string) => setFmt(f => f.includes(v) ? f.filter(x => x !== v) : [...f, v]);
@@ -157,8 +102,8 @@ export const IconOnlyFormatting: Story = {
   },
 };
 
-export const Pagination: Story = {
-  name: 'Icon only — pagination',
+export const PaginationButtons: Story = {
+  name: 'Action — icon only (pagination)',
   render: () => (
     <ButtonGroup
       showLabel={false}
@@ -171,7 +116,7 @@ export const Pagination: Story = {
 };
 
 export const ZoomControls: Story = {
-  name: 'Icon only — zoom toolbar',
+  name: 'Action — icon only (zoom toolbar)',
   render: () => (
     <ButtonGroup
       showLabel={false}
@@ -184,19 +129,174 @@ export const ZoomControls: Story = {
   ),
 };
 
+export const WithDisabled: Story = {
+  name: 'Action — disabled item',
+  render: () => (
+    <ButtonGroup
+      items={[
+        { label: 'Play',  icon: <Play        className="w-4 h-4" />, onClick: () => {} },
+        { label: 'Pause', icon: <Pause       className="w-4 h-4" />, onClick: () => {}, active: true },
+        { label: 'Skip',  icon: <SkipForward className="w-4 h-4" />, onClick: () => {}, disabled: true },
+      ]}
+    />
+  ),
+};
+
+// ── Single-select (controlled) ────────────────────────────
+
+export const SingleSelectText: Story = {
+  name: 'Single-select — text',
+  render: () => {
+    const [val, setVal] = React.useState('active');
+    return (
+      <ButtonGroup
+        label="Filter by status"
+        value={val}
+        onChange={v => setVal(v as string)}
+        items={[
+          { value: 'all',    label: 'All'    },
+          { value: 'active', label: 'Active' },
+          { value: 'draft',  label: 'Draft'  },
+          { value: 'failed', label: 'Failed' },
+        ]}
+      />
+    );
+  },
+};
+
+export const SingleSelectIcons: Story = {
+  name: 'Single-select — icons + text',
+  render: () => {
+    const [val, setVal] = React.useState('desktop');
+    return (
+      <ButtonGroup
+        label="Viewport"
+        value={val}
+        onChange={v => setVal(v as string)}
+        items={[
+          { value: 'mobile',  label: 'Mobile',  icon: <Smartphone className="w-4 h-4" /> },
+          { value: 'tablet',  label: 'Tablet',  icon: <Tablet     className="w-4 h-4" /> },
+          { value: 'desktop', label: 'Desktop', icon: <Monitor    className="w-4 h-4" /> },
+        ]}
+      />
+    );
+  },
+};
+
+export const SingleSelectIconOnly: Story = {
+  name: 'Single-select — icon only',
+  render: () => {
+    const [val, setVal] = React.useState('center');
+    return (
+      <ButtonGroup
+        label="Alignment"
+        showLabel={false}
+        value={val}
+        onChange={v => setVal(v as string)}
+        items={[
+          { value: 'left',   label: 'Left',   icon: <AlignLeft   className="w-4 h-4" /> },
+          { value: 'center', label: 'Center', icon: <AlignCenter className="w-4 h-4" /> },
+          { value: 'right',  label: 'Right',  icon: <AlignRight  className="w-4 h-4" /> },
+        ]}
+      />
+    );
+  },
+};
+
+export const ThemeToggle: Story = {
+  name: 'Single-select — theme toggle',
+  render: () => {
+    const [val, setVal] = React.useState('light');
+    return (
+      <ButtonGroup
+        label="Theme"
+        value={val}
+        onChange={v => setVal(v as string)}
+        items={[
+          { value: 'light', label: 'Light', icon: <Sun  className="w-4 h-4" /> },
+          { value: 'dark',  label: 'Dark',  icon: <Moon className="w-4 h-4" /> },
+        ]}
+      />
+    );
+  },
+};
+
+export const SingleSelectWithDisabled: Story = {
+  name: 'Single-select — disabled option',
+  render: () => {
+    const [val, setVal] = React.useState('list');
+    return (
+      <ButtonGroup
+        label="View"
+        value={val}
+        onChange={v => setVal(v as string)}
+        hint="Grid view coming soon"
+        items={[
+          { value: 'list', label: 'List', icon: <List    className="w-4 h-4" /> },
+          { value: 'grid', label: 'Grid', icon: <Grid2x2 className="w-4 h-4" />, disabled: true },
+        ]}
+      />
+    );
+  },
+};
+
+// ── Multi-select (controlled) ─────────────────────────────
+
+export const MultiSelectText: Story = {
+  name: 'Multi-select — text',
+  render: () => {
+    const [vals, setVals] = React.useState<string[]>(['finance', 'hr']);
+    return (
+      <ButtonGroup
+        label="Filter departments"
+        multiple
+        value={vals}
+        onChange={v => setVals(v as string[])}
+        hint="Select one or more departments."
+        items={[
+          { value: 'finance',   label: 'Finance'   },
+          { value: 'hr',        label: 'HR'        },
+          { value: 'support',   label: 'Support'   },
+          { value: 'analytics', label: 'Analytics' },
+        ]}
+      />
+    );
+  },
+};
+
+export const MultiSelectIcons: Story = {
+  name: 'Multi-select — icons + text',
+  render: () => {
+    const [vals, setVals] = React.useState<string[]>(['bold', 'italic']);
+    return (
+      <ButtonGroup
+        label="Text formatting"
+        multiple
+        value={vals}
+        onChange={v => setVals(v as string[])}
+        items={[
+          { value: 'bold',      label: 'Bold',      icon: <Bold      className="w-4 h-4" /> },
+          { value: 'italic',    label: 'Italic',    icon: <Italic    className="w-4 h-4" /> },
+          { value: 'underline', label: 'Underline', icon: <Underline className="w-4 h-4" /> },
+        ]}
+      />
+    );
+  },
+};
+
 // ── Variants ──────────────────────────────────────────────
 
 export const GhostVariant: Story = {
   name: 'Variant — ghost',
   render: () => {
-    const [active, setActive] = React.useState('months');
+    const [val, setVal] = React.useState('months');
     return (
       <ButtonGroup
         variant="ghost"
+        value={val}
+        onChange={v => setVal(v as string)}
         items={['Years', 'Months', 'Days'].map(p => ({
-          label:  p,
-          active: active === p.toLowerCase(),
-          onClick: () => setActive(p.toLowerCase()),
+          value: p.toLowerCase(), label: p,
         }))}
       />
     );
@@ -223,41 +323,76 @@ export const AllSizes: Story = {
   ),
 };
 
-// ── With disabled ─────────────────────────────────────────
+// ── fullWidth ─────────────────────────────────────────────
 
-export const WithDisabled: Story = {
-  render: () => (
-    <ButtonGroup
-      items={[
-        { label: 'Play',  icon: <Play        className="w-4 h-4" />, onClick: () => {} },
-        { label: 'Pause', icon: <Pause       className="w-4 h-4" />, onClick: () => {}, active: true },
-        { label: 'Skip',  icon: <SkipForward className="w-4 h-4" />, onClick: () => {}, disabled: true },
-      ]}
-    />
-  ),
+export const FullWidthAlways: Story = {
+  name: 'fullWidth — always',
+  render: () => {
+    const [val, setVal] = React.useState('active');
+    return (
+      <ButtonGroup
+        label="Filter by status"
+        fullWidth="always"
+        value={val}
+        onChange={v => setVal(v as string)}
+        hint="Fills the container with equal-width options."
+        items={[
+          { value: 'all',    label: 'All'    },
+          { value: 'active', label: 'Active' },
+          { value: 'draft',  label: 'Draft'  },
+          { value: 'failed', label: 'Failed' },
+        ]}
+      />
+    );
+  },
 };
 
-// ── Toolbar composition ───────────────────────────────────
+export const FullWidthMobile: Story = {
+  name: 'fullWidth — mobile',
+  render: () => {
+    const [val, setVal] = React.useState('all');
+    return (
+      <ButtonGroup
+        label="Filter by status"
+        fullWidth="mobile"
+        value={val}
+        onChange={v => setVal(v as string)}
+        hint="Full width on small screens, shrink-wrapped on sm+."
+        items={[
+          { value: 'all',    label: 'All'    },
+          { value: 'active', label: 'Active' },
+          { value: 'draft',  label: 'Draft'  },
+        ]}
+      />
+    );
+  },
+};
+
+// ── Composition ───────────────────────────────────────────
 
 export const ToolbarComposition: Story = {
   name: 'Composition — toolbar with gap',
   render: () => {
-    const [view, setView]   = React.useState('list');
+    const [view,  setView]  = React.useState('list');
     const [align, setAlign] = React.useState('left');
     return (
       <div className="flex items-center gap-2">
         <ButtonGroup
+          value={view}
+          onChange={v => setView(v as string)}
           items={[
-            { label: 'List', icon: <List    className="w-4 h-4" />, active: view === 'list', onClick: () => setView('list') },
-            { label: 'Grid', icon: <Grid2x2 className="w-4 h-4" />, active: view === 'grid', onClick: () => setView('grid') },
+            { value: 'list', label: 'List', icon: <List    className="w-4 h-4" /> },
+            { value: 'grid', label: 'Grid', icon: <Grid2x2 className="w-4 h-4" /> },
           ]}
         />
         <ButtonGroup
           showLabel={false}
+          value={align}
+          onChange={v => setAlign(v as string)}
           items={[
-            { label: 'Left',   icon: <AlignLeft   className="w-4 h-4" />, active: align === 'left',   onClick: () => setAlign('left')   },
-            { label: 'Center', icon: <AlignCenter className="w-4 h-4" />, active: align === 'center', onClick: () => setAlign('center') },
-            { label: 'Right',  icon: <AlignRight  className="w-4 h-4" />, active: align === 'right',  onClick: () => setAlign('right')  },
+            { value: 'left',   label: 'Left',   icon: <AlignLeft   className="w-4 h-4" /> },
+            { value: 'center', label: 'Center', icon: <AlignCenter className="w-4 h-4" /> },
+            { value: 'right',  label: 'Right',  icon: <AlignRight  className="w-4 h-4" /> },
           ]}
         />
         <ButtonGroup

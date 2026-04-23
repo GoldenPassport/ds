@@ -83,7 +83,7 @@ const columns = [
 // ── Stories ───────────────────────────────────────────────
 
 export const Playground: Story = {
-  args: { loading: false, stickyHeader: false },
+  args: { loading: false, stickyHeader: false, columns: [], data: [] },
   render: (args) => (
     <DataTable
       {...args}
@@ -95,6 +95,7 @@ export const Playground: Story = {
 };
 
 export const Default: Story = {
+  args: { columns: [], data: [] },
   render: () => (
     <DataTable
       columns={columns}
@@ -108,6 +109,7 @@ export const Default: Story = {
 
 export const ClientSidePagination: Story = {
   name: 'Pagination — client-side',
+  args: { columns: [], data: [] },
   render: () => (
     <DataTable
       columns={columns}
@@ -120,6 +122,7 @@ export const ClientSidePagination: Story = {
 
 export const CustomPageSizes: Story = {
   name: 'Pagination — custom page sizes',
+  args: { columns: [], data: [] },
   render: () => (
     <DataTable
       columns={columns}
@@ -131,6 +134,7 @@ export const CustomPageSizes: Story = {
 
 export const ServerSidePagination: Story = {
   name: 'Pagination — server-side (controlled)',
+  args: { columns: [], data: [] },
   render: () => {
     const PAGE_SIZE = 5;
     const [page, setPage]         = React.useState(1);
@@ -168,6 +172,7 @@ export const ServerSidePagination: Story = {
 
 export const NoPaginationSizeSelector: Story = {
   name: 'Pagination — no size selector',
+  args: { columns: [], data: [] },
   render: () => (
     <DataTable
       columns={columns}
@@ -181,6 +186,7 @@ export const NoPaginationSizeSelector: Story = {
 
 export const WithActionButton: Story = {
   name: 'Actions — single button',
+  args: { columns: [], data: [] },
   render: () => {
     const columnsWithAction = [
       ...columns,
@@ -206,6 +212,7 @@ export const WithActionButton: Story = {
 
 export const WithActionMenu: Story = {
   name: 'Actions — overflow menu',
+  args: { columns: [], data: [] },
   render: () => {
     const columnsWithMenu = [
       ...columns,
@@ -241,6 +248,7 @@ export const WithActionMenu: Story = {
 
 export const WithBothActions: Story = {
   name: 'Actions — button + menu',
+  args: { columns: [], data: [] },
   render: () => {
     const columnsWithBoth = [
       ...columns,
@@ -277,10 +285,12 @@ export const WithBothActions: Story = {
 // ── Other states ──────────────────────────────────────────
 
 export const Loading: Story = {
+  args: { columns: [], data: [] },
   render: () => <DataTable columns={columns} data={[]} loading />,
 };
 
 export const Empty: Story = {
+  args: { columns: [], data: [] },
   render: () => (
     <DataTable
       columns={columns}
@@ -297,6 +307,7 @@ export const Empty: Story = {
 };
 
 export const Sortable: Story = {
+  args: { columns: [], data: [] },
   render: () => (
     <div className="space-y-2">
       <p className="text-xs text-ink-400 dark:text-ink-500 font-body">Click column headers to sort</p>

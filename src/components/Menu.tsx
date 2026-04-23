@@ -22,17 +22,20 @@ export interface MenuItem {
 }
 
 export interface MenuProps {
-  trigger:   React.ReactNode;
-  items:     MenuItem[];
-  align?:    'left' | 'right';
+  trigger:    React.ReactNode;
+  items:      MenuItem[];
+  align?:     'left' | 'right';
+  ariaLabel?: string;
   className?: string;
 }
 
-export function Menu({ trigger, items, align = 'right', className = '' }: MenuProps) {
+export function Menu({ trigger, items, align = 'right', ariaLabel, className = '' }: MenuProps) {
   return (
     <HLMenu as="div" className={`relative inline-block text-left ${className}`}>
       <HLMenu.Button as={React.Fragment}>
-        {trigger}
+        {ariaLabel
+          ? React.cloneElement(trigger as React.ReactElement, { 'aria-label': ariaLabel })
+          : trigger}
       </HLMenu.Button>
 
       <Transition
@@ -68,12 +71,12 @@ export function Menu({ trigger, items, align = 'right', className = '' }: MenuPr
 
                   return item.href ? (
                     <a href={item.href} className={cls}>
-                      {item.icon && <span className="shrink-0 text-ink-400">{item.icon}</span>}
+                      {item.icon && <span className="shrink-0 text-ink-400" aria-hidden="true">{item.icon}</span>}
                       {item.label}
                     </a>
                   ) : (
                     <button onClick={item.onClick} className={cls}>
-                      {item.icon && <span className="shrink-0 text-ink-400">{item.icon}</span>}
+                      {item.icon && <span className="shrink-0 text-ink-400" aria-hidden="true">{item.icon}</span>}
                       {item.label}
                     </button>
                   );

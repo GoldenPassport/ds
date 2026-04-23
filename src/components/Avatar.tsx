@@ -14,6 +14,7 @@ export function Avatar({ name, size = 32, className = '' }: AvatarProps) {
 
   return (
     <div
+      role="img"
       aria-label={name}
       style={{
         width: size,

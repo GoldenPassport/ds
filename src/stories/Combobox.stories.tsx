@@ -47,6 +47,9 @@ export const Playground: Story = {
     placeholder: 'Search team members…',
     hint:        'This person will be notified when the step runs',
     disabled:    false,
+    value:       null,
+    onChange:    () => {},
+    options:     [],
   },
   render: (args) => {
     const [val, setVal] = React.useState<string | null>(null);
@@ -59,6 +62,7 @@ export const Playground: Story = {
 };
 
 export const AssignUser: Story = {
+  args: { value: null, onChange: () => {}, options: [] },
   render: () => {
     const [val, setVal] = React.useState<string | null>(null);
     return (
@@ -77,6 +81,7 @@ export const AssignUser: Story = {
 };
 
 export const SelectIntegration: Story = {
+  args: { value: null, onChange: () => {}, options: [] },
   render: () => {
     const [val, setVal] = React.useState<string | null>('slack');
     return (
@@ -94,6 +99,7 @@ export const SelectIntegration: Story = {
 };
 
 export const Disabled: Story = {
+  args: { value: null, onChange: () => {}, options: [] },
   render: () => (
     <div className="w-72">
       <Combobox

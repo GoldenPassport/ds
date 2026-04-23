@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { useArgs } from 'storybook/preview-api';
 import { Checkbox } from '../components/Checkbox';
 
 const meta = {
@@ -15,6 +16,23 @@ const meta = {
     onChange:      { control: false,     description: 'Called with the new boolean value on change' },
     className:     { control: 'text' },
   },
+  // Default args satisfy required props; individual stories override as needed.
+  args: {
+    checked:  false,
+    onChange: () => {},
+  },
+  // Meta-level render: useArgs keeps checked in sync with the controls panel
+  // so every story (including the auto-generated docs preview) is interactive.
+  render: (args) => {
+    const [{ checked }, updateArgs] = useArgs();
+    return (
+      <Checkbox
+        {...args}
+        checked={Boolean(checked)}
+        onChange={(val) => updateArgs({ checked: val })}
+      />
+    );
+  },
 } satisfies Meta<typeof Checkbox>;
 
 export default meta;
@@ -22,19 +40,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   args: { checked: false, label: 'Enable feature', description: 'This will apply to all workflows.', disabled: false },
-  render: (args) => {
-    const [checked, setChecked] = React.useState(args.checked);
-    React.useEffect(() => { setChecked(args.checked); }, [args.checked]);
-    return <Checkbox {...args} checked={checked} onChange={setChecked} />;
-  },
 };
 
 export const Unchecked: Story = {
-  args: { checked: false, label: 'Notify on failure', onChange: () => {} },
+  args: { checked: false, label: 'Notify on failure' },
 };
 
 export const Checked: Story = {
-  args: { checked: true, label: 'Notify on failure', onChange: () => {} },
+  args: { checked: true, label: 'Notify on failure' },
 };
 
 export const WithDescription: Story = {
@@ -42,7 +55,6 @@ export const WithDescription: Story = {
     checked:     true,
     label:       'AI Suggestions',
     description: 'Show prompt suggestions while building workflows.',
-    onChange:    () => {},
   },
 };
 
@@ -52,19 +64,19 @@ export const Indeterminate: Story = {
     indeterminate: true,
     label:         'Select all workflows',
     description:   '3 of 8 selected',
-    onChange:      () => {},
   },
 };
 
 export const Disabled: Story = {
-  args: { checked: true, label: 'Enforce 2FA', description: 'Managed by your org admin.', disabled: true, onChange: () => {} },
+  args: { checked: true, label: 'Enforce 2FA', description: 'Managed by your org admin.', disabled: true },
 };
 
 export const Standalone: Story = {
-  args: { checked: true, onChange: () => {} },
+  args: { checked: true },
 };
 
 export const CheckboxGroup: Story = {
+  args: { checked: false, onChange: () => {} },
   render: () => {
     const [vals, setVals] = React.useState({
       failures: true,
@@ -88,6 +100,7 @@ export const CheckboxGroup: Story = {
 };
 
 export const SelectAllPattern: Story = {
+  args: { checked: false, onChange: () => {} },
   render: () => {
     const items = ['Invoice Approval', 'Employee Onboarding', 'PTO Request Handler', 'Vendor Onboarding'];
     const [selected, setSelected] = React.useState<string[]>([items[0]]);

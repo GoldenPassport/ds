@@ -38,6 +38,7 @@ export function Button({
   return (
     <button
       disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={[
         'inline-flex items-center justify-center font-semibold font-body',
         'cursor-pointer transition-all duration-150 border',
@@ -48,7 +49,7 @@ export function Button({
       ].join(' ')}
       {...props}
     >
-      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : children}
+      {loading ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> : children}
     </button>
   );
 }

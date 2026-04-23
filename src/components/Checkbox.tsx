@@ -28,13 +28,6 @@ export function Checkbox({
     if (!disabled) onChange(e.target.checked);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLSpanElement>) => {
-    if (e.key === ' ' || e.key === 'Enter') {
-      e.preventDefault();
-      if (!disabled) onChange(indeterminate ? true : !checked);
-    }
-  };
-
   const isChecked = indeterminate || checked;
 
   return (
@@ -55,15 +48,13 @@ export function Checkbox({
         disabled={disabled}
         ref={el => { if (el) el.indeterminate = indeterminate; }}
         className="sr-only"
+        aria-checked={indeterminate ? 'mixed' : checked}
         aria-describedby={description ? `${checkId}-desc` : undefined}
       />
 
       {/* Visual checkbox */}
       <span
-        role="presentation"
-        tabIndex={disabled ? -1 : 0}
-        onKeyDown={handleKeyDown}
-        onClick={() => { if (!disabled) onChange(indeterminate ? true : !checked); }}
+        aria-hidden="true"
         className={[
           'mt-0.5 shrink-0 w-4 h-4 rounded flex items-center justify-center',
           'border transition-all duration-150',
