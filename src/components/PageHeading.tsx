@@ -212,7 +212,7 @@ export function PageHeading({
   return (
     <div className={[
       sticky ? 'sticky top-0 z-10 bg-white dark:bg-ink-900' : '',
-      bordered ? 'border-b border-ink-200 dark:border-ink-700' : '',
+      bordered ? (mobileVariant === 'none' ? 'sm:border-b sm:border-ink-200 sm:dark:border-ink-700' : 'border-b border-ink-200 dark:border-ink-700') : '',
       className,
     ].filter(Boolean).join(' ')}>
 
