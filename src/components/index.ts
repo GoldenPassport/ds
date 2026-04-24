@@ -13,6 +13,7 @@ export { PageContainer }  from './PageContainer';
 export { PageHeading }    from './PageHeading';
 export { SectionHeading } from './SectionHeading';
 export { Stats }          from './Stats';
+export { Calendar }       from './Calendar';
 export { Alert }       from './Alert';
 export { Divider }     from './Divider';
 export { Button }      from './Button';
@@ -38,6 +39,11 @@ export { StepsBar }                 from './StepsBar';
 export { Tooltip }    from './Tooltip';
 export { DataTable }  from './DataTable';
 export { Pagination } from './Pagination';
+export { Navbar }      from './Navbar';
+export { VerticalNav }  from './VerticalNav';
+export { SidebarNav }   from './SidebarNav';
+export { MediaObject, MediaObjectList } from './MediaObject';
+export { Drawer } from './Drawer';
 export {
   NotificationCard,
   NotificationStack,
@@ -59,6 +65,7 @@ export type { PageContainerProps, PageContainerWidth, PageContainerPadding, Page
 export type { PageHeadingProps, PageHeadingTab }                                                          from './PageHeading';
 export type { SectionHeadingProps, SectionHeadingTab }                                                    from './SectionHeading';
 export type { StatsProps, StatItem, StatsVariant }                                                        from './Stats';
+export type { CalendarProps, CalendarEvent, CalendarEventColor, CalendarVariant }                          from './Calendar';
 export type { AlertProps, AlertVariant, AlertAppearance, AlertAction } from './Alert';
 export type { DividerProps, DividerOrientation, DividerAlign }         from './Divider';
 export type { ButtonProps, ButtonVariant, ButtonSize }                      from './Button';
@@ -80,6 +87,11 @@ export type { DataTableProps, DataTableColumn, DataTablePaginationConfig, SortDi
 export type { ProgressBarProps, ProgressBarVariant, ProgressBarSize }         from './ProgressBar';
 export type { StepsBarProps, StepsBarStep, StepsBarVariant, StepsBarPanelAppearance, StepsBarFullWidth } from './StepsBar';
 export type { PaginationProps }                                             from './Pagination';
+export type { NavbarProps, NavbarItem, NavbarUser, NavbarUserItem, NavbarAppearance } from './Navbar';
+export type { VerticalNavProps, VerticalNavGroup, VerticalNavItem, VerticalNavAppearance } from './VerticalNav';
+export type { SidebarNavProps, SidebarNavUser, SidebarNavAppearance } from './SidebarNav';
+export type { MediaObjectProps, MediaObjectListProps, MediaObjectAlign, MediaObjectSide, MediaObjectGap } from './MediaObject';
+export type { DrawerProps, DrawerPlacement, DrawerSize } from './Drawer';
 export type {
   NotificationItem,
   NotificationAction,

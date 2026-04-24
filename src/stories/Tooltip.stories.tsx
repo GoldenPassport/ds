@@ -6,7 +6,7 @@ import { Button } from '../components/Button';
 import { Badge } from '../components/Badge';
 
 const meta = {
-  title: 'Components/Tooltip',
+  title: 'UI/Tooltip',
   component: Tooltip,
   tags: ['autodocs'],
   argTypes: {
