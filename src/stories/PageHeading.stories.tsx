@@ -5,6 +5,7 @@ import { PageHeading } from '../components/PageHeading';
 import { Button } from '../components/Button';
 import { Badge } from '../components/Badge';
 import { Avatar } from '../components/Avatar';
+import type { PageHeadingAction } from '../components/PageHeading';
 
 const meta = {
   title: 'Headings/PageHeading',
@@ -77,6 +78,11 @@ export const WithBreadcrumbs: Story = {
 
 // ── With back button ──────────────────────────────────────
 
+const BACK_BUTTON_ACTIONS: PageHeadingAction[] = [
+  { label: 'Settings', icon: <Settings className="w-4 h-4" />, onClick: () => {}, variant: 'secondary' },
+  { label: 'New run',  icon: <Plus      className="w-4 h-4" />, onClick: () => {}, variant: 'primary'   },
+];
+
 export const WithBackButton: Story = {
   name: 'With back button',
   args: { title: '' },
@@ -85,18 +91,7 @@ export const WithBackButton: Story = {
       onBack={() => {}}
       title="GraphQL API"
       description="Last run 2 hours ago · 4 active deployments"
-      actions={
-        <>
-          <Button variant="secondary" size="sm">
-            <Settings className="w-3.5 h-3.5" aria-hidden="true" />
-            Settings
-          </Button>
-          <Button variant="primary" size="sm">
-            <Plus className="w-3.5 h-3.5" aria-hidden="true" />
-            New run
-          </Button>
-        </>
-      }
+      actionItems={BACK_BUTTON_ACTIONS}
     />
   ),
 };

@@ -62,13 +62,13 @@ export type { CardProps, CardPadding }                                          
 export type { DescriptionListProps, DescriptionListItem, DescriptionListAction, DescriptionListLayout } from './DescriptionList';
 export type { ContainerListProps, ContainerListVariant }                                                from './ContainerList';
 export type { PageContainerProps, PageContainerWidth, PageContainerPadding, PageContainerAlign }         from './PageContainer';
-export type { PageHeadingProps, PageHeadingTab }                                                          from './PageHeading';
+export type { PageHeadingProps, PageHeadingTab, PageHeadingAction }                                       from './PageHeading';
 export type { SectionHeadingProps, SectionHeadingTab }                                                    from './SectionHeading';
 export type { StatsProps, StatItem, StatsVariant }                                                        from './Stats';
 export type { CalendarProps, CalendarEvent, CalendarEventColor, CalendarVariant }                          from './Calendar';
 export type { AlertProps, AlertVariant, AlertAppearance, AlertAction } from './Alert';
 export type { DividerProps, DividerOrientation, DividerAlign }         from './Divider';
-export type { ButtonProps, ButtonVariant, ButtonSize }                      from './Button';
+export type { ButtonProps, ButtonVariant, ButtonSize, ButtonRadius }         from './Button';
 export type { BadgeProps, BadgeVariant }                                    from './Badge';
 export type { AvatarProps }                                                 from './Avatar';
 export type { InputProps }                                                  from './Input';
