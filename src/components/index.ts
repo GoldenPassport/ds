@@ -51,6 +51,7 @@ export {
 } from './Notification';
 export { FabMenu }    from './FabMenu';
 export { Carousel }   from './Carousel';
+export { BottomNav }  from './BottomNav';
 
 // Types
 export type { ActionPanelProps, ActionPanelVariant, ActionPanelLayout }  from './ActionPanel';
@@ -96,6 +97,7 @@ export type { MediaObjectProps, MediaObjectListProps, MediaObjectAlign, MediaObj
 export type { DrawerProps, DrawerPlacement, DrawerSize } from './Drawer';
 export type { FabMenuProps, FabMenuItem, FabMenuVariant, FabMenuColor, FabMenuPosition } from './FabMenu';
 export type { CarouselProps, CarouselItem, CarouselVariant } from './Carousel';
+export type { BottomNavProps, BottomNavItem, BottomNavAppearance } from './BottomNav';
 export type {
   NotificationItem,
   NotificationAction,
