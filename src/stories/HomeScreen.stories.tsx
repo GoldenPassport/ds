@@ -308,7 +308,7 @@ function CashflowFilterTabs() {
     { label: 'All-time',     value: 'all' },
   ];
   return (
-    <div className="border-b border-ink-200 dark:border-ink-800 bg-white dark:bg-ink-900 px-6">
+    <div className="border-b border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-900 px-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-0">
           <span className="text-base font-semibold font-display text-ink-900 dark:text-ink-50 mr-6 py-4">Cashflow</span>
@@ -340,7 +340,7 @@ function CashflowFilterTabs() {
 function StackedDemo({ dark }: { dark?: boolean }) {
   return (
     <div className={dark ? 'dark' : ''}>
-      <div className="min-h-screen bg-ink-50 dark:bg-ink-950">
+      <div className="min-h-screen bg-white dark:bg-ink-900">
         <Navbar
           logo={
             <span className="text-base font-bold font-display text-ink-900 dark:text-white">Acme</span>
@@ -364,7 +364,7 @@ function StackedDemo({ dark }: { dark?: boolean }) {
         <CashflowFilterTabs />
 
         <div className="mx-auto max-w-7xl px-6 py-8">
-          <Stats items={STATS} variant="bordered" columns={4} className="mb-8" />
+          <Stats items={STATS} variant="cards" columns={4} className="mb-8" />
           <TransactionTable />
         </div>
       </div>
