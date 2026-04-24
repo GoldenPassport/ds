@@ -189,18 +189,21 @@ export function PageHeading({
 
   const TitleBlock = ({ size }: { size: 'sm' | 'md' | 'lg' }) => (
     <div className="flex items-center gap-3">
-      {avatar && <div className="shrink-0">{avatar}</div>}
+      {avatar && size !== 'sm' && <div className="shrink-0">{avatar}</div>}
       <div className="min-w-0">
         <h1 className={[
           'font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-tight',
-          size === 'sm' ? 'text-lg'      : '',
+          size === 'sm' ? 'text-base'    : '',
           size === 'md' ? 'text-[28px]'  : '',
           size === 'lg' ? 'text-[34px]'  : '',
         ].join(' ')}>
           {title}
         </h1>
         {description && (
-          <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">{description}</p>
+          <p className={[
+            'font-body text-ink-500 dark:text-ink-400',
+            size === 'sm' ? 'mt-0 text-xs leading-tight' : 'mt-0.5 text-sm',
+          ].join(' ')}>{description}</p>
         )}
       </div>
     </div>
