@@ -311,3 +311,46 @@ export const InContext: Story = {
   args: { title: '' },
   render: () => <InContextDemo />,
 };
+
+// ── Sticky ────────────────────────────────────────────────
+
+function StickyDemo() {
+  const [active, setActive] = React.useState('overview');
+  return (
+    <div className="h-[500px] overflow-y-auto bg-ink-50 dark:bg-ink-900">
+      <PageHeading
+        title="GraphQL API"
+        description="Last run 2 hours ago · 4 active deployments"
+        bordered
+        sticky
+        actions={
+          <Button variant="primary" size="sm">
+            <Plus className="w-3.5 h-3.5" aria-hidden="true" />
+            New run
+          </Button>
+        }
+        tabs={[
+          { label: 'Overview',    value: 'overview' },
+          { label: 'Runs',        value: 'runs',    badge: 12 },
+          { label: 'Deployments', value: 'deployments' },
+          { label: 'Settings',    value: 'settings' },
+        ]}
+        activeTab={active}
+        onTabChange={setActive}
+      />
+      <div className="px-6 py-4 space-y-4">
+        {Array.from({ length: 20 }, (_, i) => (
+          <div key={i} className="h-12 rounded-xl bg-ink-200 dark:bg-ink-700 flex items-center px-4">
+            <span className="text-sm font-body text-ink-500 dark:text-ink-400">Content row {i + 1}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export const Sticky: Story = {
+  name: 'Sticky — scrollable container',
+  args: { title: '' },
+  render: () => <StickyDemo />,
+};

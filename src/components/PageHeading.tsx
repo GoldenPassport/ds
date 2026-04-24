@@ -51,6 +51,8 @@ export interface PageHeadingProps {
   bordered?:      boolean;
   /** Mobile layout type. Default: 'medium' */
   mobileVariant?: PageHeadingMobileVariant;
+  /** Stick the header to the top of the viewport on scroll */
+  sticky?:        boolean;
   className?:     string;
 }
 
@@ -145,6 +147,7 @@ export function PageHeading({
   onTabChange,
   bordered       = false,
   mobileVariant  = 'medium',
+  sticky         = false,
   className      = '',
 }: PageHeadingProps) {
 
@@ -205,6 +208,7 @@ export function PageHeading({
 
   return (
     <div className={[
+      sticky ? 'sticky top-0 z-10 bg-white dark:bg-ink-900' : '',
       bordered ? 'border-b border-ink-200 dark:border-ink-700' : '',
       className,
     ].filter(Boolean).join(' ')}>
