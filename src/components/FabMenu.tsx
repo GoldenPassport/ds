@@ -131,14 +131,14 @@ export function FabMenu({
                 type="button"
                 onClick={() => { item.onClick?.(); close(); }}
                 aria-label={item.label}
-                className="w-10 h-10 rounded-xl flex items-center justify-center bg-white dark:bg-ink-800 text-ink-700 dark:text-ink-100 shadow-md hover:bg-ink-50 dark:hover:bg-ink-700 transition-colors shrink-0"
+                className="w-14 h-14 rounded-2xl flex items-center justify-center bg-ink-900 dark:bg-ink-800 text-white shadow-lg hover:bg-ink-700 dark:hover:bg-ink-700 transition-colors shrink-0"
               >
                 <span className="w-5 h-5 flex items-center justify-center">{item.icon}</span>
               </button>
             );
 
             const chipLabel = (
-              <span className="px-3 py-1.5 rounded-lg bg-white dark:bg-ink-800 text-ink-700 dark:text-ink-100 text-sm font-medium font-body shadow-md whitespace-nowrap">
+              <span className="px-4 py-2.5 rounded-2xl bg-ink-900 dark:bg-ink-800 text-white text-sm font-semibold font-body shadow-lg whitespace-nowrap">
                 {item.label}
               </span>
             );

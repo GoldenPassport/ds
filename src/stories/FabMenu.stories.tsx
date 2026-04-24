@@ -7,7 +7,7 @@ import {
 import { FabMenu } from '../components/FabMenu';
 
 const meta = {
-  title: 'Components/FabMenu',
+  title: 'Navigation/FabMenu',
   component: FabMenu,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
