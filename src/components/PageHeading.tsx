@@ -187,6 +187,39 @@ export function PageHeading({
     )
   ) : null;
 
+  const TabBar = ({ compact }: { compact?: boolean }) => tabs && tabs.length > 0 ? (
+    <div className={['flex gap-0 overflow-x-auto', compact ? '-mb-px' : 'mt-4 -mb-px'].join(' ')}>
+      {tabs.map(tab => {
+        const isActive = tab.value === activeTab;
+        return (
+          <button
+            key={tab.value}
+            type="button"
+            onClick={() => onTabChange?.(tab.value)}
+            className={[
+              'inline-flex items-center gap-2 px-1 py-3 mr-6 text-sm font-medium font-body border-b-2 whitespace-nowrap transition-colors',
+              isActive
+                ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                : 'border-transparent text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
+            ].join(' ')}
+          >
+            {tab.label}
+            {tab.badge != null && (
+              <span className={[
+                'rounded-full px-2 py-0.5 text-xs font-medium',
+                isActive
+                  ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300'
+                  : 'bg-ink-100 dark:bg-ink-700 text-ink-600 dark:text-ink-300',
+              ].join(' ')}>
+                {tab.badge}
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  ) : null;
+
   const TitleBlock = ({ size }: { size: 'sm' | 'md' | 'lg' }) => (
     <div className="flex items-center gap-3">
       {avatar && size !== 'sm' && <div className="shrink-0">{avatar}</div>}
@@ -223,13 +256,16 @@ export function PageHeading({
 
         {/* type 2 — small: single compact row with inline title */}
         {mobileVariant === 'small' && (
-          <div className="flex items-center gap-2 h-14 px-1">
-            {BackIcon ?? <div className="w-10 shrink-0" />}
-            <div className="flex-1 min-w-0">
-              <TitleBlock size="sm" />
+          <>
+            <div className="flex items-center gap-2 h-14 px-1">
+              {BackIcon ?? <div className="w-10 shrink-0" />}
+              <div className="flex-1 min-w-0">
+                <TitleBlock size="sm" />
+              </div>
+              <div className="flex items-center gap-1 shrink-0">{MobileTrailing}</div>
             </div>
-            <div className="flex items-center gap-1 shrink-0">{MobileTrailing}</div>
-          </div>
+            <TabBar compact />
+          </>
         )}
 
         {/* type 3 — medium: top bar + 28px title below */}
@@ -241,6 +277,7 @@ export function PageHeading({
             </div>
             <div className="px-1 pb-4"><TitleBlock size="md" /></div>
             {meta && <div className="px-1 pb-3 flex flex-wrap items-center gap-2">{meta}</div>}
+            <TabBar compact />
           </>
         )}
 
@@ -253,6 +290,7 @@ export function PageHeading({
             </div>
             <div className="px-1 pb-5"><TitleBlock size="lg" /></div>
             {meta && <div className="px-1 pb-3 flex flex-wrap items-center gap-2">{meta}</div>}
+            <TabBar compact />
           </>
         )}
       </div>
@@ -305,39 +343,7 @@ export function PageHeading({
           <div className="mt-3 flex flex-wrap items-center gap-2">{meta}</div>
         )}
 
-        {/* Tab bar */}
-        {tabs && tabs.length > 0 && (
-          <div className="mt-4 -mb-px flex gap-0 overflow-x-auto">
-            {tabs.map(tab => {
-              const isActive = tab.value === activeTab;
-              return (
-                <button
-                  key={tab.value}
-                  type="button"
-                  onClick={() => onTabChange?.(tab.value)}
-                  className={[
-                    'inline-flex items-center gap-2 px-1 py-3 mr-6 text-sm font-medium font-body border-b-2 whitespace-nowrap transition-colors',
-                    isActive
-                      ? 'border-primary-500 text-primary-600 dark:text-primary-400'
-                      : 'border-transparent text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
-                  ].join(' ')}
-                >
-                  {tab.label}
-                  {tab.badge != null && (
-                    <span className={[
-                      'rounded-full px-2 py-0.5 text-xs font-medium',
-                      isActive
-                        ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300'
-                        : 'bg-ink-100 dark:bg-ink-700 text-ink-600 dark:text-ink-300',
-                    ].join(' ')}>
-                      {tab.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        )}
+        <TabBar />
       </div>
     </div>
   );
