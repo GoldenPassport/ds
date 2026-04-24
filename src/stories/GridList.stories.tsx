@@ -6,7 +6,7 @@ import { Badge } from '../components/Badge';
 import { Menu } from '../components/Menu';
 
 const meta = {
-  title: 'Lists/Grid Lists',
+  title: 'Lists/GridList',
   component: GridList,
   tags: ['autodocs'],
   argTypes: {

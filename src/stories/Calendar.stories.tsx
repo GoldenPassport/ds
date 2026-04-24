@@ -4,7 +4,7 @@ import { Calendar } from '../components/Calendar';
 import type { CalendarEvent } from '../components/Calendar';
 
 const meta = {
-  title: 'Data Display/Calendars',
+  title: 'Data Display/Calendar',
   component: Calendar,
   tags: ['autodocs'],
   argTypes: {

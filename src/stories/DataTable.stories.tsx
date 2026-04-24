@@ -7,7 +7,7 @@ import { Button } from '../components/Button';
 import { Menu } from '../components/Menu';
 
 const meta = {
-  title: 'Lists/Tables',
+  title: 'Lists/DataTable',
   component: DataTable,
   tags: ['autodocs'],
   argTypes: {

@@ -6,7 +6,7 @@ import { Avatar } from '../components/Avatar';
 import { Badge } from '../components/Badge';
 
 const meta = {
-  title: 'Headings/Card Headings',
+  title: 'Headings/SectionHeader',
   component: SectionHeader,
   tags: ['autodocs'],
   argTypes: {

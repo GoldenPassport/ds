@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { StepsBar } from '../components/StepsBar';
 
 const meta = {
-  title: 'Navigation/Steps Bars',
+  title: 'Navigation/StepsBar',
   component: StepsBar,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

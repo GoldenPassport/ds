@@ -3,7 +3,7 @@ import { Plus, FolderOpen, Users, FileText, Search, Inbox, GitBranch } from 'luc
 import { EmptyState } from '../components/EmptyState';
 
 const meta = {
-  title: 'Feedback/Empty States',
+  title: 'Feedback/EmptyState',
   component: EmptyState,
   tags: ['autodocs'],
   argTypes: {

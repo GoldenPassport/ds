@@ -6,7 +6,7 @@ import { Button } from '../components/Button';
 import { Badge } from '../components/Badge';
 
 const meta = {
-  title: 'Layout/Dividers',
+  title: 'Layout/Divider',
   component: Divider,
   tags: ['autodocs'],
   argTypes: {

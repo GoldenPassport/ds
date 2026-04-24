@@ -6,7 +6,7 @@ import { Toggle } from '../components/Toggle';
 import { Input } from '../components/Input';
 
 const meta = {
-  title: 'Forms/Action Panels',
+  title: 'Forms/ActionPanel',
   component: ActionPanel,
   tags: ['autodocs'],
   argTypes: {

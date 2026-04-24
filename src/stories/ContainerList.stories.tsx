@@ -12,7 +12,7 @@ function ControlledToggle({ defaultChecked }: { defaultChecked: boolean }) {
 }
 
 const meta = {
-  title: 'Layout/List Containers',
+  title: 'Layout/ContainerList',
   component: ContainerList,
   tags: ['autodocs'],
   argTypes: {

@@ -7,7 +7,7 @@ import { Avatar } from '../components/Avatar';
 import { Divider } from '../components/Divider';
 
 const meta = {
-  title: 'Layout/Cards',
+  title: 'Layout/Card',
   component: Card,
   tags: ['autodocs'],
   argTypes: {

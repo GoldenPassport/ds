@@ -5,7 +5,7 @@ import { Dialog } from '../components/Dialog';
 import { Button } from '../components/Button';
 
 const meta = {
-  title: 'Overlays/Modal Dialogs',
+  title: 'Overlays/Dialog',
   component: Dialog,
   tags: ['autodocs'],
   argTypes: {

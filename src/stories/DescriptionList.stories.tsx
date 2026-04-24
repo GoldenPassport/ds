@@ -3,7 +3,7 @@ import { DescriptionList, type DescriptionListItem } from '../components/Descrip
 import { Badge } from '../components/Badge';
 
 const meta = {
-  title: 'Data Display/Description Lists',
+  title: 'Data Display/DescriptionList',
   component: DescriptionList,
   tags: ['autodocs'],
   argTypes: {

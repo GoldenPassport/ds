@@ -6,7 +6,7 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Card } from '../components/Card';
 
 const meta = {
-  title: 'Layout/Containers',
+  title: 'Layout/PageContainer',
   component: PageContainer,
   tags: ['autodocs'],
   argTypes: {

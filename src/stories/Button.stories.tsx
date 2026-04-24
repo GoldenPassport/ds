@@ -3,7 +3,7 @@ import { Play, Plus, Trash2 } from 'lucide-react';
 import { Button } from '../components/Button';
 
 const meta = {
-  title: 'Elements/Buttons',
+  title: 'Elements/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {
