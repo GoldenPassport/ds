@@ -7,19 +7,42 @@ import { Badge } from '../components/Badge';
 import { Avatar } from '../components/Avatar';
 import type { PageHeadingAction } from '../components/PageHeading';
 
+const PLAYGROUND_ACTION_ITEMS: PageHeadingAction[] = [
+  { label: 'Settings', icon: <Settings className="w-4 h-4" />, onClick: () => {}, variant: 'secondary' },
+  { label: 'New run',  icon: <Plus      className="w-4 h-4" />, onClick: () => {}, variant: 'primary'   },
+];
+
+const PLAYGROUND_TABS = [
+  { label: 'Overview',    value: 'overview' },
+  { label: 'Runs',        value: 'runs',    badge: 12 },
+  { label: 'Deployments', value: 'deployments' },
+  { label: 'Settings',    value: 'settings' },
+];
+
+const PLAYGROUND_BREADCRUMBS = [
+  { label: 'Projects', href: '#' },
+  { label: 'GraphQL API' },
+];
+
 const meta = {
   title: 'Headings/PageHeading',
   component: PageHeading,
   tags: ['autodocs'],
   argTypes: {
-    title:       { control: 'text' },
-    description: { control: 'text' },
-    bordered:    { control: 'boolean' },
-    actions:     { control: false },
-    meta:        { control: false },
-    avatar:      { control: false },
-    breadcrumbs: { control: false },
-    tabs:        { control: false },
+    title:         { control: 'text' },
+    description:   { control: 'text' },
+    bordered:      { control: 'boolean' },
+    sticky:        { control: 'boolean' },
+    mobileVariant: { control: 'select', options: ['none', 'small', 'medium', 'large'] },
+    activeTab:     { control: 'select', options: ['overview', 'runs', 'deployments', 'settings'] },
+    actions:       { control: false },
+    meta:          { control: false },
+    avatar:        { control: false },
+    breadcrumbs:   { control: false },
+    tabs:          { control: false },
+    actionItems:   { control: false },
+    onBack:        { control: false },
+    onTabChange:   { control: false },
   },
 } satisfies Meta<typeof PageHeading>;
 
@@ -28,12 +51,39 @@ type Story = StoryObj<typeof meta>;
 
 // ── Playground ────────────────────────────────────────────
 
+function PlaygroundDemo(args: React.ComponentProps<typeof PageHeading>) {
+  const [activeTab, setActiveTab] = React.useState(args.activeTab ?? 'overview');
+  React.useEffect(() => { setActiveTab(args.activeTab ?? 'overview'); }, [args.activeTab]);
+  return (
+    <PageHeading
+      {...args}
+      actionItems={PLAYGROUND_ACTION_ITEMS}
+      breadcrumbs={PLAYGROUND_BREADCRUMBS}
+      tabs={PLAYGROUND_TABS}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      onBack={() => {}}
+      meta={
+        <>
+          <Badge label="Active"     variant="active" />
+          <Badge label="Production" variant="draft"  />
+        </>
+      }
+      avatar={<Avatar name="GraphQL API" size={48} />}
+    />
+  );
+}
+
 export const Playground: Story = {
   args: {
-    title:       'Projects',
-    description: 'All projects in your workspace.',
-    bordered:    false,
+    title:         'GraphQL API',
+    description:   'Last run 2 hours ago · 4 active deployments',
+    bordered:      true,
+    sticky:        false,
+    mobileVariant: 'medium',
+    activeTab:     'overview',
   },
+  render: (args) => <PlaygroundDemo {...args} />,
 };
 
 // ── Simple ────────────────────────────────────────────────
