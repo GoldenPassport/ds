@@ -142,7 +142,7 @@ function DeploymentList() {
 
 function ActivityFeed() {
   return (
-    <div className="w-72 shrink-0">
+    <div className="w-72 shrink-0 bg-ink-50 dark:bg-ink-950 -my-6 -mr-6 px-6 py-6">
       <div className="flex items-center justify-between pb-3 mb-4 border-b border-ink-200 dark:border-ink-800">
         <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">Activity feed</h2>
         <button type="button" className="text-sm font-body text-primary-600 dark:text-primary-400 hover:underline transition-colors">View all</button>
