@@ -44,14 +44,14 @@ interface Tokens {
 
 const tokens: Record<VerticalNavAppearance, Tokens> = {
   default: {
-    item:        'font-medium text-ink-600 dark:text-ink-400 hover:text-primary-600 hover:bg-ink-50 dark:hover:bg-ink-800',
-    itemActive:  'font-semibold text-primary-600 bg-ink-50 dark:bg-ink-800',
+    item:        'font-medium text-ink-600 dark:text-ink-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-ink-700/40',
+    itemActive:  'font-semibold text-primary-600 bg-primary-50 dark:bg-ink-700/40',
     icon:        'text-ink-400 group-hover:text-primary-600',
     iconActive:  'text-primary-600',
     badge:       'bg-ink-100 dark:bg-ink-800 text-ink-600 dark:text-ink-300',
     groupLabel:  'text-ink-400',
-    childItem:   'font-medium text-ink-500 dark:text-ink-400 hover:text-primary-600 hover:bg-ink-50 dark:hover:bg-ink-800',
-    childActive: 'font-semibold text-primary-600 bg-ink-50 dark:bg-ink-800',
+    childItem:   'font-medium text-ink-500 dark:text-ink-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-ink-700/40',
+    childActive: 'font-semibold text-primary-600 bg-primary-50 dark:bg-ink-700/40',
     chevron:     'text-ink-400',
     childBorder: 'border-ink-200 dark:border-ink-700',
   },
