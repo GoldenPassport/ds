@@ -49,6 +49,7 @@ export {
   NotificationStack,
   useNotifications,
 } from './Notification';
+export { FabMenu } from './FabMenu';
 
 // Types
 export type { ActionPanelProps, ActionPanelVariant, ActionPanelLayout }  from './ActionPanel';
@@ -92,6 +93,7 @@ export type { VerticalNavProps, VerticalNavGroup, VerticalNavItem, VerticalNavAp
 export type { SidebarNavProps, SidebarNavUser, SidebarNavAppearance } from './SidebarNav';
 export type { MediaObjectProps, MediaObjectListProps, MediaObjectAlign, MediaObjectSide, MediaObjectGap } from './MediaObject';
 export type { DrawerProps, DrawerPlacement, DrawerSize } from './Drawer';
+export type { FabMenuProps, FabMenuItem, FabMenuVariant, FabMenuColor, FabMenuPosition } from './FabMenu';
 export type {
   NotificationItem,
   NotificationAction,
