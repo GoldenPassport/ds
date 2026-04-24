@@ -2,16 +2,17 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import {
   FolderOpen, Cpu, Activity, Globe, BarChart2, Settings,
-  Search, ChevronRight, ArrowUpCircle, ArrowDownCircle, RefreshCw,
+  ChevronRight, ArrowUpCircle, ArrowDownCircle, RefreshCw,
   Bell, Plus,
 } from 'lucide-react';
 
-import { Navbar }     from '../components/Navbar';
-import { SidebarNav } from '../components/SidebarNav';
-import { Stats }      from '../components/Stats';
-import { Avatar }     from '../components/Avatar';
-import { Badge }      from '../components/Badge';
-import { Button }     from '../components/Button';
+import { Navbar }       from '../components/Navbar';
+import { SidebarNav }   from '../components/SidebarNav';
+import { PageHeading }  from '../components/PageHeading';
+import { Stats }        from '../components/Stats';
+import { Avatar }       from '../components/Avatar';
+import { Badge }        from '../components/Badge';
+import { Button }       from '../components/Button';
 
 const meta = {
   title: 'Example Pages/HomeScreen',
@@ -186,17 +187,16 @@ function SidebarDemo({ dark }: { dark?: boolean }) {
 
         {/* Main */}
         <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-          {/* Search bar */}
-          <div className="border-b border-ink-200 dark:border-ink-800 px-6 py-3 bg-white dark:bg-ink-900">
-            <div className="flex items-center gap-2 max-w-sm text-ink-400 dark:text-ink-500">
-              <Search className="w-4 h-4 shrink-0" />
-              <input
-                type="text"
-                placeholder="Search…"
-                className="flex-1 bg-transparent text-sm font-body text-ink-700 dark:text-ink-200 placeholder:text-ink-400 dark:placeholder:text-ink-600 outline-none"
-              />
-            </div>
-          </div>
+          <PageHeading
+            title=""
+            mobileVariant="master"
+            bordered
+            sticky
+            searchPlaceholder="Search…"
+            actions={
+              <Avatar name="Tom Cook" size={32} />
+            }
+          />
 
           {/* Content */}
           <div className="flex-1 px-6 py-6 flex gap-8 min-w-0">
