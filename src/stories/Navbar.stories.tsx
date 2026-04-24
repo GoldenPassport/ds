@@ -11,6 +11,7 @@ const meta = {
   argTypes: {
     appearance: { control: { type: 'select', options: ['light', 'dark'] } },
     actions:    { control: false },
+    moreMenu:   { control: false },
     logo:       { control: false },
     items:      { control: false },
     user:       { control: false },
@@ -259,6 +260,41 @@ export const InContext: Story = {
         <p className="text-sm font-body text-ink-400 dark:text-ink-500">Page content goes here</p>
       </main>
     </div>
+  ),
+};
+
+// ── More menu ─────────────────────────────────────────────
+
+const MORE_ITEMS = [
+  { label: 'Help & support',  href: '#' },
+  { label: 'Keyboard shortcuts', href: '#' },
+  { label: 'Sign out', onClick: () => {}, dividerAbove: true },
+];
+
+export const WithMoreMenu: Story = {
+  name: 'With more menu (⋮)',
+  args: {},
+  render: () => (
+    <Navbar
+      logo={LOGO_LIGHT}
+      items={NAV_ITEMS_SIMPLE}
+      user={USER}
+      moreMenu={MORE_ITEMS}
+    />
+  ),
+};
+
+export const DarkWithMoreMenu: Story = {
+  name: 'Dark — with more menu (⋮)',
+  args: {},
+  render: () => (
+    <Navbar
+      appearance="dark"
+      logo={LOGO_DARK}
+      items={NAV_ITEMS_SIMPLE}
+      user={USER}
+      moreMenu={MORE_ITEMS}
+    />
   ),
 };
 

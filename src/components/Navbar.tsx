@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu as HLMenu, Transition } from '@headlessui/react';
-import { Search, Menu as MenuIcon, X } from 'lucide-react';
+import { Search, Menu as MenuIcon, X, MoreVertical, UserCircle } from 'lucide-react';
 import { Avatar } from './Avatar';
 
 // ── Types ─────────────────────────────────────────────────
@@ -23,7 +23,7 @@ export interface NavbarUserItem {
 }
 
 export interface NavbarUser {
-  name:       string;
+  name?:      string;
   email?:     string;
   avatarUrl?: string;
   menuItems?: NavbarUserItem[];
@@ -39,6 +39,8 @@ export interface NavbarProps {
   searchPlaceholder?: string;
   /** Arbitrary right-side content (icon buttons, quick actions, etc.) */
   actions?:           React.ReactNode;
+  /** Three-dot overflow menu items */
+  moreMenu?:          NavbarUserItem[];
   appearance?:        NavbarAppearance;
   /** Bottom border */
   bordered?:          boolean;
@@ -138,13 +140,17 @@ function UserMenu({ user, t }: { user: NavbarUser; t: Tokens }) {
         className={`flex items-center gap-2.5 rounded-xl p-1.5 transition-colors focus:outline-none ${t.userBtn}`}
       >
         {user.avatarUrl ? (
-          <img src={user.avatarUrl} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
-        ) : (
+          <img src={user.avatarUrl} alt={user.name ?? 'User'} className="w-8 h-8 rounded-full object-cover" />
+        ) : user.name ? (
           <Avatar name={user.name} size={32} />
+        ) : (
+          <UserCircle className={`w-8 h-8 ${t.iconBtn}`} aria-hidden="true" />
         )}
-        <span className={`hidden lg:block text-sm font-medium font-body ${t.userName}`}>
-          {user.name}
-        </span>
+        {user.name && (
+          <span className={`hidden lg:block text-sm font-medium font-body ${t.userName}`}>
+            {user.name}
+          </span>
+        )}
       </HLMenu.Button>
 
       <Transition
@@ -159,10 +165,10 @@ function UserMenu({ user, t }: { user: NavbarUser; t: Tokens }) {
         <HLMenu.Items
           className={`absolute right-0 z-50 mt-1.5 w-56 rounded-xl border overflow-hidden focus:outline-none ${t.dropdownBg}`}
         >
-          {user.email && (
+          {(user.name || user.email) && (
             <div className={`px-4 py-3 border-b ${t.dropdownDivider}`}>
-              <p className={`text-xs font-semibold font-body truncate ${t.userName}`}>{user.name}</p>
-              <p className={`text-xs font-body truncate ${t.userEmail}`}>{user.email}</p>
+              {user.name && <p className={`text-xs font-semibold font-body truncate ${t.userName}`}>{user.name}</p>}
+              {user.email && <p className={`text-xs font-body truncate ${t.userEmail}`}>{user.email}</p>}
             </div>
           )}
 
@@ -209,6 +215,53 @@ function SearchBox({ t, placeholder, onSearch, className = '' }: {
   );
 }
 
+// ── MoreMenu ───────────────────────────────────────────────
+
+function MoreMenu({ items, t }: { items: NavbarUserItem[]; t: Tokens }) {
+  return (
+    <HLMenu as="div" className="relative">
+      <HLMenu.Button
+        className={`flex items-center justify-center w-9 h-9 rounded-lg transition-colors focus:outline-none ${t.iconBtn}`}
+        aria-label="More options"
+      >
+        <MoreVertical className="w-5 h-5" aria-hidden="true" />
+      </HLMenu.Button>
+
+      <Transition
+        as={React.Fragment}
+        enter="transition ease-out duration-150"
+        enterFrom="opacity-0 scale-95 translate-y-1"
+        enterTo="opacity-100 scale-100 translate-y-0"
+        leave="transition ease-in duration-100"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0 scale-95"
+      >
+        <HLMenu.Items
+          className={`absolute right-0 z-50 mt-1.5 w-48 rounded-xl border overflow-hidden focus:outline-none ${t.dropdownBg}`}
+        >
+          <div className="py-1">
+            {items.map((mi, i) => (
+              <React.Fragment key={i}>
+                {mi.dividerAbove && <div className={`my-1 border-t ${t.dropdownDivider}`} />}
+                <HLMenu.Item>
+                  {({ active }) => {
+                    const cls = `flex w-full items-center px-4 py-2 text-sm font-body text-left transition-colors ${t.dropdownItemBase} ${active ? t.dropdownItemHover : ''}`;
+                    return mi.href ? (
+                      <a href={mi.href} className={cls}>{mi.label}</a>
+                    ) : (
+                      <button type="button" onClick={mi.onClick} className={cls}>{mi.label}</button>
+                    );
+                  }}
+                </HLMenu.Item>
+              </React.Fragment>
+            ))}
+          </div>
+        </HLMenu.Items>
+      </Transition>
+    </HLMenu>
+  );
+}
+
 // ── Navbar ─────────────────────────────────────────────────
 
 export function Navbar({
@@ -219,6 +272,7 @@ export function Navbar({
   onSearch,
   searchPlaceholder = 'Search…',
   actions,
+  moreMenu,
   appearance        = 'light',
   bordered          = true,
   className         = '',
@@ -263,6 +317,7 @@ export function Navbar({
               />
             )}
             {actions && <div className="flex items-center gap-1">{actions}</div>}
+            {moreMenu && moreMenu.length > 0 && <MoreMenu items={moreMenu} t={t} />}
             {user && <UserMenu user={user} t={t} />}
           </div>
         </div>
@@ -308,17 +363,21 @@ export function Navbar({
 
             {user && (
               <div className={`mt-2 pt-3 border-t ${t.dropdownDivider}`}>
-                <div className="flex items-center gap-3 px-3 py-2 mb-1">
-                  {user.avatarUrl ? (
-                    <img src={user.avatarUrl} alt={user.name} className="w-9 h-9 rounded-full object-cover shrink-0" />
-                  ) : (
-                    <Avatar name={user.name} size={36} />
-                  )}
-                  <div className="min-w-0">
-                    <p className={`text-sm font-semibold font-body truncate ${t.userName}`}>{user.name}</p>
-                    {user.email && <p className={`text-xs font-body truncate ${t.userEmail}`}>{user.email}</p>}
+                {(user.name || user.email || user.avatarUrl) && (
+                  <div className="flex items-center gap-3 px-3 py-2 mb-1">
+                    {user.avatarUrl ? (
+                      <img src={user.avatarUrl} alt={user.name ?? 'User'} className="w-9 h-9 rounded-full object-cover shrink-0" />
+                    ) : user.name ? (
+                      <Avatar name={user.name} size={36} />
+                    ) : (
+                      <UserCircle className={`w-9 h-9 shrink-0 ${t.iconBtn}`} aria-hidden="true" />
+                    )}
+                    <div className="min-w-0">
+                      {user.name && <p className={`text-sm font-semibold font-body truncate ${t.userName}`}>{user.name}</p>}
+                      {user.email && <p className={`text-xs font-body truncate ${t.userEmail}`}>{user.email}</p>}
+                    </div>
                   </div>
-                </div>
+                )}
                 {user.menuItems?.map((mi, i) => (
                   <React.Fragment key={i}>
                     {mi.dividerAbove && <div className={`my-1 border-t ${t.dropdownDivider}`} />}
