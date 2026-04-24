@@ -176,9 +176,7 @@ function SidebarDemo({ dark }: { dark?: boolean }) {
         {/* Sidebar */}
         <SidebarNav
           logo={
-            <svg viewBox="0 0 40 24" className="h-6 w-auto text-primary-500" fill="currentColor">
-              <path d="M20 0C14.7 0 11.3 2.7 10 8c2-2.7 4.3-3.7 7-3 1.2.3 2 1.1 2.9 2C21.7 9 23.8 10 27 10c5.3 0 8.7-2.7 10-8-2 2.7-4.3 3.7-7 3-1.2-.3-2-1.1-2.9-2C25.3 1 23.2 0 20 0zM10 10C4.7 10 1.3 12.7 0 18c2-2.7 4.3-3.7 7-3 1.2.3 2 1.1 2.9 2C11.7 19 13.8 20 17 20c5.3 0 8.7-2.7 10-8-2 2.7-4.3 3.7-7 3-1.2-.3-2-1.1-2.9-2C15.3 11 13.2 10 10 10z" />
-            </svg>
+            <span className="text-base font-bold font-display text-ink-900 dark:text-white">Acme</span>
           }
           groups={[...SIDEBAR_GROUPS, ...SIDEBAR_TEAMS_GROUP]}
           user={SIDEBAR_USER}
@@ -345,9 +343,7 @@ function StackedDemo({ dark }: { dark?: boolean }) {
       <div className="min-h-screen bg-ink-50 dark:bg-ink-950">
         <Navbar
           logo={
-            <svg viewBox="0 0 40 24" className="h-6 w-auto text-primary-500" fill="currentColor">
-              <path d="M20 0C14.7 0 11.3 2.7 10 8c2-2.7 4.3-3.7 7-3 1.2.3 2 1.1 2.9 2C21.7 9 23.8 10 27 10c5.3 0 8.7-2.7 10-8-2 2.7-4.3 3.7-7 3-1.2-.3-2-1.1-2.9-2C25.3 1 23.2 0 20 0zM10 10C4.7 10 1.3 12.7 0 18c2-2.7 4.3-3.7 7-3 1.2.3 2 1.1 2.9 2C11.7 19 13.8 20 17 20c5.3 0 8.7-2.7 10-8-2 2.7-4.3 3.7-7 3-1.2-.3-2-1.1-2.9-2C15.3 11 13.2 10 10 10z" />
-            </svg>
+            <span className="text-base font-bold font-display text-ink-900 dark:text-white">Acme</span>
           }
           items={[
             { label: 'Home',     href: '#', active: true },
