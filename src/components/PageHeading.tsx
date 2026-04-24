@@ -272,7 +272,7 @@ export function PageHeading({
           )}
 
           {/* Search pill */}
-          <div className="flex-1 relative">
+          <div className="flex-1 sm:flex-none sm:w-80 lg:w-96 relative">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 dark:text-ink-500 pointer-events-none" aria-hidden="true" />
             <input
               type="search"
