@@ -281,9 +281,9 @@ export function PageHeading({
             />
           </div>
 
-          {/* Trailing actions slot */}
+          {/* Trailing actions slot — pushed to far right */}
           {actions && (
-            <div className="flex items-center gap-1 shrink-0">{actions}</div>
+            <div className="ml-auto flex items-center gap-1 shrink-0">{actions}</div>
           )}
         </div>
       </div>
