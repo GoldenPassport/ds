@@ -239,9 +239,6 @@ export function PageHeading({
               <div>{BackIcon ?? <div className="w-10" />}</div>
               <div className="flex items-center gap-1">{MobileTrailing}</div>
             </div>
-            {breadcrumbs && breadcrumbs.length > 0 && (
-              <div className="mb-2 px-1"><Breadcrumbs items={breadcrumbs} /></div>
-            )}
             <div className="px-1 pb-4"><TitleBlock size="md" /></div>
             {meta && <div className="px-1 pb-3 flex flex-wrap items-center gap-2">{meta}</div>}
           </>
@@ -254,9 +251,6 @@ export function PageHeading({
               <div>{BackIcon ?? <div className="w-10" />}</div>
               <div className="flex items-center gap-1">{MobileTrailing}</div>
             </div>
-            {breadcrumbs && breadcrumbs.length > 0 && (
-              <div className="mb-2 px-1"><Breadcrumbs items={breadcrumbs} /></div>
-            )}
             <div className="px-1 pb-5"><TitleBlock size="lg" /></div>
             {meta && <div className="px-1 pb-3 flex flex-wrap items-center gap-2">{meta}</div>}
           </>
