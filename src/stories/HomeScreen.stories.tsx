@@ -108,7 +108,7 @@ function StatusDot({ status }: { status: 'active' | 'pending' }) {
 function DeploymentList() {
   return (
     <div className="flex-1 min-w-0">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between pb-3 mb-4 border-b border-ink-200 dark:border-ink-800">
         <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">Deployments</h2>
         <button type="button" className="inline-flex items-center gap-1 text-sm font-body text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
           Sort by <span className="text-xs">⇅</span>
@@ -143,7 +143,7 @@ function DeploymentList() {
 function ActivityFeed() {
   return (
     <div className="w-72 shrink-0">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between pb-3 mb-4 border-b border-ink-200 dark:border-ink-800">
         <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">Activity feed</h2>
         <button type="button" className="text-sm font-body text-primary-600 dark:text-primary-400 hover:underline transition-colors">View all</button>
       </div>
@@ -266,7 +266,7 @@ function DirectionIcon({ d }: { d: Transaction['direction'] }) {
 function TransactionTable() {
   return (
     <div>
-      <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50 mb-4">Recent activity</h2>
+      <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50 pb-3 mb-4 border-b border-ink-200 dark:border-ink-800">Recent activity</h2>
       {TRANSACTIONS.map(group => (
         <div key={group.group} className="mb-6">
           <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 py-3 border-t border-b border-ink-200 dark:border-ink-800 mb-0">
