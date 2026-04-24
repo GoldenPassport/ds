@@ -186,7 +186,7 @@ function SidebarDemo({ dark }: { dark?: boolean }) {
         />
 
         {/* Main */}
-        <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <div className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-white dark:bg-ink-900">
           <PageHeading
             title=""
             mobileVariant="master"
