@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, MoreVertical } from 'lucide-react';
+import { ArrowLeft, MoreVertical, Menu, Search } from 'lucide-react';
 import { Menu as HLMenu, Transition } from '@headlessui/react';
 import { Breadcrumbs } from './Breadcrumbs';
 import type { BreadcrumbItem } from './Breadcrumbs';
@@ -22,13 +22,13 @@ export interface PageHeadingAction {
 }
 
 /**
- * Mobile layout variant — mirrors Material Design 3 Top App Bar types:
- * - none   : no mobile header; rely on Navbar
+ * Mobile layout variant:
+ * - master : full-width search bar + hamburger (mobile) / no hamburger (desktop)
  * - small  : back + title + actions on a single compact row
- * - medium : back/actions top bar, large title stacked below  (default)
+ * - medium : back/actions top bar, large title stacked below (default)
  * - large  : back/actions top bar, extra-large title stacked below
  */
-export type PageHeadingMobileVariant = 'none' | 'small' | 'medium' | 'large';
+export type PageHeadingMobileVariant = 'master' | 'small' | 'medium' | 'large';
 
 export interface PageHeadingProps {
   title:          React.ReactNode;
@@ -39,7 +39,7 @@ export interface PageHeadingProps {
    * icon-only / overflow-menu on mobile automatically.
    */
   actionItems?:   PageHeadingAction[];
-  /** Freeform slot rendered on desktop only */
+  /** Freeform slot rendered on the right (desktop) or trailing (master) */
   actions?:       React.ReactNode;
   meta?:          React.ReactNode;
   avatar?:        React.ReactNode;
@@ -53,6 +53,10 @@ export interface PageHeadingProps {
   mobileVariant?: PageHeadingMobileVariant;
   /** Stick the header to the top of the viewport on scroll */
   sticky?:        boolean;
+  /** master variant — hamburger click handler; shows hamburger when provided */
+  onMenuClick?:   () => void;
+  /** master variant — search input placeholder */
+  searchPlaceholder?: string;
   className?:     string;
 }
 
@@ -145,10 +149,12 @@ export function PageHeading({
   tabs,
   activeTab,
   onTabChange,
-  bordered       = false,
-  mobileVariant  = 'medium',
-  sticky         = false,
-  className      = '',
+  bordered           = false,
+  mobileVariant      = 'medium',
+  sticky             = false,
+  onMenuClick,
+  searchPlaceholder  = 'Search…',
+  className          = '',
 }: PageHeadingProps) {
 
   const hasBack    = backHref || onBack;
@@ -242,19 +248,59 @@ export function PageHeading({
     </div>
   );
 
+  const borderCls = bordered ? 'border-b border-ink-200 dark:border-ink-700' : '';
+
+  // ── Master variant — unified bar for all screen sizes ────
+  if (mobileVariant === 'master') {
+    return (
+      <div className={[
+        sticky ? 'sticky top-0 z-10 bg-white dark:bg-ink-900' : '',
+        borderCls,
+        className,
+      ].filter(Boolean).join(' ')}>
+        <div className="flex items-center gap-3 h-14 px-3">
+          {/* Hamburger — mobile only */}
+          {onMenuClick && (
+            <button
+              type="button"
+              onClick={onMenuClick}
+              aria-label="Open menu"
+              className={`${iconBtnCls} sm:hidden shrink-0`}
+            >
+              <Menu className="w-5 h-5" aria-hidden="true" />
+            </button>
+          )}
+
+          {/* Search pill */}
+          <div className="flex-1 relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 dark:text-ink-500 pointer-events-none" aria-hidden="true" />
+            <input
+              type="search"
+              placeholder={searchPlaceholder}
+              className="w-full h-10 rounded-full bg-ink-100 dark:bg-ink-800 pl-10 pr-4 text-sm font-body text-ink-700 dark:text-ink-200 placeholder:text-ink-400 dark:placeholder:text-ink-500 outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-500 transition"
+            />
+          </div>
+
+          {/* Trailing actions slot */}
+          {actions && (
+            <div className="flex items-center gap-1 shrink-0">{actions}</div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Standard variants ─────────────────────────────────────
   return (
     <div className={[
       sticky ? 'sticky top-0 z-10 bg-white dark:bg-ink-900' : '',
-      bordered ? (mobileVariant === 'none' ? 'sm:border-b sm:border-ink-200 sm:dark:border-ink-700' : 'border-b border-ink-200 dark:border-ink-700') : '',
+      borderCls,
       className,
     ].filter(Boolean).join(' ')}>
 
       {/* ── Mobile ── */}
       <div className="sm:hidden">
-        {/* type 1 — none: render nothing on mobile */}
-        {mobileVariant === 'none' && null}
-
-        {/* type 2 — small: single compact row with inline title */}
+        {/* small: single compact row with inline title */}
         {mobileVariant === 'small' && (
           <>
             <div className="flex items-center gap-2 h-14 px-1">
@@ -268,7 +314,7 @@ export function PageHeading({
           </>
         )}
 
-        {/* type 3 — medium: top bar + 28px title below */}
+        {/* medium: top bar + 28px title below */}
         {mobileVariant === 'medium' && (
           <>
             <div className="flex items-center justify-between h-14 px-1">
@@ -281,7 +327,7 @@ export function PageHeading({
           </>
         )}
 
-        {/* type 4 — large: top bar + 34px title below */}
+        {/* large: top bar + 34px title below */}
         {mobileVariant === 'large' && (
           <>
             <div className="flex items-center justify-between h-14 px-1">
@@ -295,9 +341,8 @@ export function PageHeading({
         )}
       </div>
 
-      {/* ── Desktop: original layout ── */}
+      {/* ── Desktop ── */}
       <div className="hidden sm:block">
-        {/* Back link */}
         {hasBack && (
           <div className="mb-3">
             {backHref ? (
@@ -312,12 +357,10 @@ export function PageHeading({
           </div>
         )}
 
-        {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <div className="mb-2"><Breadcrumbs items={breadcrumbs} /></div>
         )}
 
-        {/* Title row */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0">
             {avatar && <div className="shrink-0">{avatar}</div>}
@@ -338,7 +381,6 @@ export function PageHeading({
           </div>
         </div>
 
-        {/* Meta row */}
         {meta && (
           <div className="mt-3 flex flex-wrap items-center gap-2">{meta}</div>
         )}

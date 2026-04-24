@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-import { Plus, Settings, Trash2, Share2 } from 'lucide-react';
+import { Plus, Settings, Trash2, Share2, Bell, MoreVertical } from 'lucide-react';
 import { PageHeading } from '../components/PageHeading';
 import { Button } from '../components/Button';
 import { Badge } from '../components/Badge';
@@ -33,7 +33,9 @@ const meta = {
     description:   { control: 'text' },
     bordered:      { control: 'boolean' },
     sticky:        { control: 'boolean' },
-    mobileVariant: { control: 'select', options: ['none', 'small', 'medium', 'large'] },
+    mobileVariant:      { control: 'select', options: ['master', 'small', 'medium', 'large'] },
+    searchPlaceholder:  { control: 'text' },
+    onMenuClick:        { control: false },
     activeTab:     { control: 'select', options: ['overview', 'runs', 'deployments', 'settings'] },
     actions:       { control: false },
     meta:          { control: false },
@@ -403,4 +405,63 @@ export const Sticky: Story = {
   name: 'Sticky — scrollable container',
   args: { title: '' },
   render: () => <StickyDemo />,
+};
+
+// ── Master ────────────────────────────────────────────────
+
+export const Master: Story = {
+  name: 'Master — search bar nav',
+  args: { title: '' },
+  render: () => (
+    <div className="bg-ink-50 dark:bg-ink-900 p-4 space-y-4">
+      <p className="text-xs font-body text-ink-400 mb-1">With hamburger + bell + avatar</p>
+      <PageHeading
+        title=""
+        mobileVariant="master"
+        bordered
+        sticky={false}
+        onMenuClick={() => {}}
+        searchPlaceholder="Search product"
+        actions={
+          <>
+            <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+              <Bell className="w-5 h-5" aria-hidden="true" />
+            </button>
+            <Avatar name="Leslie Alexander" size={36} />
+          </>
+        }
+      />
+      <p className="text-xs font-body text-ink-400 mb-1 mt-6">With bell + 3-dot menu (no hamburger)</p>
+      <PageHeading
+        title=""
+        mobileVariant="master"
+        bordered
+        searchPlaceholder="Search…"
+        actions={
+          <>
+            <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+              <Bell className="w-5 h-5" aria-hidden="true" />
+            </button>
+            <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+              <MoreVertical className="w-5 h-5" aria-hidden="true" />
+            </button>
+          </>
+        }
+      />
+      <p className="text-xs font-body text-ink-400 mb-1 mt-6">With CTA button</p>
+      <PageHeading
+        title=""
+        mobileVariant="master"
+        bordered
+        onMenuClick={() => {}}
+        searchPlaceholder="Search projects"
+        actions={
+          <Button variant="primary" size="sm">
+            <Plus className="w-3.5 h-3.5" aria-hidden="true" />
+            New
+          </Button>
+        }
+      />
+    </div>
+  ),
 };
