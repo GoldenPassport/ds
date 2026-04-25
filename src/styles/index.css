@@ -104,6 +104,53 @@
 }
 .dark .tippy-box[data-theme~='gp'] .tippy-arrow { color: var(--color-ink-700); }
 
+/* ── Date / time input native UI ───────────────────────── */
+
+/* Picker icon (calendar / clock) — match placeholder weight */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0.35;
+  cursor: pointer;
+}
+
+/* Format-hint text (dd/mm/yyyy, --:--) — match placeholder colour */
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="datetime-local"]::-webkit-datetime-edit-text,
+input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+input[type="datetime-local"]::-webkit-datetime-edit-year-field,
+input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+input[type="datetime-local"]::-webkit-datetime-edit-minute-field,
+input[type="datetime-local"]::-webkit-datetime-edit-ampm-field,
+input[type="time"]::-webkit-datetime-edit-text,
+input[type="time"]::-webkit-datetime-edit-hour-field,
+input[type="time"]::-webkit-datetime-edit-minute-field,
+input[type="time"]::-webkit-datetime-edit-ampm-field {
+  color: var(--color-ink-400);
+}
+
+/* When a field is focused/selected restore full ink */
+input[type="date"]::-webkit-datetime-edit-day-field:focus,
+input[type="date"]::-webkit-datetime-edit-month-field:focus,
+input[type="date"]::-webkit-datetime-edit-year-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-day-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-month-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-year-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-hour-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-minute-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-ampm-field:focus,
+input[type="time"]::-webkit-datetime-edit-hour-field:focus,
+input[type="time"]::-webkit-datetime-edit-minute-field:focus,
+input[type="time"]::-webkit-datetime-edit-ampm-field:focus {
+  color: var(--color-ink-900);
+  background-color: var(--color-primary-200);
+  border-radius: 2px;
+}
+
 @layer utilities {
   /* Focus ring — primary */
   .gp-focus {
