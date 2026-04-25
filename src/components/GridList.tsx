@@ -97,7 +97,7 @@ function DefaultCard({ item }: { item: GridListItem }) {
             {hasMenu && (
               <Menu
                 trigger={
-                  <button className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
+                  <button className="inline-flex items-center justify-center w-7 h-7 rounded-xl text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
                     <MoreVertical className="w-4 h-4" aria-hidden="true" />
                   </button>
                 }
