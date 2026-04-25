@@ -378,7 +378,12 @@ export function DateTimePicker({
           {name && <input type="hidden" name={name} value={isoValue} />}
 
           <Transition as={React.Fragment} {...TRANSITION}>
-            <Popover.Panel className={PANEL_CLS}>
+            {/*
+              Fixed width = w-64 calendar + p-3 panel padding on each side.
+              The content area is given the same min-height as the calendar so
+              switching to the Time tab doesn't shrink the panel.
+            */}
+            <Popover.Panel className={`${PANEL_CLS} w-[280px]`}>
               {/* Tab switcher */}
               <ButtonGroup
                 fullWidth="always"
@@ -391,41 +396,45 @@ export function DateTimePicker({
                 ]}
               />
 
-              {/* Date panel */}
-              {tab === 'date' && (
-                <div className="mt-3">
+              {/*
+                Fixed-height content area — tall enough to hold the calendar.
+                Both tabs live inside so the panel never resizes between tabs.
+              */}
+              <div className="mt-3 min-h-[272px] flex flex-col">
+                {/* Date panel */}
+                {tab === 'date' && (
                   <Calendar
                     variant="mini"
                     selected={current?.date ?? null}
                     onSelect={(d) => { update({ date: d }); setTab('time'); }}
                   />
-                </div>
-              )}
+                )}
 
-              {/* Time panel */}
-              {tab === 'time' && (
-                <div className="mt-3 flex justify-center">
-                  <div className="flex items-start gap-2">
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">HH</span>
-                      <ScrollColumn
-                        values={HOURS}
-                        selected={current?.hour ?? 12}
-                        onSelect={(v) => update({ hour: v })}
-                      />
-                    </div>
-                    <span className="mt-[30px] text-sm font-body font-semibold text-ink-400">:</span>
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">MM</span>
-                      <ScrollColumn
-                        values={MINUTES}
-                        selected={current?.minute ?? 0}
-                        onSelect={(v) => update({ minute: v })}
-                      />
+                {/* Time panel — centred vertically in the same space */}
+                {tab === 'time' && (
+                  <div className="flex-1 flex items-center justify-center">
+                    <div className="flex items-start gap-2">
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">HH</span>
+                        <ScrollColumn
+                          values={HOURS}
+                          selected={current?.hour ?? 12}
+                          onSelect={(v) => update({ hour: v })}
+                        />
+                      </div>
+                      <span className="mt-[30px] text-sm font-body font-semibold text-ink-400">:</span>
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">MM</span>
+                        <ScrollColumn
+                          values={MINUTES}
+                          selected={current?.minute ?? 0}
+                          onSelect={(v) => update({ minute: v })}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               {/* Footer actions */}
               <div className="mt-3 flex justify-between px-1">
