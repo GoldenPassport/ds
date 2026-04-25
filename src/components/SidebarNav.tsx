@@ -26,8 +26,10 @@ export interface SidebarNavProps {
   footer?:     React.ReactNode;
   appearance?: SidebarNavAppearance;
   /** Render as a rounded card panel rather than a flush edge sidebar */
-  rounded?:    boolean;
-  className?:  string;
+  rounded?:         boolean;
+  /** Show a left-border active indicator on nav items — default `false` */
+  activeIndicator?: boolean;
+  className?:       string;
 }
 
 // ── Style tokens ───────────────────────────────────────────
@@ -111,13 +113,25 @@ function NavBadge({ value, t }: { value: string | number; t: Tokens }) {
 
 // ── NavItem ────────────────────────────────────────────────
 
-function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; depth?: number }) {
+function NavItem({
+  item,
+  t,
+  depth            = 0,
+  activeIndicator  = false,
+}: {
+  item:             VerticalNavItem;
+  t:                Tokens;
+  depth?:           number;
+  activeIndicator?: boolean;
+}) {
   const [open, setOpen] = useState(() => item.children?.some(c => c.active) ?? false);
   const hasChildren = item.children && item.children.length > 0;
 
   const baseCls = [
     'group flex items-center gap-3 w-full rounded-xl text-sm font-body transition-colors text-left',
-    depth === 0 ? 'px-3 py-2 border-l-2' : 'px-3 py-1.5',
+    // border-l-2 is only added when the active indicator is enabled;
+    // the border-primary-500 / border-transparent tokens are inert without it
+    depth === 0 ? `px-3 py-2${activeIndicator ? ' border-l-2' : ''}` : 'px-3 py-1.5',
     item.active
       ? (depth === 0 ? t.itemActive : t.childActive)
       : (depth === 0 ? t.item       : t.childItem),
@@ -160,7 +174,7 @@ function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; dep
       {hasChildren && open && (
         <ul className={`mt-1 ml-4 pl-3 border-l ${t.childBorder} flex flex-col gap-0.5`}>
           {item.children!.map((child, i) => (
-            <NavItem key={i} item={child} t={t} depth={depth + 1} />
+            <NavItem key={i} item={child} t={t} depth={depth + 1} activeIndicator={activeIndicator} />
           ))}
         </ul>
       )}
@@ -259,9 +273,10 @@ export function SidebarNav({
   groups,
   user,
   footer,
-  appearance = 'light',
-  rounded    = false,
-  className  = '',
+  appearance       = 'light',
+  rounded          = false,
+  activeIndicator  = false,
+  className        = '',
 }: SidebarNavProps) {
   const t = tokens[appearance];
 
@@ -296,7 +311,7 @@ export function SidebarNav({
             )}
             <ul className="flex flex-col gap-0.5">
               {group.items.map((item, ii) => (
-                <NavItem key={ii} item={item} t={t} />
+                <NavItem key={ii} item={item} t={t} activeIndicator={activeIndicator} />
               ))}
             </ul>
           </div>
