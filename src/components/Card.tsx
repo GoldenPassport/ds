@@ -33,7 +33,7 @@ const paddingCls: Record<CardPadding, string> = {
   lg:   'px-8 py-7',
 };
 
-const MUTED = 'bg-ink-50 dark:bg-ink-900/50';
+const MUTED = 'bg-ink-50 dark:bg-ink-700/50';
 
 // ── Card ──────────────────────────────────────────────────
 

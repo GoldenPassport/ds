@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import gpLogo from '../../assets/gp-logo.png';
 import {
   LayoutDashboard, Users, FolderOpen, BarChart2, FileText, Settings,
   Bell, HelpCircle, ShieldCheck, Zap, GitBranch, Database, Globe,
@@ -133,9 +134,12 @@ const GROUPED_GROUPS = [
 
 function Logo({ dark = false }: { dark?: boolean }) {
   return (
-    <span className={`text-lg font-bold font-display tracking-tight ${dark ? 'text-white' : 'text-ink-900 dark:text-white'}`}>
-      Acme
-    </span>
+    <div className="flex items-center gap-2">
+      <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
+      <span className={`text-[15px] font-extrabold font-display tracking-tight leading-none ${dark ? 'text-white' : 'text-ink-900 dark:text-white'}`}>
+        Golden Passport
+      </span>
+    </div>
   );
 }
 
@@ -145,7 +149,7 @@ function Shell({ sidebar }: { sidebar: React.ReactNode }) {
   return (
     <div className="flex h-screen">
       <div className="w-64 shrink-0 h-full">{sidebar}</div>
-      <main className="flex-1 p-8 overflow-y-auto bg-ink-50 dark:bg-ink-900">
+      <main className="flex-1 p-8 overflow-y-auto bg-white dark:bg-ink-900">
         <p className="text-sm font-body text-ink-400 dark:text-ink-500">Page content</p>
       </main>
     </div>
@@ -404,10 +408,8 @@ export const BrandedDark: Story = {
           appearance="dark"
           logo={
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-primary-500 flex items-center justify-center">
-                <Zap className="w-4 h-4 text-ink-900" />
-              </div>
-              <span className="text-base font-bold font-display text-white tracking-tight">Acme</span>
+              <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
+              <span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">Golden Passport</span>
             </div>
           }
           groups={GROUPED_GROUPS}

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import gpLogo from '../../assets/gp-logo.png';
 import { Bell, Plus, Settings, LayoutDashboard, Users, BarChart2, FileText } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Button } from '../components/Button';
@@ -24,11 +25,17 @@ type Story = StoryObj<typeof meta>;
 // ── Fixtures ──────────────────────────────────────────────
 
 const LOGO_LIGHT = (
-  <span className="text-lg font-bold font-display text-ink-900 tracking-tight">Acme</span>
+  <div className="flex items-center gap-2">
+    <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
+    <span className="text-[15px] font-extrabold font-display text-ink-900 tracking-tight leading-none">Golden Passport</span>
+  </div>
 );
 
 const LOGO_DARK = (
-  <span className="text-lg font-bold font-display text-white tracking-tight">Acme</span>
+  <div className="flex items-center gap-2">
+    <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
+    <span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">Golden Passport</span>
+  </div>
 );
 
 const NAV_ITEMS = [

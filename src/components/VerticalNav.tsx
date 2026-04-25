@@ -44,15 +44,15 @@ interface Tokens {
 
 const tokens: Record<VerticalNavAppearance, Tokens> = {
   default: {
-    item:        'font-medium text-ink-600 dark:text-ink-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-ink-700/40',
-    itemActive:  'font-semibold text-primary-600 bg-primary-50 dark:bg-ink-700/40',
-    icon:        'text-ink-400 group-hover:text-primary-600',
-    iconActive:  'text-primary-600',
-    badge:       'bg-ink-100 dark:bg-ink-800 text-ink-600 dark:text-ink-300',
+    item:        'border-transparent font-medium text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+    itemActive:  'border-primary-500 font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
+    icon:        'text-ink-300 dark:text-ink-400',
+    iconActive:  'text-primary-500',
+    badge:       'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300',
     groupLabel:  'text-ink-400',
-    childItem:   'font-medium text-ink-500 dark:text-ink-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-ink-700/40',
-    childActive: 'font-semibold text-primary-600 bg-primary-50 dark:bg-ink-700/40',
-    chevron:     'text-ink-400',
+    childItem:   'font-medium text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+    childActive: 'font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
+    chevron:     'text-ink-300 dark:text-ink-400',
     childBorder: 'border-ink-200 dark:border-ink-700',
   },
   gray: {
@@ -99,7 +99,7 @@ function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; dep
 
   const baseCls = [
     'group flex items-center gap-3 w-full rounded-lg text-sm font-body transition-colors text-left',
-    depth === 0 ? 'px-3 py-2' : 'px-3 py-1.5',
+    depth === 0 ? 'px-3 py-2 border-l-2' : 'px-3 py-1.5',
     item.active
       ? (depth === 0 ? t.itemActive : t.childActive)
       : (depth === 0 ? t.item       : t.childItem),

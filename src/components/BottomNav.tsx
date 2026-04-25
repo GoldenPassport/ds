@@ -31,6 +31,7 @@ const tokens = {
     itemInactive:   'text-ink-500 dark:text-ink-400',
     itemActive:     'text-primary-600 dark:text-primary-400',
     indicator:      'bg-primary-50 dark:bg-primary-900/30',
+    indicatorHover: 'hover:bg-ink-100 dark:hover:bg-ink-800',
     badge:          'bg-primary-500 text-white',
   },
   dark: {
@@ -38,6 +39,7 @@ const tokens = {
     itemInactive:   'text-ink-400',
     itemActive:     'text-primary-400',
     indicator:      'bg-ink-700',
+    indicatorHover: 'hover:bg-ink-800',
     badge:          'bg-primary-500 text-white',
   },
 };
@@ -76,43 +78,43 @@ export function BottomNav({
               aria-current={isActive ? 'page' : undefined}
               aria-label={item.label}
               className={[
-                'flex-1 flex flex-col items-center justify-center gap-1 py-3 min-h-[56px]',
+                'flex-1 flex items-center justify-center py-2 min-h-[56px]',
                 'transition-colors duration-150 focus:outline-none',
                 isActive ? t.itemActive : t.itemInactive,
               ].join(' ')}
             >
-              {/* Icon + active indicator pill */}
-              <div className="relative flex items-center justify-center">
-                <span
-                  className={[
-                    'absolute inset-0 -mx-4 rounded-full transition-all duration-200',
-                    isActive ? `${t.indicator} scale-100 opacity-100` : 'scale-75 opacity-0',
-                  ].join(' ')}
-                />
-                <span className="relative w-6 h-6 flex items-center justify-center">
+              {/* Pill — wraps icon + label */}
+              <span
+                className={[
+                  'relative flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-200',
+                  isActive ? t.indicator : t.indicatorHover,
+                ].join(' ')}
+              >
+                {/* Icon */}
+                <span className="relative w-6 h-6 flex items-center justify-center shrink-0">
                   {item.icon}
+                  {/* Badge */}
+                  {item.badge != null && (
+                    <span className={[
+                      'absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full',
+                      'text-[10px] font-bold font-body flex items-center justify-center',
+                      t.badge,
+                    ].join(' ')}>
+                      {item.badge}
+                    </span>
+                  )}
                 </span>
-                {/* Badge */}
-                {item.badge != null && (
+
+                {/* Label */}
+                {showLabels && (
                   <span className={[
-                    'absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full',
-                    'text-[10px] font-bold font-body flex items-center justify-center',
-                    t.badge,
+                    'text-[11px] font-body leading-none transition-all duration-150',
+                    isActive ? 'font-semibold' : 'font-medium',
                   ].join(' ')}>
-                    {item.badge}
+                    {item.label}
                   </span>
                 )}
-              </div>
-
-              {/* Label */}
-              {showLabels && (
-                <span className={[
-                  'text-[11px] font-medium font-body leading-none transition-all duration-150',
-                  isActive ? 'font-semibold' : '',
-                ].join(' ')}>
-                  {item.label}
-                </span>
-              )}
+              </span>
             </button>
           );
         })}

@@ -56,21 +56,21 @@ interface Tokens {
 
 const tokens: Record<SidebarNavAppearance, Tokens> = {
   light: {
-    sidebar:     'bg-white dark:bg-ink-900',
+    sidebar:     'bg-ink-50 dark:bg-ink-800',
     border:      'border-ink-200 dark:border-ink-700',
-    item:        'font-medium text-ink-600 dark:text-ink-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-ink-50 dark:hover:bg-ink-700/40',
-    itemActive:  'font-medium text-primary-600 bg-ink-50 dark:bg-ink-700/40',
-    icon:        'text-ink-400 group-hover:text-primary-600 dark:group-hover:text-primary-400',
-    iconActive:  'text-primary-600',
-    badge:       'bg-ink-100 dark:bg-ink-800 text-ink-600 dark:text-ink-300',
+    item:        'border-transparent font-medium text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+    itemActive:  'border-primary-500 font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
+    icon:        'text-ink-300 dark:text-ink-400',
+    iconActive:  'text-primary-500',
+    badge:       'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300',
     groupLabel:  'text-ink-400 dark:text-ink-500',
-    childItem:   'font-medium text-ink-500 dark:text-ink-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-ink-50 dark:hover:bg-ink-700/40',
-    childActive: 'font-medium text-primary-600 bg-ink-50 dark:bg-ink-700/40',
-    chevron:     'text-ink-400 dark:text-ink-500',
+    childItem:   'font-medium text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+    childActive: 'font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
+    chevron:     'text-ink-300 dark:text-ink-400',
     childBorder: 'border-ink-200 dark:border-ink-700',
     userName:    'text-ink-900 dark:text-white',
     userEmail:   'text-ink-500 dark:text-ink-400',
-    userBtn:     'hover:bg-ink-100 dark:hover:bg-ink-800',
+    userBtn:     'hover:bg-ink-100 dark:hover:bg-ink-700',
     dropdownBg:  'bg-white dark:bg-ink-800 border-ink-200 dark:border-ink-700 shadow-md',
     dropdownDivider: 'border-ink-100 dark:border-ink-700',
     dropdownItem: 'text-ink-700 dark:text-ink-200',
@@ -117,7 +117,7 @@ function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; dep
 
   const baseCls = [
     'group flex items-center gap-3 w-full rounded-lg text-sm font-body transition-colors text-left',
-    depth === 0 ? 'px-3 py-2' : 'px-3 py-1.5',
+    depth === 0 ? 'px-3 py-2 border-l-2' : 'px-3 py-1.5',
     item.active
       ? (depth === 0 ? t.itemActive : t.childActive)
       : (depth === 0 ? t.item       : t.childItem),

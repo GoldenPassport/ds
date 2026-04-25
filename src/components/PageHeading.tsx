@@ -151,7 +151,7 @@ export function PageHeading({
   onTabChange,
   bordered           = false,
   mobileVariant      = 'medium',
-  sticky             = false,
+  sticky             = true,
   onMenuClick,
   searchPlaceholder  = 'Search…',
   className          = '',
@@ -254,7 +254,7 @@ export function PageHeading({
   if (mobileVariant === 'master') {
     return (
       <div className={[
-        sticky ? 'sticky top-0 z-10 bg-white dark:bg-ink-900' : '',
+        sticky ? 'sticky top-0 z-10 bg-ink-50 dark:bg-ink-800' : '',
         borderCls,
         className,
       ].filter(Boolean).join(' ')}>
@@ -293,7 +293,7 @@ export function PageHeading({
   // ── Standard variants ─────────────────────────────────────
   return (
     <div className={[
-      sticky ? 'sticky top-0 z-10 bg-white dark:bg-ink-900' : '',
+      sticky ? 'sticky top-0 z-10 bg-white dark:bg-ink-800' : '',
       borderCls,
       className,
     ].filter(Boolean).join(' ')}>

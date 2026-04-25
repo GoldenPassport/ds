@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import gpLogo from '../../assets/gp-logo.png';
 import {
   Briefcase, MapPin, DollarSign, CalendarDays, Paperclip,
   CheckCircle, XCircle, PenSquare, MessageCircle,
@@ -219,7 +220,7 @@ export const Stacked: Story = {
   render: () => (
     <div className="min-h-screen bg-ink-50 dark:bg-ink-800 flex flex-col">
       <Navbar
-        logo={<span className="text-lg font-bold font-display text-ink-900 dark:text-white tracking-tight">Acme</span>}
+        logo={<div className="flex items-center gap-2"><img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" /><span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-white tracking-tight leading-none">Golden Passport</span></div>}
         items={NAV_ITEMS}
         user={NAVBAR_USER}
         bordered
@@ -264,7 +265,7 @@ export const StackedDark: Story = {
     <div className="dark min-h-screen bg-ink-900 flex flex-col">
       <Navbar
         appearance="dark"
-        logo={<span className="text-lg font-bold font-display text-white tracking-tight">Acme</span>}
+        logo={<div className="flex items-center gap-2"><img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" /><span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">Golden Passport</span></div>}
         items={NAV_ITEMS}
         user={NAVBAR_USER}
         bordered
@@ -308,7 +309,7 @@ export const WithSidebar: Story = {
     <div className="flex h-screen bg-ink-50 dark:bg-ink-900">
       <div className="w-64 shrink-0 h-full">
         <SidebarNav
-          logo={<span className="text-lg font-bold font-display text-ink-900 dark:text-white tracking-tight">Acme</span>}
+          logo={<div className="flex items-center gap-2"><img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" /><span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-white tracking-tight leading-none">Golden Passport</span></div>}
           groups={SIDEBAR_GROUPS}
           user={NAVBAR_USER}
         />
@@ -356,7 +357,7 @@ export const WithSidebarDark: Story = {
       <div className="w-64 shrink-0 h-full">
         <SidebarNav
           appearance="dark"
-          logo={<span className="text-lg font-bold font-display text-white tracking-tight">Acme</span>}
+          logo={<div className="flex items-center gap-2"><img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" /><span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">Golden Passport</span></div>}
           groups={SIDEBAR_GROUPS}
           user={NAVBAR_USER}
         />

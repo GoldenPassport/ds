@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import gpLogo from '../../assets/gp-logo.png';
 import {
   LayoutDashboard, Users, BarChart2, FileText, Settings, FolderOpen,
   Bell, HelpCircle, ShieldCheck, Zap, GitBranch, Database, Globe,
@@ -238,10 +239,13 @@ export const InContext: Story = {
   render: () => (
     <div className="min-h-screen flex bg-ink-50 dark:bg-ink-900">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800">
+      <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-ink-200 dark:border-ink-700 bg-ink-50 dark:bg-ink-800">
         {/* Logo */}
         <div className="flex items-center h-16 px-6 border-b border-ink-200 dark:border-ink-700 shrink-0">
-          <span className="text-lg font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">Acme</span>
+          <div className="flex items-center gap-2">
+            <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
+            <span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-none">Golden Passport</span>
+          </div>
         </div>
         {/* Nav */}
         <div className="flex-1 overflow-y-auto py-5 px-3">
@@ -250,7 +254,7 @@ export const InContext: Story = {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-8 bg-white dark:bg-ink-900">
         <p className="text-sm font-body text-ink-400 dark:text-ink-500">Page content goes here</p>
       </main>
     </div>
