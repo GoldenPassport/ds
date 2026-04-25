@@ -4,7 +4,7 @@ import { Input } from './Input';
 
 // ── Types ─────────────────────────────────────────────────
 
-export interface SearchCardProps {
+export interface SearchSetProps {
   /** Controlled search query */
   value:             string;
   /** Called with the (debounced) query string — fire your server request here */
@@ -33,7 +33,7 @@ export interface SearchCardProps {
 
 // ── Component ─────────────────────────────────────────────
 
-export function SearchCard({
+export function SearchSet({
   value,
   onChange,
   total,
@@ -47,7 +47,7 @@ export function SearchCard({
   label,
   filters,
   className        = '',
-}: SearchCardProps) {
+}: SearchSetProps) {
   const [draft, setDraft] = useState(value);
   const timer = useRef<ReturnType<typeof setTimeout>>();
 

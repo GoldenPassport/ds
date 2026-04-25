@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { SearchCard } from '../components/SearchCard';
+import { SearchSet } from '../components/SearchSet';
 import { Badge } from '../components/Badge';
 import { StackedList } from '../components/StackedList';
 import { DataTable } from '../components/DataTable';
 
 const meta = {
-  title: 'Forms/SearchCard',
-  component: SearchCard,
+  title: 'Forms/SearchSet',
+  component: SearchSet,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
@@ -20,7 +20,7 @@ const meta = {
     placeholder: { control: 'text' },
     label:       { control: 'text' },
   },
-} satisfies Meta<typeof SearchCard>;
+} satisfies Meta<typeof SearchSet>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -43,7 +43,7 @@ export const Playground: Story = {
     const [size,  setSize]  = useState(args.pageSize ?? 25);
     return (
       <div className="max-w-lg">
-        <SearchCard
+        <SearchSet
           {...args}
           value={query}
           onChange={setQuery}
@@ -69,7 +69,7 @@ export const SearchOnly: Story = {
     const [q, setQ] = useState('');
     return (
       <div className="max-w-lg">
-        <SearchCard value={q} onChange={setQ} placeholder="Search users…" />
+        <SearchSet value={q} onChange={setQ} placeholder="Search users…" />
       </div>
     );
   },
@@ -85,7 +85,7 @@ export const WithResults: Story = {
     const [size, setSize] = useState(25);
     return (
       <div className="max-w-lg">
-        <SearchCard
+        <SearchSet
           value={q}
           onChange={setQ}
           placeholder="Search deployments…"
@@ -106,7 +106,7 @@ export const NoResults: Story = {
   args: { value: '', onChange: () => {}, total: 0 },
   render: () => (
     <div className="max-w-lg">
-      <SearchCard
+      <SearchSet
         value="xyzzy"
         onChange={() => {}}
         placeholder="Search…"
@@ -126,7 +126,7 @@ export const Loading: Story = {
   args: { value: '', onChange: () => {}, total: undefined },
   render: () => (
     <div className="max-w-lg">
-      <SearchCard
+      <SearchSet
         value="invoice"
         onChange={() => {}}
         placeholder="Search…"
@@ -150,7 +150,7 @@ export const WithFilters: Story = {
 
     return (
       <div className="max-w-lg flex flex-col gap-4">
-        <SearchCard
+        <SearchSet
           value={q}
           onChange={setQ}
           placeholder="Search workflows…"
@@ -192,7 +192,7 @@ export const WithLabel: Story = {
     const [q, setQ] = useState('');
     return (
       <div className="max-w-lg">
-        <SearchCard
+        <SearchSet
           value={q}
           onChange={setQ}
           label="Find a team member"
@@ -246,7 +246,7 @@ export const WithStackedList: Story = {
 
     return (
       <div className="max-w-lg flex flex-col gap-3">
-        <SearchCard
+        <SearchSet
           value={query}
           onChange={setQuery}
           placeholder="Search by name or email…"
@@ -312,7 +312,7 @@ export const WithDataTable: Story = {
 
     return (
       <div className="flex flex-col gap-3">
-        <SearchCard
+        <SearchSet
           value={query}
           onChange={setQuery}
           placeholder="Search team…"
