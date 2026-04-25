@@ -20,6 +20,7 @@ export { Button }      from './Button';
 export { Badge }       from './Badge';
 export { Avatar }      from './Avatar';
 export { Input }       from './Input';
+export { SearchCard }  from './SearchCard';
 export { Textarea }     from './Textarea';
 export { Checkbox }     from './Checkbox';
 export { ButtonGroup }  from './ButtonGroup';
@@ -75,6 +76,7 @@ export type { ButtonProps, ButtonVariant, ButtonSize, ButtonRadius }         fro
 export type { BadgeProps, BadgeVariant }                                    from './Badge';
 export type { AvatarProps }                                                 from './Avatar';
 export type { InputProps }                                                  from './Input';
+export type { SearchCardProps }                                             from './SearchCard';
 export type { TextareaProps }                                               from './Textarea';
 export type { CheckboxProps }                                               from './Checkbox';
 export type { ButtonGroupProps, ButtonGroupItem }                           from './ButtonGroup';
