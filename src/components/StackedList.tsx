@@ -128,7 +128,7 @@ export function StackedList({
       ].filter(Boolean).join(' ')}
     >
       {items.map((item, i) => (
-        <li key={item.id}>
+        <li key={item.id} className={bordered ? 'px-6' : ''}>
           {renderItem ? renderItem(item, i) : <DefaultRow item={item} showLeading={showLeading} />}
         </li>
       ))}
@@ -142,9 +142,7 @@ export function StackedList({
         'bg-white dark:bg-ink-800 shadow-sm',
         className,
       ].join(' ')}>
-        <div className="px-6">
-          {list}
-        </div>
+        {list}
       </div>
     );
   }
