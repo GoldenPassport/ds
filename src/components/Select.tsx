@@ -1,45 +1,59 @@
 /**
- * Select — wraps Headless UI Listbox
- * Fully accessible single-select with GP styling.
+ * Select — single-select with two render modes:
+ *
+ * - `variant="custom"` (default) — Headless UI Listbox; fully styled dropdown,
+ *   keyboard-accessible, works identically on all platforms.
+ *
+ * - `variant="native"` — plain `<select>` element; delegates the picker UI to
+ *   the OS/browser. Recommended on mobile where native pickers are optimal.
  *
  * Usage:
- *   <Select
- *     label="AI Model"
- *     value={selected}
- *     onChange={setSelected}
- *     options={[{ value: 'claude', label: 'Claude 3.5 Sonnet' }]}
- *   />
+ *   <Select label="AI Model" value={v} onChange={setV} options={opts} />
+ *   <Select variant="native" label="Department" value={v} onChange={setV} options={opts} />
  */
 import React from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown, Check } from 'lucide-react';
 
 export interface SelectOption<T = string> {
-  value:    T;
-  label:    string;
+  value:     T;
+  label:     string;
   disabled?: boolean;
 }
 
 export interface SelectProps<T = string> {
-  value:     T;
-  onChange:  (value: T) => void;
-  options:   SelectOption<T>[];
-  label?:    string;
-  hint?:     string;
-  error?:    string;
-  disabled?: boolean;
+  value:      T;
+  onChange:   (value: T) => void;
+  options:    SelectOption<T>[];
+  /**
+   * `"custom"` — fully styled Headless UI dropdown (default).
+   * `"native"` — OS/browser native `<select>` picker; best on mobile.
+   */
+  variant?:   'custom' | 'native';
+  label?:     string;
+  hint?:      string;
+  error?:     string;
+  disabled?:  boolean;
+  placeholder?: string;
   className?: string;
 }
 
-export function Select<T extends string | number>({
-  value,
-  onChange,
-  options,
-  label,
-  hint,
-  error,
-  disabled = false,
-  className = '',
+// ── Shared style tokens ───────────────────────────────────
+
+const triggerBase = [
+  'relative w-full rounded-xl border px-3 py-2.5 text-sm font-body',
+  'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
+  'transition-all duration-150',
+  'disabled:opacity-40 disabled:cursor-not-allowed',
+].join(' ');
+
+const triggerBorderNormal = 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25';
+const triggerBorderError  = 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/25';
+
+// ── Custom variant (Headless UI Listbox) ──────────────────
+
+function SelectCustom<T extends string | number>({
+  value, onChange, options, label, hint, error, disabled = false, className = '',
 }: SelectProps<T>) {
   const id       = React.useId();
   const selected = options.find(o => o.value === value) ?? options[0];
@@ -52,28 +66,22 @@ export function Select<T extends string | number>({
             {label}
           </Listbox.Label>
         )}
-
-        {/* Trigger + panel anchored together */}
         <div className="relative">
           <Listbox.Button
             aria-describedby={hint ? `${id}-hint` : error ? `${id}-error` : undefined}
             aria-invalid={!!error || undefined}
             className={[
-            'relative w-full cursor-pointer rounded-xl border px-3 py-2.5 pr-9 text-left text-sm font-body',
-            'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
-            error
-              ? 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/25'
-              : 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25',
-            'disabled:opacity-40 disabled:cursor-not-allowed',
-            'transition-all duration-150',
-          ].join(' ')}>
+              triggerBase,
+              'cursor-pointer text-left pr-9',
+              error ? triggerBorderError : triggerBorderNormal,
+            ].join(' ')}
+          >
             <span className="block truncate">{selected?.label}</span>
             <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-ink-400">
               <ChevronDown className="h-4 w-4" />
             </span>
           </Listbox.Button>
 
-          {/* Dropdown — absolute relative to the button wrapper */}
           <Transition
             as={React.Fragment}
             leave="transition ease-in duration-100"
@@ -85,7 +93,7 @@ export function Select<T extends string | number>({
           >
             <Listbox.Options className={[
               'absolute top-full left-0 z-50 mt-1 w-full overflow-auto rounded-xl py-1',
-              'bg-white dark:bg-ink-800 shadow-lg dark:shadow-dark-md',
+              'bg-white dark:bg-ink-800 shadow-lg',
               'border border-ink-200 dark:border-ink-700',
               'focus:outline-none text-sm font-body max-h-60',
             ].join(' ')}>
@@ -96,8 +104,8 @@ export function Select<T extends string | number>({
                   disabled={option.disabled}
                   className={({ active, selected: sel }) => [
                     'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
-                    active   ? 'bg-ink-50 dark:bg-ink-700' : '',
-                    sel      ? 'text-primary-600 dark:text-primary-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
+                    active  ? 'bg-ink-50 dark:bg-ink-700' : '',
+                    sel     ? 'text-primary-600 dark:text-primary-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
                     option.disabled ? 'opacity-40 cursor-not-allowed' : '',
                   ].join(' ')}
                 >
@@ -122,4 +130,78 @@ export function Select<T extends string | number>({
       </div>
     </Listbox>
   );
+}
+
+// ── Native variant (<select>) ─────────────────────────────
+
+function SelectNative<T extends string | number>({
+  value, onChange, options, label, hint, error, disabled = false, placeholder, className = '',
+}: SelectProps<T>) {
+  const id = React.useId();
+
+  return (
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      {label && (
+        <label
+          htmlFor={id}
+          className="text-[13px] font-semibold font-body text-ink-900 dark:text-ink-50"
+        >
+          {label}
+        </label>
+      )}
+
+      {/* Wrapper gives us the custom chevron while keeping the native picker */}
+      <div className="relative">
+        <select
+          id={id}
+          value={String(value)}
+          onChange={e => {
+            const raw = e.target.value as T;
+            onChange(raw);
+          }}
+          disabled={disabled}
+          aria-describedby={hint ? `${id}-hint` : error ? `${id}-error` : undefined}
+          aria-invalid={!!error || undefined}
+          className={[
+            triggerBase,
+            'appearance-none cursor-pointer pr-9',
+            // suppress default OS arrow on WebKit
+            '[&::-webkit-inner-spin-button]:hidden [&::-ms-expand]:hidden',
+            error ? triggerBorderError : triggerBorderNormal,
+          ].join(' ')}
+        >
+          {placeholder && (
+            <option value="" disabled>
+              {placeholder}
+            </option>
+          )}
+          {options.map(o => (
+            <option key={String(o.value)} value={String(o.value)} disabled={o.disabled}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+
+        {/* Custom chevron — pointer-events-none so clicks pass through to <select> */}
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-ink-400 dark:text-ink-500">
+          <ChevronDown className="h-4 w-4" />
+        </span>
+      </div>
+
+      {hint && !error && (
+        <p id={`${id}-hint`} className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+      )}
+      {error && (
+        <p id={`${id}-error`} role="alert" className="text-xs text-red-500 dark:text-red-400 font-body">{error}</p>
+      )}
+    </div>
+  );
+}
+
+// ── Public export ─────────────────────────────────────────
+
+export function Select<T extends string | number>(props: SelectProps<T>) {
+  return props.variant === 'native'
+    ? <SelectNative {...props} />
+    : <SelectCustom {...props} />;
 }

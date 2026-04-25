@@ -1,9 +1,11 @@
 import React from 'react';
-import { ArrowLeft, MoreVertical, Menu, Search } from 'lucide-react';
+import { ArrowLeft, MoreVertical, Menu } from 'lucide-react';
 import { Menu as HLMenu, Transition } from '@headlessui/react';
 import { Breadcrumbs } from './Breadcrumbs';
 import type { BreadcrumbItem } from './Breadcrumbs';
 import type { ButtonVariant } from './Button';
+import { SearchSet } from './SearchSet';
+import type { SearchSetTag, SearchSetFilterDef, SearchSetFilterValues } from './SearchSet';
 
 // ── Types ─────────────────────────────────────────────────
 
@@ -23,12 +25,14 @@ export interface PageHeadingAction {
 
 /**
  * Mobile layout variant:
- * - master : full-width search bar + hamburger (mobile) / no hamburger (desktop)
- * - small  : back + title + actions on a single compact row
- * - medium : back/actions top bar, large title stacked below (default)
- * - large  : back/actions top bar, extra-large title stacked below
+ * - master-simple : search input only — no tags, no info button, no summary row (all screen sizes)
+ * - master-full   : full SearchSet (tags + info + summary) on desktop; simple search on mobile
+ * - master        : alias for master-simple (kept for backward compatibility)
+ * - small         : back + title + actions on a single compact row
+ * - medium        : back/actions top bar, large title stacked below (default)
+ * - large         : back/actions top bar, extra-large title stacked below
  */
-export type PageHeadingMobileVariant = 'master' | 'small' | 'medium' | 'large';
+export type PageHeadingMobileVariant = 'master' | 'master-simple' | 'master-full' | 'small' | 'medium' | 'large';
 
 export interface PageHeadingProps {
   title:          React.ReactNode;
@@ -54,10 +58,30 @@ export interface PageHeadingProps {
   /** Stick the header to the top of the viewport on scroll */
   sticky?:        boolean;
   /** master variant — hamburger click handler; shows hamburger when provided */
-  onMenuClick?:   () => void;
+  onMenuClick?:        () => void;
+  /** master variant — controlled search query */
+  searchValue?:        string;
+  /** master variant — called with debounced query */
+  onSearchChange?:     (query: string) => void;
+  /** master variant — show spinner while fetching */
+  searchLoading?:      boolean;
   /** master variant — search input placeholder */
-  searchPlaceholder?: string;
-  className?:     string;
+  searchPlaceholder?:  string;
+  /** master variant — AND/OR committed search tags */
+  searchTags?:         SearchSetTag[];
+  /** master variant — called when search tags change */
+  onSearchTagsChange?: (tags: SearchSetTag[]) => void;
+  /** master variant — result summary shown below the input */
+  searchSummary?:      React.ReactNode;
+  /** master variant — filter field definitions (shows filter button) */
+  searchFilterDefs?:      SearchSetFilterDef[];
+  /** master variant — controlled filter values */
+  searchFilterValues?:    SearchSetFilterValues;
+  /** master variant — called when filters are applied */
+  onSearchFilterChange?:  (values: SearchSetFilterValues) => void;
+  /** master variant — filter dialog title */
+  searchFilterTitle?:     string;
+  className?:          string;
 }
 
 // ── Mobile overflow menu ───────────────────────────────────
@@ -151,10 +175,20 @@ export function PageHeading({
   onTabChange,
   bordered           = false,
   mobileVariant      = 'medium',
-  sticky             = true,
+  sticky               = true,
   onMenuClick,
-  searchPlaceholder  = 'Search…',
-  className          = '',
+  searchValue          = '',
+  onSearchChange,
+  searchLoading        = false,
+  searchPlaceholder    = 'Search…',
+  searchTags,
+  onSearchTagsChange,
+  searchSummary,
+  searchFilterDefs,
+  searchFilterValues,
+  onSearchFilterChange,
+  searchFilterTitle,
+  className            = '',
 }: PageHeadingProps) {
 
   const hasBack    = backHref || onBack;
@@ -250,42 +284,72 @@ export function PageHeading({
 
   const borderCls = bordered ? 'border-b border-ink-200 dark:border-ink-700' : '';
 
-  // ── Master variant — unified bar for all screen sizes ────
-  if (mobileVariant === 'master') {
+  // ── Master variants — unified search bar ─────────────────
+  if (mobileVariant === 'master' || mobileVariant === 'master-simple' || mobileVariant === 'master-full') {
+    const isFull   = mobileVariant === 'master-full';
+
+    /** Shared bar chrome — hamburger + search slot + actions */
+    const MasterBar = ({ simple }: { simple: boolean }) => (
+      <div className="flex items-center gap-3 px-3 py-2">
+        {/* Hamburger */}
+        {onMenuClick && (
+          <button
+            type="button"
+            onClick={onMenuClick}
+            aria-label="Open menu"
+            className={`${iconBtnCls} sm:hidden shrink-0`}
+          >
+            <Menu className="w-5 h-5" aria-hidden="true" />
+          </button>
+        )}
+
+        {/* SearchSet — simple strips tags/summary/info */}
+        <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-none sm:flex-none sm:w-80 lg:w-96">
+          <SearchSet
+            value={searchValue}
+            onChange={onSearchChange ?? (() => {})}
+            placeholder={searchPlaceholder}
+            loading={searchLoading}
+            filterDefs={searchFilterDefs}
+            filterValues={searchFilterValues}
+            onFilterChange={onSearchFilterChange}
+            filterTitle={searchFilterTitle}
+            {...(!simple && {
+              tags:         searchTags,
+              onTagsChange: onSearchTagsChange,
+              summary:      searchSummary,
+            })}
+          />
+        </div>
+
+        {/* Trailing actions */}
+        {actions && (
+          <div className="ml-auto flex items-center gap-1 shrink-0">{actions}</div>
+        )}
+      </div>
+    );
+
     return (
       <div className={[
         sticky ? 'sticky top-0 z-10 bg-ink-50 dark:bg-ink-800' : '',
         borderCls,
         className,
       ].filter(Boolean).join(' ')}>
-        <div className="flex items-center gap-3 h-14 px-3">
-          {/* Hamburger — mobile only */}
-          {onMenuClick && (
-            <button
-              type="button"
-              onClick={onMenuClick}
-              aria-label="Open menu"
-              className={`${iconBtnCls} sm:hidden shrink-0`}
-            >
-              <Menu className="w-5 h-5" aria-hidden="true" />
-            </button>
-          )}
-
-          {/* Search pill */}
-          <div className="flex-1 sm:flex-none sm:w-80 lg:w-96 relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 dark:text-ink-500 pointer-events-none" aria-hidden="true" />
-            <input
-              type="search"
-              placeholder={searchPlaceholder}
-              className="w-full h-10 rounded-full bg-ink-100 dark:bg-ink-800 pl-10 pr-4 text-sm font-body text-ink-700 dark:text-ink-200 placeholder:text-ink-400 dark:placeholder:text-ink-500 outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-500 transition"
-            />
-          </div>
-
-          {/* Trailing actions slot — pushed to far right */}
-          {actions && (
-            <div className="ml-auto flex items-center gap-1 shrink-0">{actions}</div>
-          )}
-        </div>
+        {isFull ? (
+          <>
+            {/* Mobile — simple search */}
+            <div className="sm:hidden">
+              <MasterBar simple />
+            </div>
+            {/* Desktop — full search with tags + summary */}
+            <div className="hidden sm:block">
+              <MasterBar simple={false} />
+            </div>
+          </>
+        ) : (
+          /* master / master-simple — always simple */
+          <MasterBar simple />
+        )}
       </div>
     );
   }

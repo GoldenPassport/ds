@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
-import { Plus, Settings, Trash2, Share2, Bell, MoreVertical } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Settings, Trash2, Share2, Bell } from 'lucide-react';
 import { PageHeading } from '../components/PageHeading';
 import { Button } from '../components/Button';
 import { Badge } from '../components/Badge';
 import { Avatar } from '../components/Avatar';
 import type { PageHeadingAction } from '../components/PageHeading';
+import type { SearchSetTag } from '../components/SearchSet';
 
 const PLAYGROUND_ACTION_ITEMS: PageHeadingAction[] = [
   { label: 'Settings', icon: <Settings className="w-4 h-4" />, onClick: () => {}, variant: 'secondary' },
@@ -409,19 +410,57 @@ export const Sticky: Story = {
 
 // ── Master ────────────────────────────────────────────────
 
-export const Master: Story = {
-  name: 'Master — search bar nav',
-  args: { title: '' },
-  render: () => (
-    <div className="bg-ink-50 dark:bg-ink-900 p-4 space-y-4">
-      <p className="text-xs font-body text-ink-400 mb-1">With hamburger + bell + avatar</p>
+const MASTER_ITEMS = [
+  { id: 1,  name: 'Invoice Approval',        dept: 'Finance',    status: 'Active'   },
+  { id: 2,  name: 'Employee Onboarding',     dept: 'HR',         status: 'Running'  },
+  { id: 3,  name: 'Customer Support Routing',dept: 'Support',    status: 'Active'   },
+  { id: 4,  name: 'Monthly Report Pipeline', dept: 'Analytics',  status: 'Draft'    },
+  { id: 5,  name: 'Vendor Onboarding',       dept: 'Procurement',status: 'Pending'  },
+  { id: 6,  name: 'Expense Approval',        dept: 'Finance',    status: 'Active'   },
+  { id: 7,  name: 'IT Provisioning',         dept: 'IT',         status: 'Active'   },
+  { id: 8,  name: 'Leave Request',           dept: 'HR',         status: 'Running'  },
+];
+
+function MasterDemo() {
+  const [query,  setQuery]  = useState('');
+  const [tags,   setTags]   = useState<SearchSetTag[]>([]);
+
+  function matchesTags(item: typeof MASTER_ITEMS[0]): boolean {
+    const hit = (term: string) =>
+      item.name.toLowerCase().includes(term.toLowerCase()) ||
+      item.dept.toLowerCase().includes(term.toLowerCase()) ||
+      item.status.toLowerCase().includes(term.toLowerCase());
+
+    let result = true;
+    for (let i = 0; i < tags.length; i++) {
+      const { term, op } = tags[i];
+      if (i === 0)        result = hit(term);
+      else if (op === 'and') result = result && hit(term);
+      else                   result = result || hit(term);
+    }
+    if (query) result = result && hit(query);
+    return result;
+  }
+
+  const filtered = MASTER_ITEMS.filter(matchesTags);
+  const summary  = filtered.length === MASTER_ITEMS.length
+    ? `${MASTER_ITEMS.length} workflows`
+    : `${filtered.length} of ${MASTER_ITEMS.length} workflows`;
+
+  return (
+    <div className="bg-ink-50 dark:bg-ink-900 rounded-2xl overflow-hidden border border-ink-200 dark:border-ink-700">
       <PageHeading
         title=""
         mobileVariant="master"
         bordered
         sticky={false}
         onMenuClick={() => {}}
-        searchPlaceholder="Search product"
+        searchPlaceholder="Search workflows…"
+        searchValue={query}
+        onSearchChange={setQuery}
+        searchTags={tags}
+        onSearchTagsChange={setTags}
+        searchSummary={summary}
         actions={
           <>
             <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
@@ -431,37 +470,87 @@ export const Master: Story = {
           </>
         }
       />
-      <p className="text-xs font-body text-ink-400 mb-1 mt-6">With bell + 3-dot menu (no hamburger)</p>
-      <PageHeading
-        title=""
-        mobileVariant="master"
-        bordered
-        searchPlaceholder="Search…"
-        actions={
-          <>
-            <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
-              <Bell className="w-5 h-5" aria-hidden="true" />
-            </button>
-            <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
-              <MoreVertical className="w-5 h-5" aria-hidden="true" />
-            </button>
-          </>
-        }
-      />
-      <p className="text-xs font-body text-ink-400 mb-1 mt-6">With CTA button</p>
-      <PageHeading
-        title=""
-        mobileVariant="master"
-        bordered
-        onMenuClick={() => {}}
-        searchPlaceholder="Search projects"
-        actions={
-          <Button variant="primary" size="sm">
-            <Plus className="w-3.5 h-3.5" aria-hidden="true" />
-            New
-          </Button>
-        }
-      />
+
+      {/* Results list */}
+      <div className="divide-y divide-ink-100 dark:divide-ink-700">
+        {filtered.length === 0 ? (
+          <p className="px-4 py-8 text-sm font-body text-center text-ink-400">No workflows found</p>
+        ) : filtered.map(item => (
+          <div key={item.id} className="flex items-center justify-between px-4 py-3">
+            <div>
+              <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.name}</p>
+              <p className="text-xs font-body text-ink-400">{item.dept}</p>
+            </div>
+            <Badge
+              label={item.status}
+              variant={item.status === 'Active' ? 'active' : item.status === 'Running' ? 'running' : item.status === 'Pending' ? 'pending' : 'draft'}
+              size="sm"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Simple master (input only, same on mobile + desktop) ──
+
+export const MasterSimple: Story = {
+  name: 'Master — simple',
+  args: { title: '' },
+  render: () => {
+    const [query, setQuery] = React.useState('');
+    const filtered = MASTER_ITEMS.filter(item =>
+      !query ||
+      item.name.toLowerCase().includes(query.toLowerCase()) ||
+      item.dept.toLowerCase().includes(query.toLowerCase())
+    );
+    return (
+      <div className="max-w-lg rounded-2xl overflow-hidden border border-ink-200 dark:border-ink-700">
+        <PageHeading
+          title=""
+          mobileVariant="master-simple"
+          bordered
+          sticky={false}
+          onMenuClick={() => {}}
+          searchPlaceholder="Search workflows…"
+          searchValue={query}
+          onSearchChange={setQuery}
+          actions={
+            <>
+              <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+                <Bell className="w-5 h-5" aria-hidden="true" />
+              </button>
+              <Avatar name="Leslie Alexander" size={36} />
+            </>
+          }
+        />
+        <div className="divide-y divide-ink-100 dark:divide-ink-700">
+          {filtered.length === 0 ? (
+            <p className="px-4 py-8 text-sm font-body text-center text-ink-400">No workflows found</p>
+          ) : filtered.map(item => (
+            <div key={item.id} className="flex items-center justify-between px-4 py-3">
+              <div>
+                <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.name}</p>
+                <p className="text-xs font-body text-ink-400">{item.dept}</p>
+              </div>
+              <Badge label={item.status} variant={item.status === 'Active' ? 'active' : item.status === 'Running' ? 'running' : item.status === 'Pending' ? 'pending' : 'draft'} size="sm" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  },
+};
+
+// ── Full master (tags + summary on desktop, simple on mobile) ──
+
+export const Master: Story = {
+  name: 'Master — full',
+  args: { title: '' },
+  render: () => (
+    <div className="space-y-6 max-w-lg">
+      <MasterDemo />
     </div>
   ),
 };

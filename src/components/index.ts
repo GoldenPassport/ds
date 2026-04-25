@@ -25,6 +25,18 @@ export { Textarea }     from './Textarea';
 export { Checkbox }     from './Checkbox';
 export { ButtonGroup }  from './ButtonGroup';
 export { RadioGroup }   from './RadioGroup';
+export {
+  Fieldset,
+  Legend,
+  FieldGroup,
+  Field,
+  Label,
+  Description,
+  ErrorMessage,
+  FieldDivider,
+  useFieldId,
+  useFieldsetDisabled,
+} from './Fieldset';
 
 // Headless UI components
 export { Toggle }    from './Toggle';
@@ -51,6 +63,7 @@ export {
   useNotifications,
 } from './Notification';
 export { FabMenu }    from './FabMenu';
+export { FlyoutMenu, FlyoutTrigger } from './FlyoutMenu';
 export { Carousel }   from './Carousel';
 export { BottomNav }  from './BottomNav';
 
@@ -76,11 +89,21 @@ export type { ButtonProps, ButtonVariant, ButtonSize, ButtonRadius }         fro
 export type { BadgeProps, BadgeVariant }                                    from './Badge';
 export type { AvatarProps }                                                 from './Avatar';
 export type { InputProps }                                                  from './Input';
-export type { SearchSetProps }                                             from './SearchSet';
+export type { SearchSetProps, SearchSetTag, SearchSetFilterDef, SearchSetFilterOption, SearchSetFilterValues } from './SearchSet';
 export type { TextareaProps }                                               from './Textarea';
 export type { CheckboxProps }                                               from './Checkbox';
 export type { ButtonGroupProps, ButtonGroupItem }                           from './ButtonGroup';
 export type { RadioGroupProps, RadioGroupOption, RadioGroupVariant }        from './RadioGroup';
+export type {
+  FieldsetProps,
+  LegendProps,
+  FieldGroupProps,
+  FieldProps,
+  LabelProps,
+  DescriptionProps,
+  ErrorMessageProps,
+  FieldDividerProps,
+} from './Fieldset';
 export type { ToggleProps }                                                 from './Toggle';
 export type { SelectProps, SelectOption }                                   from './Select';
 export type { MenuProps, MenuItem }                                         from './Menu';
@@ -98,6 +121,7 @@ export type { SidebarNavProps, SidebarNavUser, SidebarNavAppearance } from './Si
 export type { MediaObjectProps, MediaObjectListProps, MediaObjectAlign, MediaObjectSide, MediaObjectGap } from './MediaObject';
 export type { DrawerProps, DrawerPlacement, DrawerSize } from './Drawer';
 export type { FabMenuProps, FabMenuItem, FabMenuVariant, FabMenuColor, FabMenuPosition } from './FabMenu';
+export type { FlyoutMenuProps, FlyoutMenuItem, FlyoutMenuAction, FlyoutMenuVariant, FlyoutTriggerProps } from './FlyoutMenu';
 export type { CarouselProps, CarouselItem, CarouselVariant } from './Carousel';
 export type { BottomNavProps, BottomNavItem, BottomNavAppearance } from './BottomNav';
 export type {

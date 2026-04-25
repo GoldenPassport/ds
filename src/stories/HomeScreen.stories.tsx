@@ -16,6 +16,7 @@ import { Avatar }       from '../components/Avatar';
 import { Badge }        from '../components/Badge';
 import { Button }       from '../components/Button';
 import { StackedList }  from '../components/StackedList';
+import type { SearchSetFilterValues } from '../components/SearchSet';
 
 const meta = {
   title: 'Example Pages/HomeScreen',
@@ -105,6 +106,51 @@ const ACTIVITY: ActivityItem[] = [
   { name: 'Michael Foster', action: 'Pushed to', repo: 'relay-service',   commit: '624bc94c', branch: 'main', time: '5d'  },
 ];
 
+// ── Filter definitions ────────────────────────────────────
+
+const DEPLOYMENT_FILTER_DEFS = [
+  {
+    key:   'env',
+    label: 'Environment',
+    type:  'select' as const,
+    options: [
+      { value: 'Production', label: 'Production' },
+      { value: 'Preview',    label: 'Preview'    },
+    ],
+  },
+  {
+    key:   'status',
+    label: 'Status',
+    type:  'select' as const,
+    options: [
+      { value: 'active',  label: 'Active'  },
+      { value: 'pending', label: 'Pending' },
+    ],
+  },
+];
+
+const EMPTY_FILTER_VALUES: SearchSetFilterValues = { env: '', status: '' };
+
+// ── Filtering helpers ─────────────────────────────────────
+
+function matchesDeployment(d: Deployment, query: string, filters: SearchSetFilterValues): boolean {
+  const q = query.toLowerCase();
+  const textMatch = !q || d.repo.toLowerCase().includes(q) || d.org.toLowerCase().includes(q);
+  const envMatch = !filters.env || d.env === filters.env;
+  const statusMatch = !filters.status || d.status === filters.status;
+  return textMatch && envMatch && statusMatch;
+}
+
+function matchesActivity(a: ActivityItem, query: string): boolean {
+  if (!query) return true;
+  const q = query.toLowerCase();
+  return (
+    a.name.toLowerCase().includes(q) ||
+    a.repo.toLowerCase().includes(q) ||
+    a.commit.toLowerCase().includes(q)
+  );
+}
+
 // ── Sub-components ────────────────────────────────────────
 
 function StatusDot({ status }: { status: 'active' | 'pending' }) {
@@ -116,70 +162,92 @@ function StatusDot({ status }: { status: 'active' | 'pending' }) {
   );
 }
 
-function DeploymentList() {
+function DeploymentList({ rows }: { rows: Deployment[] }) {
   return (
     <div className="flex-1 min-w-0">
       <div className="flex items-center justify-between pb-3 mb-3 border-b border-ink-200 dark:border-ink-700">
-        <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">Deployments</h2>
+        <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">
+          Deployments
+          {rows.length !== DEPLOYMENTS.length && (
+            <span className="ml-2 text-sm font-normal text-ink-400 dark:text-ink-500">
+              ({rows.length} of {DEPLOYMENTS.length})
+            </span>
+          )}
+        </h2>
         <button type="button" className="inline-flex items-center gap-1 text-sm font-body text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
           Sort by <span className="text-xs">⇅</span>
         </button>
       </div>
-      <StackedList
-        items={DEPLOYMENTS.map((d, i) => ({ id: i, title: d.repo }))}
-        renderItem={(_, i) => {
-          const d = DEPLOYMENTS[i];
-          return (
-            <div className="flex items-center justify-between gap-3 py-3 -mx-2 px-2 rounded-xl hover:bg-ink-100 dark:hover:bg-ink-700/50 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3 min-w-0">
-                <StatusDot status={d.status} />
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
-                    <span className="text-ink-400 dark:text-ink-500 font-normal">{d.org} / </span>{d.repo}
-                  </p>
-                  <p className="text-xs font-body text-ink-400 dark:text-ink-500 mt-0.5">{d.source} · {d.time}</p>
+      {rows.length === 0 ? (
+        <p className="py-6 text-center text-sm font-body text-ink-400 dark:text-ink-500">No deployments match your search.</p>
+      ) : (
+        <StackedList
+          items={rows.map((d, i) => ({ id: i, title: d.repo }))}
+          renderItem={(_, i) => {
+            const d = rows[i];
+            return (
+              <div className="flex items-center justify-between gap-3 py-3 -mx-2 px-2 rounded-xl hover:bg-ink-100 dark:hover:bg-ink-700/50 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3 min-w-0">
+                  <StatusDot status={d.status} />
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+                      <span className="text-ink-400 dark:text-ink-500 font-normal">{d.org} / </span>{d.repo}
+                    </p>
+                    <p className="text-xs font-body text-ink-400 dark:text-ink-500 mt-0.5">{d.source} · {d.time}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Badge label={d.env} variant={d.env === 'Production' ? 'running' : 'draft'} />
+                  <ChevronRight className="w-4 h-4 text-ink-400 dark:text-ink-500" />
                 </div>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <Badge label={d.env} variant={d.env === 'Production' ? 'running' : 'draft'} />
-                <ChevronRight className="w-4 h-4 text-ink-400 dark:text-ink-500" />
-              </div>
-            </div>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      )}
     </div>
   );
 }
 
-function ActivityFeed() {
+function ActivityFeed({ rows }: { rows: ActivityItem[] }) {
   return (
     <div className="w-full sm:w-72 sm:shrink-0 bg-white dark:bg-ink-800 rounded-2xl border border-ink-200 dark:border-ink-700 overflow-hidden">
       <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-ink-200 dark:border-ink-700">
-        <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">Activity feed</h2>
+        <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">
+          Activity feed
+          {rows.length !== ACTIVITY.length && (
+            <span className="ml-2 text-sm font-normal text-ink-400 dark:text-ink-500">
+              ({rows.length})
+            </span>
+          )}
+        </h2>
         <button type="button" className="text-sm font-body text-primary-600 dark:text-primary-400 hover:underline transition-colors">View all</button>
       </div>
-      <StackedList
-        items={ACTIVITY.map((a, i) => ({ id: i, title: a.name }))}
-        renderItem={(_, i) => {
-          const a = ACTIVITY[i];
-          return (
-            <div className="flex items-start gap-3 px-5 py-3">
-              <Avatar name={a.name} size={36} />
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline justify-between gap-2">
-                  <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{a.name}</p>
-                  <span className="text-xs font-body text-ink-400 dark:text-ink-500 shrink-0">{a.time}</span>
+      {rows.length === 0 ? (
+        <p className="px-5 py-6 text-center text-sm font-body text-ink-400 dark:text-ink-500">No activity found.</p>
+      ) : (
+        <StackedList
+          items={rows.map((a, i) => ({ id: i, title: a.name }))}
+          renderItem={(_, i) => {
+            const a = rows[i];
+            return (
+              <div className="flex items-start gap-3 px-5 py-3">
+                <Avatar name={a.name} size={36} />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{a.name}</p>
+                    <span className="text-xs font-body text-ink-400 dark:text-ink-500 shrink-0">{a.time}</span>
+                  </div>
+                  <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400 leading-relaxed">
+                    {a.action} <span className="font-medium text-ink-700 dark:text-ink-300">{a.repo}</span>{' '}
+                    (<code className="text-[11px] bg-ink-100 dark:bg-ink-700 px-1 rounded">{a.commit}</code> on <span className="font-medium">{a.branch}</span>)
+                  </p>
                 </div>
-                <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400 leading-relaxed">
-                  {a.action} <span className="font-medium text-ink-700 dark:text-ink-300">{a.repo}</span>{' '}
-                  (<code className="text-[11px] bg-ink-100 dark:bg-ink-700 px-1 rounded">{a.commit}</code> on <span className="font-medium">{a.branch}</span>)
-                </p>
               </div>
-            </div>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -187,7 +255,17 @@ function ActivityFeed() {
 // ── Story 1: Sidebar layout ───────────────────────────────
 
 function SidebarDemo({ dark }: { dark?: boolean }) {
-  const [activeNav, setActiveNav] = React.useState('deployments');
+  const [activeNav,    setActiveNav]    = React.useState('deployments');
+  const [query,        setQuery]        = React.useState('');
+  const [filterValues, setFilterValues] = React.useState<SearchSetFilterValues>(EMPTY_FILTER_VALUES);
+
+  const filteredDeployments = DEPLOYMENTS.filter(d => matchesDeployment(d, query, filterValues));
+  const filteredActivity    = ACTIVITY.filter(a => matchesActivity(a, query));
+
+  const totalFiltered = filteredDeployments.length + filteredActivity.length;
+  const searchSummary = query || Object.values(filterValues).some(Boolean)
+    ? `${totalFiltered} result${totalFiltered !== 1 ? 's' : ''}`
+    : `${DEPLOYMENTS.length + ACTIVITY.length} items`;
 
   return (
     <div className={dark ? 'dark' : ''}>
@@ -216,7 +294,14 @@ function SidebarDemo({ dark }: { dark?: boolean }) {
             mobileVariant="master"
             bordered
             sticky
-            searchPlaceholder="Search…"
+            searchValue={query}
+            onSearchChange={setQuery}
+            searchPlaceholder="Search deployments & activity…"
+            searchSummary={searchSummary}
+            searchFilterDefs={DEPLOYMENT_FILTER_DEFS}
+            searchFilterValues={filterValues}
+            onSearchFilterChange={setFilterValues}
+            searchFilterTitle="Filter deployments"
             onMenuClick={() => {}}
             actions={<Avatar name="Tom Cook" size={32} />}
           />
@@ -224,8 +309,8 @@ function SidebarDemo({ dark }: { dark?: boolean }) {
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto">
             <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 px-4 sm:px-6 py-5 sm:py-6 pb-24 sm:pb-6 min-w-0">
-              <DeploymentList />
-              <ActivityFeed />
+              <DeploymentList rows={filteredDeployments} />
+              <ActivityFeed rows={filteredActivity} />
             </div>
           </div>
 

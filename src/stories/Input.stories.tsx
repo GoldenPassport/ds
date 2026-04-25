@@ -3,6 +3,7 @@ import { Eye, EyeOff, Search as SearchIcon, Mail, User, Lock, Globe } from 'luci
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from '../components/Input';
 import { DatePicker, TimePicker, DateTimePicker } from '../components/DatePicker';
+import { Select } from '../components/Select';
 
 const meta = {
   title: 'Forms/Input',
@@ -213,6 +214,187 @@ export const TimeInput: Story = {
   },
 };
 
+// ── Addons ────────────────────────────────────────────────
+
+export const Addons: Story = {
+  name: 'Addons',
+  render: () => {
+    const [url,      setUrl]      = useState('');
+    const [amount,   setAmount]   = useState('');
+    const [username, setUsername] = useState('');
+    const [domain,   setDomain]   = useState('');
+    const [price,    setPrice]    = useState('');
+    return (
+      <div className="flex flex-col gap-5 max-w-sm">
+        {/* Leading text */}
+        <Input
+          label="Website"
+          placeholder="yourcompany.com"
+          leadingAddon="https://"
+          value={url}
+          onChange={e => setUrl(e.target.value)}
+        />
+
+        {/* Trailing text */}
+        <Input
+          label="Amount"
+          type="number"
+          placeholder="0.00"
+          trailingAddon="USD"
+          value={amount}
+          onChange={e => setAmount(e.target.value)}
+        />
+
+        {/* Leading + trailing */}
+        <Input
+          label="Price"
+          type="number"
+          placeholder="0.00"
+          leadingAddon="$"
+          trailingAddon="USD"
+          value={price}
+          onChange={e => setPrice(e.target.value)}
+        />
+
+        {/* Leading text */}
+        <Input
+          label="Username"
+          placeholder="handle"
+          leadingAddon="@"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+        />
+
+        {/* Trailing text */}
+        <Input
+          label="Subdomain"
+          placeholder="myapp"
+          trailingAddon=".goldenpassport.app"
+          value={domain}
+          onChange={e => setDomain(e.target.value)}
+        />
+      </div>
+    );
+  },
+};
+
+// ── Corner hint ───────────────────────────────────────────
+
+export const CornerHints: Story = {
+  name: 'Corner hints',
+  render: () => {
+    const MAX = 140;
+    const [bio,   setBio]   = useState('');
+    const [email, setEmail] = useState('');
+    return (
+      <div className="flex flex-col gap-5 max-w-sm">
+        {/* Static hint */}
+        <Input
+          label="Email"
+          type="email"
+          placeholder="alex@example.com"
+          cornerHint="Optional"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+
+        {/* Dynamic character count */}
+        <Input
+          label="Bio"
+          placeholder="Tell us about yourself…"
+          cornerHint={`${bio.length} / ${MAX}`}
+          maxLength={MAX}
+          value={bio}
+          onChange={e => setBio(e.target.value)}
+        />
+      </div>
+    );
+  },
+};
+
+// ── Addon + icon combo ────────────────────────────────────
+
+export const AddonWithIcon: Story = {
+  name: 'Addon + icon',
+  render: () => {
+    const [val, setVal] = useState('');
+    return (
+      <div className="flex flex-col gap-5 max-w-sm">
+        <Input
+          label="Website"
+          placeholder="yourcompany.com"
+          leadingAddon="https://"
+          icon={<Globe className="w-4 h-4" />}
+          value={val}
+          onChange={e => setVal(e.target.value)}
+        />
+      </div>
+    );
+  },
+};
+
+// ── Addon error state ─────────────────────────────────────
+
+export const AddonWithError: Story = {
+  name: 'Addon — error state',
+  render: () => (
+    <div className="flex flex-col gap-5 max-w-sm">
+      <Input
+        label="Subdomain"
+        placeholder="myapp"
+        trailingAddon=".goldenpassport.app"
+        defaultValue="my app"
+        error="Subdomain can only contain lowercase letters, numbers and hyphens"
+      />
+      <Input
+        label="Amount"
+        type="number"
+        placeholder="0.00"
+        leadingAddon="$"
+        trailingAddon="USD"
+        defaultValue="-5"
+        error="Amount must be greater than 0"
+      />
+    </div>
+  ),
+};
+
+// ── Inline select ─────────────────────────────────────────
+
+export const InlineSelect: Story = {
+  name: 'Inline select addon',
+  render: () => {
+    const [currency, setCurrency] = useState('usd');
+    const [amount,   setAmount]   = useState('');
+    return (
+      <div className="max-w-sm">
+        <Input
+          label="Transfer amount"
+          type="number"
+          placeholder="0.00"
+          hint="Converted at today's mid-market rate"
+          trailingAddon={
+            <Select
+              variant="native"
+              value={currency}
+              onChange={setCurrency}
+              options={[
+                { value: 'usd', label: 'USD' },
+                { value: 'eur', label: 'EUR' },
+                { value: 'gbp', label: 'GBP' },
+                { value: 'aud', label: 'AUD' },
+              ]}
+              className="border-none bg-transparent -mr-3 -my-1 pr-7 text-ink-500 dark:text-ink-400 focus:ring-0 cursor-pointer"
+            />
+          }
+          value={amount}
+          onChange={e => setAmount(e.target.value)}
+        />
+      </div>
+    );
+  },
+};
+
 // ── States ────────────────────────────────────────────────
 
 export const WithError: Story = {
@@ -238,18 +420,97 @@ export const Disabled: Story = {
 
 export const AllTypes: Story = {
   name: 'All types',
-  render: () => (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-5 max-w-2xl">
-      <Input type="text"     label="Text"     placeholder="Alex Morgan" />
-      <Input type="email"    label="Email"    placeholder="alex@company.com" />
-      <Input type="password" label="Password" placeholder="••••••••" />
-      <Input type="number"   label="Number"   placeholder="42" min={0} />
-      <Input type="tel"      label="Tel"      placeholder="+1 (555) 000-0000" />
-      <Input type="url"      label="URL"      placeholder="https://example.com" />
-      <Input type="search"   label="Search"   placeholder="Search…" />
-      <DatePicker     label="Date"          placeholder="Select date" />
-      <DateTimePicker label="Datetime"      placeholder="Select date & time" />
-      <TimePicker     label="Time"          placeholder="Select time" />
-    </div>
-  ),
+  render: () => {
+    const [showPw, setShowPw] = React.useState(false);
+    const [bio, setBio] = React.useState('');
+    const MAX = 200;
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 max-w-2xl">
+
+        <Input
+          type="text"
+          label="Full name"
+          placeholder="Alex Morgan"
+          icon={<User className="w-4 h-4" />}
+          hint="As it appears on your account"
+        />
+
+        <Input
+          type="email"
+          label="Email address"
+          placeholder="alex@company.com"
+          icon={<Mail className="w-4 h-4" />}
+          cornerHint="Optional"
+          hint="Used for login and notifications"
+        />
+
+        <Input
+          type={showPw ? 'text' : 'password'}
+          label="Password"
+          placeholder="••••••••"
+          icon={<Lock className="w-4 h-4" />}
+          hint="At least 8 characters"
+          rightAction={
+            <button
+              type="button"
+              onClick={() => setShowPw(v => !v)}
+              aria-label={showPw ? 'Hide password' : 'Show password'}
+              className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1"
+            >
+              {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
+        />
+
+        <Input
+          type="number"
+          label="Retry attempts"
+          placeholder="3"
+          min={0}
+          max={10}
+          trailingAddon="retries"
+          hint="Max before the step is marked failed"
+        />
+
+        <Input
+          type="tel"
+          label="Phone number"
+          placeholder="+1 (555) 000-0000"
+          leadingAddon="+1"
+          hint="Used for SMS alerts"
+        />
+
+        <Input
+          type="url"
+          label="Webhook URL"
+          placeholder="yoursite.com/hook"
+          leadingAddon="https://"
+          icon={<Globe className="w-4 h-4" />}
+          hint="POST requests sent on each run"
+        />
+
+        <Input
+          type="search"
+          label="Search"
+          placeholder="Search workflows…"
+          icon={<SearchIcon className="w-4 h-4" />}
+        />
+
+        <Input
+          type="text"
+          label="Bio"
+          placeholder="Tell us about yourself…"
+          cornerHint={`${bio.length} / ${MAX}`}
+          maxLength={MAX}
+          value={bio}
+          onChange={e => setBio(e.target.value)}
+        />
+
+        <DatePicker     label="Start date"    placeholder="Select date"       hint="Workflow goes live on this date" />
+        <DateTimePicker label="Scheduled run" placeholder="Select date & time" hint="Runs once at this exact time"    />
+        <TimePicker     label="Daily digest"  placeholder="Select time"        hint="Summary email sent at this time" />
+
+      </div>
+    );
+  },
 };

@@ -71,12 +71,12 @@ export function Menu({ trigger, items, align = 'right', ariaLabel, className = '
 
                   return item.href ? (
                     <a href={item.href} className={cls}>
-                      {item.icon && <span className="shrink-0 text-ink-400" aria-hidden="true">{item.icon}</span>}
+                      {item.icon && <span className="shrink-0 text-current opacity-70" aria-hidden="true">{item.icon}</span>}
                       {item.label}
                     </a>
                   ) : (
                     <button onClick={item.onClick} className={cls}>
-                      {item.icon && <span className="shrink-0 text-ink-400" aria-hidden="true">{item.icon}</span>}
+                      {item.icon && <span className="shrink-0 text-current opacity-70" aria-hidden="true">{item.icon}</span>}
                       {item.label}
                     </button>
                   );
