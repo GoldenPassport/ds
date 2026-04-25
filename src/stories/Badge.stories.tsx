@@ -9,7 +9,7 @@ const meta = {
   argTypes: {
     label:    { control: 'text' },
     variant:  { control: 'select', options: ['active', 'running', 'pending', 'draft', 'failed', 'warning', 'ai', 'neutral'] },
-    size:     { control: 'select', options: ['sm', 'md'] },
+    size:     { control: 'select', options: ['sm', 'md', 'lg'] },
     shape:    { control: 'select', options: ['pill', 'rounded'] },
     outlined: { control: 'boolean' },
     dot:      { control: 'boolean' },
@@ -24,7 +24,7 @@ const ALL_VARIANTS = ['active', 'running', 'pending', 'draft', 'failed', 'warnin
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
-  args: { label: 'Active', variant: 'active' },
+  args: { label: 'Active', variant: 'active', size: 'md', shape: 'pill', outlined: false, dot: true },
 };
 
 // ── Variants ──────────────────────────────────────────────
@@ -65,6 +65,18 @@ export const Rounded: Story = {
 };
 
 // ── Sizes ─────────────────────────────────────────────────
+
+export const SizeLg: Story = {
+  name: 'Size — lg',
+  args: { label: '' },
+  render: () => (
+    <div className="flex flex-wrap gap-2">
+      {ALL_VARIANTS.map(v => (
+        <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} size="lg" />
+      ))}
+    </div>
+  ),
+};
 
 export const SizeMd: Story = {
   name: 'Size — md',
@@ -242,12 +254,19 @@ export const AllVariants: Story = {
         </div>
       </div>
 
-      {/* Small */}
+      {/* Sizes */}
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Small</p>
-        <div className="flex flex-wrap gap-1.5 items-center">
-          {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} size="sm" />)}
-          {ALL_VARIANTS.map(v => <Badge key={`${v}-r`} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} size="sm" shape="rounded" outlined />)}
+        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Sizes</p>
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap gap-1.5 items-center">
+            {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} size="lg" />)}
+          </div>
+          <div className="flex flex-wrap gap-1.5 items-center">
+            {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} size="md" />)}
+          </div>
+          <div className="flex flex-wrap gap-1.5 items-center">
+            {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} size="sm" />)}
+          </div>
         </div>
       </div>
 

@@ -8,7 +8,7 @@ export interface BadgeProps {
   label:      string;
   variant?:   BadgeVariant;
   /** Visual size — default `md` */
-  size?:      'sm' | 'md';
+  size?:      'sm' | 'md' | 'lg';
   /** Border radius — default `pill` (rounded-full) */
   shape?:     'pill' | 'rounded';
   /** Adds a ring border around the badge */
@@ -101,8 +101,9 @@ const cfg: Record<BadgeVariant, ColourCfg> = {
 // ── Size tokens ───────────────────────────────────────────
 
 const sizes = {
-  md: { wrap: 'px-2.5 py-0.5 text-[11px] gap-1.5', dot: 'w-1.5 h-1.5', remove: 'w-2.5 h-2.5' },
-  sm: { wrap: 'px-1.5 py-0.5 text-[10px] gap-1',   dot: 'w-1 h-1',     remove: 'w-2 h-2' },
+  lg: { wrap: 'px-3 py-1 text-xs gap-2',            dot: 'w-2 h-2',     remove: 'w-3 h-3' },
+  md: { wrap: 'px-2.5 py-0.5 text-[11px] gap-1.5',  dot: 'w-1.5 h-1.5', remove: 'w-2.5 h-2.5' },
+  sm: { wrap: 'px-1.5 py-0.5 text-[10px] gap-1',    dot: 'w-1 h-1',     remove: 'w-2 h-2' },
 };
 
 // ── Component ─────────────────────────────────────────────
@@ -157,7 +158,7 @@ export function Badge({
             viewBox="0 0 6 6"
             fill="none"
             stroke="currentColor"
-            strokeWidth="1.5"
+            strokeWidth="1.25"
             strokeLinecap="round"
             className={`${sz.remove} opacity-40 group-hover:opacity-70 transition-opacity`}
             aria-hidden="true"
