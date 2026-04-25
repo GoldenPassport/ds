@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Search as SearchIcon, Mail, User, Lock, Globe } from 'lucide-react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from '../components/Input';
 
@@ -29,6 +29,21 @@ export const Playground: Story = {
     placeholder: 'e.g. Invoice Approval Flow',
     hint:        'Used in reports and audit logs',
   },
+};
+
+// ── With icon ─────────────────────────────────────────────
+
+export const WithIcon: Story = {
+  name: 'With icon',
+  render: () => (
+    <div className="flex flex-col gap-4 p-4 max-w-sm">
+      <Input label="Search"   placeholder="Search…"          icon={<SearchIcon className="w-4 h-4" />} />
+      <Input label="Email"    placeholder="you@example.com"  icon={<Mail   className="w-4 h-4" />} type="email" />
+      <Input label="Username" placeholder="@handle"          icon={<User   className="w-4 h-4" />} />
+      <Input label="Password" placeholder="••••••••"         icon={<Lock   className="w-4 h-4" />} type="password" />
+      <Input label="Website"  placeholder="https://…"        icon={<Globe  className="w-4 h-4" />} type="url" />
+    </div>
+  ),
 };
 
 // ── Text ──────────────────────────────────────────────────
