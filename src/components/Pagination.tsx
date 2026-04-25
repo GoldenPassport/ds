@@ -59,7 +59,7 @@ function PageBtn({
       aria-label={ariaLabel}
       aria-current={active ? 'page' : undefined}
       className={[
-        'inline-flex items-center justify-center w-8 h-8 rounded-lg text-[13px] font-medium font-body',
+        'inline-flex items-center justify-center w-8 h-8 rounded-xl text-[13px] font-medium font-body',
         'transition-colors duration-100 border-0 cursor-pointer',
         'disabled:opacity-40 disabled:cursor-not-allowed',
         active
@@ -115,7 +115,7 @@ export function Pagination({
               onChange={e => changePageSize(Number(e.target.value))}
               aria-label="Rows per page"
               className={[
-                'text-[13px] font-body font-medium rounded-lg px-2.5 py-1.5',
+                'text-[13px] font-body font-medium rounded-xl px-2.5 py-1.5',
                 'bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700',
                 'text-ink-900 dark:text-ink-50',
                 'focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25',

@@ -71,7 +71,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
 
   pill: [
     BASE_TAB,
-    'px-3.5 py-1.5 rounded-lg',
+    'px-3.5 py-1.5 rounded-xl',
     'text-ink-500 dark:text-ink-400',
     'hover:text-ink-700 dark:hover:text-ink-200',
     'data-[selected]:bg-white dark:data-[selected]:bg-ink-800 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50 data-[selected]:shadow-sm',

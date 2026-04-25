@@ -42,7 +42,7 @@ export function Textarea({
         id={textareaId}
         rows={rows}
         className={[
-          'w-full px-3 py-2.5 rounded-lg border text-sm font-body',
+          'w-full px-3 py-2.5 rounded-xl border text-sm font-body',
           'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
           'placeholder:text-ink-400 dark:placeholder:text-ink-500',
           'transition-all duration-150 outline-none',

@@ -111,7 +111,7 @@ export function Alert({
       aria-live={variant === 'error' ? 'assertive' : 'polite'}
       aria-atomic="true"
       className={[
-        'rounded-lg p-4',
+        'rounded-xl p-4',
         wrapperClass,
         className,
       ].join(' ')}

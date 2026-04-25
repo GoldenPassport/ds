@@ -59,7 +59,7 @@ export function Select<T extends string | number>({
             aria-describedby={hint ? `${id}-hint` : error ? `${id}-error` : undefined}
             aria-invalid={!!error || undefined}
             className={[
-            'relative w-full cursor-pointer rounded-lg border px-3 py-2.5 pr-9 text-left text-sm font-body',
+            'relative w-full cursor-pointer rounded-xl border px-3 py-2.5 pr-9 text-left text-sm font-body',
             'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
             error
               ? 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/25'

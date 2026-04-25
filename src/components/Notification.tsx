@@ -101,7 +101,7 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
       className={[
         'w-80 max-w-[calc(100vw-2rem)] pointer-events-auto',
         'bg-white dark:bg-ink-800',
-        'rounded-lg shadow-md dark:shadow-dark-md',
+        'rounded-xl shadow-md dark:shadow-dark-md',
         'border border-ink-100 dark:border-ink-700',
         'p-4 animate-gp-slide-up',
       ].join(' ')}

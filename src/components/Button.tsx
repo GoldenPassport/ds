@@ -38,8 +38,8 @@ const iconOnlySizeClasses: Record<ButtonSize, string> = {
 
 // Default radius per size (used when radius='rounded')
 const defaultRadiusClasses: Record<ButtonSize, string> = {
-  sm: 'rounded-md',
-  md: 'rounded-lg',
+  sm: 'rounded-xl',
+  md: 'rounded-xl',
   lg: 'rounded-xl',
 };
 

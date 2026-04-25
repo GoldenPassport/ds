@@ -116,7 +116,7 @@ function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; dep
   const hasChildren = item.children && item.children.length > 0;
 
   const baseCls = [
-    'group flex items-center gap-3 w-full rounded-lg text-sm font-body transition-colors text-left',
+    'group flex items-center gap-3 w-full rounded-xl text-sm font-body transition-colors text-left',
     depth === 0 ? 'px-3 py-2 border-l-2' : 'px-3 py-1.5',
     item.active
       ? (depth === 0 ? t.itemActive : t.childActive)

@@ -116,7 +116,7 @@ const tokens: Record<NavbarAppearance, Tokens> = {
 // ── NavLink ────────────────────────────────────────────────
 
 function NavLink({ item, t }: { item: NavbarItem; t: Tokens }) {
-  const base = 'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium font-body transition-colors';
+  const base = 'flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium font-body transition-colors';
   const cls  = item.active ? `${base} ${t.linkActive}` : `${base} ${t.link}`;
   return item.href ? (
     <a href={item.href} className={cls}>
@@ -203,7 +203,7 @@ function SearchBox({ t, placeholder, onSearch, className = '' }: {
   t: Tokens; placeholder: string; onSearch?: (q: string) => void; className?: string;
 }) {
   return (
-    <div className={`flex items-center gap-2 h-9 px-3 rounded-lg border transition-all ${t.searchWrap} ${className}`}>
+    <div className={`flex items-center gap-2 h-9 px-3 rounded-xl border transition-all ${t.searchWrap} ${className}`}>
       <Search className={`w-4 h-4 shrink-0 ${t.searchIcon}`} aria-hidden="true" />
       <input
         type="search"
@@ -221,7 +221,7 @@ function MoreMenu({ items, t }: { items: NavbarUserItem[]; t: Tokens }) {
   return (
     <HLMenu as="div" className="relative">
       <HLMenu.Button
-        className={`flex items-center justify-center w-9 h-9 rounded-lg transition-colors focus:outline-none ${t.iconBtn}`}
+        className={`flex items-center justify-center w-9 h-9 rounded-xl transition-colors focus:outline-none ${t.iconBtn}`}
         aria-label="More options"
       >
         <MoreVertical className="w-5 h-5" aria-hidden="true" />
@@ -292,7 +292,7 @@ export function Navbar({
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen(o => !o)}
-              className={`lg:hidden flex items-center justify-center w-9 h-9 rounded-lg transition-colors shrink-0 ${t.iconBtn}`}
+              className={`lg:hidden flex items-center justify-center w-9 h-9 rounded-xl transition-colors shrink-0 ${t.iconBtn}`}
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
             </button>

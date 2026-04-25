@@ -89,7 +89,7 @@ function NavButton({ onClick, label, children }: { onClick: () => void; label: s
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex items-center justify-center w-8 h-8 rounded-lg text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
+      className="flex items-center justify-center w-8 h-8 rounded-xl text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
     >
       {children}
     </button>
@@ -330,7 +330,7 @@ export function Calendar({
           <button
             type="button"
             onClick={goToday}
-            className="px-3 h-8 text-xs font-medium font-body rounded-lg border border-ink-200 dark:border-ink-700 text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
+            className="px-3 h-8 text-xs font-medium font-body rounded-xl border border-ink-200 dark:border-ink-700 text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
           >
             Today
           </button>

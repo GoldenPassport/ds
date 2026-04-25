@@ -118,7 +118,7 @@ const variantDesktopCls: Record<ButtonVariant, string> = {
 
 function DesktopActionButton({ item }: { item: PageHeadingAction }) {
   const cls = [
-    'inline-flex items-center gap-1.5 px-[18px] py-[9px] text-sm font-semibold font-body rounded-lg border transition-all duration-150',
+    'inline-flex items-center gap-1.5 px-[18px] py-[9px] text-sm font-semibold font-body rounded-xl border transition-all duration-150',
     variantDesktopCls[item.variant ?? 'secondary'],
   ].join(' ');
   return item.href ? (

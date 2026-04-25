@@ -152,7 +152,7 @@ export function Drawer({
                           type="button"
                           onClick={onClose}
                           aria-label="Close drawer"
-                          className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
+                          className="shrink-0 flex items-center justify-center w-8 h-8 rounded-xl text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
                         >
                           <X className="w-4 h-4" />
                         </button>
