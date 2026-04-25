@@ -4,27 +4,37 @@ import { DatePicker, TimePicker, DateTimePicker } from '../components/DatePicker
 
 const meta = {
   title: 'Forms/DatePicker',
+  component: DatePicker,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
-} satisfies Meta;
+  argTypes: {
+    label:       { control: 'text' },
+    placeholder: { control: 'text' },
+    hint:        { control: 'text' },
+    error:       { control: 'text' },
+    disabled:    { control: 'boolean' },
+  },
+} satisfies Meta<typeof DatePicker>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // ── DatePicker ─────────────────────────────────────────────
 
-export const Date_: Story = {
+export const Playground: Story = {
   name: 'DatePicker',
-  render: () => {
+  args: {
+    label:       'Date',
+    placeholder: 'Select a date',
+    hint:        '',
+    error:       '',
+    disabled:    false,
+  },
+  render: (args) => {
     const [val, setVal] = useState<Date | null>(null);
     return (
       <div className="max-w-xs flex flex-col gap-3">
-        <DatePicker
-          label="Date"
-          placeholder="Select a date"
-          value={val}
-          onChange={setVal}
-        />
+        <DatePicker {...args} value={val} onChange={setVal} />
         {val && (
           <p className="text-xs font-body text-ink-500 dark:text-ink-400">
             Selected: <strong className="text-ink-900 dark:text-ink-50">{val.toDateString()}</strong>
@@ -37,6 +47,7 @@ export const Date_: Story = {
 
 export const DateWithHint: Story = {
   name: 'DatePicker — with hint',
+  args: { label: '', placeholder: '' },
   render: () => (
     <div className="max-w-xs">
       <DatePicker
@@ -50,6 +61,7 @@ export const DateWithHint: Story = {
 
 export const DateWithError: Story = {
   name: 'DatePicker — with error',
+  args: { label: '', placeholder: '' },
   render: () => (
     <div className="max-w-xs">
       <DatePicker
@@ -65,13 +77,23 @@ export const DateWithError: Story = {
 
 export const Time_: Story = {
   name: 'TimePicker',
-  render: () => {
+  args: {
+    label:       'Time',
+    placeholder: 'Select a time',
+    hint:        '',
+    error:       '',
+    disabled:    false,
+  },
+  render: (args) => {
     const [val, setVal] = useState<string | null>(null);
     return (
       <div className="max-w-xs flex flex-col gap-3">
         <TimePicker
-          label="Time"
-          placeholder="Select a time"
+          label={args.label}
+          placeholder={args.placeholder}
+          hint={args.hint}
+          error={args.error}
+          disabled={args.disabled}
           value={val ?? undefined}
           onChange={setVal}
         />
@@ -89,13 +111,23 @@ export const Time_: Story = {
 
 export const DateTime_: Story = {
   name: 'DateTimePicker',
-  render: () => {
+  args: {
+    label:       'Appointment',
+    placeholder: 'Select date & time',
+    hint:        '',
+    error:       '',
+    disabled:    false,
+  },
+  render: (args) => {
     const [val, setVal] = useState<{ date: Date; hour: number; minute: number } | null>(null);
     return (
       <div className="max-w-xs flex flex-col gap-3">
         <DateTimePicker
-          label="Appointment"
-          placeholder="Select date & time"
+          label={args.label}
+          placeholder={args.placeholder}
+          hint={args.hint}
+          error={args.error}
+          disabled={args.disabled}
           value={val}
           onChange={setVal}
         />
@@ -115,6 +147,7 @@ export const DateTime_: Story = {
 
 export const AllVariants: Story = {
   name: 'All variants',
+  args: { label: '', placeholder: '' },
   render: () => (
     <div className="flex flex-col gap-6 max-w-xs">
       <DatePicker     label="Date"        placeholder="Select a date" />

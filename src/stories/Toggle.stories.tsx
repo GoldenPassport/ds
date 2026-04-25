@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { useArgs } from 'storybook/preview-api';
 import { Toggle } from '../components/Toggle';
 
 const meta = {
@@ -16,6 +17,26 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
+  args: {
+    checked:     true,
+    onChange:    () => {},
+    disabled:    false,
+    label:       'AI Suggestions',
+    description: 'Show prompt suggestions in the builder',
+  },
+  render: (args) => {
+    const [{ checked }, updateArgs] = useArgs();
+    return (
+      <Toggle
+        {...args}
+        checked={Boolean(checked)}
+        onChange={(val) => updateArgs({ checked: val })}
+      />
+    );
+  },
+};
 
 export const On: Story = {
   args: { checked: true, onChange: () => {}, label: 'AI Suggestions', description: 'Show prompt suggestions in the builder' },

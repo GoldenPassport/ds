@@ -14,6 +14,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const Playground: Story = {
+  args: { name: 'Alex Morgan', size: 40 },
+};
+
 export const Default: Story = {
   args: { name: 'Alex Morgan', size: 40 },
 };
