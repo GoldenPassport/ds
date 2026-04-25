@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Eye, EyeOff, Search as SearchIcon, Mail, User, Lock, Globe } from 'lucide-react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from '../components/Input';
+import { DatePicker, TimePicker, DateTimePicker } from '../components/DatePicker';
 
 const meta = {
   title: 'Forms/Input',
@@ -156,10 +157,19 @@ export const Search: Story = {
 
 export const DateInput: Story = {
   name: 'Type — date',
-  args: {
-    type:  'date',
-    label: 'Start date',
-    hint:  'Workflow goes live on this date',
+  render: () => {
+    const [val, setVal] = useState<Date | null>(null);
+    return (
+      <div className="max-w-xs">
+        <DatePicker
+          label="Start date"
+          placeholder="Select date"
+          hint="Workflow goes live on this date"
+          value={val}
+          onChange={setVal}
+        />
+      </div>
+    );
   },
 };
 
@@ -167,10 +177,19 @@ export const DateInput: Story = {
 
 export const DatetimeLocal: Story = {
   name: 'Type — datetime-local',
-  args: {
-    type:  'datetime-local',
-    label: 'Scheduled run',
-    hint:  'Runs once at this exact time',
+  render: () => {
+    const [val, setVal] = useState<{ date: Date; hour: number; minute: number } | null>(null);
+    return (
+      <div className="max-w-xs">
+        <DateTimePicker
+          label="Scheduled run"
+          placeholder="Select date & time"
+          hint="Runs once at this exact time"
+          value={val}
+          onChange={setVal}
+        />
+      </div>
+    );
   },
 };
 
@@ -178,10 +197,19 @@ export const DatetimeLocal: Story = {
 
 export const TimeInput: Story = {
   name: 'Type — time',
-  args: {
-    type:  'time',
-    label: 'Daily digest time',
-    hint:  'Summary email is sent at this time each day',
+  render: () => {
+    const [val, setVal] = useState<string | null>(null);
+    return (
+      <div className="max-w-xs">
+        <TimePicker
+          label="Daily digest time"
+          placeholder="Select time"
+          hint="Summary email is sent at this time each day"
+          value={val ?? undefined}
+          onChange={setVal}
+        />
+      </div>
+    );
   },
 };
 
@@ -212,16 +240,16 @@ export const AllTypes: Story = {
   name: 'All types',
   render: () => (
     <div className="grid grid-cols-2 gap-x-6 gap-y-5 max-w-2xl">
-      <Input type="text"           label="Text"           placeholder="Alex Morgan" />
-      <Input type="email"          label="Email"          placeholder="alex@company.com" />
-      <Input type="password"       label="Password"       placeholder="••••••••" />
-      <Input type="number"         label="Number"         placeholder="42" min={0} />
-      <Input type="tel"            label="Tel"            placeholder="+1 (555) 000-0000" />
-      <Input type="url"            label="URL"            placeholder="https://example.com" />
-      <Input type="search"         label="Search"         placeholder="Search…" />
-      <Input type="date"           label="Date" />
-      <Input type="datetime-local" label="Datetime" />
-      <Input type="time"           label="Time" />
+      <Input type="text"     label="Text"     placeholder="Alex Morgan" />
+      <Input type="email"    label="Email"    placeholder="alex@company.com" />
+      <Input type="password" label="Password" placeholder="••••••••" />
+      <Input type="number"   label="Number"   placeholder="42" min={0} />
+      <Input type="tel"      label="Tel"      placeholder="+1 (555) 000-0000" />
+      <Input type="url"      label="URL"      placeholder="https://example.com" />
+      <Input type="search"   label="Search"   placeholder="Search…" />
+      <DatePicker     label="Date"          placeholder="Select date" />
+      <DateTimePicker label="Datetime"      placeholder="Select date & time" />
+      <TimePicker     label="Time"          placeholder="Select time" />
     </div>
   ),
 };
