@@ -149,7 +149,7 @@ export function Badge({
           aria-label="Remove"
           onClick={(e) => { e.stopPropagation(); onRemove(); }}
           className={[
-            'shrink-0 -mr-0.5 font-normal leading-none',
+            'shrink-0 -mr-0.5 font-normal leading-none text-[1.1em]',
             'opacity-40 hover:opacity-70 transition-opacity',
             'focus:outline-none focus-visible:ring-1 focus-visible:ring-current',
           ].join(' ')}

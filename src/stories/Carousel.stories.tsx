@@ -3,7 +3,7 @@ import { Carousel } from '../components/Carousel';
 import type { CarouselItem } from '../components/Carousel';
 
 const meta = {
-  title: 'Components/Carousel',
+  title: 'Lists/Carousel',
   component: Carousel,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
