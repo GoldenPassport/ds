@@ -15,6 +15,7 @@ import { Stats }        from '../components/Stats';
 import { Avatar }       from '../components/Avatar';
 import { Badge }        from '../components/Badge';
 import { Button }       from '../components/Button';
+import { StackedList }  from '../components/StackedList';
 
 const meta = {
   title: 'Example Pages/HomeScreen',
@@ -118,59 +119,67 @@ function StatusDot({ status }: { status: 'active' | 'pending' }) {
 function DeploymentList() {
   return (
     <div className="flex-1 min-w-0">
-      <div className="flex items-center justify-between pb-3 mb-4 border-b border-ink-200 dark:border-ink-700">
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-ink-200 dark:border-ink-700">
         <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">Deployments</h2>
         <button type="button" className="inline-flex items-center gap-1 text-sm font-body text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
           Sort by <span className="text-xs">⇅</span>
         </button>
       </div>
-      <div className="divide-y divide-ink-200 dark:divide-ink-700">
-        {DEPLOYMENTS.map((d, i) => (
-          <div key={i} className="flex items-center justify-between gap-3 py-3 hover:bg-ink-100 dark:hover:bg-ink-700/50 rounded-lg px-2 -mx-2 transition-colors">
-            <div className="flex items-center gap-3 min-w-0">
-              <StatusDot status={d.status} />
-              <div className="min-w-0">
-                <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
-                  <span className="text-ink-400 dark:text-ink-500 font-normal">{d.org} / </span>{d.repo}
-                </p>
-                <p className="text-xs font-body text-ink-400 dark:text-ink-500 mt-0.5">{d.source} · {d.time}</p>
+      <StackedList
+        items={DEPLOYMENTS.map((d, i) => ({ id: i, title: d.repo }))}
+        renderItem={(_, i) => {
+          const d = DEPLOYMENTS[i];
+          return (
+            <div className="flex items-center justify-between gap-3 py-3 -mx-2 px-2 rounded-xl hover:bg-ink-100 dark:hover:bg-ink-700/50 transition-colors cursor-pointer">
+              <div className="flex items-center gap-3 min-w-0">
+                <StatusDot status={d.status} />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+                    <span className="text-ink-400 dark:text-ink-500 font-normal">{d.org} / </span>{d.repo}
+                  </p>
+                  <p className="text-xs font-body text-ink-400 dark:text-ink-500 mt-0.5">{d.source} · {d.time}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <Badge label={d.env} variant={d.env === 'Production' ? 'running' : 'draft'} />
+                <ChevronRight className="w-4 h-4 text-ink-400 dark:text-ink-500" />
               </div>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <Badge label={d.env} variant={d.env === 'Production' ? 'running' : 'draft'} />
-              <ChevronRight className="w-4 h-4 text-ink-400 dark:text-ink-500" />
-            </div>
-          </div>
-        ))}
-      </div>
+          );
+        }}
+      />
     </div>
   );
 }
 
 function ActivityFeed() {
   return (
-    <div className="w-full sm:w-72 sm:shrink-0 bg-white dark:bg-ink-800 rounded-2xl px-5 py-4 border border-ink-200 dark:border-ink-700">
-      <div className="flex items-center justify-between pb-3 mb-4 border-b border-ink-200 dark:border-ink-700">
+    <div className="w-full sm:w-72 sm:shrink-0 bg-white dark:bg-ink-800 rounded-2xl border border-ink-200 dark:border-ink-700 overflow-hidden">
+      <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-ink-200 dark:border-ink-700">
         <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">Activity feed</h2>
         <button type="button" className="text-sm font-body text-primary-600 dark:text-primary-400 hover:underline transition-colors">View all</button>
       </div>
-      <div className="space-y-4">
-        {ACTIVITY.map((a, i) => (
-          <div key={i} className="flex items-start gap-3">
-            <Avatar name={a.name} size={36} />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-baseline justify-between gap-2">
-                <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{a.name}</p>
-                <span className="text-xs font-body text-ink-400 dark:text-ink-500 shrink-0">{a.time}</span>
+      <StackedList
+        items={ACTIVITY.map((a, i) => ({ id: i, title: a.name }))}
+        renderItem={(_, i) => {
+          const a = ACTIVITY[i];
+          return (
+            <div className="flex items-start gap-3 px-5 py-3">
+              <Avatar name={a.name} size={36} />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{a.name}</p>
+                  <span className="text-xs font-body text-ink-400 dark:text-ink-500 shrink-0">{a.time}</span>
+                </div>
+                <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400 leading-relaxed">
+                  {a.action} <span className="font-medium text-ink-700 dark:text-ink-300">{a.repo}</span>{' '}
+                  (<code className="text-[11px] bg-ink-100 dark:bg-ink-700 px-1 rounded">{a.commit}</code> on <span className="font-medium">{a.branch}</span>)
+                </p>
               </div>
-              <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400 leading-relaxed">
-                {a.action} <span className="font-medium text-ink-700 dark:text-ink-300">{a.repo}</span>{' '}
-                (<code className="text-[11px] bg-ink-100 dark:bg-ink-700 px-1 rounded">{a.commit}</code> on <span className="font-medium">{a.branch}</span>)
-              </p>
             </div>
-          </div>
-        ))}
-      </div>
+          );
+        }}
+      />
     </div>
   );
 }
