@@ -6,6 +6,8 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   error?:         string;
   /** Lucide icon (or any ReactNode) rendered inside the left edge of the input */
   icon?:          React.ReactNode;
+  /** Arbitrary element (e.g. show/hide button) rendered inside the right edge */
+  rightAction?:   React.ReactNode;
   wrapClassName?: string;
 }
 
@@ -14,6 +16,7 @@ export function Input({
   hint,
   error,
   icon,
+  rightAction,
   wrapClassName = '',
   className = '',
   id,
@@ -26,7 +29,8 @@ export function Input({
       id={inputId}
       className={[
         'w-full py-2.5 rounded-xl border text-sm font-body',
-        icon ? 'pl-9 pr-3' : 'px-3',
+        icon ? 'pl-9' : 'pl-3',
+        rightAction ? 'pr-10' : 'pr-3',
         'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
         'placeholder:text-ink-400 dark:placeholder:text-ink-500',
         'transition-all duration-150 outline-none',
@@ -52,15 +56,22 @@ export function Input({
         </label>
       )}
 
-      {icon ? (
+      {icon || rightAction ? (
         <div className="relative">
-          <span
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 dark:text-ink-500 pointer-events-none"
-            aria-hidden="true"
-          >
-            {icon}
-          </span>
+          {icon && (
+            <span
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 dark:text-ink-500 pointer-events-none"
+              aria-hidden="true"
+            >
+              {icon}
+            </span>
+          )}
           {inputEl}
+          {rightAction && (
+            <span className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
+              {rightAction}
+            </span>
+          )}
         </div>
       ) : inputEl}
 

@@ -79,25 +79,24 @@ export const Password: Story = {
   render: () => {
     const [show, setShow] = React.useState(false);
     return (
-      <div className="max-w-sm relative">
+      <div className="max-w-sm">
         <Input
           type={show ? 'text' : 'password'}
           label="Password"
           placeholder="Enter your password"
           hint="At least 8 characters"
           autoComplete="current-password"
-          className="pr-10"
+          rightAction={
+            <button
+              type="button"
+              onClick={() => setShow(v => !v)}
+              aria-label={show ? 'Hide password' : 'Show password'}
+              className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1"
+            >
+              {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
         />
-        <button
-          type="button"
-          onClick={() => setShow(v => !v)}
-          aria-label={show ? 'Hide password' : 'Show password'}
-          className="absolute right-3 top-[34px] text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors border-0 bg-transparent cursor-pointer p-0"
-        >
-          {show
-            ? <EyeOff className="w-4 h-4" />
-            : <Eye    className="w-4 h-4" />}
-        </button>
       </div>
     );
   },
