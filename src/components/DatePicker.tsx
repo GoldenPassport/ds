@@ -3,6 +3,7 @@ import { Popover, Transition } from '@headlessui/react';
 import { CalendarDays, Clock, X } from 'lucide-react';
 import { Calendar } from './Calendar';
 import { Input } from './Input';
+import { ButtonGroup } from './ButtonGroup';
 
 // ── Helpers ────────────────────────────────────────────────
 
@@ -329,6 +330,7 @@ export function DateTimePicker({
 }: DateTimePickerProps) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState<{ date: Date; hour: number; minute: number } | null>(null);
+  const [tab, setTab] = useState<'date' | 'time'>('date');
 
   const current = isControlled ? value : internal;
 
@@ -376,57 +378,71 @@ export function DateTimePicker({
           {name && <input type="hidden" name={name} value={isoValue} />}
 
           <Transition as={React.Fragment} {...TRANSITION}>
-            <Popover.Panel className={`${PANEL_CLS} flex flex-col sm:flex-row gap-4`}>
-              {/* Date column */}
-              <div>
-                <Calendar
-                  variant="mini"
-                  selected={current?.date ?? null}
-                  onSelect={(d) => update({ date: d })}
-                />
-                <div className="mt-2 flex justify-between px-1">
-                  <button
-                    type="button"
-                    onClick={() => { if (!isControlled) setInternal(null); onChange?.(null); close(); }}
-                    className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline"
-                  >
-                    Clear
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => { const now = new Date(); update({ date: now, hour: now.getHours(), minute: now.getMinutes() }); }}
-                    className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline"
-                  >
-                    Now
-                  </button>
+            <Popover.Panel className={PANEL_CLS}>
+              {/* Tab switcher */}
+              <ButtonGroup
+                fullWidth="always"
+                size="sm"
+                value={tab}
+                onChange={(v) => setTab(v as 'date' | 'time')}
+                items={[
+                  { label: 'Date', value: 'date', icon: <CalendarDays className="w-3.5 h-3.5" /> },
+                  { label: 'Time', value: 'time', icon: <Clock        className="w-3.5 h-3.5" /> },
+                ]}
+              />
+
+              {/* Date panel */}
+              {tab === 'date' && (
+                <div className="mt-3">
+                  <Calendar
+                    variant="mini"
+                    selected={current?.date ?? null}
+                    onSelect={(d) => { update({ date: d }); setTab('time'); }}
+                  />
                 </div>
-              </div>
+              )}
 
-              {/* Divider — horizontal on mobile, vertical on sm+ */}
-              <div className="h-px sm:h-auto sm:w-px bg-ink-200 dark:bg-ink-700 sm:self-stretch" />
-
-              {/* Time column */}
-              <div className="flex flex-col items-center gap-1 pt-1">
-                <span className="text-xs font-body font-semibold text-ink-500 dark:text-ink-400 mb-1">Time</span>
-                <div className="flex items-start gap-2">
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">HH</span>
-                    <ScrollColumn
-                      values={HOURS}
-                      selected={current?.hour ?? 12}
-                      onSelect={(v) => update({ hour: v })}
-                    />
-                  </div>
-                  <span className="mt-[26px] text-sm font-body font-semibold text-ink-400">:</span>
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">MM</span>
-                    <ScrollColumn
-                      values={MINUTES}
-                      selected={current?.minute ?? 0}
-                      onSelect={(v) => update({ minute: v })}
-                    />
+              {/* Time panel */}
+              {tab === 'time' && (
+                <div className="mt-3 flex justify-center">
+                  <div className="flex items-start gap-2">
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">HH</span>
+                      <ScrollColumn
+                        values={HOURS}
+                        selected={current?.hour ?? 12}
+                        onSelect={(v) => update({ hour: v })}
+                      />
+                    </div>
+                    <span className="mt-[30px] text-sm font-body font-semibold text-ink-400">:</span>
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">MM</span>
+                      <ScrollColumn
+                        values={MINUTES}
+                        selected={current?.minute ?? 0}
+                        onSelect={(v) => update({ minute: v })}
+                      />
+                    </div>
                   </div>
                 </div>
+              )}
+
+              {/* Footer actions */}
+              <div className="mt-3 flex justify-between px-1">
+                <button
+                  type="button"
+                  onClick={() => { if (!isControlled) setInternal(null); onChange?.(null); close(); }}
+                  className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline transition-colors"
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { const now = new Date(); update({ date: now, hour: now.getHours(), minute: now.getMinutes() }); }}
+                  className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline transition-colors"
+                >
+                  Now
+                </button>
               </div>
             </Popover.Panel>
           </Transition>
