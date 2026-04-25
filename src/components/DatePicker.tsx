@@ -62,14 +62,16 @@ function ScrollColumn({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  // Scroll selected item into view when column renders
+  // Centre the selected item in the scroll container when it changes
   React.useEffect(() => {
-    const el = ref.current?.querySelector('[data-selected="true"]');
-    el?.scrollIntoView({ block: 'nearest' });
+    const el = ref.current?.querySelector<HTMLElement>('[data-selected="true"]');
+    el?.scrollIntoView({ block: 'center', behavior: 'auto' });
   }, [selected]);
 
   return (
     <div ref={ref} className="h-40 overflow-y-auto scrollbar-none flex flex-col gap-0.5 snap-y snap-mandatory pr-1">
+      {/* top spacer so first items can scroll to centre */}
+      <div className="shrink-0 h-16" aria-hidden="true" />
       {values.map(v => (
         <button
           key={v}
@@ -86,6 +88,8 @@ function ScrollColumn({
           {String(v).padStart(2, '0')}
         </button>
       ))}
+      {/* bottom spacer so last items can scroll to centre */}
+      <div className="shrink-0 h-16" aria-hidden="true" />
     </div>
   );
 }
@@ -267,7 +271,7 @@ export function TimePicker({
           {name && <input type="hidden" name={name} value={displayValue} />}
 
           <Transition as={React.Fragment} {...TRANSITION}>
-            <Popover.Panel className={`${PANEL_CLS} w-36`}>
+            <Popover.Panel className={`${PANEL_CLS} w-36 min-w-[9rem]`}>
               <div className="flex items-start gap-2 justify-center">
                 <div className="flex flex-col items-center gap-1">
                   <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">HH</span>
@@ -372,7 +376,7 @@ export function DateTimePicker({
           {name && <input type="hidden" name={name} value={isoValue} />}
 
           <Transition as={React.Fragment} {...TRANSITION}>
-            <Popover.Panel className={`${PANEL_CLS} flex gap-4`}>
+            <Popover.Panel className={`${PANEL_CLS} flex flex-col sm:flex-row gap-4`}>
               {/* Date column */}
               <div>
                 <Calendar
@@ -398,8 +402,8 @@ export function DateTimePicker({
                 </div>
               </div>
 
-              {/* Divider */}
-              <div className="w-px bg-ink-200 dark:bg-ink-700 self-stretch" />
+              {/* Divider — horizontal on mobile, vertical on sm+ */}
+              <div className="h-px sm:h-auto sm:w-px bg-ink-200 dark:bg-ink-700 sm:self-stretch" />
 
               {/* Time column */}
               <div className="flex flex-col items-center gap-1 pt-1">
