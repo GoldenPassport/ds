@@ -22,9 +22,11 @@ export interface VerticalNavGroup {
 }
 
 export interface VerticalNavProps {
-  groups:      VerticalNavGroup[];
-  appearance?: VerticalNavAppearance;
-  className?:  string;
+  groups:       VerticalNavGroup[];
+  appearance?:  VerticalNavAppearance;
+  /** Accessible label for the nav landmark. Override when multiple VerticalNavs appear on the same page. */
+  'aria-label'?: string;
+  className?:   string;
 }
 
 // ── Style tokens ───────────────────────────────────────────
@@ -151,13 +153,14 @@ function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; dep
 
 export function VerticalNav({
   groups,
-  appearance = 'default',
-  className  = '',
+  appearance   = 'default',
+  'aria-label': navAriaLabel = 'Sidebar navigation',
+  className    = '',
 }: VerticalNavProps) {
   const t = tokens[appearance];
 
   return (
-    <nav className={`flex flex-col gap-6 ${className}`} aria-label="Sidebar navigation">
+    <nav className={`flex flex-col gap-6 ${className}`} aria-label={navAriaLabel}>
       {groups.map((group, gi) => (
         <div key={gi}>
           {group.label && (

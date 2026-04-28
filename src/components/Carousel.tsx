@@ -96,7 +96,7 @@ function CarouselCard({
       )}
       {/* Scrim */}
       {(item.title || item.subtitle || item.label || item.content) && (
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
       )}
       {/* Content overlay */}
       {(item.title || item.subtitle || item.label || item.content) && (
@@ -187,6 +187,8 @@ export function Carousel({
       {/* ── Track ── */}
       <div
         ref={trackRef}
+        tabIndex={0}
+        aria-label="Carousel items"
         className={[
           'flex overflow-x-auto scroll-smooth',
           'scrollbar-hide',

@@ -149,6 +149,7 @@ export function DataTable<T extends { id: string | number }>({
                 return (
                 <th
                   key={colKey}
+                  scope="col"
                   style={col.width ? { width: col.width } : undefined}
                   onClick={() => handleSort(col)}
                   aria-sort={ariaSortValue}
@@ -159,7 +160,11 @@ export function DataTable<T extends { id: string | number }>({
                   ].join(' ')}
                 >
                   <span className="inline-flex items-center gap-1.5">
-                    {col.header}
+                    {col.header || (
+                      <span className="sr-only">
+                        {colKey.charAt(0).toUpperCase() + colKey.slice(1)}
+                      </span>
+                    )}
                     {col.sortable && (
                       <SortIcon state={sort.key === String(col.key) ? sort.direction : null} />
                     )}

@@ -45,6 +45,8 @@ export interface StepsBarProps {
    * compact left-border vertical list below the `sm` breakpoint (≤ 640 px).
    */
   responsive?: boolean;
+  /** Accessible label for the nav landmark. Defaults to "Progress". Override when multiple StepsBars appear on the same page. */
+  'aria-label'?: string;
   className?: string;
 }
 
@@ -69,14 +71,16 @@ function BarVariant({
   current,
   onStepClick,
   minStepWidth,
+  navAriaLabel = 'Progress',
 }: {
   steps: StepsBarStep[];
   current: number;
   onStepClick?: (index: number) => void;
   minStepWidth?: number;
+  navAriaLabel?: string;
 }) {
   return (
-    <nav aria-label="Progress">
+    <nav aria-label={navAriaLabel}>
       <ol className="flex gap-px">
         {steps.map((step, i) => {
           const { isComplete, isCurrent, isUpcoming } = stepState(i, current);
@@ -183,15 +187,17 @@ function PanelsVariant({
   onStepClick,
   panelAppearance = 'default',
   minStepWidth,
+  navAriaLabel = 'Progress',
 }: {
   steps: StepsBarStep[];
   current: number;
   onStepClick?: (index: number) => void;
   panelAppearance?: StepsBarPanelAppearance;
   minStepWidth?: number;
+  navAriaLabel?: string;
 }) {
   return (
-    <nav aria-label="Progress">
+    <nav aria-label={navAriaLabel}>
       <ol className="flex overflow-hidden rounded-lg border border-ink-200 dark:border-ink-700">
         {steps.map((step, i) => {
           const { isComplete, isCurrent } = stepState(i, current);
@@ -212,7 +218,7 @@ function PanelsVariant({
                   isComplete
                     ? 'bg-primary-500 text-ink-900 group-hover:bg-primary-600'
                     : isCurrent
-                      ? 'border-2 border-primary-500 text-primary-600 dark:text-primary-400 group-hover:border-primary-600 group-hover:text-primary-700 dark:group-hover:text-primary-300'
+                      ? 'border-2 border-primary-500 text-ink-900 dark:text-ink-50 group-hover:border-primary-600 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                       : 'border-2 border-ink-300 dark:border-ink-600 text-ink-500 dark:text-ink-300 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
@@ -226,7 +232,7 @@ function PanelsVariant({
                 className={[
                   'text-sm font-semibold font-body leading-snug truncate transition-colors duration-150',
                   isCurrent
-                    ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
+                    ? 'text-ink-900 dark:text-ink-50 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                     : isComplete
                       ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                       : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
@@ -334,14 +340,16 @@ function CirclesVariant({
   current,
   onStepClick,
   minStepWidth,
+  navAriaLabel = 'Progress',
 }: {
   steps: StepsBarStep[];
   current: number;
   onStepClick?: (index: number) => void;
   minStepWidth?: number;
+  navAriaLabel?: string;
 }) {
   return (
-    <nav aria-label="Progress">
+    <nav aria-label={navAriaLabel}>
       {/* Every li is flex-1 so columns are always equal width.
           Width is driven by the outer StepsBar wrapper via fullWidth prop. */}
       <ol className="flex items-start">
@@ -395,7 +403,7 @@ function CirclesVariant({
                     className={[
                       'text-xs font-semibold font-body transition-colors duration-150',
                       isCurrent
-                        ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
+                        ? 'text-ink-900 dark:text-ink-50 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                         : isComplete
                           ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                           : 'text-ink-500 dark:text-ink-300',
@@ -457,14 +465,16 @@ function VerticalVariant({
   current,
   onStepClick,
   minStepWidth,
+  navAriaLabel = 'Progress',
 }: {
   steps: StepsBarStep[];
   current: number;
   onStepClick?: (index: number) => void;
   minStepWidth?: number;
+  navAriaLabel?: string;
 }) {
   return (
-    <nav aria-label="Progress">
+    <nav aria-label={navAriaLabel}>
       <ol className="flex flex-col">
         {steps.map((step, i) => {
           const { isComplete, isCurrent } = stepState(i, current);
@@ -556,7 +566,7 @@ function StepVerticalLabel({
         className={[
           'text-sm font-semibold font-body leading-snug transition-colors duration-150',
           isCurrent
-            ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
+            ? 'text-ink-900 dark:text-ink-50 group-hover:text-ink-900 dark:group-hover:text-ink-50'
             : isComplete
               ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
               : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
@@ -584,16 +594,18 @@ function MobilePanelsList({
   current,
   onStepClick,
   panelAppearance = 'default',
+  navAriaLabel = 'Progress',
 }: {
   steps: StepsBarStep[];
   current: number;
   onStepClick?: (index: number) => void;
   panelAppearance?: StepsBarPanelAppearance;
+  navAriaLabel?: string;
 }) {
   const bgClass = panelAppearance === 'ghost' ? 'bg-transparent' : 'bg-white dark:bg-ink-800';
 
   return (
-    <nav aria-label="Progress steps">
+    <nav aria-label={navAriaLabel}>
       <ol className={['rounded-lg border border-ink-200 dark:border-ink-700 overflow-hidden', bgClass].join(' ')}>
         {steps.map((step, i) => {
           const { isComplete, isCurrent } = stepState(i, current);
@@ -608,7 +620,7 @@ function MobilePanelsList({
                   isComplete
                     ? 'bg-primary-500 text-ink-900 group-hover:bg-primary-600'
                     : isCurrent
-                      ? 'border-2 border-primary-500 text-primary-600 dark:text-primary-400 group-hover:border-primary-600 group-hover:text-primary-700 dark:group-hover:text-primary-300'
+                      ? 'border-2 border-primary-500 text-ink-900 dark:text-ink-50 group-hover:border-primary-600 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                       : 'border-2 border-ink-300 dark:border-ink-600 text-ink-500 dark:text-ink-300 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
@@ -621,7 +633,7 @@ function MobilePanelsList({
                 className={[
                   'text-sm font-semibold font-body leading-snug transition-colors duration-150',
                   isCurrent
-                    ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
+                    ? 'text-ink-900 dark:text-ink-50 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                     : isComplete
                       ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
                       : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
@@ -690,13 +702,15 @@ function MobileList({
   steps,
   current,
   onStepClick,
+  navAriaLabel = 'Progress',
 }: {
   steps: StepsBarStep[];
   current: number;
   onStepClick?: (index: number) => void;
+  navAriaLabel?: string;
 }) {
   return (
-    <nav aria-label="Progress steps">
+    <nav aria-label={navAriaLabel}>
       <ol className="space-y-1">
         {steps.map((step, i) => {
           const { isComplete, isCurrent } = stepState(i, current);
@@ -777,6 +791,7 @@ export function StepsBar({
   fullWidth        = 'mobile',
   minStepWidth     = 50,
   responsive       = true,
+  'aria-label':    navAriaLabel = 'Progress',
   className        = '',
 }: StepsBarProps) {
   const isHorizontal = variant !== 'vertical';
@@ -797,18 +812,18 @@ export function StepsBar({
       {responsive && isHorizontal && (
         <div className="sm:hidden">
           {variant === 'panels'
-            ? <MobilePanelsList steps={steps} current={activeCurrent} onStepClick={handleStepClick} panelAppearance={panelAppearance} />
-            : <MobileList steps={steps} current={activeCurrent} onStepClick={handleStepClick} />
+            ? <MobilePanelsList steps={steps} current={activeCurrent} onStepClick={handleStepClick} panelAppearance={panelAppearance} navAriaLabel={navAriaLabel} />
+            : <MobileList steps={steps} current={activeCurrent} onStepClick={handleStepClick} navAriaLabel={navAriaLabel} />
           }
         </div>
       )}
 
       {/* Normal variant — hidden on mobile when responsive=true + horizontal */}
       <div className={responsive && isHorizontal ? 'hidden sm:block' : undefined}>
-        {variant === 'bar'      && <BarVariant      steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} />}
-        {variant === 'panels'   && <PanelsVariant   steps={steps} current={activeCurrent} onStepClick={handleStepClick} panelAppearance={panelAppearance} minStepWidth={minStepWidth} />}
-        {variant === 'circles'  && <CirclesVariant  steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} />}
-        {variant === 'vertical' && <VerticalVariant steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} />}
+        {variant === 'bar'      && <BarVariant      steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} navAriaLabel={navAriaLabel} />}
+        {variant === 'panels'   && <PanelsVariant   steps={steps} current={activeCurrent} onStepClick={handleStepClick} panelAppearance={panelAppearance} minStepWidth={minStepWidth} navAriaLabel={navAriaLabel} />}
+        {variant === 'circles'  && <CirclesVariant  steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} navAriaLabel={navAriaLabel} />}
+        {variant === 'vertical' && <VerticalVariant steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} navAriaLabel={navAriaLabel} />}
       </div>
     </div>
   );

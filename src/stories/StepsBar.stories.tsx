@@ -148,12 +148,12 @@ export const PanelsAppearances: Story = {
   render: () => (
     <div className="space-y-8">
       <div className="space-y-2">
-        <p className="text-xs font-mono text-ink-400">default</p>
-        <StepsBar steps={STEPS_SIMPLE} current={1} variant="panels" panelAppearance="default" onStepClick={() => {}} />
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">default</p>
+        <StepsBar steps={STEPS_SIMPLE} current={1} variant="panels" panelAppearance="default" onStepClick={() => {}} aria-label="Progress (default)" />
       </div>
       <div className="space-y-2">
-        <p className="text-xs font-mono text-ink-400">ghost</p>
-        <StepsBar steps={STEPS_SIMPLE} current={1} variant="panels" panelAppearance="ghost" onStepClick={() => {}} />
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">ghost</p>
+        <StepsBar steps={STEPS_SIMPLE} current={1} variant="panels" panelAppearance="ghost" onStepClick={() => {}} aria-label="Progress (ghost)" />
       </div>
     </div>
   ),
@@ -181,13 +181,13 @@ export const AllVariants: Story = {
     <div className="space-y-10 max-w-2xl">
       {(['bar', 'panels', 'circles'] as const).map(v => (
         <div key={v} className="space-y-2">
-          <p className="text-xs font-mono text-ink-400">{v}</p>
-          <StepsBar steps={STEPS_SIMPLE} current={1} variant={v} />
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v}</p>
+          <StepsBar steps={STEPS_SIMPLE} current={1} variant={v} aria-label={`Progress (${v})`} />
         </div>
       ))}
       <div className="space-y-2">
-        <p className="text-xs font-mono text-ink-400">vertical</p>
-        <StepsBar steps={STEPS_SIMPLE} current={1} variant="vertical" />
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">vertical</p>
+        <StepsBar steps={STEPS_SIMPLE} current={1} variant="vertical" aria-label="Progress (vertical)" />
       </div>
     </div>
   ),
@@ -201,8 +201,8 @@ export const AllComplete: Story = {
     <div className="space-y-8 max-w-2xl">
       {(['bar', 'panels', 'circles'] as const).map(v => (
         <div key={v} className="space-y-1">
-          <p className="text-xs font-mono text-ink-400">{v}</p>
-          <StepsBar steps={STEPS_SIMPLE} current={STEPS_SIMPLE.length} variant={v} />
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v}</p>
+          <StepsBar steps={STEPS_SIMPLE} current={STEPS_SIMPLE.length} variant={v} aria-label={`Progress (${v})`} />
         </div>
       ))}
     </div>
@@ -218,7 +218,7 @@ export const Responsive: Story = {
     <div className="space-y-8">
       {(['bar', 'panels', 'circles'] as const).map(v => (
         <div key={v} className="space-y-2">
-          <p className="text-xs font-mono text-ink-400">{v} (resize window below 640 px)</p>
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v} (resize window below 640 px)</p>
           <StepsBar
             {...args}
             steps={STEPS_DESC}
@@ -226,6 +226,7 @@ export const Responsive: Story = {
             variant={v}
             fullWidth="always"
             responsive
+            aria-label={`Progress (${v})`}
           />
         </div>
       ))}

@@ -239,7 +239,7 @@ export function PageHeading({
             className={[
               'inline-flex items-center gap-2 px-1 py-3 mr-6 text-sm font-medium font-body border-b-2 whitespace-nowrap transition-colors',
               isActive
-                ? 'border-primary-500 text-primary-800 dark:text-primary-400'
+                ? 'border-primary-500 text-ink-900 dark:text-ink-50'
                 : 'border-transparent text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
             ].join(' ')}
           >
@@ -248,7 +248,7 @@ export function PageHeading({
               <span className={[
                 'rounded-full px-2 py-0.5 text-xs font-medium',
                 isActive
-                  ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-300'
+                  ? 'bg-ink-100 dark:bg-ink-700 text-ink-900 dark:text-ink-50'
                   : 'bg-ink-100 dark:bg-ink-700 text-ink-600 dark:text-ink-300',
               ].join(' ')}>
                 {tab.badge}
@@ -329,9 +329,36 @@ export function PageHeading({
       </div>
     );
 
+    /** Desktop full bar: search+filter constrained, actions pinned right, summary+tags full-width below */
+    const FullDesktopBar = () => (
+      <div className="hidden sm:flex items-start gap-3 px-3 py-2">
+        {/* SearchSet fills the row; input row is width-constrained via searchClassName */}
+        <div className="flex-1 min-w-0">
+          <SearchSet
+            value={searchValue}
+            onChange={onSearchChange ?? (() => {})}
+            placeholder={searchPlaceholder}
+            loading={searchLoading}
+            filterDefs={searchFilterDefs}
+            filterValues={searchFilterValues}
+            onFilterChange={onSearchFilterChange}
+            filterTitle={searchFilterTitle}
+            tags={searchTags}
+            onTagsChange={onSearchTagsChange}
+            summary={searchSummary}
+            searchClassName="w-80 lg:w-96"
+          />
+        </div>
+        {/* Actions sit beside the input row (top-aligned, same height) */}
+        {actions && (
+          <div className="shrink-0 flex items-center gap-1">{actions}</div>
+        )}
+      </div>
+    );
+
     return (
       <div className={[
-        sticky ? 'sticky top-0 z-10' : '',
+        sticky ? 'sticky top-0 z-10 bg-inherit' : '',
         borderCls,
         className,
       ].filter(Boolean).join(' ')}>
@@ -341,10 +368,8 @@ export function PageHeading({
             <div className="sm:hidden">
               <MasterBar simple />
             </div>
-            {/* Desktop — full search with tags + summary */}
-            <div className="hidden sm:block">
-              <MasterBar simple={false} />
-            </div>
+            {/* Desktop — two-row layout */}
+            <FullDesktopBar />
           </>
         ) : (
           /* master / master-simple — always simple */
@@ -357,7 +382,7 @@ export function PageHeading({
   // ── Standard variants ─────────────────────────────────────
   return (
     <div className={[
-      sticky ? 'sticky top-0 z-10' : '',
+      sticky ? 'sticky top-0 z-10 bg-inherit' : '',
       borderCls,
       className,
     ].filter(Boolean).join(' ')}>

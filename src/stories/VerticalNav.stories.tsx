@@ -255,7 +255,7 @@ export const InContext: Story = {
 
       {/* Main */}
       <main className="flex-1 p-8 bg-white dark:bg-ink-900">
-        <p className="text-sm font-body text-ink-400 dark:text-ink-500">Page content goes here</p>
+        <p className="text-sm font-body text-ink-400 dark:text-ink-300">Page content goes here</p>
       </main>
     </div>
   ),
@@ -269,29 +269,29 @@ export const AllVariants: Story = {
   render: () => (
     <div className="flex gap-12 flex-wrap items-start">
       <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500">Simple</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52"><VerticalNav groups={[{ items: SIMPLE_ITEMS }]} /></div>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Simple</p>
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52"><VerticalNav groups={[{ items: SIMPLE_ITEMS }]} aria-label="Simple navigation" /></div>
       </div>
       <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500">With badges</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52"><VerticalNav groups={[{ items: BADGE_ITEMS }]} /></div>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">With badges</p>
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52"><VerticalNav groups={[{ items: BADGE_ITEMS }]} aria-label="Navigation with badges" /></div>
       </div>
       <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500">With icons</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64"><VerticalNav groups={[{ items: ICON_ITEMS }]} /></div>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">With icons</p>
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64"><VerticalNav groups={[{ items: ICON_ITEMS }]} aria-label="Navigation with icons" /></div>
       </div>
       <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500">Icons + badges</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64"><VerticalNav groups={[{ items: ICON_BADGE_ITEMS }]} /></div>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Icons + badges</p>
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64"><VerticalNav groups={[{ items: ICON_BADGE_ITEMS }]} aria-label="Navigation with icons and badges" /></div>
       </div>
       <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500">Secondary nav</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64"><VerticalNav groups={SECONDARY_GROUPS} /></div>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Secondary nav</p>
+        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64"><VerticalNav groups={SECONDARY_GROUPS} aria-label="Secondary navigation" /></div>
       </div>
       <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500">On gray</p>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">On gray</p>
         <div className="bg-ink-50 dark:bg-ink-900 rounded-2xl p-4 w-64">
-          <VerticalNav appearance="gray" groups={[{ items: ICON_BADGE_ITEMS }]} />
+          <VerticalNav appearance="gray" groups={[{ items: ICON_BADGE_ITEMS }]} aria-label="Navigation on gray" />
         </div>
       </div>
     </div>
