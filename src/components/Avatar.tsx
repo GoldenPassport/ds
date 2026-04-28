@@ -20,10 +20,9 @@ export function Avatar({ name, size = 32, className = '' }: AvatarProps) {
         width: size,
         height: size,
         fontSize: size * 0.35,
-        background: 'linear-gradient(135deg, var(--color-primary-400), var(--color-primary-600))',
         flexShrink: 0,
       }}
-      className={`rounded-full flex items-center justify-center font-bold font-display text-ink-900 select-none ${className}`}
+      className={`rounded-full flex items-center justify-center font-bold font-display bg-primary-500 text-ink-900 select-none ${className}`}
     >
       {initials}
     </div>

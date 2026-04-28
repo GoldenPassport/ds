@@ -51,7 +51,7 @@ export function SectionHeading({
     <div className={className}>
       {/* Label / eyebrow */}
       {label && (
-        <p className="mb-1 text-xs font-semibold font-body uppercase tracking-wider text-primary-600 dark:text-primary-400">
+        <p className="mb-1 text-xs font-semibold font-body uppercase tracking-wider text-ink-600 dark:text-ink-300">
           {label}
         </p>
       )}
@@ -63,7 +63,7 @@ export function SectionHeading({
             {title}
           </Tag>
           {description && (
-            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">
+            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
               {description}
             </p>
           )}
@@ -89,8 +89,8 @@ export function SectionHeading({
                 className={[
                   'inline-flex items-center gap-2 px-1 py-2.5 mr-5 text-sm font-medium font-body border-b-2 whitespace-nowrap transition-colors',
                   isActive
-                    ? 'border-primary-500 text-primary-600 dark:text-primary-400'
-                    : 'border-transparent text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
+                    ? 'border-primary-500 text-primary-800 dark:text-primary-400'
+                    : 'border-transparent text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
                 ].join(' ')}
               >
                 {tab.label}
@@ -98,7 +98,7 @@ export function SectionHeading({
                   <span className={[
                     'rounded-full px-1.5 py-0.5 text-xs font-medium',
                     isActive
-                      ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300'
+                      ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-300'
                       : 'bg-ink-100 dark:bg-ink-700 text-ink-600 dark:text-ink-300',
                   ].join(' ')}>
                     {tab.badge}

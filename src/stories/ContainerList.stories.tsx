@@ -43,11 +43,11 @@ function PersonRow({ name, email, role, status }: typeof PEOPLE[0]) {
         <Avatar name={name} size={40} />
         <div className="min-w-0">
           <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{name}</p>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-400 truncate">{email}</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{email}</p>
         </div>
       </div>
       <div className="hidden sm:flex items-center gap-4 shrink-0">
-        <span className="text-sm font-body text-ink-500 dark:text-ink-400">{role}</span>
+        <span className="text-sm font-body text-ink-500 dark:text-ink-300">{role}</span>
         <Badge label={status.charAt(0).toUpperCase() + status.slice(1)} variant={status} />
       </div>
     </div>
@@ -65,7 +65,7 @@ const SETTING_ITEMS = [
   <div key={label} className="flex items-center justify-between gap-6">
     <div className="min-w-0">
       <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{label}</p>
-      <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400">{description}</p>
+      <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300">{description}</p>
     </div>
     <ControlledToggle defaultChecked={defaultOn} />
   </div>
@@ -79,7 +79,7 @@ const ACTION_ITEMS = [
   <div key={title} className="flex items-center justify-between gap-6">
     <div className="min-w-0">
       <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{title}</p>
-      <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400">{description}</p>
+      <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300">{description}</p>
     </div>
     <Button variant={danger ? 'danger' : 'secondary'} size="sm" className="shrink-0">
       {action}
@@ -148,11 +148,11 @@ export const Flush: Story = {
               <Avatar name={p.name} size={32} />
               <div className="min-w-0">
                 <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{p.name}</p>
-                <p className="text-xs font-body text-ink-500 dark:text-ink-400 truncate">{p.email}</p>
+                <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{p.email}</p>
               </div>
             </div>
             <div className="hidden sm:flex items-center gap-3 shrink-0">
-              <span className="text-sm font-body text-ink-500 dark:text-ink-400">{p.role}</span>
+              <span className="text-sm font-body text-ink-500 dark:text-ink-300">{p.role}</span>
               <Badge label={p.status.charAt(0).toUpperCase() + p.status.slice(1)} variant={p.status} />
             </div>
           </div>
@@ -171,7 +171,7 @@ export const AllVariants: Story = {
     <div className="max-w-2xl flex flex-col gap-10">
       {(['divided', 'bordered', 'cards', 'flush'] as const).map(variant => (
         <div key={variant}>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">variant="{variant}"</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">variant="{variant}"</p>
           <ContainerList
             variant={variant}
             items={variant === 'flush'
@@ -180,7 +180,7 @@ export const AllVariants: Story = {
                     <Avatar name={p.name} size={32} />
                     <div className="min-w-0">
                       <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{p.name}</p>
-                      <p className="text-xs font-body text-ink-500 dark:text-ink-400 truncate">{p.role}</p>
+                      <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{p.role}</p>
                     </div>
                   </div>
                 ))
@@ -202,7 +202,7 @@ export const NoDividers: Story = {
     <div className="max-w-2xl flex flex-col gap-8">
       {(['divided', 'bordered', 'flush'] as const).map(variant => (
         <div key={variant}>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">variant="{variant}" dividers=false</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">variant="{variant}" dividers=false</p>
           <ContainerList variant={variant} dividers={false} items={PERSON_ITEMS.slice(0, 3)} />
         </div>
       ))}
@@ -218,11 +218,11 @@ export const SettingsList: Story = {
   render: () => (
     <div className="max-w-2xl flex flex-col gap-8">
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">divided</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">divided</p>
         <ContainerList variant="divided" items={SETTING_ITEMS} />
       </div>
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">bordered</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">bordered</p>
         <ContainerList variant="bordered" items={SETTING_ITEMS} />
       </div>
     </div>
@@ -237,11 +237,11 @@ export const ActionRows: Story = {
   render: () => (
     <div className="max-w-2xl flex flex-col gap-8">
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">divided</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">divided</p>
         <ContainerList variant="divided" items={ACTION_ITEMS} />
       </div>
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">cards</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">cards</p>
         <ContainerList variant="cards" items={ACTION_ITEMS} />
       </div>
     </div>

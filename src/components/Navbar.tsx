@@ -44,6 +44,8 @@ export interface NavbarProps {
   appearance?:        NavbarAppearance;
   /** Bottom border */
   bordered?:          boolean;
+  /** Accessible label for the <nav> landmark — required when multiple Navbars appear on the same page */
+  ariaLabel?:         string;
   className?:         string;
 }
 
@@ -74,14 +76,14 @@ const tokens: Record<NavbarAppearance, Tokens> = {
   light: {
     nav:               'bg-white dark:bg-ink-800',
     border:            'border-ink-200 dark:border-ink-700',
-    link:              'text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-50 dark:hover:bg-ink-700',
+    link:              'text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-50 dark:hover:bg-ink-700',
     linkActive:        'text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
     searchWrap:        'bg-ink-50 dark:bg-ink-700 border-ink-200 dark:border-ink-600 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/25',
-    searchInput:       'text-ink-900 dark:text-white placeholder:text-ink-400 dark:placeholder:text-ink-500',
-    searchIcon:        'text-ink-400 dark:text-ink-500',
-    iconBtn:           'text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+    searchInput:       'text-ink-900 dark:text-white placeholder:text-ink-500 dark:placeholder:text-ink-400',
+    searchIcon:        'text-ink-500 dark:text-ink-400',
+    iconBtn:           'text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
     mobileMenu:        'bg-white dark:bg-ink-800 border-t border-ink-200 dark:border-ink-700',
-    mobileLink:        'text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-50 dark:hover:bg-ink-700',
+    mobileLink:        'text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-50 dark:hover:bg-ink-700',
     mobileLinkActive:  'text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
     userName:          'text-ink-900 dark:text-white',
     userEmail:         'text-ink-500 dark:text-ink-400',
@@ -99,12 +101,12 @@ const tokens: Record<NavbarAppearance, Tokens> = {
     searchWrap:        'bg-ink-800 border-ink-700 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/25',
     searchInput:       'text-white placeholder:text-ink-500',
     searchIcon:        'text-ink-500',
-    iconBtn:           'text-ink-400 hover:text-ink-100 hover:bg-ink-800',
+    iconBtn:           'text-ink-300 hover:text-ink-100 hover:bg-ink-800',
     mobileMenu:        'bg-ink-900 border-t border-ink-700',
     mobileLink:        'text-ink-300 hover:text-white hover:bg-ink-800',
     mobileLinkActive:  'text-white bg-ink-800',
     userName:          'text-white',
-    userEmail:         'text-ink-400',
+    userEmail:         'text-ink-300',
     userBtn:           'hover:bg-ink-800',
     dropdownBg:        'bg-ink-800 border-ink-700 shadow-dark-md',
     dropdownDivider:   'border-ink-700',
@@ -275,13 +277,14 @@ export function Navbar({
   moreMenu,
   appearance        = 'light',
   bordered          = true,
+  ariaLabel,
   className         = '',
 }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const t = tokens[appearance];
 
   return (
-    <nav className={[t.nav, bordered ? `border-b ${t.border}` : '', className].filter(Boolean).join(' ')}>
+    <nav aria-label={ariaLabel || undefined} className={[t.nav, bordered ? `border-b ${t.border}` : '', className].filter(Boolean).join(' ')}>
       <div className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
 

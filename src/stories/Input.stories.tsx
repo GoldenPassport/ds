@@ -16,6 +16,11 @@ const meta = {
     error:    { control: 'text' },
     disabled: { control: 'boolean' },
     placeholder: { control: 'text' },
+    validate: {
+      control: 'radio',
+      options: [undefined, 'onBlur', 'onSubmit', 'both'],
+      description: 'When to trigger HTML5 constraint validation. Requires native HTML attributes like `required`, `pattern`, `type="email"` etc.',
+    },
   },
 } satisfies Meta<typeof Input>;
 
@@ -93,7 +98,7 @@ export const Password: Story = {
               type="button"
               onClick={() => setShow(v => !v)}
               aria-label={show ? 'Hide password' : 'Show password'}
-              className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1"
+              className="text-ink-500 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1"
             >
               {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -376,6 +381,7 @@ export const InlineSelect: Story = {
           trailingAddon={
             <Select
               variant="native"
+              aria-label="Currency"
               value={currency}
               onChange={setCurrency}
               options={[
@@ -390,6 +396,184 @@ export const InlineSelect: Story = {
           value={amount}
           onChange={e => setAmount(e.target.value)}
         />
+      </div>
+    );
+  },
+};
+
+// ── Validation modes ──────────────────────────────────────
+
+export const ValidationModes: Story = {
+  name: 'Validation modes',
+  render: () => {
+    // Each mini-form tracks its own submit state so we can show a success banner
+    const [submitOnBlur,   setSubmitOnBlur]   = React.useState(false);
+    const [submitOnSubmit, setSubmitOnSubmit] = React.useState(false);
+    const [submitBoth,     setSubmitBoth]     = React.useState(false);
+
+    function prevent(e: React.FormEvent) {
+      e.preventDefault();
+      const form = e.currentTarget as HTMLFormElement;
+      if (form.checkValidity()) {
+        // identify which form submitted
+        const id = form.dataset.id;
+        if (id === 'blur')   setSubmitOnBlur(true);
+        if (id === 'submit') setSubmitOnSubmit(true);
+        if (id === 'both')   setSubmitBoth(true);
+      }
+    }
+
+    const successBanner = (
+      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 text-xs font-semibold font-body text-green-700 dark:text-green-400">
+        <svg className="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" />
+        </svg>
+        Submitted successfully
+      </div>
+    );
+
+    const submitBtn = (label = 'Submit') => (
+      <button
+        type="submit"
+        className="mt-1 w-full py-2 px-4 rounded-xl text-sm font-semibold font-body bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-ink-900 transition-colors"
+      >
+        {label}
+      </button>
+    );
+
+    const sectionTitle = (title: string, description: string) => (
+      <div className="mb-4">
+        <p className="text-sm font-bold font-display text-ink-900 dark:text-ink-50">{title}</p>
+        <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300">{description}</p>
+      </div>
+    );
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl">
+
+        {/* ── onBlur ── */}
+        <form
+          data-id="blur"
+          noValidate
+          onSubmit={prevent}
+          className="flex flex-col gap-3 p-5 rounded-2xl border border-ink-100 dark:border-ink-700 bg-white dark:bg-ink-800"
+        >
+          {sectionTitle(
+            'onBlur',
+            'Errors appear as soon as you leave a field and clear while you type.',
+          )}
+          {submitOnBlur ? successBanner : (
+            <>
+              <Input
+                validate="onBlur"
+                label="Full name"
+                placeholder="Alex Morgan"
+                required
+                hint="Required"
+              />
+              <Input
+                validate="onBlur"
+                label="Email"
+                type="email"
+                placeholder="you@example.com"
+                required
+                hint="Required · must be a valid address"
+              />
+              <Input
+                validate="onBlur"
+                label="Min-length username"
+                placeholder="at least 4 chars"
+                required
+                minLength={4}
+                hint="Required · min 4 characters"
+              />
+              {submitBtn()}
+            </>
+          )}
+        </form>
+
+        {/* ── onSubmit ── */}
+        <form
+          data-id="submit"
+          noValidate
+          onSubmit={prevent}
+          className="flex flex-col gap-3 p-5 rounded-2xl border border-ink-100 dark:border-ink-700 bg-white dark:bg-ink-800"
+        >
+          {sectionTitle(
+            'onSubmit',
+            'No errors while typing. All errors surface together when Submit is pressed.',
+          )}
+          {submitOnSubmit ? successBanner : (
+            <>
+              <Input
+                validate="onSubmit"
+                label="Full name"
+                placeholder="Alex Morgan"
+                required
+                hint="Required"
+              />
+              <Input
+                validate="onSubmit"
+                label="Email"
+                type="email"
+                placeholder="you@example.com"
+                required
+                hint="Required · must be a valid address"
+              />
+              <Input
+                validate="onSubmit"
+                label="Min-length username"
+                placeholder="at least 4 chars"
+                required
+                minLength={4}
+                hint="Required · min 4 characters"
+              />
+              {submitBtn()}
+            </>
+          )}
+        </form>
+
+        {/* ── both ── */}
+        <form
+          data-id="both"
+          noValidate
+          onSubmit={prevent}
+          className="flex flex-col gap-3 p-5 rounded-2xl border border-ink-100 dark:border-ink-700 bg-white dark:bg-ink-800"
+        >
+          {sectionTitle(
+            'both',
+            'Validates on blur as you work through the form, and on submit for anything missed.',
+          )}
+          {submitBoth ? successBanner : (
+            <>
+              <Input
+                validate="both"
+                label="Full name"
+                placeholder="Alex Morgan"
+                required
+                hint="Required"
+              />
+              <Input
+                validate="both"
+                label="Email"
+                type="email"
+                placeholder="you@example.com"
+                required
+                hint="Required · must be a valid address"
+              />
+              <Input
+                validate="both"
+                label="Min-length username"
+                placeholder="at least 4 chars"
+                required
+                minLength={4}
+                hint="Required · min 4 characters"
+              />
+              {submitBtn()}
+            </>
+          )}
+        </form>
+
       </div>
     );
   },
@@ -455,7 +639,7 @@ export const AllTypes: Story = {
               type="button"
               onClick={() => setShowPw(v => !v)}
               aria-label={showPw ? 'Hide password' : 'Show password'}
-              className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1"
+              className="text-ink-500 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1"
             >
               {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>

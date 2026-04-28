@@ -38,7 +38,7 @@ export interface DescriptionListProps {
 // ── Action link ───────────────────────────────────────────
 
 function ActionLink({ action }: { action: DescriptionListAction }) {
-  const cls = 'text-xs font-semibold font-body text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors shrink-0';
+  const cls = 'text-xs font-semibold font-body text-primary-800 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-300 transition-colors shrink-0';
   return action.href ? (
     <a href={action.href} className={cls}>{action.label}</a>
   ) : (
@@ -54,7 +54,7 @@ function StackedRow({ item, striped, index }: { item: DescriptionListItem; strip
       'px-6 py-4',
       striped && index % 2 === 0 ? 'bg-ink-50 dark:bg-ink-900/40' : '',
     ].filter(Boolean).join(' ')}>
-      <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-400">
+      <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-300">
         {item.label}
       </dt>
       <dd className="mt-1 flex items-start justify-between gap-4">
@@ -75,7 +75,7 @@ function SideBySideRow({ item, striped, index }: { item: DescriptionListItem; st
       'grid grid-cols-3 gap-4 px-6 py-4',
       striped && index % 2 === 0 ? 'bg-ink-50 dark:bg-ink-900/40' : '',
     ].filter(Boolean).join(' ')}>
-      <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-400 col-span-1 self-start pt-px">
+      <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-300 col-span-1 self-start pt-px">
         {item.label}
       </dt>
       <dd className="text-sm font-body text-ink-900 dark:text-ink-50 col-span-2 flex items-start justify-between gap-4">
@@ -127,7 +127,7 @@ export function DescriptionList({
               </h3>
             )}
             {subtitle && (
-              <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">
+              <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
                 {subtitle}
               </p>
             )}

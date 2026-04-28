@@ -54,13 +54,13 @@ export const OnIconButton: Story = {
   render: () => (
     <div className="flex justify-center gap-4 pt-16">
       <Tooltip content="Copy workflow" placement="top">
-        <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-600 transition-colors border-0 cursor-pointer">
-          <Copy className="w-4 h-4" />
+        <button aria-label="Copy workflow" className="w-9 h-9 flex items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-600 transition-colors border-0 cursor-pointer">
+          <Copy className="w-4 h-4" aria-hidden="true" />
         </button>
       </Tooltip>
       <Tooltip content="Delete permanently" placement="top">
-        <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100 transition-colors border-0 cursor-pointer">
-          <Trash2 className="w-4 h-4" />
+        <button aria-label="Delete permanently" className="w-9 h-9 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100 transition-colors border-0 cursor-pointer">
+          <Trash2 className="w-4 h-4" aria-hidden="true" />
         </button>
       </Tooltip>
     </div>
@@ -132,7 +132,7 @@ export const WithRichContent: Story = {
           </span>
         }
       >
-        <button className="inline-flex items-center gap-1.5 text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-300 transition-colors cursor-pointer bg-transparent border-0">
+        <button className="inline-flex items-center gap-1.5 text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-300 transition-colors cursor-pointer bg-transparent border-0">
           <Info className="w-4 h-4" />
           <span className="text-sm font-body">About this workflow</span>
         </button>

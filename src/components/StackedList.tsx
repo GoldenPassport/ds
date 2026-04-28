@@ -62,7 +62,7 @@ function DefaultRow({ item, showLeading }: { item: StackedListItem; showLeading:
             {item.title}
           </p>
           {item.subtitle && (
-            <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400 truncate">
+            <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300 truncate">
               {item.subtitle}
             </p>
           )}
@@ -78,7 +78,7 @@ function DefaultRow({ item, showLeading }: { item: StackedListItem; showLeading:
             </div>
           )}
           {item.trailingMeta && (
-            <div className="mt-1 text-xs font-body text-ink-400 dark:text-ink-500">
+            <div className="mt-1 text-xs font-body text-ink-500 dark:text-ink-300">
               {item.trailingMeta}
             </div>
           )}

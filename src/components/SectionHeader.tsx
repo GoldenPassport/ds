@@ -41,7 +41,7 @@ export function SectionHeader({
   const menuButton = menuItems && menuItems.length > 0 && (
     <Menu
       trigger={
-        <button className="inline-flex items-center justify-center w-8 h-8 rounded-xl text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
+        <button aria-label="More options" className="inline-flex items-center justify-center w-8 h-8 rounded-xl text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
           <MoreVertical className="w-4 h-4" aria-hidden="true" />
         </button>
       }
@@ -57,7 +57,7 @@ export function SectionHeader({
           {title}
         </h2>
         {subtitle && (
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400 leading-snug">
+          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300 leading-snug">
             {subtitle}
           </p>
         )}

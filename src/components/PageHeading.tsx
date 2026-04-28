@@ -112,12 +112,12 @@ function OverflowMenu({ items }: { items: PageHeadingAction[] }) {
                   const cls = `flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-body text-left text-ink-700 dark:text-ink-200 transition-colors ${active ? 'bg-ink-50 dark:bg-ink-700' : ''}`;
                   return item.href ? (
                     <a href={item.href} className={cls}>
-                      <span className="w-4 h-4 shrink-0 text-ink-400">{item.icon}</span>
+                      <span className="w-4 h-4 shrink-0 text-ink-500">{item.icon}</span>
                       {item.label}
                     </a>
                   ) : (
                     <button type="button" onClick={item.onClick} className={cls}>
-                      <span className="w-4 h-4 shrink-0 text-ink-400">{item.icon}</span>
+                      <span className="w-4 h-4 shrink-0 text-ink-500">{item.icon}</span>
                       {item.label}
                     </button>
                   );
@@ -192,7 +192,7 @@ export function PageHeading({
 }: PageHeadingProps) {
 
   const hasBack    = backHref || onBack;
-  const iconBtnCls = 'inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 dark:text-ink-400 hover:text-ink-900 dark:hover:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus:outline-none';
+  const iconBtnCls = 'inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus:outline-none';
   const backLinkCls = `${iconBtnCls} -ml-2`;
 
   const BackIcon = hasBack ? (
@@ -239,7 +239,7 @@ export function PageHeading({
             className={[
               'inline-flex items-center gap-2 px-1 py-3 mr-6 text-sm font-medium font-body border-b-2 whitespace-nowrap transition-colors',
               isActive
-                ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                ? 'border-primary-500 text-primary-800 dark:text-primary-400'
                 : 'border-transparent text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
             ].join(' ')}
           >
@@ -248,7 +248,7 @@ export function PageHeading({
               <span className={[
                 'rounded-full px-2 py-0.5 text-xs font-medium',
                 isActive
-                  ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300'
+                  ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-300'
                   : 'bg-ink-100 dark:bg-ink-700 text-ink-600 dark:text-ink-300',
               ].join(' ')}>
                 {tab.badge}
@@ -274,7 +274,7 @@ export function PageHeading({
         </h1>
         {description && (
           <p className={[
-            'font-body text-ink-500 dark:text-ink-400',
+            'font-body text-ink-500 dark:text-ink-300',
             size === 'sm' ? 'mt-0 text-xs leading-tight' : 'mt-0.5 text-sm',
           ].join(' ')}>{description}</p>
         )}
@@ -331,7 +331,7 @@ export function PageHeading({
 
     return (
       <div className={[
-        sticky ? 'sticky top-0 z-10 bg-ink-50 dark:bg-ink-800' : '',
+        sticky ? 'sticky top-0 z-10' : '',
         borderCls,
         className,
       ].filter(Boolean).join(' ')}>
@@ -357,7 +357,7 @@ export function PageHeading({
   // ── Standard variants ─────────────────────────────────────
   return (
     <div className={[
-      sticky ? 'sticky top-0 z-10 bg-white dark:bg-ink-800' : '',
+      sticky ? 'sticky top-0 z-10' : '',
       borderCls,
       className,
     ].filter(Boolean).join(' ')}>
@@ -410,11 +410,11 @@ export function PageHeading({
         {hasBack && (
           <div className="mb-3">
             {backHref ? (
-              <a href={backHref} className="inline-flex items-center gap-1.5 text-sm font-body text-ink-500 dark:text-ink-400 hover:text-ink-900 dark:hover:text-ink-50 transition-colors">
+              <a href={backHref} className="inline-flex items-center gap-1.5 text-sm font-body text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 transition-colors">
                 <ArrowLeft className="w-4 h-4" aria-hidden="true" />Back
               </a>
             ) : (
-              <button type="button" onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-body text-ink-500 dark:text-ink-400 hover:text-ink-900 dark:hover:text-ink-50 transition-colors">
+              <button type="button" onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-body text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 transition-colors">
                 <ArrowLeft className="w-4 h-4" aria-hidden="true" />Back
               </button>
             )}
@@ -433,7 +433,7 @@ export function PageHeading({
                 {title}
               </h1>
               {description && (
-                <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">{description}</p>
+                <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">{description}</p>
               )}
             </div>
           </div>

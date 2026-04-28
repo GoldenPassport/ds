@@ -256,7 +256,7 @@ function WithTabsAndBreadcrumbsDemo() {
       bordered
       actions={
         <>
-          <Button variant="secondary" size="sm">
+          <Button variant="secondary" size="sm" aria-label="Settings">
             <Settings className="w-3.5 h-3.5" aria-hidden="true" />
           </Button>
           <Button variant="primary" size="sm">
@@ -327,7 +327,7 @@ function InContextDemo() {
           }
           actions={
             <>
-              <Button variant="secondary" size="sm">
+              <Button variant="secondary" size="sm" aria-label="Delete">
                 <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
               </Button>
               <Button variant="secondary" size="sm">
@@ -463,7 +463,7 @@ function MasterDemo() {
         searchSummary={summary}
         actions={
           <>
-            <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+            <button type="button" aria-label="Notifications" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
               <Bell className="w-5 h-5" aria-hidden="true" />
             </button>
             <Avatar name="Leslie Alexander" size={36} />
@@ -474,12 +474,12 @@ function MasterDemo() {
       {/* Results list */}
       <div className="divide-y divide-ink-100 dark:divide-ink-700">
         {filtered.length === 0 ? (
-          <p className="px-4 py-8 text-sm font-body text-center text-ink-400">No workflows found</p>
+          <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-400">No workflows found</p>
         ) : filtered.map(item => (
           <div key={item.id} className="flex items-center justify-between px-4 py-3">
             <div>
               <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.name}</p>
-              <p className="text-xs font-body text-ink-400">{item.dept}</p>
+              <p className="text-xs font-body text-ink-500 dark:text-ink-400">{item.dept}</p>
             </div>
             <Badge
               label={item.status}
@@ -518,7 +518,7 @@ export const MasterSimple: Story = {
           onSearchChange={setQuery}
           actions={
             <>
-              <button type="button" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+              <button type="button" aria-label="Notifications" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
                 <Bell className="w-5 h-5" aria-hidden="true" />
               </button>
               <Avatar name="Leslie Alexander" size={36} />
@@ -527,12 +527,12 @@ export const MasterSimple: Story = {
         />
         <div className="divide-y divide-ink-100 dark:divide-ink-700">
           {filtered.length === 0 ? (
-            <p className="px-4 py-8 text-sm font-body text-center text-ink-400">No workflows found</p>
+            <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-400">No workflows found</p>
           ) : filtered.map(item => (
             <div key={item.id} className="flex items-center justify-between px-4 py-3">
               <div>
                 <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.name}</p>
-                <p className="text-xs font-body text-ink-400">{item.dept}</p>
+                <p className="text-xs font-body text-ink-500 dark:text-ink-400">{item.dept}</p>
               </div>
               <Badge label={item.status} variant={item.status === 'Active' ? 'active' : item.status === 'Running' ? 'running' : item.status === 'Pending' ? 'pending' : 'draft'} size="sm" />
             </div>

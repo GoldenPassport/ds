@@ -80,7 +80,7 @@ const DESCRIPTION_ITEMS = [
     label: 'Location',
     value: (
       <span className="flex items-center gap-1.5">
-        <MapPin className="w-4 h-4 text-ink-400" />
+        <MapPin className="w-4 h-4 text-ink-500" />
         Remote — EMEA
       </span>
     ),
@@ -89,7 +89,7 @@ const DESCRIPTION_ITEMS = [
     label: 'Salary range',
     value: (
       <span className="flex items-center gap-1.5">
-        <DollarSign className="w-4 h-4 text-ink-400" />
+        <DollarSign className="w-4 h-4 text-ink-500" />
         $120,000 – $150,000
       </span>
     ),
@@ -98,7 +98,7 @@ const DESCRIPTION_ITEMS = [
     label: 'Closes',
     value: (
       <span className="flex items-center gap-1.5">
-        <CalendarDays className="w-4 h-4 text-ink-400" />
+        <CalendarDays className="w-4 h-4 text-ink-500" />
         30 April 2026
       </span>
     ),
@@ -137,16 +137,16 @@ const ACTIVITY = [
 function Attachments() {
   return (
     <div>
-      <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-100 mb-3">Attachments</h3>
+      <h2 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-100 mb-3">Attachments</h2>
       <ul className="divide-y divide-ink-100 dark:divide-ink-800 rounded-lg border border-ink-200 dark:border-ink-700 overflow-hidden">
         {ATTACHMENTS.map(a => (
           <li key={a.name} className="flex items-center justify-between gap-3 px-4 py-3 bg-white dark:bg-ink-900">
             <span className="flex items-center gap-2.5 min-w-0">
-              <Paperclip className="w-4 h-4 shrink-0 text-ink-400" />
+              <Paperclip className="w-4 h-4 shrink-0 text-ink-500" />
               <span className="text-sm font-body text-ink-700 dark:text-ink-300 truncate">{a.name}</span>
-              <span className="text-xs font-body text-ink-400 shrink-0">{a.size}</span>
+              <span className="text-xs font-body text-ink-500 shrink-0">{a.size}</span>
             </span>
-            <a href="#" className="text-xs font-medium font-body text-primary-600 hover:text-primary-700 shrink-0">Download</a>
+            <a href="#" className="text-xs font-medium font-body text-primary-800 hover:text-primary-900 shrink-0">Download</a>
           </li>
         ))}
       </ul>
@@ -157,7 +157,7 @@ function Attachments() {
 function ActivityFeed() {
   return (
     <div>
-      <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-100 mb-4">Activity</h3>
+      <h2 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-100 mb-4">Activity</h2>
       <ul className="flex flex-col gap-6">
         {ACTIVITY.map((a, i) => (
           <li key={i} className="flex gap-3">
@@ -165,9 +165,9 @@ function ActivityFeed() {
             <div className="min-w-0">
               <p className="text-sm font-body text-ink-900 dark:text-ink-100">
                 <span className="font-semibold">{a.author}</span>
-                <span className="text-ink-400 dark:text-ink-500 ml-2 font-normal">{a.time}</span>
+                <span className="text-ink-500 dark:text-ink-300 ml-2 font-normal">{a.time}</span>
               </p>
-              <p className="mt-1 text-sm font-body text-ink-600 dark:text-ink-400">{a.comment}</p>
+              <p className="mt-1 text-sm font-body text-ink-600 dark:text-ink-300">{a.comment}</p>
             </div>
           </li>
         ))}
@@ -180,7 +180,7 @@ function ActivityFeed() {
           <textarea
             rows={3}
             placeholder="Add a comment…"
-            className="block w-full px-4 pt-3 pb-2 text-sm font-body bg-transparent text-ink-900 dark:text-ink-100 placeholder:text-ink-400 outline-none resize-none"
+            className="block w-full px-4 pt-3 pb-2 text-sm font-body bg-transparent text-ink-900 dark:text-ink-100 placeholder:text-ink-500 outline-none resize-none"
           />
           <div className="flex justify-end px-3 pb-3">
             <Button size="sm" variant="primary">

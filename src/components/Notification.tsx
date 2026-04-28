@@ -51,7 +51,7 @@ const variantIconColor: Record<NotificationVariant, string> = {
   default: '',
   info:    'text-slate-500 dark:text-slate-400',
   success: 'text-green-500 dark:text-green-400',
-  warning: 'text-primary-500 dark:text-primary-400',
+  warning: 'text-primary-800 dark:text-primary-400',
   error:   'text-red-500 dark:text-red-400',
 };
 
@@ -152,8 +152,8 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
                     'text-sm font-semibold font-body transition-colors duration-150',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded',
                     i === 0
-                      ? 'text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300'
-                      : 'text-ink-400 hover:text-ink-600 dark:text-ink-500 dark:hover:text-ink-300',
+                      ? 'text-primary-800 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300'
+                      : 'text-ink-500 hover:text-ink-600 dark:text-ink-400 dark:hover:text-ink-300',
                   ].join(' ')}
                 >
                   {action.label}
@@ -169,7 +169,7 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
           aria-label="Dismiss notification"
           className={[
             'shrink-0 -mr-1 -mt-1 p-1 rounded',
-            'text-ink-300 hover:text-ink-500 dark:text-ink-600 dark:hover:text-ink-400',
+            'text-ink-500 hover:text-ink-600 dark:text-ink-400 dark:hover:text-ink-300',
             'transition-colors duration-150',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40',
           ].join(' ')}

@@ -14,6 +14,7 @@
 import React from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown, Check } from 'lucide-react';
+import { useFieldId } from './Fieldset';
 
 export interface SelectOption<T = string> {
   value:     T;
@@ -36,6 +37,7 @@ export interface SelectProps<T = string> {
   disabled?:  boolean;
   placeholder?: string;
   className?: string;
+  'aria-label'?: string;
 }
 
 // ── Shared style tokens ───────────────────────────────────
@@ -122,10 +124,10 @@ function SelectCustom<T extends string | number>({
         </div>
 
         {hint && !error && (
-          <p id={`${id}-hint`} className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+          <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-400 font-body">{hint}</p>
         )}
         {error && (
-          <p id={`${id}-error`} role="alert" className="text-xs text-red-500 dark:text-red-400 font-body">{error}</p>
+          <p id={`${id}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400 font-body">{error}</p>
         )}
       </div>
     </Listbox>
@@ -135,9 +137,15 @@ function SelectCustom<T extends string | number>({
 // ── Native variant (<select>) ─────────────────────────────
 
 function SelectNative<T extends string | number>({
-  value, onChange, options, label, hint, error, disabled = false, placeholder, className = '',
+  value, onChange, options, label, hint, error, disabled = false, placeholder, className = '', 'aria-label': ariaLabel,
 }: SelectProps<T>) {
-  const id = React.useId();
+  const autoId  = React.useId();
+  const fieldId = useFieldId(); // '' when not inside a Field
+  // When the component has its own visible label it uses autoId so the internal
+  // <label htmlFor> wires up to the <select>.  When there is no visible label
+  // (the consumer is using a Fieldset <Label> above), we fall back to the
+  // Field's generated id so that Label ↔ <select> connection is maintained.
+  const id = label ? autoId : (fieldId || autoId);
 
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
@@ -154,6 +162,7 @@ function SelectNative<T extends string | number>({
       <div className="relative">
         <select
           id={id}
+          aria-label={!label ? ariaLabel : undefined}
           value={String(value)}
           onChange={e => {
             const raw = e.target.value as T;
@@ -183,16 +192,16 @@ function SelectNative<T extends string | number>({
         </select>
 
         {/* Custom chevron — pointer-events-none so clicks pass through to <select> */}
-        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-ink-400 dark:text-ink-500">
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-ink-500 dark:text-ink-400">
           <ChevronDown className="h-4 w-4" />
         </span>
       </div>
 
       {hint && !error && (
-        <p id={`${id}-hint`} className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+        <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-400 font-body">{hint}</p>
       )}
       {error && (
-        <p id={`${id}-error`} role="alert" className="text-xs text-red-500 dark:text-red-400 font-body">{error}</p>
+        <p id={`${id}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400 font-body">{error}</p>
       )}
     </div>
   );

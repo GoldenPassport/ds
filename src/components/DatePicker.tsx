@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Popover, Transition } from '@headlessui/react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { CalendarDays, Clock, X } from 'lucide-react';
 import { Calendar } from './Calendar';
-import { Input } from './Input';
 import { ButtonGroup } from './ButtonGroup';
 
 // ── Helpers ────────────────────────────────────────────────
@@ -24,16 +23,12 @@ const PANEL_CLS = [
   'border border-ink-200 dark:border-ink-700',
   'rounded-2xl shadow-md dark:shadow-dark-md p-3',
   'origin-top-left focus:outline-none',
+  // v2 transitions via data attributes
+  'transition',
+  'data-[closed]:translate-y-1 data-[closed]:opacity-0',
+  'data-[enter]:duration-150 data-[enter]:ease-out',
+  'data-[leave]:duration-100 data-[leave]:ease-in',
 ].join(' ');
-
-const TRANSITION = {
-  enter:     'transition ease-out duration-150',
-  enterFrom: 'opacity-0 scale-95 translate-y-1',
-  enterTo:   'opacity-100 scale-100 translate-y-0',
-  leave:     'transition ease-in duration-100',
-  leaveFrom: 'opacity-100 scale-100',
-  leaveTo:   'opacity-0 scale-95',
-};
 
 // ── Shared clear button ────────────────────────────────────
 
@@ -43,10 +38,117 @@ function ClearBtn({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
       type="button"
       onClick={onClick}
       aria-label="Clear"
-      className="text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 transition-colors p-1 rounded-xl"
+      className="text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 transition-colors p-1 rounded-xl"
     >
       <X className="w-3.5 h-3.5" />
     </button>
+  );
+}
+
+// ── Picker trigger (input-like button) ─────────────────────
+//
+// Uses a native <button> so HUI's aria-expanded lands on a proper button
+// element — no interactive descendants, no aria-allowed-attr violations.
+
+interface PickerTriggerProps {
+  label?:       string;
+  hint?:        string;
+  error?:       string;
+  disabled?:    boolean;
+  placeholder:  string;
+  displayValue: string;
+  icon:         React.ReactNode;
+  hasClear:     boolean;
+  onClear:      (e: React.MouseEvent) => void;
+  labelId?:     string;
+  className?:   string;
+  wrapClassName?: string;
+  children?:    React.ReactNode; // panel + hidden input passed through
+}
+
+function PickerTrigger({
+  label, hint, error, disabled, placeholder, displayValue,
+  icon, hasClear, onClear, labelId, className = '', wrapClassName = '',
+  children,
+}: PickerTriggerProps) {
+  const borderErr    = 'border-red-400 dark:border-red-500';
+  const borderNormal = 'border-ink-200 dark:border-ink-600';
+
+  return (
+    <div className={`flex flex-col gap-1.5 ${wrapClassName}`}>
+      {/* Label — a <span> with an id so the button can reference it via
+          aria-labelledby without creating an invalid label/input pairing */}
+      {label && (
+        <span
+          id={labelId}
+          className="text-[13px] font-semibold font-body text-ink-900 dark:text-ink-50"
+        >
+          {label}
+        </span>
+      )}
+
+      {/* Trigger row: button + optional clear button overlay */}
+      <div className="relative">
+        <PopoverButton
+          disabled={disabled}
+          aria-labelledby={label && labelId ? labelId : undefined}
+          className={[
+            // mimic Input's inner <input> styles exactly
+            'relative w-full flex items-center py-2.5 text-sm font-body text-left',
+            'pl-9', hasClear ? 'pr-10' : 'pr-3',
+            'bg-white dark:bg-ink-700',
+            'border rounded-xl',
+            error ? borderErr : borderNormal,
+            error
+              ? 'focus:border-red-500 focus:ring-2 focus:ring-red-500/30'
+              : 'focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25',
+            'outline-none transition-all duration-150',
+            'disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
+            className,
+          ].join(' ')}
+        >
+          {/* Left icon */}
+          <span
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500 dark:text-ink-400 pointer-events-none"
+            aria-hidden="true"
+          >
+            {icon}
+          </span>
+
+          {/* Value / placeholder text */}
+          <span className={displayValue
+            ? 'text-ink-900 dark:text-ink-50'
+            : 'text-ink-500 dark:text-ink-400'
+          }>
+            {displayValue || placeholder}
+          </span>
+        </PopoverButton>
+
+        {/* Clear button — rendered as a sibling of PopoverButton (not inside it)
+            to avoid nesting interactive elements */}
+        {hasClear && !disabled && (
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center z-10">
+            <ClearBtn onClick={onClear} />
+          </span>
+        )}
+
+        {/* Panel + hidden input from the parent picker */}
+        {children}
+      </div>
+
+      {/* Hint / error — always present so layout doesn't shift */}
+      <p
+        role={error ? 'alert' : undefined}
+        className={[
+          'min-h-[1rem] text-xs font-body leading-none',
+          error
+            ? 'text-red-700 dark:text-red-400'
+            : 'text-ink-500 dark:text-ink-400',
+        ].join(' ')}
+      >
+        {error || hint || ''}
+      </p>
+    </div>
   );
 }
 
@@ -125,9 +227,11 @@ export function DatePicker({
   wrapClassName = '',
   className     = '',
 }: DatePickerProps) {
-  const [internal, setInternal] = useState<Date | null>(null);
+  const uid        = React.useId();
+  const labelId    = label ? `${uid}-label` : undefined;
   const isControlled = value !== undefined;
-  const selected     = isControlled ? value : internal;
+  const [internal, setInternal] = useState<Date | null>(null);
+  const selected   = isControlled ? value : internal;
 
   function pick(d: Date, close: () => void) {
     if (!isControlled) setInternal(d);
@@ -144,52 +248,48 @@ export function DatePicker({
   const displayValue = selected ? formatDate(selected) : '';
 
   return (
-    <Popover className={`relative flex flex-col gap-1.5 ${wrapClassName}`}>
+    <Popover>
       {({ close }) => (
-        <>
-          <Popover.Button as="div" className="focus:outline-none">
-            <Input
-              readOnly
-              label={label}
-              placeholder={placeholder}
-              hint={hint}
-              error={error}
-              disabled={disabled}
-              value={displayValue}
-              icon={<CalendarDays className="w-4 h-4" />}
-              rightAction={selected ? <ClearBtn onClick={clear} /> : undefined}
-              className={`cursor-pointer ${className}`}
-            />
-          </Popover.Button>
-
+        <PickerTrigger
+          label={label}
+          hint={hint}
+          error={error}
+          disabled={disabled}
+          placeholder={placeholder}
+          displayValue={displayValue}
+          icon={<CalendarDays className="w-4 h-4" />}
+          hasClear={!!selected}
+          onClear={clear}
+          labelId={labelId}
+          className={className}
+          wrapClassName={wrapClassName}
+        >
           {name && <input type="hidden" name={name} value={selected ? selected.toISOString().split('T')[0] : ''} />}
 
-          <Transition as={React.Fragment} {...TRANSITION}>
-            <Popover.Panel className={PANEL_CLS}>
-              <Calendar
-                variant="mini"
-                selected={selected ?? null}
-                onSelect={(d) => pick(d, close)}
-              />
-              <div className="mt-2 flex justify-between px-1">
-                <button
-                  type="button"
-                  onClick={() => { if (!isControlled) setInternal(null); onChange?.(null); close(); }}
-                  className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline transition-colors"
-                >
-                  Clear
-                </button>
-                <button
-                  type="button"
-                  onClick={() => pick(new Date(), close)}
-                  className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline transition-colors"
-                >
-                  Today
-                </button>
-              </div>
-            </Popover.Panel>
-          </Transition>
-        </>
+          <PopoverPanel transition className={PANEL_CLS}>
+            <Calendar
+              variant="mini"
+              selected={selected ?? null}
+              onSelect={(d) => pick(d, close)}
+            />
+            <div className="mt-2 flex justify-between px-1">
+              <button
+                type="button"
+                onClick={() => { if (!isControlled) setInternal(null); onChange?.(null); close(); }}
+                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => pick(new Date(), close)}
+                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
+              >
+                Today
+              </button>
+            </div>
+          </PopoverPanel>
+        </PickerTrigger>
       )}
     </Popover>
   );
@@ -222,6 +322,9 @@ export function TimePicker({
   wrapClassName = '',
   className     = '',
 }: TimePickerProps) {
+  const uid = React.useId();
+  const labelId = label ? `${uid}-label` : undefined;
+
   const parseTime = (v?: string) => {
     if (!v) return { h: 12, m: 0, set: false };
     const [h, m] = v.split(':').map(Number);
@@ -251,51 +354,47 @@ export function TimePicker({
   const displayValue = hasValue ? formatTime(h, m) : '';
 
   return (
-    <Popover className={`relative flex flex-col gap-1.5 ${wrapClassName}`}>
+    <Popover>
       {() => (
-        <>
-          <Popover.Button as="div" className="focus:outline-none">
-            <Input
-              readOnly
-              label={label}
-              placeholder={placeholder}
-              hint={hint}
-              error={error}
-              disabled={disabled}
-              value={displayValue}
-              icon={<Clock className="w-4 h-4" />}
-              rightAction={hasValue ? <ClearBtn onClick={clear} /> : undefined}
-              className={`cursor-pointer ${className}`}
-            />
-          </Popover.Button>
-
+        <PickerTrigger
+          label={label}
+          hint={hint}
+          error={error}
+          disabled={disabled}
+          placeholder={placeholder}
+          displayValue={displayValue}
+          icon={<Clock className="w-4 h-4" />}
+          hasClear={hasValue}
+          onClear={clear}
+          labelId={labelId}
+          className={className}
+          wrapClassName={wrapClassName}
+        >
           {name && <input type="hidden" name={name} value={displayValue} />}
 
-          <Transition as={React.Fragment} {...TRANSITION}>
-            <Popover.Panel className={`${PANEL_CLS} w-36 min-w-[9rem]`}>
-              <div className="flex items-start gap-2 justify-center">
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">HH</span>
-                  <ScrollColumn values={HOURS}   selected={h} onSelect={(v) => commit(v, m)} />
-                </div>
-                <span className="mt-[30px] text-sm font-body font-semibold text-ink-400">:</span>
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">MM</span>
-                  <ScrollColumn values={MINUTES} selected={m} onSelect={(v) => commit(h, v)} />
-                </div>
+          <PopoverPanel transition className={`${PANEL_CLS} w-36 min-w-[9rem]`}>
+            <div className="flex items-start gap-2 justify-center">
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-400 uppercase tracking-wider">HH</span>
+                <ScrollColumn values={HOURS}   selected={h} onSelect={(v) => commit(v, m)} />
               </div>
-              <div className="mt-2 flex justify-center">
-                <button
-                  type="button"
-                  onClick={(e) => clear(e)}
-                  className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline transition-colors"
-                >
-                  Clear
-                </button>
+              <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-400">:</span>
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-400 uppercase tracking-wider">MM</span>
+                <ScrollColumn values={MINUTES} selected={m} onSelect={(v) => commit(h, v)} />
               </div>
-            </Popover.Panel>
-          </Transition>
-        </>
+            </div>
+            <div className="mt-2 flex justify-center">
+              <button
+                type="button"
+                onClick={(e) => clear(e)}
+                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
+              >
+                Clear
+              </button>
+            </div>
+          </PopoverPanel>
+        </PickerTrigger>
       )}
     </Popover>
   );
@@ -328,6 +427,8 @@ export function DateTimePicker({
   wrapClassName = '',
   className     = '',
 }: DateTimePickerProps) {
+  const uid      = React.useId();
+  const labelId  = label ? `${uid}-label` : undefined;
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState<{ date: Date; hour: number; minute: number } | null>(null);
   const [tab, setTab] = useState<'date' | 'time'>('date');
@@ -357,105 +458,101 @@ export function DateTimePicker({
     : '';
 
   return (
-    <Popover className={`relative flex flex-col gap-1.5 ${wrapClassName}`}>
+    <Popover>
       {({ close }) => (
-        <>
-          <Popover.Button as="div" className="focus:outline-none">
-            <Input
-              readOnly
-              label={label}
-              placeholder={placeholder}
-              hint={hint}
-              error={error}
-              disabled={disabled}
-              value={displayValue}
-              icon={<CalendarDays className="w-4 h-4" />}
-              rightAction={current ? <ClearBtn onClick={clear} /> : undefined}
-              className={`cursor-pointer ${className}`}
-            />
-          </Popover.Button>
-
+        <PickerTrigger
+          label={label}
+          hint={hint}
+          error={error}
+          disabled={disabled}
+          placeholder={placeholder}
+          displayValue={displayValue}
+          icon={<CalendarDays className="w-4 h-4" />}
+          hasClear={!!current}
+          onClear={clear}
+          labelId={labelId}
+          className={className}
+          wrapClassName={wrapClassName}
+        >
           {name && <input type="hidden" name={name} value={isoValue} />}
 
-          <Transition as={React.Fragment} {...TRANSITION}>
+          {/*
+            Fixed width = w-64 calendar + p-3 panel padding on each side.
+            The content area is given the same min-height as the calendar so
+            switching to the Time tab doesn't shrink the panel.
+          */}
+          <PopoverPanel transition className={`${PANEL_CLS} w-[280px]`}>
+            {/* Tab switcher */}
+            <ButtonGroup
+              fullWidth="always"
+              size="sm"
+              value={tab}
+              onChange={(v) => setTab(v as 'date' | 'time')}
+              items={[
+                { label: 'Date', value: 'date', icon: <CalendarDays className="w-3.5 h-3.5" /> },
+                { label: 'Time', value: 'time', icon: <Clock        className="w-3.5 h-3.5" /> },
+              ]}
+            />
+
             {/*
-              Fixed width = w-64 calendar + p-3 panel padding on each side.
-              The content area is given the same min-height as the calendar so
-              switching to the Time tab doesn't shrink the panel.
+              Fixed-height content area — tall enough to hold the calendar.
+              Both tabs live inside so the panel never resizes between tabs.
             */}
-            <Popover.Panel className={`${PANEL_CLS} w-[280px]`}>
-              {/* Tab switcher */}
-              <ButtonGroup
-                fullWidth="always"
-                size="sm"
-                value={tab}
-                onChange={(v) => setTab(v as 'date' | 'time')}
-                items={[
-                  { label: 'Date', value: 'date', icon: <CalendarDays className="w-3.5 h-3.5" /> },
-                  { label: 'Time', value: 'time', icon: <Clock        className="w-3.5 h-3.5" /> },
-                ]}
-              />
+            <div className="mt-3 min-h-[272px] flex flex-col">
+              {/* Date panel */}
+              {tab === 'date' && (
+                <Calendar
+                  variant="mini"
+                  selected={current?.date ?? null}
+                  onSelect={(d) => { update({ date: d }); setTab('time'); }}
+                />
+              )}
 
-              {/*
-                Fixed-height content area — tall enough to hold the calendar.
-                Both tabs live inside so the panel never resizes between tabs.
-              */}
-              <div className="mt-3 min-h-[272px] flex flex-col">
-                {/* Date panel */}
-                {tab === 'date' && (
-                  <Calendar
-                    variant="mini"
-                    selected={current?.date ?? null}
-                    onSelect={(d) => { update({ date: d }); setTab('time'); }}
-                  />
-                )}
-
-                {/* Time panel — centred vertically in the same space */}
-                {tab === 'time' && (
-                  <div className="flex-1 flex items-center justify-center">
-                    <div className="flex items-start gap-2">
-                      <div className="flex flex-col items-center gap-1">
-                        <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">HH</span>
-                        <ScrollColumn
-                          values={HOURS}
-                          selected={current?.hour ?? 12}
-                          onSelect={(v) => update({ hour: v })}
-                        />
-                      </div>
-                      <span className="mt-[30px] text-sm font-body font-semibold text-ink-400">:</span>
-                      <div className="flex flex-col items-center gap-1">
-                        <span className="text-[10px] font-body font-semibold text-ink-400 uppercase tracking-wider">MM</span>
-                        <ScrollColumn
-                          values={MINUTES}
-                          selected={current?.minute ?? 0}
-                          onSelect={(v) => update({ minute: v })}
-                        />
-                      </div>
+              {/* Time panel — centred vertically in the same space */}
+              {tab === 'time' && (
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="flex items-start gap-2">
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-400 uppercase tracking-wider">HH</span>
+                      <ScrollColumn
+                        values={HOURS}
+                        selected={current?.hour ?? 12}
+                        onSelect={(v) => update({ hour: v })}
+                      />
+                    </div>
+                    <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-400">:</span>
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-400 uppercase tracking-wider">MM</span>
+                      <ScrollColumn
+                        values={MINUTES}
+                        selected={current?.minute ?? 0}
+                        onSelect={(v) => update({ minute: v })}
+                      />
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+            </div>
 
-              {/* Footer actions */}
-              <div className="mt-3 flex justify-between px-1">
-                <button
-                  type="button"
-                  onClick={() => { if (!isControlled) setInternal(null); onChange?.(null); close(); }}
-                  className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline transition-colors"
-                >
-                  Clear
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { const now = new Date(); update({ date: now, hour: now.getHours(), minute: now.getMinutes() }); }}
-                  className="text-xs font-body font-medium text-primary-600 dark:text-primary-400 hover:underline transition-colors"
-                >
-                  Now
-                </button>
-              </div>
-            </Popover.Panel>
-          </Transition>
-        </>
+            {/* Footer actions */}
+            <div className="mt-3 flex justify-between px-1">
+              <button
+                type="button"
+                onClick={() => { if (!isControlled) setInternal(null); onChange?.(null); close(); }}
+                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => { const now = new Date(); update({ date: now, hour: now.getHours(), minute: now.getMinutes() }); }}
+                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
+              >
+                Now
+              </button>
+            </div>
+          </PopoverPanel>
+        </PickerTrigger>
       )}
     </Popover>
   );

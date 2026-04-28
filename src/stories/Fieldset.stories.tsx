@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
   Fieldset, Legend, FieldGroup, Field,
-  Label, Description, ErrorMessage, FieldDivider,
+  Label, Description, FieldDivider,
 } from '../components/Fieldset';
 import { Input }      from '../components/Input';
 import { Select }     from '../components/Select';
@@ -234,7 +234,6 @@ export const WithErrors: Story = {
                 placeholder="Alex Morgan"
                 error={nameErr}
               />
-              {nameErr && <ErrorMessage>{nameErr}</ErrorMessage>}
             </Field>
             <Field>
               <Label required>Email address</Label>
@@ -245,10 +244,7 @@ export const WithErrors: Story = {
                 placeholder="alex@example.com"
                 error={emailErr}
               />
-              {emailErr
-                ? <ErrorMessage>{emailErr}</ErrorMessage>
-                : <Description>We'll send a confirmation link here.</Description>
-              }
+              {!emailErr && <Description>We'll send a confirmation link here.</Description>}
             </Field>
           </FieldGroup>
           <div className="mt-6 flex justify-end gap-3">
@@ -269,7 +265,7 @@ export const Disabled: Story = {
     <div className="max-w-md">
       <Fieldset disabled>
         <Legend>Billing details</Legend>
-        <Description className="mt-1 text-xs text-ink-400 dark:text-ink-500">
+        <Description className="mt-1 text-xs text-ink-500 dark:text-ink-400">
           Locked — upgrade your plan to edit billing information.
         </Description>
         <FieldGroup className="mt-4">
@@ -348,7 +344,7 @@ export const CheckboxGroup: Story = {
       <div className="max-w-sm">
         <Fieldset>
           <Legend>Permissions</Legend>
-          <Description className="mt-1 text-xs text-ink-400 dark:text-ink-500 font-body">
+          <Description className="mt-1 text-xs text-ink-500 dark:text-ink-400 font-body">
             Choose what this API key is allowed to do.
           </Description>
           <FieldGroup gap="sm" className="mt-4">

@@ -17,6 +17,9 @@ export interface BreadcrumbsProps {
   homeIcon?:     boolean;
   /** Wrap in a full-width contained bar */
   contained?:    boolean;
+  /** Accessible label for the <nav> landmark. Default: 'Breadcrumb'.
+   *  Must be unique when multiple breadcrumb navs appear on the same page. */
+  ariaLabel?:    string;
   className?:    string;
 }
 
@@ -25,14 +28,14 @@ export interface BreadcrumbsProps {
 function Separator({ type }: { type: BreadcrumbSeparator }) {
   if (type === 'slash') {
     return (
-      <span className="mx-2 text-ink-300 dark:text-ink-600 select-none" aria-hidden="true">
+      <span className="mx-2 text-ink-500 dark:text-ink-300 select-none" aria-hidden="true">
         /
       </span>
     );
   }
   return (
     <ChevronRight
-      className="mx-1.5 w-4 h-4 shrink-0 text-ink-300 dark:text-ink-600"
+      className="mx-1.5 w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300"
       aria-hidden="true"
     />
   );
@@ -45,10 +48,11 @@ export function Breadcrumbs({
   separator = 'chevron',
   homeIcon  = false,
   contained = false,
+  ariaLabel = 'Breadcrumb',
   className = '',
 }: BreadcrumbsProps) {
   const nav = (
-    <nav aria-label="Breadcrumb" className={contained ? '' : className}>
+    <nav aria-label={ariaLabel} className={contained ? '' : className}>
       <ol role="list" className="flex flex-wrap items-center">
         {items.map((item, i) => {
           const isLast = i === items.length - 1;
@@ -72,8 +76,8 @@ export function Breadcrumbs({
                   className={[
                     'text-sm font-body font-medium',
                     isLast
-                      ? 'text-ink-500 dark:text-ink-400'
-                      : 'text-ink-400 dark:text-ink-500',
+                      ? 'text-ink-900 dark:text-ink-100'
+                      : 'text-ink-600 dark:text-ink-300',
                   ].join(' ')}
                   {...(isLast ? { 'aria-current': 'page' as const } : {})}
                 >
@@ -82,7 +86,7 @@ export function Breadcrumbs({
               ) : (
                 <a
                   href={item.href}
-                  className="flex items-center gap-1.5 text-sm font-body font-medium text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 transition-colors"
+                  className="flex items-center gap-1.5 text-sm font-body font-medium text-ink-600 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-100 transition-colors"
                 >
                   {labelNode}
                 </a>

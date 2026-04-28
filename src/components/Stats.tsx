@@ -40,9 +40,9 @@ function ChangeIndicator({ change, changeType }: { change: string; changeType?: 
   const type = changeType ?? 'neutral';
 
   const colours = {
-    increase: 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20',
-    decrease: 'text-red-600  dark:text-red-400  bg-red-50  dark:bg-red-900/20',
-    neutral:  'text-ink-500  dark:text-ink-400  bg-ink-100 dark:bg-ink-700/50',
+    increase: 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20',
+    decrease: 'text-red-700  dark:text-red-400  bg-red-50  dark:bg-red-900/20',
+    neutral:  'text-ink-500  dark:text-ink-300  bg-ink-100 dark:bg-ink-700/50',
   };
 
   const Icon = type === 'increase' ? TrendingUp : type === 'decrease' ? TrendingDown : Minus;
@@ -62,11 +62,11 @@ function StatCard({ item, variant }: { item: StatItem; variant: StatsVariant }) 
     <div className="flex flex-col gap-3 h-full">
       {/* Icon + label row */}
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-medium font-body text-ink-500 dark:text-ink-400 leading-snug">
+        <p className="text-sm font-medium font-body text-ink-500 dark:text-ink-300 leading-snug">
           {item.label}
         </p>
         {item.icon && (
-          <div className="shrink-0 w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400">
+          <div className="shrink-0 w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center text-primary-800 dark:text-primary-400">
             {item.icon}
           </div>
         )}
@@ -83,7 +83,7 @@ function StatCard({ item, variant }: { item: StatItem; variant: StatsVariant }) 
           <ChangeIndicator change={item.change} changeType={item.changeType} />
         )}
         {item.description && (
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500">{item.description}</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300">{item.description}</p>
         )}
       </div>
     </div>
@@ -128,7 +128,7 @@ export function Stats({
       <dl className={[grid, className].filter(Boolean).join(' ')}>
         {items.map((item, i) => (
           <div key={i} className="flex flex-col gap-2">
-            <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-400">{item.label}</dt>
+            <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-300">{item.label}</dt>
             <dd className="flex flex-col gap-1.5">
               <span className="text-3xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-none">
                 {item.value}
@@ -136,7 +136,7 @@ export function Stats({
               {(item.change || item.description) && (
                 <div className="flex flex-wrap items-center gap-2">
                   {item.change && <ChangeIndicator change={item.change} changeType={item.changeType} />}
-                  {item.description && <span className="text-xs font-body text-ink-400 dark:text-ink-500">{item.description}</span>}
+                  {item.description && <span className="text-xs font-body text-ink-500 dark:text-ink-300">{item.description}</span>}
                 </div>
               )}
             </dd>
@@ -159,7 +159,7 @@ export function Stats({
       }`}>
         {items.map((item, i) => (
           <div key={i} className="flex flex-col gap-3 px-6 py-5">
-            <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-400">{item.label}</dt>
+            <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-300">{item.label}</dt>
             <dd className="flex flex-col gap-1.5">
               <span className="text-3xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-none">
                 {item.value}
@@ -167,7 +167,7 @@ export function Stats({
               {(item.change || item.description) && (
                 <div className="flex flex-wrap items-center gap-2">
                   {item.change && <ChangeIndicator change={item.change} changeType={item.changeType} />}
-                  {item.description && <span className="text-xs font-body text-ink-400 dark:text-ink-500">{item.description}</span>}
+                  {item.description && <span className="text-xs font-body text-ink-500 dark:text-ink-300">{item.description}</span>}
                 </div>
               )}
             </dd>

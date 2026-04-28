@@ -45,7 +45,7 @@ export const Playground: Story = {
       </div>
     ),
     children: (
-      <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+      <p className="text-sm font-body text-ink-500 dark:text-ink-300">
         This is the card body. Toggle the muted props above to grey out each section independently.
       </p>
     ),
@@ -94,7 +94,7 @@ export const WithHeader: Story = {
           </h3>
         }
       >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
           Your account is on the Pro plan. Billing renews on 1 May 2026.
         </p>
       </Card>
@@ -106,7 +106,7 @@ export const WithHeader: Story = {
               <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
                 API keys
               </h3>
-              <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400">
+              <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300">
                 Manage keys used to authenticate API requests.
               </p>
             </div>
@@ -117,7 +117,7 @@ export const WithHeader: Story = {
           </div>
         }
       >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
           You have 2 active API keys. Keys are shown once at creation.
         </p>
       </Card>
@@ -140,7 +140,7 @@ export const WithFooter: Story = {
           </div>
         }
       >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
           Update your display name and email address. Changes take effect immediately.
         </p>
       </Card>
@@ -148,7 +148,7 @@ export const WithFooter: Story = {
       <Card
         footer={
           <div className="flex items-center justify-between gap-4">
-            <p className="text-xs font-body text-ink-400 dark:text-ink-500">
+            <p className="text-xs font-body text-ink-500 dark:text-ink-300">
               Last updated 2 hours ago
             </p>
             <Button variant="ghost" size="sm">
@@ -158,7 +158,7 @@ export const WithFooter: Story = {
           </div>
         }
       >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
           Monthly usage report for April 2026. 14,302 API calls across 3 projects.
         </p>
       </Card>
@@ -188,19 +188,19 @@ export const WithHeaderAndFooter: Story = {
       >
         <div className="flex flex-col gap-3 text-sm font-body">
           <div className="flex justify-between">
-            <span className="text-ink-500 dark:text-ink-400">Plan</span>
+            <span className="text-ink-500 dark:text-ink-300">Plan</span>
             <span className="font-medium text-ink-900 dark:text-ink-50">Pro</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-ink-500 dark:text-ink-400">Billing cycle</span>
+            <span className="text-ink-500 dark:text-ink-300">Billing cycle</span>
             <span className="font-medium text-ink-900 dark:text-ink-50">Monthly</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-ink-500 dark:text-ink-400">Next invoice</span>
+            <span className="text-ink-500 dark:text-ink-300">Next invoice</span>
             <span className="font-medium text-ink-900 dark:text-ink-50">1 May 2026</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-ink-500 dark:text-ink-400">Amount</span>
+            <span className="text-ink-500 dark:text-ink-300">Amount</span>
             <span className="font-medium text-ink-900 dark:text-ink-50">$49 / month</span>
           </div>
         </div>
@@ -221,7 +221,7 @@ export const MutedSections: Story = {
       </h3>
     );
     const body = (
-      <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+      <p className="text-sm font-body text-ink-500 dark:text-ink-300">
         Body content sits here. Toggle which sections are muted to establish visual hierarchy.
       </p>
     );
@@ -234,23 +234,23 @@ export const MutedSections: Story = {
     return (
       <div className="max-w-lg flex flex-col gap-6">
         <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2">headerMuted</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">headerMuted</p>
           <Card header={header} footer={footer} headerMuted>{body}</Card>
         </div>
         <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2">bodyMuted</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">bodyMuted</p>
           <Card header={header} footer={footer} bodyMuted>{body}</Card>
         </div>
         <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2">footerMuted</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">footerMuted</p>
           <Card header={header} footer={footer} footerMuted>{body}</Card>
         </div>
         <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2">headerMuted + footerMuted</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">headerMuted + footerMuted</p>
           <Card header={header} footer={footer} headerMuted footerMuted>{body}</Card>
         </div>
         <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2">all muted</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">all muted</p>
           <Card header={header} footer={footer} headerMuted bodyMuted footerMuted>{body}</Card>
         </div>
       </div>
@@ -335,7 +335,7 @@ export const WithDividers: Story = {
                 <Avatar name={person.name} size={36} />
                 <div className="min-w-0">
                   <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{person.name}</p>
-                  <p className="text-xs font-body text-ink-500 dark:text-ink-400 truncate">{person.role}</p>
+                  <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{person.role}</p>
                 </div>
               </div>
               <Badge
@@ -360,7 +360,7 @@ export const PaddingSizes: Story = {
     <div className="max-w-lg flex flex-col gap-4">
       {(['sm', 'md', 'lg'] as const).map(size => (
         <Card key={size} padding={size}>
-          <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+          <p className="text-sm font-body text-ink-500 dark:text-ink-300">
             <span className="font-semibold text-ink-900 dark:text-ink-50">padding="{size}"</span> — body content with this padding applied.
           </p>
         </Card>

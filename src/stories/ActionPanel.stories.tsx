@@ -77,7 +77,7 @@ export const WithInput: Story = {
           title="Update your email"
           description="Change the email address you want associated with your account."
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             <Input
               type="email"
               placeholder="you@example.com"
@@ -189,7 +189,7 @@ export const AllLayouts: Story = {
           title="Update your email"
           description="Change the email address you want associated with your account."
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             <Input type="email" placeholder="you@example.com" className="max-w-xs" />
             <Button variant="primary">Save</Button>
           </div>
