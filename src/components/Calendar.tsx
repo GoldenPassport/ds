@@ -89,7 +89,7 @@ function NavButton({ onClick, label, children }: { onClick: () => void; label: s
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex items-center justify-center w-8 h-8 rounded-xl text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
+      className="flex items-center justify-center w-8 h-8 rounded-xl text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
     >
       {children}
     </button>
@@ -116,7 +116,7 @@ function MonthCell({
   return (
     <div
       className={[
-        'relative flex flex-col min-h-[7rem] p-2 border-b border-r border-ink-100 dark:border-ink-700',
+        'relative flex flex-col min-h-28 p-2 border-b border-r border-ink-100 dark:border-ink-700',
         !current                        ? 'bg-ink-50/50 dark:bg-ink-900/30'
         : shadeWeekends && isWeekend    ? 'bg-ink-100/60 dark:bg-ink-900/40'
         : '',
@@ -131,12 +131,12 @@ function MonthCell({
         className={[
           'self-start mb-1 w-7 h-7 flex items-center justify-center rounded-full text-sm font-medium font-body transition-colors',
           today
-            ? 'bg-primary-500 text-ink-900 font-bold'
+            ? 'bg-primary-700 dark:bg-primary-500 text-ink-900 font-bold'
             : selected
               ? 'bg-ink-900 dark:bg-ink-50 text-white dark:text-ink-900'
               : current
                 ? 'text-ink-900 dark:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-700'
-                : 'text-ink-400 dark:text-ink-600 hover:bg-ink-100 dark:hover:bg-ink-700',
+                : 'text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
         ].join(' ')}
       >
         {date.getDate()}
@@ -160,7 +160,7 @@ function MonthCell({
           );
         })}
         {overflow > 0 && (
-          <span className="text-xs font-body text-ink-400 dark:text-ink-500 px-1.5">
+          <span className="text-xs font-body text-ink-500 dark:text-ink-300 px-1.5">
             +{overflow} more
           </span>
         )}
@@ -198,12 +198,12 @@ function MiniCell({
         className={[
           'w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium font-body transition-colors',
           today
-            ? 'bg-primary-500 text-ink-900 font-bold'
+            ? 'bg-primary-700 dark:bg-primary-500 text-ink-900 font-bold'
             : selected
               ? 'bg-ink-900 dark:bg-ink-50 text-white dark:text-ink-900'
               : current
                 ? 'text-ink-900 dark:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-700'
-                : 'text-ink-300 dark:text-ink-600 hover:bg-ink-100 dark:hover:bg-ink-700',
+                : 'text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
         ].join(' ')}
       >
         {date.getDate()}
@@ -287,7 +287,7 @@ export function Calendar({
                 bordered ? 'border-r border-b border-ink-100 dark:border-ink-700' : '',
               ].join(' ')}
             >
-              <span className="text-xs font-medium font-body text-ink-400 dark:text-ink-500 w-8 text-center">
+              <span className="text-xs font-medium font-body text-ink-500 dark:text-ink-300 w-8 text-center">
                 {d[0]}
               </span>
             </div>
@@ -345,7 +345,7 @@ export function Calendar({
             key={d}
             className="border-b border-r border-ink-100 dark:border-ink-700 py-2 text-center"
           >
-            <span className="text-xs font-semibold font-body text-ink-500 dark:text-ink-400 uppercase tracking-wide">
+            <span className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wide">
               {d}
             </span>
           </div>

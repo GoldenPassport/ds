@@ -177,7 +177,7 @@ export function ButtonGroup<T extends string | number = string>({
                   ? 'bg-primary-500 text-ink-900 dark:bg-primary-500'
                   : variant === 'default'
                     ? 'bg-white dark:bg-ink-800 text-ink-700 dark:text-ink-200 hover:bg-ink-50 dark:hover:bg-ink-700'
-                    : 'bg-transparent text-ink-500 dark:text-ink-400 hover:bg-ink-50 dark:hover:bg-ink-700/60 hover:text-ink-900 dark:hover:text-ink-100',
+                    : 'bg-transparent text-ink-500 dark:text-ink-300 hover:bg-ink-50 dark:hover:bg-ink-700/60 hover:text-ink-900 dark:hover:text-ink-100',
               ].join(' ')}
             >
               {item.icon && <span className="shrink-0">{item.icon}</span>}
@@ -188,7 +188,7 @@ export function ButtonGroup<T extends string | number = string>({
       </div>
 
       {hint && (
-        <p className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+        <p className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>
       )}
     </div>
   );

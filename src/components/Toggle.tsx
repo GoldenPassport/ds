@@ -34,7 +34,7 @@ export function Toggle({
             </Switch.Label>
           )}
           {description && (
-            <Switch.Description className="text-xs text-ink-400 dark:text-ink-500 font-body mt-0.5">
+            <Switch.Description className="text-xs text-ink-500 dark:text-ink-300 font-body mt-0.5">
               {description}
             </Switch.Description>
           )}

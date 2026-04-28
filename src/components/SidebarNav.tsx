@@ -105,7 +105,7 @@ const tokens: Record<SidebarNavAppearance, Tokens> = {
 
 function NavBadge({ value, t }: { value: string | number; t: Tokens }) {
   return (
-    <span className={`ml-auto shrink-0 min-w-[1.25rem] px-1.5 py-0.5 text-xs font-medium font-body rounded-full text-center ${t.badge}`}>
+    <span className={`ml-auto shrink-0 min-w-5 px-1.5 py-0.5 text-xs font-medium font-body rounded-full text-center ${t.badge}`}>
       {value}
     </span>
   );

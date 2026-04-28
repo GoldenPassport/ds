@@ -114,7 +114,7 @@ export function Combobox<T extends string | number>({
               'focus:outline-none text-sm font-body max-h-60',
             ].join(' ')}>
               {filtered.length === 0 ? (
-                <div className="px-3.5 py-3 text-ink-400 dark:text-ink-500 text-sm font-body">
+                <div className="px-3.5 py-3 text-ink-500 dark:text-ink-300 text-sm font-body">
                   No results for &ldquo;{query}&rdquo;
                 </div>
               ) : (
@@ -144,7 +144,7 @@ export function Combobox<T extends string | number>({
         </div>
 
         {hint && !error && (
-          <p id={`${id}-hint`} className="text-xs text-ink-400 dark:text-ink-500 font-body">{hint}</p>
+          <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>
         )}
         {error && (
           <p id={`${id}-error`} role="alert" className="text-xs text-red-500 dark:text-red-400 font-body">{error}</p>

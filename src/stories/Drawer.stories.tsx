@@ -245,7 +245,7 @@ export const UserProfile: Story = {
           <div className="flex flex-col items-center text-center pb-6 mb-6 border-b border-ink-100 dark:border-ink-700">
             <Avatar name="Alex Johnson" size={72} />
             <h2 className="mt-3 text-lg font-bold font-display text-ink-900 dark:text-ink-50">Alex Johnson</h2>
-            <p className="text-sm font-body text-ink-500 dark:text-ink-400">Product Manager</p>
+            <p className="text-sm font-body text-ink-500 dark:text-ink-300">Product Manager</p>
             <div className="mt-2 flex gap-2">
               <Badge label="Admin"  variant="active"  />
               <Badge label="Pro"    variant="running" />
@@ -372,7 +372,7 @@ export const InContext: Story = {
         <>
           <div className="min-h-screen bg-ink-50 dark:bg-ink-900 p-8">
             <h1 className="text-2xl font-bold font-display text-ink-900 dark:text-ink-50">Projects</h1>
-            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
               Click "Open details panel" above to reveal the side drawer.
             </p>
           </div>

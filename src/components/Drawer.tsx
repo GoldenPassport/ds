@@ -125,7 +125,7 @@ export function Drawer({
                         type="button"
                         onClick={onClose}
                         aria-label="Close drawer"
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-white dark:bg-ink-700 shadow-md text-ink-500 hover:text-ink-900 dark:text-ink-400 dark:hover:text-ink-50 transition-colors"
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-white dark:bg-ink-700 shadow-md text-ink-500 hover:text-ink-900 dark:text-ink-300 dark:hover:text-ink-50 transition-colors"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -142,7 +142,7 @@ export function Drawer({
                           </HLDialog.Title>
                         )}
                         {description && (
-                          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+                          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
                             {description}
                           </p>
                         )}

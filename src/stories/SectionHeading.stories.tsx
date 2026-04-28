@@ -40,11 +40,11 @@ function PersonRow({ name, email, role, status }: typeof PEOPLE[0]) {
         <Avatar name={name} size={36} />
         <div className="min-w-0">
           <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{name}</p>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-400 truncate">{email}</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{email}</p>
         </div>
       </div>
       <div className="hidden sm:flex items-center gap-3 shrink-0">
-        <span className="text-sm font-body text-ink-500 dark:text-ink-400">{role}</span>
+        <span className="text-sm font-body text-ink-500 dark:text-ink-300">{role}</span>
         <Badge label={status.charAt(0).toUpperCase() + status.slice(1)} variant={status} />
       </div>
     </div>
@@ -219,17 +219,17 @@ export const AsH3: Story = {
               title="Personal details"
             />
             <div className="h-20 rounded-xl border-2 border-dashed border-ink-200 dark:border-ink-700 flex items-center justify-center">
-              <span className="text-xs font-body text-ink-400 dark:text-ink-500">Form fields</span>
+              <span className="text-xs font-body text-ink-500 dark:text-ink-300">Form fields</span>
             </div>
           </div>
           <div className="flex flex-col gap-3">
             <SectionHeading
               as="h3"
               title="Notifications"
-              actions={<Button variant="secondary" size="sm"><Settings className="w-3.5 h-3.5" /></Button>}
+              actions={<Button variant="secondary" size="sm" aria-label="Settings"><Settings className="w-3.5 h-3.5" /></Button>}
             />
             <div className="h-20 rounded-xl border-2 border-dashed border-ink-200 dark:border-ink-700 flex items-center justify-center">
-              <span className="text-xs font-body text-ink-400 dark:text-ink-500">Toggle settings</span>
+              <span className="text-xs font-body text-ink-500 dark:text-ink-300">Toggle settings</span>
             </div>
           </div>
         </div>
@@ -262,7 +262,7 @@ export const AllVariants: Story = {
         )},
       ].map(({ name, node }) => (
         <div key={name}>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">{name}</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">{name}</p>
           {node}
         </div>
       ))}

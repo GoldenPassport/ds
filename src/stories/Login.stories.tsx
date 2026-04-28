@@ -86,7 +86,7 @@ function SuccessScreen({ title, body, onReset }: { title: string; body: React.Re
         <ShieldCheck className="w-7 h-7 text-green-600 dark:text-green-400" />
       </div>
       <h2 className="text-lg font-bold font-display text-ink-900 dark:text-ink-50">{title}</h2>
-      <p className="text-sm font-body text-ink-500 dark:text-ink-400">{body}</p>
+      <p className="text-sm font-body text-ink-500 dark:text-ink-300">{body}</p>
       <Button variant="secondary" size="sm" className="mt-2" onClick={onReset}>Sign out</Button>
     </div>
   );
@@ -131,7 +131,7 @@ function StandardLogin() {
   return (
     <AuthShell>
       <h1 className="text-xl font-bold font-display text-ink-900 dark:text-ink-50 mb-1">Sign in</h1>
-      <p className="text-sm font-body text-ink-500 dark:text-ink-400 mb-6">
+      <p className="text-sm font-body text-ink-500 dark:text-ink-300 mb-6">
         Don't have an account?{' '}
         <a href="#" className="font-semibold text-primary-600 dark:text-primary-400 hover:underline">Sign up</a>
       </p>
@@ -243,7 +243,7 @@ function OtpLogin() {
         <h1 className="text-xl font-bold font-display text-ink-900 dark:text-ink-50 mb-1">
           Sign in without a password
         </h1>
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400 mb-6">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300 mb-6">
           We'll send a one-time code to your email or phone.
         </p>
 
@@ -285,14 +285,14 @@ function OtpLogin() {
       <AuthShell>
         <button type="button"
           onClick={() => { setStep('request'); setOtp(''); setError(''); }}
-          className="flex items-center gap-1.5 text-xs font-semibold font-body text-ink-500 hover:text-ink-700 dark:text-ink-400 dark:hover:text-ink-200 transition-colors mb-6">
+          className="flex items-center gap-1.5 text-xs font-semibold font-body text-ink-500 hover:text-ink-700 dark:text-ink-300 dark:hover:text-ink-200 transition-colors mb-6">
           <ArrowLeft className="w-3.5 h-3.5" /> Back
         </button>
 
         <h1 className="text-xl font-bold font-display text-ink-900 dark:text-ink-50 mb-1">
           Check your {destLabel}
         </h1>
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400 mb-6">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300 mb-6">
           We sent a 6-digit code to{' '}
           <span className="font-medium text-ink-700 dark:text-ink-200">{masked}</span>.
           {' '}Enter it below to sign in.
@@ -319,7 +319,7 @@ function OtpLogin() {
             <span className="text-green-600 dark:text-green-400 font-semibold">Code resent!</span>
           ) : (
             <button type="button" onClick={handleResend}
-              className="text-ink-500 hover:text-ink-700 dark:text-ink-400 dark:hover:text-ink-200 transition-colors">
+              className="text-ink-500 hover:text-ink-700 dark:text-ink-300 dark:hover:text-ink-200 transition-colors">
               Didn't get a code?{' '}
               <span className="font-semibold text-primary-600 dark:text-primary-400">Resend</span>
             </button>
@@ -387,7 +387,7 @@ function TwoFaLogin() {
           <Badge label="2FA enabled" variant="active" />
         </div>
         <h1 className="text-xl font-bold font-display text-ink-900 dark:text-ink-50 mb-1">Sign in</h1>
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400 mb-6">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300 mb-6">
           Two-factor authentication is enabled on your account.
         </p>
 
@@ -445,14 +445,14 @@ function TwoFaLogin() {
       <AuthShell>
         <button type="button"
           onClick={() => { setStep('credentials'); setOtp(''); setError(''); }}
-          className="flex items-center gap-1.5 text-xs font-semibold font-body text-ink-500 hover:text-ink-700 dark:text-ink-400 dark:hover:text-ink-200 transition-colors mb-6">
+          className="flex items-center gap-1.5 text-xs font-semibold font-body text-ink-500 hover:text-ink-700 dark:text-ink-300 dark:hover:text-ink-200 transition-colors mb-6">
           <ArrowLeft className="w-3.5 h-3.5" /> Back
         </button>
 
         <h1 className="text-xl font-bold font-display text-ink-900 dark:text-ink-50 mb-1">
           Two-factor authentication
         </h1>
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400 mb-6">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300 mb-6">
           Enter the 6-digit code from your authenticator app or the one we sent to{' '}
           <span className="font-medium text-ink-700 dark:text-ink-200">
             {email.replace(/(.{2}).+(@.+)/, '$1•••••$2')}

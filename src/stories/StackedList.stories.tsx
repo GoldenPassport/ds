@@ -235,11 +235,11 @@ export const CustomRenderItem: Story = {
               {item.leading}
               <div className="min-w-0">
                 <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{item.title}</p>
-                <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400 truncate">{item.subtitle}</p>
+                <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300 truncate">{item.subtitle}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 shrink-0">
-              <span className="hidden sm:block text-sm font-body text-ink-500 dark:text-ink-400">{item.trailing}</span>
+              <span className="hidden sm:block text-sm font-body text-ink-500 dark:text-ink-300">{item.trailing}</span>
               <Menu
                 trigger={
                   <button className="p-1 rounded text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors">

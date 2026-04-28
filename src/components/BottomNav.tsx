@@ -28,11 +28,11 @@ export interface BottomNavProps {
 const tokens = {
   light: {
     bar:            'bg-white dark:bg-ink-900 border-t border-ink-200 dark:border-ink-700',
-    itemInactive:   'text-ink-500 dark:text-ink-400',
+    itemInactive:   'text-ink-500 dark:text-ink-300',
     itemActive:     'text-primary-600 dark:text-primary-400',
     indicator:      'bg-primary-50 dark:bg-primary-900/30',
     indicatorHover: 'hover:bg-ink-100 dark:hover:bg-ink-800',
-    badge:          'bg-primary-500 text-white',
+    badge:          'bg-primary-500 text-ink-900',
   },
   dark: {
     bar:            'bg-ink-900 border-t border-ink-700',
@@ -40,7 +40,7 @@ const tokens = {
     itemActive:     'text-primary-400',
     indicator:      'bg-ink-700',
     indicatorHover: 'hover:bg-ink-800',
-    badge:          'bg-primary-500 text-white',
+    badge:          'bg-primary-500 text-ink-900',
   },
 };
 

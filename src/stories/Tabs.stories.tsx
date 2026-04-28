@@ -204,7 +204,7 @@ export const OnChangeCallback: Story = {
     const [active, setActive] = React.useState(0);
     return (
       <div className="w-full max-w-2xl space-y-4">
-        <p className="text-xs text-ink-400 dark:text-ink-500 font-body">
+        <p className="text-xs text-ink-500 dark:text-ink-300 font-body">
           Active index: <strong className="text-ink-700 dark:text-ink-300">{active}</strong>
         </p>
         <Tabs {...args} tabs={sampleTabs} onChange={setActive} />

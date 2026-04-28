@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 function Placeholder({ label, h = 'h-32' }: { label: string; h?: string }) {
   return (
     <div className={`${h} rounded-2xl border-2 border-dashed border-ink-200 dark:border-ink-700 flex items-center justify-center`}>
-      <span className="text-xs font-body text-ink-400 dark:text-ink-500">{label}</span>
+      <span className="text-xs font-body text-ink-500 dark:text-ink-300">{label}</span>
     </div>
   );
 }
@@ -67,10 +67,10 @@ export const WidthVariants: Story = {
     <div className="flex flex-col gap-6 py-4">
       {(['sm', 'md', 'lg', 'xl', '2xl', 'full'] as const).map(w => (
         <div key={w}>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2 px-2">maxWidth="{w}"</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">maxWidth="{w}"</p>
           <PageContainer maxWidth={w}>
             <div className="h-12 rounded-xl border-2 border-dashed border-primary-300 dark:border-primary-700 flex items-center justify-center">
-              <span className="text-xs font-body text-ink-400 dark:text-ink-500">{w}</span>
+              <span className="text-xs font-body text-ink-500 dark:text-ink-300">{w}</span>
             </div>
           </PageContainer>
         </div>
@@ -87,11 +87,11 @@ export const PaddingVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-10">
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-4 px-2 font-semibold">Horizontal padding (paddingX)</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-4 px-2 font-semibold">Horizontal padding (paddingX)</p>
         <div className="flex flex-col gap-4">
           {(['none', 'sm', 'md', 'lg'] as const).map(p => (
             <div key={p}>
-              <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2 px-2">paddingX="{p}"</p>
+              <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">paddingX="{p}"</p>
               <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
                 <PageContainer maxWidth="xl" paddingX={p}>
                   <Placeholder label={`paddingX="${p}"`} h="h-10" />
@@ -103,11 +103,11 @@ export const PaddingVariants: Story = {
       </div>
 
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-4 px-2 font-semibold">Vertical padding (paddingY)</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-4 px-2 font-semibold">Vertical padding (paddingY)</p>
         <div className="flex flex-col gap-4">
           {(['none', 'sm', 'md', 'lg'] as const).map(p => (
             <div key={p}>
-              <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2 px-2">paddingY="{p}"</p>
+              <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">paddingY="{p}"</p>
               <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
                 <PageContainer maxWidth="xl" paddingY={p}>
                   <Placeholder label={`paddingY="${p}"`} h="h-10" />
@@ -130,11 +130,11 @@ export const Alignment: Story = {
     <div className="flex flex-col gap-4">
       {(['left', 'center', 'right'] as const).map(a => (
         <div key={a}>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2 px-2">align="{a}"</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">align="{a}"</p>
           <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
             <PageContainer maxWidth="sm" align={a}>
               <div className="h-12 rounded-xl border-2 border-dashed border-primary-300 dark:border-primary-700 flex items-center justify-center">
-                <span className="text-xs font-body text-ink-400 dark:text-ink-500">{a}</span>
+                <span className="text-xs font-body text-ink-500 dark:text-ink-300">{a}</span>
               </div>
             </PageContainer>
           </div>
@@ -152,7 +152,7 @@ export const MobilePadding: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2 px-2">mobilePadding=true (default)</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">mobilePadding=true (default)</p>
         <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
           <PageContainer maxWidth="xl" mobilePadding={true}>
             <Placeholder label="Has padding on all screen sizes" h="h-12" />
@@ -160,7 +160,7 @@ export const MobilePadding: Story = {
         </div>
       </div>
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2 px-2">mobilePadding=false</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">mobilePadding=false</p>
         <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
           <PageContainer maxWidth="xl" mobilePadding={false}>
             <Placeholder label="No padding on mobile, padded on sm+" h="h-12" />
@@ -184,7 +184,7 @@ export const WithPageHeading: Story = {
             <h1 className="text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
               Projects
             </h1>
-            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
               All projects in your workspace.
             </p>
           </div>
@@ -221,7 +221,7 @@ export const WithBreadcrumbs: Story = {
               <h1 className="text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
                 Settings
               </h1>
-              <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+              <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
                 Manage configuration and access for this project.
               </p>
             </div>
@@ -242,13 +242,13 @@ export const FullWidth: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2 px-2">paddingX="md" (default)</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">paddingX="md" (default)</p>
         <PageContainer maxWidth="full">
           <Placeholder label="Content with responsive padding" h="h-20" />
         </PageContainer>
       </div>
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-2 px-2">paddingX="none"</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">paddingX="none"</p>
         <PageContainer maxWidth="full" paddingX="none">
           <Placeholder label="Edge-to-edge content (no padding)" h="h-20" />
         </PageContainer>
@@ -273,7 +273,7 @@ export const FullHeight: Story = {
             <h1 className="text-xl sm:text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
               Full-height container
             </h1>
-            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">
+            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
               Height locked to the viewport — scroll here, the page never scrolls.
             </p>
           </div>
@@ -290,7 +290,7 @@ export const FullHeight: Story = {
               <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
                 Card {i + 1}
               </p>
-              <p className="mt-1 text-xs font-body text-ink-400 dark:text-ink-500">
+              <p className="mt-1 text-xs font-body text-ink-500 dark:text-ink-300">
                 Scroll to see all cards — content stays inside the container.
               </p>
             </Card>
@@ -325,7 +325,7 @@ export const FullHeightResponsive: Story = {
             <h1 className="text-xl sm:text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
               Responsive page
             </h1>
-            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">
+            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
               Padding, gutter, and layout all adapt across breakpoints.
             </p>
           </div>
@@ -339,7 +339,7 @@ export const FullHeightResponsive: Story = {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {['px: none → md → lg', 'py: 24px → 32px', 'max-w: xl (80rem)', 'grid: 1 → 2 → 3 col', 'overscroll-contain', 'fixed inset-0'].map(label => (
             <Card key={label}>
-              <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-400">{label}</p>
+              <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300">{label}</p>
             </Card>
           ))}
         </div>
@@ -367,7 +367,7 @@ export const InContext: Story = {
               <h1 className="text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
                 Dashboard
               </h1>
-              <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+              <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
                 Welcome back, Leslie. Here's what's happening today.
               </p>
             </div>
@@ -381,7 +381,7 @@ export const InContext: Story = {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {['Total projects', 'Active runs', 'Team members'].map(label => (
               <Card key={label}>
-                <p className="text-xs font-body text-ink-500 dark:text-ink-400">{label}</p>
+                <p className="text-xs font-body text-ink-500 dark:text-ink-300">{label}</p>
                 <p className="mt-1 text-2xl font-bold font-display text-ink-900 dark:text-ink-50">
                   {label === 'Total projects' ? '12' : label === 'Active runs' ? '4' : '8'}
                 </p>

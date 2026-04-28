@@ -180,7 +180,7 @@ function ActivityFeed() {
           <textarea
             rows={3}
             placeholder="Add a comment…"
-            className="block w-full px-4 pt-3 pb-2 text-sm font-body bg-transparent text-ink-900 dark:text-ink-100 placeholder:text-ink-500 outline-none resize-none"
+            className="block w-full px-4 pt-3 pb-2 text-sm font-body bg-white dark:bg-ink-900 text-ink-900 dark:text-ink-100 placeholder:text-ink-500 outline-none resize-none"
           />
           <div className="flex justify-end px-3 pb-3">
             <Button size="sm" variant="primary">

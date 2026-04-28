@@ -154,11 +154,11 @@ function StatusSwatch({ name, fg, bg }: { name: string; fg: string; bg: string }
           <span className="text-[10px] font-mono text-ink-400 dark:text-ink-500">{bg}</span>
         </div>
         <div className="flex gap-3 mt-1">
-          <span className="text-[10px] font-body text-ink-500 dark:text-ink-400">
+          <span className="text-[10px] font-body text-ink-500 dark:text-ink-300">
             fg {fgRatio.toFixed(1)}:1{' '}
             <span style={{ color: gradeColour(fgGrade), fontWeight: 700 }}>{fgGrade}</span>
           </span>
-          <span className="text-[10px] font-body text-ink-500 dark:text-ink-400">
+          <span className="text-[10px] font-body text-ink-500 dark:text-ink-300">
             bg {bgRatio.toFixed(1)}:1{' '}
             <span style={{ color: gradeColour(bgGrade), fontWeight: 700 }}>{bgGrade}</span>
           </span>
@@ -211,7 +211,7 @@ export const Palette = {
       <div className="flex flex-col gap-3">
         <div>
           <h1 className="text-lg font-bold font-display text-ink-900 dark:text-ink-50">Color Palette</h1>
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
             Each swatch auto-selects the best-contrast text (white or dark) and shows its WCAG ratio and grade. Palettes are shown on both light and dark surfaces.
           </p>
         </div>
@@ -273,7 +273,7 @@ export const Palette = {
         <p className="mb-3 text-xs font-semibold font-body uppercase tracking-widest text-primary-600 dark:text-primary-400">
           Status
         </p>
-        <p className="mb-4 text-xs font-body text-ink-500 dark:text-ink-400">
+        <p className="mb-4 text-xs font-body text-ink-500 dark:text-ink-300">
           Foreground (left) and background tint (right) for each status colour.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">

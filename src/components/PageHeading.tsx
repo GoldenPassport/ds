@@ -90,7 +90,7 @@ function OverflowMenu({ items }: { items: PageHeadingAction[] }) {
   return (
     <HLMenu as="div" className="relative">
       <HLMenu.Button
-        className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 dark:text-ink-400 hover:text-ink-900 dark:hover:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus:outline-none"
+        className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus:outline-none"
         aria-label="More actions"
       >
         <MoreVertical className="w-5 h-5" aria-hidden="true" />
@@ -240,7 +240,7 @@ export function PageHeading({
               'inline-flex items-center gap-2 px-1 py-3 mr-6 text-sm font-medium font-body border-b-2 whitespace-nowrap transition-colors',
               isActive
                 ? 'border-primary-500 text-primary-800 dark:text-primary-400'
-                : 'border-transparent text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
+                : 'border-transparent text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
             ].join(' ')}
           >
             {tab.label}

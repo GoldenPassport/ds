@@ -71,7 +71,7 @@ function PickerTrigger({
   icon, hasClear, onClear, labelId, className = '', wrapClassName = '',
   children,
 }: PickerTriggerProps) {
-  const borderErr    = 'border-red-400 dark:border-red-500';
+  const borderErr    = 'border-red-500 dark:border-red-400';
   const borderNormal = 'border-ink-200 dark:border-ink-600';
 
   return (
@@ -109,7 +109,7 @@ function PickerTrigger({
         >
           {/* Left icon */}
           <span
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500 dark:text-ink-400 pointer-events-none"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500 dark:text-ink-300 pointer-events-none"
             aria-hidden="true"
           >
             {icon}
@@ -118,7 +118,7 @@ function PickerTrigger({
           {/* Value / placeholder text */}
           <span className={displayValue
             ? 'text-ink-900 dark:text-ink-50'
-            : 'text-ink-500 dark:text-ink-400'
+            : 'text-ink-500 dark:text-ink-300'
           }>
             {displayValue || placeholder}
           </span>
@@ -140,10 +140,10 @@ function PickerTrigger({
       <p
         role={error ? 'alert' : undefined}
         className={[
-          'min-h-[1rem] text-xs font-body leading-none',
+          'min-h-4 text-xs font-body leading-none',
           error
             ? 'text-red-700 dark:text-red-400'
-            : 'text-ink-500 dark:text-ink-400',
+            : 'text-ink-500 dark:text-ink-300',
         ].join(' ')}
       >
         {error || hint || ''}
@@ -372,15 +372,15 @@ export function TimePicker({
         >
           {name && <input type="hidden" name={name} value={displayValue} />}
 
-          <PopoverPanel transition className={`${PANEL_CLS} w-36 min-w-[9rem]`}>
+          <PopoverPanel transition className={`${PANEL_CLS} w-36 min-w-36`}>
             <div className="flex items-start gap-2 justify-center">
               <div className="flex flex-col items-center gap-1">
-                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-400 uppercase tracking-wider">HH</span>
+                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">HH</span>
                 <ScrollColumn values={HOURS}   selected={h} onSelect={(v) => commit(v, m)} />
               </div>
-              <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-400">:</span>
+              <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-300">:</span>
               <div className="flex flex-col items-center gap-1">
-                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-400 uppercase tracking-wider">MM</span>
+                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">MM</span>
                 <ScrollColumn values={MINUTES} selected={m} onSelect={(v) => commit(h, v)} />
               </div>
             </div>
@@ -513,16 +513,16 @@ export function DateTimePicker({
                 <div className="flex-1 flex items-center justify-center">
                   <div className="flex items-start gap-2">
                     <div className="flex flex-col items-center gap-1">
-                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-400 uppercase tracking-wider">HH</span>
+                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">HH</span>
                       <ScrollColumn
                         values={HOURS}
                         selected={current?.hour ?? 12}
                         onSelect={(v) => update({ hour: v })}
                       />
                     </div>
-                    <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-400">:</span>
+                    <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-300">:</span>
                     <div className="flex flex-col items-center gap-1">
-                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-400 uppercase tracking-wider">MM</span>
+                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">MM</span>
                       <ScrollColumn
                         values={MINUTES}
                         selected={current?.minute ?? 0}

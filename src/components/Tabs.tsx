@@ -56,7 +56,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
   underline: [
     BASE_TAB,
     'px-4 py-2.5 -mb-px border-b-2 border-transparent',
-    'text-ink-400 dark:text-ink-500',
+    'text-ink-500 dark:text-ink-300',
     'hover:text-ink-700 dark:hover:text-ink-300',
     'data-[selected]:border-primary-500 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50',
   ].join(' '),
@@ -64,7 +64,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
   pills: [
     BASE_TAB,
     'px-4 py-1.5 rounded-full',
-    'text-ink-500 dark:text-ink-400',
+    'text-ink-500 dark:text-ink-300',
     'hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200',
     'data-[selected]:bg-primary-500 data-[selected]:text-ink-900',
   ].join(' '),
@@ -72,7 +72,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
   pill: [
     BASE_TAB,
     'px-3.5 py-1.5 rounded-xl',
-    'text-ink-500 dark:text-ink-400',
+    'text-ink-500 dark:text-ink-300',
     'hover:text-ink-700 dark:hover:text-ink-200',
     'data-[selected]:bg-white dark:data-[selected]:bg-ink-800 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50 data-[selected]:shadow-sm',
   ].join(' '),
@@ -80,7 +80,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
   bar: [
     BASE_TAB,
     'flex-1 justify-center px-4 py-3 -mb-px border-b-2 border-transparent',
-    'text-ink-400 dark:text-ink-500',
+    'text-ink-500 dark:text-ink-300',
     'hover:text-ink-700 dark:hover:text-ink-300',
     'data-[selected]:border-primary-500 data-[selected]:text-ink-900 dark:data-[selected]:text-ink-50',
   ].join(' '),
@@ -93,7 +93,7 @@ const tabClass: Record<NonNullable<TabsProps['variant']>, string> = {
 const BADGE_BASE = [
   'inline-flex items-center justify-center text-[11px] font-semibold',
   'px-1.5 py-0.5 rounded-full min-w-[20px]',
-  'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-400',
+  'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300',
 ].join(' ');
 
 // ── Component ─────────────────────────────────────────────

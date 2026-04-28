@@ -50,8 +50,8 @@ export const ChevronSeparator: Story = {
   args: { items: [] },
   render: () => (
     <div className="flex flex-col gap-6">
-      <Breadcrumbs items={ITEMS} separator="chevron" />
-      <Breadcrumbs items={DEEP}  separator="chevron" />
+      <Breadcrumbs items={ITEMS} separator="chevron" ariaLabel="Breadcrumb" />
+      <Breadcrumbs items={DEEP}  separator="chevron" ariaLabel="Deep breadcrumb" />
     </div>
   ),
 };
@@ -63,8 +63,8 @@ export const SlashSeparator: Story = {
   args: { items: [] },
   render: () => (
     <div className="flex flex-col gap-6">
-      <Breadcrumbs items={ITEMS} separator="slash" />
-      <Breadcrumbs items={DEEP}  separator="slash" />
+      <Breadcrumbs items={ITEMS} separator="slash" ariaLabel="Breadcrumb" />
+      <Breadcrumbs items={DEEP}  separator="slash" ariaLabel="Deep breadcrumb" />
     </div>
   ),
 };
@@ -76,9 +76,9 @@ export const WithHomeIcon: Story = {
   args: { items: [] },
   render: () => (
     <div className="flex flex-col gap-6">
-      <Breadcrumbs items={ITEMS} homeIcon />
-      <Breadcrumbs items={ITEMS} homeIcon separator="slash" />
-      <Breadcrumbs items={DEEP}  homeIcon />
+      <Breadcrumbs items={ITEMS} homeIcon ariaLabel="Breadcrumb" />
+      <Breadcrumbs items={ITEMS} homeIcon separator="slash" ariaLabel="Breadcrumb with slash" />
+      <Breadcrumbs items={DEEP}  homeIcon ariaLabel="Deep breadcrumb" />
     </div>
   ),
 };
@@ -90,8 +90,8 @@ export const ContainedBar: Story = {
   args: { items: [] },
   render: () => (
     <div className="flex flex-col gap-6 -mx-4">
-      <Breadcrumbs items={ITEMS} contained homeIcon />
-      <Breadcrumbs items={DEEP}  contained separator="slash" />
+      <Breadcrumbs items={ITEMS} contained homeIcon ariaLabel="Breadcrumb" />
+      <Breadcrumbs items={DEEP}  contained separator="slash" ariaLabel="Deep breadcrumb" />
     </div>
   ),
 };
@@ -114,7 +114,7 @@ export const InContext: Story = {
       <h1 className="mt-2 text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
         Settings
       </h1>
-      <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+      <p className="text-sm font-body text-ink-500 dark:text-ink-300">
         Manage configuration, environment variables, and access for this project.
       </p>
     </div>

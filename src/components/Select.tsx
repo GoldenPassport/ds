@@ -124,7 +124,7 @@ function SelectCustom<T extends string | number>({
         </div>
 
         {hint && !error && (
-          <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-400 font-body">{hint}</p>
+          <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>
         )}
         {error && (
           <p id={`${id}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400 font-body">{error}</p>
@@ -192,13 +192,13 @@ function SelectNative<T extends string | number>({
         </select>
 
         {/* Custom chevron — pointer-events-none so clicks pass through to <select> */}
-        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-ink-500 dark:text-ink-400">
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-ink-500 dark:text-ink-300">
           <ChevronDown className="h-4 w-4" />
         </span>
       </div>
 
       {hint && !error && (
-        <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-400 font-body">{hint}</p>
+        <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>
       )}
       {error && (
         <p id={`${id}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400 font-body">{error}</p>

@@ -169,17 +169,17 @@ function DeploymentList({ rows }: { rows: Deployment[] }) {
         <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">
           Deployments
           {rows.length !== DEPLOYMENTS.length && (
-            <span className="ml-2 text-sm font-normal text-ink-500 dark:text-ink-400">
+            <span className="ml-2 text-sm font-normal text-ink-500 dark:text-ink-300">
               ({rows.length} of {DEPLOYMENTS.length})
             </span>
           )}
         </h2>
-        <button type="button" className="inline-flex items-center gap-1 text-sm font-body text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
+        <button type="button" className="inline-flex items-center gap-1 text-sm font-body text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
           Sort by <span className="text-xs">⇅</span>
         </button>
       </div>
       {rows.length === 0 ? (
-        <p className="py-6 text-center text-sm font-body text-ink-500 dark:text-ink-400">No deployments match your search.</p>
+        <p className="py-6 text-center text-sm font-body text-ink-500 dark:text-ink-300">No deployments match your search.</p>
       ) : (
         <StackedList
           items={rows.map((d, i) => ({ id: i, title: d.repo }))}
@@ -191,14 +191,14 @@ function DeploymentList({ rows }: { rows: Deployment[] }) {
                   <StatusDot status={d.status} />
                   <div className="min-w-0">
                     <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
-                      <span className="text-ink-500 dark:text-ink-400 font-normal">{d.org} / </span>{d.repo}
+                      <span className="text-ink-500 dark:text-ink-300 font-normal">{d.org} / </span>{d.repo}
                     </p>
-                    <p className="text-xs font-body text-ink-500 dark:text-ink-400 mt-0.5">{d.source} · {d.time}</p>
+                    <p className="text-xs font-body text-ink-500 dark:text-ink-300 mt-0.5">{d.source} · {d.time}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <Badge label={d.env} variant={d.env === 'Production' ? 'running' : 'draft'} />
-                  <ChevronRight className="w-4 h-4 text-ink-500 dark:text-ink-400" />
+                  <ChevronRight className="w-4 h-4 text-ink-500 dark:text-ink-300" />
                 </div>
               </div>
             );
@@ -216,7 +216,7 @@ function ActivityFeed({ rows }: { rows: ActivityItem[] }) {
         <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">
           Activity feed
           {rows.length !== ACTIVITY.length && (
-            <span className="ml-2 text-sm font-normal text-ink-500 dark:text-ink-400">
+            <span className="ml-2 text-sm font-normal text-ink-500 dark:text-ink-300">
               ({rows.length})
             </span>
           )}
@@ -224,7 +224,7 @@ function ActivityFeed({ rows }: { rows: ActivityItem[] }) {
         <button type="button" className="text-sm font-body text-primary-800 dark:text-primary-400 hover:underline transition-colors">View all</button>
       </div>
       {rows.length === 0 ? (
-        <p className="px-5 py-6 text-center text-sm font-body text-ink-500 dark:text-ink-400">No activity found.</p>
+        <p className="px-5 py-6 text-center text-sm font-body text-ink-500 dark:text-ink-300">No activity found.</p>
       ) : (
         <StackedList
           items={rows.map((a, i) => ({ id: i, title: a.name }))}
@@ -236,9 +236,9 @@ function ActivityFeed({ rows }: { rows: ActivityItem[] }) {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline justify-between gap-2">
                     <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{a.name}</p>
-                    <span className="text-xs font-body text-ink-500 dark:text-ink-400 shrink-0">{a.time}</span>
+                    <span className="text-xs font-body text-ink-500 dark:text-ink-300 shrink-0">{a.time}</span>
                   </div>
-                  <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-400 leading-relaxed">
+                  <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300 leading-relaxed">
                     {a.action} <span className="font-medium text-ink-700 dark:text-ink-300">{a.repo}</span>{' '}
                     (<code className="text-[11px] bg-ink-100 dark:bg-ink-700 px-1 rounded">{a.commit}</code> on <span className="font-medium">{a.branch}</span>)
                   </p>
@@ -379,9 +379,9 @@ const TRANSACTIONS: { group: string; items: Transaction[] }[] = [
 ];
 
 function DirectionIcon({ d }: { d: Transaction['direction'] }) {
-  if (d === 'in')  return <ArrowUpCircle   className="w-8 h-8 text-ink-500 dark:text-ink-400 shrink-0" />;
-  if (d === 'out') return <ArrowDownCircle className="w-8 h-8 text-ink-500 dark:text-ink-400 shrink-0" />;
-  return                  <RefreshCw       className="w-8 h-8 text-ink-500 dark:text-ink-400 shrink-0" />;
+  if (d === 'in')  return <ArrowUpCircle   className="w-8 h-8 text-ink-500 dark:text-ink-300 shrink-0" />;
+  if (d === 'out') return <ArrowDownCircle className="w-8 h-8 text-ink-500 dark:text-ink-300 shrink-0" />;
+  return                  <RefreshCw       className="w-8 h-8 text-ink-500 dark:text-ink-300 shrink-0" />;
 }
 
 function TransactionRow({ t }: { t: Transaction }) {
@@ -396,7 +396,7 @@ function TransactionRow({ t }: { t: Transaction }) {
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="text-sm font-body text-ink-700 dark:text-ink-300 truncate">{t.client}</p>
-            <p className="text-xs font-body text-ink-500 dark:text-ink-400">{t.desc}{t.tax ? ` · ${t.tax}` : ''}</p>
+            <p className="text-xs font-body text-ink-500 dark:text-ink-300">{t.desc}{t.tax ? ` · ${t.tax}` : ''}</p>
           </div>
           <button type="button" className="text-sm font-body font-medium text-primary-800 dark:text-primary-400 shrink-0">
             View
@@ -409,18 +409,18 @@ function TransactionRow({ t }: { t: Transaction }) {
         <DirectionIcon d={t.direction} />
         <div className="w-44 shrink-0">
           <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{t.amount}</p>
-          {t.tax && <p className="text-xs font-body text-ink-500 dark:text-ink-400 mt-0.5">{t.tax}</p>}
+          {t.tax && <p className="text-xs font-body text-ink-500 dark:text-ink-300 mt-0.5">{t.tax}</p>}
         </div>
         <Badge label={t.badge} variant={t.badgeVariant} />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{t.client}</p>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-400 mt-0.5">{t.desc}</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mt-0.5">{t.desc}</p>
         </div>
         <div className="text-right shrink-0">
           <button type="button" className="text-sm font-body font-medium text-primary-800 dark:text-primary-400 hover:underline">
             View transaction
           </button>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-400 mt-0.5">Invoice {t.invoice}</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mt-0.5">Invoice {t.invoice}</p>
         </div>
       </div>
     </div>
@@ -473,7 +473,7 @@ function CashflowFilterTabs() {
               'px-1 py-4 mr-6 text-sm font-medium font-body border-b-2 whitespace-nowrap transition-colors shrink-0',
               active === t.value
                 ? 'border-primary-500 text-primary-800 dark:text-primary-400'
-                : 'border-transparent text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200',
+                : 'border-transparent text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200',
             ].join(' ')}
           >
             {t.label}
@@ -508,7 +508,7 @@ function StackedDemo({ dark }: { dark?: boolean }) {
             { label: 'Expenses', href: '#' },
           ]}
           actions={
-            <button type="button" aria-label="Notifications" className="p-2 rounded-full text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors">
+            <button type="button" aria-label="Notifications" className="p-2 rounded-full text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors">
               <Bell className="w-5 h-5" aria-hidden="true" />
             </button>
           }

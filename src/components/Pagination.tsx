@@ -64,7 +64,7 @@ function PageBtn({
         'disabled:opacity-40 disabled:cursor-not-allowed',
         active
           ? 'bg-primary-500 text-ink-900'
-          : 'bg-transparent text-ink-500 dark:text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-700',
+          : 'bg-transparent text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
       ].join(' ')}
     >
       {children}
@@ -107,7 +107,7 @@ export function Pagination({
       <div className="flex items-center gap-3">
         {pageSizeOptions.length > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-[13px] text-ink-400 dark:text-ink-500 font-body whitespace-nowrap">
+            <span className="text-[13px] text-ink-500 dark:text-ink-300 font-body whitespace-nowrap">
               Rows per page
             </span>
             <select
@@ -130,7 +130,7 @@ export function Pagination({
         )}
 
         {showSummary && total > 0 && (
-          <span className="text-[13px] text-ink-400 dark:text-ink-500 font-body whitespace-nowrap">
+          <span className="text-[13px] text-ink-500 dark:text-ink-300 font-body whitespace-nowrap">
             {from}–{to} of {total.toLocaleString()}
           </span>
         )}
@@ -147,7 +147,7 @@ export function Pagination({
             <span
               key={`ellipsis-${i}`}
               aria-hidden="true"
-              className="w-8 h-8 inline-flex items-center justify-center text-[13px] text-ink-300 dark:text-ink-600 select-none"
+              className="w-8 h-8 inline-flex items-center justify-center text-[13px] text-ink-500 dark:text-ink-300 select-none"
             >
               …
             </span>

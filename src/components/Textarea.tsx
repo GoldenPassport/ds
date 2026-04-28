@@ -56,7 +56,7 @@ export function Textarea({
           className={[
             'block w-full px-3 py-2.5 text-sm font-body',
             'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
-            'placeholder:text-ink-400 dark:placeholder:text-ink-500',
+            'placeholder:text-ink-500 dark:placeholder:text-ink-400',
             'outline-none border-none',
             // hide the native OS resizer on all engines
             '[&::-webkit-resizer]:hidden',
@@ -84,12 +84,12 @@ export function Textarea({
         )}
       </div>
       {error && (
-        <p id={`${textareaId}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400 font-body">
+        <p id={`${textareaId}-error`} role="alert" className="text-xs text-red-700 dark:text-red-400 font-body">
           {error}
         </p>
       )}
       {hint && !error && (
-        <p id={`${textareaId}-hint`} className="text-xs text-ink-400 dark:text-ink-500 font-body">
+        <p id={`${textareaId}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">
           {hint}
         </p>
       )}

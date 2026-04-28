@@ -145,8 +145,8 @@ function StepBarInner({
           className={[
             'text-sm font-semibold font-body truncate transition-colors duration-150',
             active
-              ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
-              : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+              ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
+              : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
           ].join(' ')}
         >
           Step {i + 1}
@@ -158,13 +158,13 @@ function StepBarInner({
               ? 'text-ink-900 dark:text-ink-50 group-hover:text-ink-700 dark:group-hover:text-ink-200'
               : isComplete
                 ? 'text-ink-600 dark:text-ink-300 group-hover:text-ink-900 dark:group-hover:text-ink-50'
-                : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+                : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
           ].join(' ')}
         >
           {step.label}
         </p>
         {step.description && (
-          <p className="text-xs text-ink-400 dark:text-ink-500 font-body truncate">
+          <p className="text-xs text-ink-500 dark:text-ink-300 font-body truncate">
             {step.description}
           </p>
         )}
@@ -213,7 +213,7 @@ function PanelsVariant({
                     ? 'bg-primary-500 text-ink-900 group-hover:bg-primary-600'
                     : isCurrent
                       ? 'border-2 border-primary-500 text-primary-600 dark:text-primary-400 group-hover:border-primary-600 group-hover:text-primary-700 dark:group-hover:text-primary-300'
-                      : 'border-2 border-ink-300 dark:border-ink-600 text-ink-400 dark:text-ink-500 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+                      : 'border-2 border-ink-300 dark:border-ink-600 text-ink-500 dark:text-ink-300 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
                 {isComplete
@@ -229,12 +229,12 @@ function PanelsVariant({
                     ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                     : isComplete
                       ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
-                      : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+                      : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
                 {step.label}
                 {step.description && (
-                  <span className="block text-xs font-normal text-ink-400 dark:text-ink-500 truncate">
+                  <span className="block text-xs font-normal text-ink-500 dark:text-ink-300 truncate">
                     {step.description}
                   </span>
                 )}
@@ -398,13 +398,13 @@ function CirclesVariant({
                         ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                         : isComplete
                           ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
-                          : 'text-ink-400 dark:text-ink-500',
+                          : 'text-ink-500 dark:text-ink-300',
                     ].join(' ')}
                   >
                     {step.label}
                   </p>
                   {step.description && (
-                    <p className="text-[11px] text-ink-400 dark:text-ink-500 font-body">
+                    <p className="text-[11px] text-ink-500 dark:text-ink-300 font-body">
                       {step.description}
                     </p>
                   )}
@@ -559,13 +559,13 @@ function StepVerticalLabel({
             ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
             : isComplete
               ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
-              : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+              : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
         ].join(' ')}
       >
         {step.label}
       </p>
       {step.description && (
-        <p className="text-xs text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300 font-body transition-colors duration-150 mt-0.5">
+        <p className="text-xs text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300 font-body transition-colors duration-150 mt-0.5">
           {step.description}
         </p>
       )}
@@ -593,7 +593,7 @@ function MobilePanelsList({
   const bgClass = panelAppearance === 'ghost' ? 'bg-transparent' : 'bg-white dark:bg-ink-800';
 
   return (
-    <nav aria-label="Progress">
+    <nav aria-label="Progress steps">
       <ol className={['rounded-lg border border-ink-200 dark:border-ink-700 overflow-hidden', bgClass].join(' ')}>
         {steps.map((step, i) => {
           const { isComplete, isCurrent } = stepState(i, current);
@@ -609,7 +609,7 @@ function MobilePanelsList({
                     ? 'bg-primary-500 text-ink-900 group-hover:bg-primary-600'
                     : isCurrent
                       ? 'border-2 border-primary-500 text-primary-600 dark:text-primary-400 group-hover:border-primary-600 group-hover:text-primary-700 dark:group-hover:text-primary-300'
-                      : 'border-2 border-ink-300 dark:border-ink-600 text-ink-400 dark:text-ink-500 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+                      : 'border-2 border-ink-300 dark:border-ink-600 text-ink-500 dark:text-ink-300 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
                 {isComplete
@@ -624,12 +624,12 @@ function MobilePanelsList({
                     ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                     : isComplete
                       ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
-                      : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+                      : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
                 {step.label}
                 {step.description && (
-                  <span className="block text-xs font-normal text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300 transition-colors duration-150">
+                  <span className="block text-xs font-normal text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300 transition-colors duration-150">
                     {step.description}
                   </span>
                 )}
@@ -696,7 +696,7 @@ function MobileList({
   onStepClick?: (index: number) => void;
 }) {
   return (
-    <nav aria-label="Progress">
+    <nav aria-label="Progress steps">
       <ol className="space-y-1">
         {steps.map((step, i) => {
           const { isComplete, isCurrent } = stepState(i, current);
@@ -709,8 +709,8 @@ function MobileList({
                 className={[
                   'text-sm font-semibold font-body leading-snug transition-colors duration-150',
                   active
-                    ? 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
-                    : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+                    ? 'text-ink-700 dark:text-ink-200 group-hover:text-ink-900 dark:group-hover:text-ink-50'
+                    : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
                 Step {i + 1}
@@ -722,13 +722,13 @@ function MobileList({
                     ? 'text-ink-900 dark:text-ink-50 group-hover:text-ink-700 dark:group-hover:text-ink-200'
                     : isComplete
                       ? 'text-ink-600 dark:text-ink-300 group-hover:text-ink-900 dark:group-hover:text-ink-50'
-                      : 'text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
+                      : 'text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
                 {step.label}
               </p>
               {step.description && (
-                <p className="text-xs text-ink-400 dark:text-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300 font-body mt-0.5 transition-colors duration-150">
+                <p className="text-xs text-ink-500 dark:text-ink-300 group-hover:text-ink-600 dark:group-hover:text-ink-300 font-body mt-0.5 transition-colors duration-150">
                   {step.description}
                 </p>
               )}

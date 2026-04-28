@@ -172,7 +172,7 @@ function InfoPopover() {
       {open && (
         <div
           className={[
-            'absolute z-[200]',
+            'absolute z-200',
             verticalCls,
             'w-64 p-3 flex flex-col gap-2.5',
             'rounded-xl border border-ink-200 dark:border-ink-700',
@@ -186,7 +186,7 @@ function InfoPopover() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Kbd>Enter</Kbd>
-              <span className="text-xs font-body text-ink-500 dark:text-ink-400">
+              <span className="text-xs font-body text-ink-500 dark:text-ink-300">
                 AND — results must match
               </span>
             </div>
@@ -196,7 +196,7 @@ function InfoPopover() {
                 <span className="text-[10px] text-ink-400">+</span>
                 <Kbd>Enter</Kbd>
               </span>
-              <span className="text-xs font-body text-ink-500 dark:text-ink-400">
+              <span className="text-xs font-body text-ink-500 dark:text-ink-300">
                 OR — results may match
               </span>
             </div>
@@ -425,7 +425,7 @@ export function SearchSet({
                   'flex items-center justify-center w-[42px] h-[42px] rounded-xl border transition-colors',
                   activeCount > 0
                     ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-400 text-primary-600 dark:text-primary-400'
-                    : 'bg-white dark:bg-ink-700 border-ink-200 dark:border-ink-600 text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-500',
+                    : 'bg-white dark:bg-ink-700 border-ink-200 dark:border-ink-600 text-ink-400 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-500',
                 ].join(' ')}
               >
                 <SlidersHorizontal className="w-4 h-4" />
@@ -445,7 +445,7 @@ export function SearchSet({
           <div className="min-h-[24px] flex items-center gap-3">
             {/* Left: summary text */}
             {summary && (
-              <span className="shrink-0 text-xs font-body text-ink-400 dark:text-ink-500 whitespace-nowrap">
+              <span className="shrink-0 text-xs font-body text-ink-500 dark:text-ink-300 whitespace-nowrap">
                 {summary}
               </span>
             )}
@@ -460,7 +460,7 @@ export function SearchSet({
                         'text-[10px] font-bold font-body uppercase tracking-wider select-none px-0.5',
                         tag.op === 'or'
                           ? 'text-primary-500 dark:text-primary-400'
-                          : 'text-ink-400 dark:text-ink-500',
+                          : 'text-ink-500 dark:text-ink-300',
                       ].join(' ')}>
                         {tag.op}
                       </span>

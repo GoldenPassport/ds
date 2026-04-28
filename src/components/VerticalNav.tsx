@@ -44,15 +44,15 @@ interface Tokens {
 
 const tokens: Record<VerticalNavAppearance, Tokens> = {
   default: {
-    item:        'border-transparent font-medium text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+    item:        'border-transparent font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
     itemActive:  'border-primary-500 font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
-    icon:        'text-ink-300 dark:text-ink-400',
+    icon:        'text-ink-500 dark:text-ink-300',
     iconActive:  'text-primary-500',
     badge:       'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300',
-    groupLabel:  'text-ink-400',
-    childItem:   'font-medium text-ink-400 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+    groupLabel:  'text-ink-500',
+    childItem:   'font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
     childActive: 'font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
-    chevron:     'text-ink-300 dark:text-ink-400',
+    chevron:     'text-ink-500 dark:text-ink-300',
     childBorder: 'border-ink-200 dark:border-ink-700',
   },
   gray: {
@@ -85,7 +85,7 @@ const tokens: Record<VerticalNavAppearance, Tokens> = {
 
 function NavBadge({ value, t }: { value: string | number; t: Tokens }) {
   return (
-    <span className={`ml-auto shrink-0 min-w-[1.25rem] px-1.5 py-0.5 text-xs font-medium font-body rounded-full text-center ${t.badge}`}>
+    <span className={`ml-auto shrink-0 min-w-5 px-1.5 py-0.5 text-xs font-medium font-body rounded-full text-center ${t.badge}`}>
       {value}
     </span>
   );

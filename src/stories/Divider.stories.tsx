@@ -29,7 +29,7 @@ export const Playground: Story = {
   },
   render: (args) => (
     <div className="max-w-xl py-4">
-      <Divider {...args} label={<span className="text-sm text-ink-400 dark:text-ink-500 font-body">Section heading</span>} />
+      <Divider {...args} label={<span className="text-sm text-ink-500 dark:text-ink-300 font-body">Section heading</span>} />
     </div>
   ),
 };
@@ -42,9 +42,9 @@ export const Simple: Story = {
   render: () => (
     <div className="max-w-xl flex flex-col gap-8 py-4">
       <div className="flex flex-col gap-4">
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">Content above</p>
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">Content above</p>
         <Divider />
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">Content below</p>
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">Content below</p>
       </div>
     </div>
   ),
@@ -57,9 +57,9 @@ export const WithLabel: Story = {
   args: {},
   render: () => (
     <div className="max-w-xl flex flex-col gap-6 py-4">
-      <Divider label={<span className="text-sm text-ink-400 dark:text-ink-500 font-body">Or continue with</span>} />
-      <Divider label={<span className="text-sm text-ink-400 dark:text-ink-500 font-body">Section title</span>} align="left" />
-      <Divider label={<span className="text-sm text-ink-400 dark:text-ink-500 font-body">End of results</span>} align="right" />
+      <Divider label={<span className="text-sm text-ink-500 dark:text-ink-300 font-body">Or continue with</span>} />
+      <Divider label={<span className="text-sm text-ink-500 dark:text-ink-300 font-body">Section title</span>} align="left" />
+      <Divider label={<span className="text-sm text-ink-500 dark:text-ink-300 font-body">End of results</span>} align="right" />
     </div>
   ),
 };
@@ -72,16 +72,16 @@ export const Alignments: Story = {
   render: () => (
     <div className="max-w-xl flex flex-col gap-6 py-4">
       <div>
-        <p className="text-xs font-semibold font-body text-ink-400 uppercase tracking-wider mb-3">Left</p>
-        <Divider align="left" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-400">January 2026</span>} />
+        <p className="text-xs font-semibold font-body text-ink-500 uppercase tracking-wider mb-3">Left</p>
+        <Divider align="left" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
       </div>
       <div>
-        <p className="text-xs font-semibold font-body text-ink-400 uppercase tracking-wider mb-3">Center</p>
-        <Divider align="center" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-400">January 2026</span>} />
+        <p className="text-xs font-semibold font-body text-ink-500 uppercase tracking-wider mb-3">Center</p>
+        <Divider align="center" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
       </div>
       <div>
-        <p className="text-xs font-semibold font-body text-ink-400 uppercase tracking-wider mb-3">Right</p>
-        <Divider align="right" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-400">January 2026</span>} />
+        <p className="text-xs font-semibold font-body text-ink-500 uppercase tracking-wider mb-3">Right</p>
+        <Divider align="right" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
       </div>
     </div>
   ),
@@ -161,7 +161,7 @@ export const WithToolbar: Story = {
         align="left"
         label={
           <span className="flex items-center gap-1.5">
-            <span className="text-xs font-semibold font-body text-ink-500 dark:text-ink-400 mr-1">Filters</span>
+            <span className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 mr-1">Filters</span>
             <Button variant="ghost" size="sm">Status</Button>
             <Button variant="ghost" size="sm">Date</Button>
             <Button variant="ghost" size="sm">Assignee</Button>
@@ -217,7 +217,7 @@ export const InContext: Story = {
         <React.Fragment key={item.label}>
           <div className="py-5">
             <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.label}</p>
-            <p className="text-sm font-body text-ink-500 dark:text-ink-400 mt-0.5">{item.desc}</p>
+            <p className="text-sm font-body text-ink-500 dark:text-ink-300 mt-0.5">{item.desc}</p>
           </div>
           {i < arr.length - 1 && <Divider />}
         </React.Fragment>

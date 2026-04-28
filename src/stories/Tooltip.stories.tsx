@@ -132,7 +132,7 @@ export const WithRichContent: Story = {
           </span>
         }
       >
-        <button className="inline-flex items-center gap-1.5 text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-300 transition-colors cursor-pointer bg-transparent border-0">
+        <button className="inline-flex items-center gap-1.5 text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-300 transition-colors cursor-pointer bg-transparent border-0">
           <Info className="w-4 h-4" />
           <span className="text-sm font-body">About this workflow</span>
         </button>

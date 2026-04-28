@@ -390,7 +390,7 @@ export const InlineSelect: Story = {
                 { value: 'gbp', label: 'GBP' },
                 { value: 'aud', label: 'AUD' },
               ]}
-              className="border-none bg-transparent -mr-3 -my-1 pr-7 text-ink-500 dark:text-ink-400 focus:ring-0 cursor-pointer"
+              className="border-none bg-transparent -mr-3 -my-1 pr-7 text-ink-500 dark:text-ink-300 focus:ring-0 cursor-pointer"
             />
           }
           value={amount}

@@ -265,7 +265,7 @@ export const Disabled: Story = {
     <div className="max-w-md">
       <Fieldset disabled>
         <Legend>Billing details</Legend>
-        <Description className="mt-1 text-xs text-ink-500 dark:text-ink-400">
+        <Description className="mt-1 text-xs text-ink-500 dark:text-ink-300">
           Locked — upgrade your plan to edit billing information.
         </Description>
         <FieldGroup className="mt-4">
@@ -344,7 +344,7 @@ export const CheckboxGroup: Story = {
       <div className="max-w-sm">
         <Fieldset>
           <Legend>Permissions</Legend>
-          <Description className="mt-1 text-xs text-ink-500 dark:text-ink-400 font-body">
+          <Description className="mt-1 text-xs text-ink-500 dark:text-ink-300 font-body">
             Choose what this API key is allowed to do.
           </Description>
           <FieldGroup gap="sm" className="mt-4">

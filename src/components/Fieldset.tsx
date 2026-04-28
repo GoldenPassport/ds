@@ -192,7 +192,7 @@ export function Label({ required = false, className = '', children }: LabelProps
     >
       {children}
       {required && (
-        <span className="ml-0.5 text-red-500" aria-hidden="true">*</span>
+        <span className="ml-0.5 text-red-600" aria-hidden="true">*</span>
       )}
     </label>
   );
@@ -212,7 +212,7 @@ export function Description({ className = '', children }: DescriptionProps) {
   return (
     <p
       className={[
-        'text-xs font-body text-ink-400 dark:text-ink-500',
+        'text-xs font-body text-ink-500 dark:text-ink-300',
         className,
       ].join(' ')}
     >
@@ -237,7 +237,7 @@ export function ErrorMessage({ className = '', children }: ErrorMessageProps) {
     <p
       role="alert"
       className={[
-        'text-xs font-body text-red-500 dark:text-red-400',
+        'text-xs font-body text-red-600 dark:text-red-400',
         className,
       ].join(' ')}
     >

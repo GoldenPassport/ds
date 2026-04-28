@@ -44,8 +44,8 @@ const ICON_ITEMS: FlyoutMenuItem[] = [
 ];
 
 const FOOTER_ACTIONS: FlyoutMenuAction[] = [
-  { label: 'View all features', href: '#', variant: 'ghost' },
-  { label: 'Start free trial',  href: '#', variant: 'primary' },
+  { label: 'View all features', href: '#' },
+  { label: 'Start free trial',  href: '#' },
 ];
 
 const FOOTER_LINKS: FlyoutMenuAction[] = [
@@ -210,8 +210,8 @@ export const NavbarExample: Story = {
           { label: 'Notifications', href: '#', description: 'Webhooks, emails and Slack alerts', icon: <Bell  className="w-5 h-5" /> },
         ]}
         footerActions={[
-          { label: 'See all features', href: '#', variant: 'ghost' },
-          { label: 'Get started',      href: '#', variant: 'primary' },
+          { label: 'See all features', href: '#' },
+          { label: 'Get started',      href: '#' },
         ]}
       />
 
@@ -228,7 +228,7 @@ export const NavbarExample: Story = {
         items={SIMPLE_ITEMS}
       />
 
-      <a href="#" className="ml-auto text-sm font-semibold font-body text-ink-500 dark:text-ink-400 hover:text-ink-900 dark:hover:text-ink-50 transition-colors">
+      <a href="#" className="ml-auto text-sm font-semibold font-body text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 transition-colors">
         Sign in
       </a>
     </nav>

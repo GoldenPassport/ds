@@ -215,14 +215,14 @@ function SenderAvatar({ sender }: { sender: ChatSender }) {
       <img
         src={sender.avatar}
         alt={sender.name}
-        className="w-7 h-7 rounded-full object-cover flex-shrink-0"
+        className="w-7 h-7 rounded-full object-cover shrink-0"
       />
     );
   }
   return (
     <span
       aria-label={sender.name}
-      className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold font-display text-ink-900 select-none"
+      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold font-display text-ink-900 select-none"
       style={{
         background:
           'linear-gradient(135deg, var(--color-primary-400), var(--color-primary-600))',
@@ -238,7 +238,7 @@ function SenderAvatar({ sender }: { sender: ChatSender }) {
 function TypingIndicator({ label, showAvatars }: { label: string; showAvatars: boolean }) {
   return (
     <div className="flex items-end gap-2 mt-3" aria-label={label || 'Typing'} role="status">
-      {showAvatars && <div className="w-7 flex-shrink-0" aria-hidden="true" />}
+      {showAvatars && <div className="w-7 shrink-0" aria-hidden="true" />}
       <div className="flex flex-col items-start gap-1">
         <div className="flex items-center gap-1.5 bg-ink-100 dark:bg-ink-700 rounded-2xl rounded-tl-sm px-4 py-3">
           <span
@@ -255,7 +255,7 @@ function TypingIndicator({ label, showAvatars }: { label: string; showAvatars: b
           />
         </div>
         {label && (
-          <span className="text-[11px] font-body text-ink-400 dark:text-ink-500 px-1">
+          <span className="text-[11px] font-body text-ink-500 dark:text-ink-300 px-1">
             {label}
           </span>
         )}
@@ -398,7 +398,7 @@ export function Chat({
     >
       {/* ── Optional header ────────────────────────────────── */}
       {header && (
-        <div className="flex-shrink-0 border-b border-ink-100 dark:border-ink-800">
+        <div className="shrink-0 border-b border-ink-100 dark:border-ink-800">
           {header}
         </div>
       )}
@@ -407,6 +407,7 @@ export function Chat({
       <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 md:px-6 md:py-5"
+        tabIndex={0}
         role="log"
         aria-label="Chat messages"
         aria-live="polite"
@@ -425,7 +426,7 @@ export function Chat({
               {/* Centered timestamp divider */}
               {showDivider && msg.timestamp && (
                 <div className="flex justify-center my-4" aria-hidden="true">
-                  <span className="text-[11px] font-body font-medium text-ink-400 dark:text-ink-500 bg-ink-50 dark:bg-ink-800 rounded-full px-3 py-1">
+                  <span className="text-[11px] font-body font-medium text-ink-500 dark:text-ink-300 bg-ink-50 dark:bg-ink-800 rounded-full px-3 py-1">
                     {formatDivider(msg.timestamp)}
                   </span>
                 </div>
@@ -441,7 +442,7 @@ export function Chat({
               >
                 {/* Avatar slot — reserves space so bubbles stay aligned */}
                 {msg.side === 'received' && showAvatars && (
-                  <div className="w-7 flex-shrink-0 self-end mb-0.5" aria-hidden="true">
+                  <div className="w-7 shrink-0 self-end mb-0.5" aria-hidden="true">
                     {isLast && msg.sender && (
                       <SenderAvatar sender={msg.sender} />
                     )}
@@ -472,7 +473,7 @@ export function Chat({
                         {msg.sender.name}
                       </span>
                       {msg.sender.role && (
-                        <span className="text-[10px] font-body font-medium leading-none px-2 py-0.5 rounded-full bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-400">
+                        <span className="text-[10px] font-body font-medium leading-none px-2 py-0.5 rounded-full bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300">
                           {msg.sender.role}
                         </span>
                       )}
@@ -588,7 +589,7 @@ export function Chat({
                       {/* Timestamp + status first in DOM so flex-row-reverse
                           keeps them closest to the screen edge on sent messages */}
                       {isLast && msg.timestamp && (
-                        <span className="text-[11px] font-body text-ink-400 dark:text-ink-500">
+                        <span className="text-[11px] font-body text-ink-500 dark:text-ink-300">
                           {formatTime(msg.timestamp)}
                         </span>
                       )}
@@ -597,8 +598,8 @@ export function Chat({
                           className={[
                             'text-[11px] font-body',
                             msg.status === 'read'
-                              ? 'text-primary-600 dark:text-primary-400'
-                              : 'text-ink-400 dark:text-ink-500',
+                              ? 'text-ink-700 dark:text-ink-300'
+                              : 'text-ink-500 dark:text-ink-300',
                           ].join(' ')}
                         >
                           {statusLabel[msg.status]}
@@ -638,7 +639,7 @@ export function Chat({
           className={[
             'flex-1 resize-none rounded-2xl border border-ink-200 dark:border-ink-700',
             'bg-white dark:bg-ink-800 text-sm font-body text-ink-900 dark:text-ink-50',
-            'placeholder:text-ink-400 dark:placeholder:text-ink-500',
+            'placeholder:text-ink-500 dark:placeholder:text-ink-400',
             'px-4 py-2 leading-snug overflow-y-auto',
             'focus:outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-500 focus:border-transparent',
             'transition-shadow',
@@ -650,10 +651,10 @@ export function Chat({
           disabled={!canSend}
           aria-label="Send message"
           className={[
-            'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150',
+            'shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150',
             canSend
               ? 'bg-primary-500 text-ink-900 hover:bg-primary-600 active:scale-90 cursor-pointer'
-              : 'bg-ink-100 dark:bg-ink-800 text-ink-300 dark:text-ink-600 cursor-not-allowed',
+              : 'bg-ink-100 dark:bg-ink-800 text-ink-500 dark:text-ink-300 cursor-not-allowed',
           ].join(' ')}
         >
           <ArrowUp className="w-4 h-4" strokeWidth={2.5} />

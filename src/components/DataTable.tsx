@@ -153,7 +153,7 @@ export function DataTable<T extends { id: string | number }>({
                   onClick={() => handleSort(col)}
                   aria-sort={ariaSortValue}
                   className={[
-                    'px-5 py-3 text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-500 font-body',
+                    'px-5 py-3 text-[11px] font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-300 font-body',
                     alignClass[col.align ?? 'left'],
                     col.sortable ? 'cursor-pointer select-none hover:text-ink-700 dark:hover:text-ink-300 transition-colors' : '',
                   ].join(' ')}
@@ -178,7 +178,7 @@ export function DataTable<T extends { id: string | number }>({
               </tr>
             ) : visibleRows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-5 py-12 text-center text-sm text-ink-400 dark:text-ink-500 font-body">
+                <td colSpan={columns.length} className="px-5 py-12 text-center text-sm text-ink-500 dark:text-ink-300 font-body">
                   {emptyState ?? 'No data available'}
                 </td>
               </tr>

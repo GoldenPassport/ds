@@ -133,7 +133,7 @@ export const LargeDialog: Story = {
     <DialogDemo title="Workflow Settings" size="lg">
       <div className="space-y-4 text-ink-600 dark:text-ink-300 text-sm">
         <p>Configure advanced settings for this workflow. Changes take effect on the next run.</p>
-        <div className="bg-ink-50 dark:bg-ink-700 rounded-lg p-4 font-mono text-xs text-ink-500 dark:text-ink-400">
+        <div className="bg-ink-50 dark:bg-ink-700 rounded-lg p-4 font-mono text-xs text-ink-500 dark:text-ink-300">
           trigger.on("form_submit")<br />
           .filter(data =&gt; data.amount &gt; 1000)<br />
           .route("approval_queue")

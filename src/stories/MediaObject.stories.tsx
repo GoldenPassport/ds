@@ -29,7 +29,7 @@ function PlaceholderImg({ size = 48, rounded = 'rounded-full' }: { size?: number
       style={{ width: size, height: size }}
       className={`${rounded} bg-ink-200 dark:bg-ink-700 flex items-center justify-center shrink-0`}
     >
-      <ImageIcon className="w-5 h-5 text-ink-400" />
+      <ImageIcon className="w-5 h-5 text-ink-600" />
     </div>
   );
 }
@@ -38,7 +38,7 @@ function Body({ title, sub, children }: { title: string; sub?: string; children?
   return (
     <div>
       <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{title}</p>
-      {sub && <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">{sub}</p>}
+      {sub && <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">{sub}</p>}
       {children}
     </div>
   );
@@ -79,7 +79,7 @@ export const Basic: Story = {
     <div className="max-w-lg">
       <MediaObject media={<PlaceholderImg />}>
         <Body title="Michael Foster" sub="Product Manager">
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
             Use this pattern whenever you need to display a media element alongside a block of text content.
           </p>
         </Body>
@@ -97,7 +97,7 @@ export const AlignedCenter: Story = {
     <div className="max-w-lg">
       <MediaObject align="center" media={<PlaceholderImg />}>
         <Body title="Lindsay Walton" sub="Front-end Developer">
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
             The media element is vertically centered against the content block, which works well for short labels or meta text.
           </p>
         </Body>
@@ -115,7 +115,7 @@ export const AlignedBottom: Story = {
     <div className="max-w-lg">
       <MediaObject align="bottom" media={<PlaceholderImg />}>
         <Body title="Courtney Henry" sub="Designer">
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
             Aligning to the bottom anchors the media element to the baseline of the content block — useful for signature-style layouts.
           </p>
         </Body>
@@ -133,7 +133,7 @@ export const MediaRight: Story = {
     <div className="max-w-lg">
       <MediaObject side="right" align="center" media={<PlaceholderImg />}>
         <Body title="Tom Cook" sub="Director of Product">
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
             Flip the media to the right side for alternative layouts like right-aligned avatars or decorative imagery.
           </p>
         </Body>
@@ -151,7 +151,7 @@ export const Responsive: Story = {
     <div className="max-w-lg">
       <MediaObject responsive media={<PlaceholderImg size={64} rounded="rounded-xl" />} gap="lg">
         <Body title="Whitney Francis" sub="Copywriter">
-          <p className="mt-2 text-sm font-body text-ink-500 dark:text-ink-400">
+          <p className="mt-2 text-sm font-body text-ink-500 dark:text-ink-300">
             On small screens the media element stacks above the content. Resize the window to see the layout shift.
           </p>
           <div className="mt-3 flex gap-2">
@@ -320,7 +320,7 @@ export const AllAlignments: Story = {
           <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-1">align="{align}"</p>
           <MediaObject align={align} media={<PlaceholderImg size={56} rounded="rounded-xl" />} gap="lg">
             <Body title="Media object" sub={`align="${align}"`}>
-              <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+              <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
                 This is a longer block of content to demonstrate how the media element is positioned vertically relative to a multi-line text block. The alignment affects only the media side.
               </p>
             </Body>

@@ -47,7 +47,7 @@ const TABLE_COLUMNS = [
         <Avatar name={row.name} size={32} />
         <div>
           <div className="font-semibold text-ink-900 dark:text-ink-50 text-sm">{row.name}</div>
-          <div className="text-xs text-ink-400 dark:text-ink-500 mt-0.5">{row.email}</div>
+          <div className="text-xs text-ink-500 dark:text-ink-300 mt-0.5">{row.email}</div>
         </div>
       </div>
     ),

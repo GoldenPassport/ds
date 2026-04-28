@@ -136,7 +136,7 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
           )}
           {body && (
             <p className={[
-              'text-sm font-body text-ink-500 dark:text-ink-400 leading-relaxed',
+              'text-sm font-body text-ink-500 dark:text-ink-300 leading-relaxed',
               title ? 'mt-0.5' : '',
             ].join(' ')}>
               {body}
@@ -153,7 +153,7 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded',
                     i === 0
                       ? 'text-primary-800 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300'
-                      : 'text-ink-500 hover:text-ink-600 dark:text-ink-400 dark:hover:text-ink-300',
+                      : 'text-ink-500 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-300',
                   ].join(' ')}
                 >
                   {action.label}
@@ -169,7 +169,7 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
           aria-label="Dismiss notification"
           className={[
             'shrink-0 -mr-1 -mt-1 p-1 rounded',
-            'text-ink-500 hover:text-ink-600 dark:text-ink-400 dark:hover:text-ink-300',
+            'text-ink-500 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-300',
             'transition-colors duration-150',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40',
           ].join(' ')}

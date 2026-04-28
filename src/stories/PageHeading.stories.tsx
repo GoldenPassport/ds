@@ -394,7 +394,7 @@ function StickyDemo() {
       <div className="px-6 py-4 space-y-4">
         {Array.from({ length: 20 }, (_, i) => (
           <div key={i} className="h-12 rounded-xl bg-ink-200 dark:bg-ink-700 flex items-center px-4">
-            <span className="text-sm font-body text-ink-500 dark:text-ink-400">Content row {i + 1}</span>
+            <span className="text-sm font-body text-ink-500 dark:text-ink-300">Content row {i + 1}</span>
           </div>
         ))}
       </div>
@@ -474,12 +474,12 @@ function MasterDemo() {
       {/* Results list */}
       <div className="divide-y divide-ink-100 dark:divide-ink-700">
         {filtered.length === 0 ? (
-          <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-400">No workflows found</p>
+          <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-300">No workflows found</p>
         ) : filtered.map(item => (
           <div key={item.id} className="flex items-center justify-between px-4 py-3">
             <div>
               <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.name}</p>
-              <p className="text-xs font-body text-ink-500 dark:text-ink-400">{item.dept}</p>
+              <p className="text-xs font-body text-ink-500 dark:text-ink-300">{item.dept}</p>
             </div>
             <Badge
               label={item.status}
@@ -527,12 +527,12 @@ export const MasterSimple: Story = {
         />
         <div className="divide-y divide-ink-100 dark:divide-ink-700">
           {filtered.length === 0 ? (
-            <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-400">No workflows found</p>
+            <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-300">No workflows found</p>
           ) : filtered.map(item => (
             <div key={item.id} className="flex items-center justify-between px-4 py-3">
               <div>
                 <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.name}</p>
-                <p className="text-xs font-body text-ink-500 dark:text-ink-400">{item.dept}</p>
+                <p className="text-xs font-body text-ink-500 dark:text-ink-300">{item.dept}</p>
               </div>
               <Badge label={item.status} variant={item.status === 'Active' ? 'active' : item.status === 'Running' ? 'running' : item.status === 'Pending' ? 'pending' : 'draft'} size="sm" />
             </div>

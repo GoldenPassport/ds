@@ -156,7 +156,7 @@ export const InContext: Story = {
             <h1 className="text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
               Dashboard
             </h1>
-            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-400">
+            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
               Welcome back. Here's what's happening this month.
             </p>
           </div>

@@ -170,7 +170,7 @@ export const InContext: Story = {
         <h2 className="text-base font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
           Projects
         </h2>
-        <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
           All projects in your workspace.
         </p>
       </div>

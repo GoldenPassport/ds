@@ -56,7 +56,7 @@ export const Controlled: Story = {
     return (
       <div className="p-6 flex flex-col gap-4">
         <RatingGroup value={val} onChange={setVal} />
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
           Current value: <strong className="text-ink-900 dark:text-ink-50">{val}</strong>
         </p>
         <div className="flex gap-2">
@@ -85,7 +85,7 @@ export const HalfStars: Story = {
     return (
       <div className="p-6 flex flex-col gap-3">
         <RatingGroup value={val} onChange={setVal} allowHalf />
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
           Rating: <strong className="text-ink-900 dark:text-ink-50">{val}</strong>
         </p>
       </div>
@@ -137,7 +137,7 @@ export const Sizes: Story = {
     <div className="p-6 flex flex-col gap-6">
       {(['sm', 'md', 'lg'] as const).map(size => (
         <div key={size} className="flex items-center gap-4">
-          <span className="w-6 text-xs font-body text-ink-400 dark:text-ink-500 uppercase tracking-wider">{size}</span>
+          <span className="w-6 text-xs font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider">{size}</span>
           <RatingGroup defaultValue={3} size={size} />
         </div>
       ))}
@@ -152,7 +152,7 @@ export const CustomIcons: Story = {
   render: () => (
     <div className="p-6 flex flex-col gap-5">
       <div className="flex flex-col gap-1.5">
-        <p className="text-xs font-body font-medium text-ink-400 dark:text-ink-500 uppercase tracking-wider">Hearts</p>
+        <p className="text-xs font-body font-medium text-ink-500 dark:text-ink-300 uppercase tracking-wider">Hearts</p>
         <RatingGroup
           defaultValue={3}
           iconEmpty={<Heart className="w-full h-full" strokeWidth={1.5} />}
@@ -160,7 +160,7 @@ export const CustomIcons: Story = {
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <p className="text-xs font-body font-medium text-ink-400 dark:text-ink-500 uppercase tracking-wider">Flames</p>
+        <p className="text-xs font-body font-medium text-ink-500 dark:text-ink-300 uppercase tracking-wider">Flames</p>
         <RatingGroup
           defaultValue={4}
           iconEmpty={<Flame className="w-full h-full" strokeWidth={1.5} />}
@@ -168,7 +168,7 @@ export const CustomIcons: Story = {
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <p className="text-xs font-body font-medium text-ink-400 dark:text-ink-500 uppercase tracking-wider">Thumbs</p>
+        <p className="text-xs font-body font-medium text-ink-500 dark:text-ink-300 uppercase tracking-wider">Thumbs</p>
         <RatingGroup
           defaultValue={2}
           count={3}
@@ -218,7 +218,7 @@ export const AllVariants: Story = {
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-6">
-      <span className="w-32 shrink-0 text-xs font-body text-ink-400 dark:text-ink-500">{label}</span>
+      <span className="w-32 shrink-0 text-xs font-body text-ink-500 dark:text-ink-300">{label}</span>
       {children}
     </div>
   );

@@ -36,7 +36,7 @@ export const Playground: Story = {
       <div className="max-w-xs flex flex-col gap-3">
         <DatePicker {...args} value={val} onChange={setVal} />
         {val && (
-          <p className="text-xs font-body text-ink-500 dark:text-ink-400">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300">
             Selected: <strong className="text-ink-900 dark:text-ink-50">{val.toDateString()}</strong>
           </p>
         )}
@@ -98,7 +98,7 @@ export const Time_: Story = {
           onChange={setVal}
         />
         {val && (
-          <p className="text-xs font-body text-ink-500 dark:text-ink-400">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300">
             Selected: <strong className="text-ink-900 dark:text-ink-50">{val}</strong>
           </p>
         )}
@@ -132,7 +132,7 @@ export const DateTime_: Story = {
           onChange={setVal}
         />
         {val && (
-          <p className="text-xs font-body text-ink-500 dark:text-ink-400">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300">
             Selected: <strong className="text-ink-900 dark:text-ink-50">
               {val.date.toDateString()} {String(val.hour).padStart(2,'0')}:{String(val.minute).padStart(2,'0')}
             </strong>

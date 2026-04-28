@@ -114,7 +114,7 @@ export const Comparison: Story = {
     return (
       <div className="flex flex-col sm:flex-row gap-6 items-start">
         <div className="w-64 flex flex-col gap-1">
-          <p className="text-xs font-semibold font-body text-ink-400 uppercase tracking-wide mb-1">Custom</p>
+          <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wide mb-1">Custom</p>
           <Select
             variant="custom"
             label="Department"
@@ -124,7 +124,7 @@ export const Comparison: Story = {
           />
         </div>
         <div className="w-64 flex flex-col gap-1">
-          <p className="text-xs font-semibold font-body text-ink-400 uppercase tracking-wide mb-1">Native</p>
+          <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wide mb-1">Native</p>
           <Select
             variant="native"
             label="Department"

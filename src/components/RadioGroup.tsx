@@ -108,7 +108,7 @@ export function RadioGroup<T extends string | number = string>({
   );
   const hintEl = hint && (
     <p id={hintId} className={[
-      'mt-3 font-body text-ink-400 dark:text-ink-500',
+      'mt-3 font-body text-ink-500 dark:text-ink-300',
       isListVariant ? 'text-sm' : 'mt-2 text-xs',
     ].join(' ')}>{hint}</p>
   );
@@ -132,7 +132,7 @@ export function RadioGroup<T extends string | number = string>({
                   {opt.label}
                 </span>
                 {opt.description && (
-                  <span className="text-sm text-ink-500 dark:text-ink-400 font-body leading-snug">
+                  <span className="text-sm text-ink-500 dark:text-ink-300 font-body leading-snug">
                     {opt.description}
                   </span>
                 )}
@@ -221,7 +221,7 @@ export function RadioGroup<T extends string | number = string>({
                     {opt.label}
                   </span>
                   {opt.description && (
-                    <span className="text-xs text-ink-500 dark:text-ink-400 font-body leading-snug">
+                    <span className="text-xs text-ink-500 dark:text-ink-300 font-body leading-snug">
                       {opt.description}
                     </span>
                   )}
@@ -289,7 +289,7 @@ export function RadioGroup<T extends string | number = string>({
                   <CheckBadge selected={isSelected} />
                 </div>
                 {opt.description && (
-                  <span className="mt-1 text-xs text-ink-500 dark:text-ink-400 font-body leading-snug">
+                  <span className="mt-1 text-xs text-ink-500 dark:text-ink-300 font-body leading-snug">
                     {opt.description}
                   </span>
                 )}
@@ -383,7 +383,7 @@ export function RadioGroup<T extends string | number = string>({
                 {opt.label}
               </span>
               {opt.description && (
-                <span className="text-xs text-ink-500 dark:text-ink-400 font-body leading-snug">
+                <span className="text-xs text-ink-500 dark:text-ink-300 font-body leading-snug">
                   {opt.description}
                 </span>
               )}

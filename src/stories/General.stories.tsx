@@ -23,7 +23,7 @@ function TokenRow({ token, value, description }: { token: string; value: string;
   return (
     <div className="flex items-center gap-4 py-3 border-b border-ink-100 dark:border-ink-700 last:border-0">
       <code className="w-40 shrink-0 text-xs font-mono text-primary-600 dark:text-primary-400">{token}</code>
-      <code className="w-28 shrink-0 text-xs font-mono text-ink-500 dark:text-ink-400">{value}</code>
+      <code className="w-28 shrink-0 text-xs font-mono text-ink-500 dark:text-ink-300">{value}</code>
       {description && <p className="text-xs font-body text-ink-400 dark:text-ink-500">{description}</p>}
     </div>
   );
@@ -101,7 +101,7 @@ export const Tokens = {
           ].map(({ name, cls }) => (
             <div key={name} className="flex flex-col items-center gap-3">
               <div className={`w-20 h-20 rounded-2xl bg-white dark:bg-ink-700 ${cls}`} />
-              <p className="text-xs font-mono text-ink-500 dark:text-ink-400">{name}</p>
+              <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{name}</p>
             </div>
           ))}
         </div>

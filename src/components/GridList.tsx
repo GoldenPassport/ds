@@ -110,7 +110,7 @@ function DefaultCard({ item }: { item: GridListItem }) {
 
       {/* Description */}
       {item.description && (
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400 leading-relaxed line-clamp-2">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300 leading-relaxed line-clamp-2">
           {item.description}
         </p>
       )}
@@ -119,7 +119,7 @@ function DefaultCard({ item }: { item: GridListItem }) {
       {hasFooter && (
         <div className="mt-auto pt-3 border-t border-ink-100 dark:border-ink-700 flex flex-wrap items-center gap-x-4 gap-y-1.5">
           {item.meta!.map((m, i) => (
-            <div key={i} className="flex items-center gap-1.5 text-xs font-body text-ink-400 dark:text-ink-500">
+            <div key={i} className="flex items-center gap-1.5 text-xs font-body text-ink-500 dark:text-ink-300">
               {m.icon && <span className="shrink-0 text-ink-300 dark:text-ink-600" aria-hidden="true">{m.icon}</span>}
               {m.label}
             </div>

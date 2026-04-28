@@ -1,4 +1,5 @@
 import React from 'react';
+import { useFieldId } from './Fieldset';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?:         string;
@@ -24,12 +25,23 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
    */
   cornerHint?:    React.ReactNode;
   wrapClassName?: string;
+  /**
+   * When to surface HTML5 constraint-validation errors (required, pattern, type, etc.).
+   * - `'onBlur'`   — validate as soon as the field loses focus; re-validates on every
+   *                  keystroke once the field has been touched.
+   * - `'onSubmit'` — validate only when the native form `submit` fires; errors appear
+   *                  all at once and clear as the user corrects each field.
+   * - `'both'`     — combines both: shows errors on blur AND on submit attempt.
+   *
+   * When unset the component behaves as before: only the `error` prop is displayed.
+   */
+  validate?:      'onBlur' | 'onSubmit' | 'both';
 }
 
 export function Input({
   label,
   hint,
-  error,
+  error: errorProp,
   icon,
   rightAction,
   leadingAddon,
@@ -38,9 +50,49 @@ export function Input({
   wrapClassName = '',
   className     = '',
   id,
+  validate,
+  onBlur:   userOnBlur,
+  onChange: userOnChange,
   ...props
 }: InputProps) {
-  const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
+  // Fall back to the nearest <Field>'s generated id when no explicit id is given.
+  // This auto-wires Label ↔ Input when used inside the Fieldset system.
+  const fieldId = useFieldId(); // returns '' when not inside a Field
+  const autoId  = React.useId();
+  const inputId = id ?? (fieldId || undefined) ?? autoId;
+
+  // ── Constraint-validation state (only active when `validate` is set) ──
+  const [internalError, setInternalError] = React.useState('');
+  const [touched,       setTouched]       = React.useState(false);
+
+  function runValidation(el: HTMLInputElement) {
+    setInternalError(el.checkValidity() ? '' : el.validationMessage);
+  }
+
+  function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
+    if (validate === 'onBlur' || validate === 'both') {
+      setTouched(true);
+      runValidation(e.target);
+    }
+    userOnBlur?.(e);
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    // Once touched, re-validate on every keystroke so errors clear as the user types
+    if (touched && validate) runValidation(e.target);
+    userOnChange?.(e);
+  }
+
+  function handleInvalid(e: React.InvalidEvent<HTMLInputElement>) {
+    e.preventDefault(); // suppress the browser's native validation tooltip
+    if (validate === 'onSubmit' || validate === 'both') {
+      setTouched(true);
+      setInternalError(e.target.validationMessage);
+    }
+  }
+
+  // External `error` prop always wins; fall back to internal constraint message
+  const displayError = errorProp || (validate ? internalError : '');
 
   const hasLeading  = !!leadingAddon;
   const hasTrailing = !!trailingAddon;
@@ -49,10 +101,13 @@ export function Input({
   const borderErr    = 'border-red-400 dark:border-red-500';
   const borderNormal = 'border-ink-200 dark:border-ink-600';
 
+  // Use displayError everywhere `error` was referenced below
+  const error = displayError;
+
   // Addon shared style — bg slightly off-white to distinguish from input
   const addonBase = [
     'inline-flex items-center px-3 text-sm font-body select-none whitespace-nowrap',
-    'bg-ink-50 dark:bg-ink-800 text-ink-500 dark:text-ink-400',
+    'bg-ink-50 dark:bg-ink-800 text-ink-500 dark:text-ink-300',
   ].join(' ');
 
   // ── Input element ─────────────────────────────────────────
@@ -65,7 +120,7 @@ export function Input({
         icon        ? 'pl-9'  : 'pl-3',
         rightAction ? 'pr-10' : 'pr-3',
         'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
-        'placeholder:text-ink-400 dark:placeholder:text-ink-500',
+        'placeholder:text-ink-500 dark:placeholder:text-ink-400',
         'transition-all duration-150 outline-none',
         '[&::-webkit-search-cancel-button]:hidden',
         // border: always present; radius shaped by addon presence
@@ -88,7 +143,10 @@ export function Input({
         className,
       ].join(' ')}
       aria-invalid={!!error}
-      aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+      aria-describedby={error || hint ? (error ? `${inputId}-error` : `${inputId}-hint`) : undefined}
+      onBlur={handleBlur}
+      onChange={handleChange}
+      onInvalid={handleInvalid}
       {...props}
     />
   );
@@ -98,7 +156,7 @@ export function Input({
     <div className="relative flex-1 min-w-0">
       {icon && (
         <span
-          className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 dark:text-ink-500 pointer-events-none"
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500 dark:text-ink-300 pointer-events-none"
           aria-hidden="true"
         >
           {icon}
@@ -169,7 +227,7 @@ export function Input({
             {label}
           </label>
           {cornerHint && (
-            <span className="text-xs font-body text-ink-400 dark:text-ink-500 shrink-0">
+            <span className="text-xs font-body text-ink-500 dark:text-ink-300 shrink-0">
               {cornerHint}
             </span>
           )}
@@ -178,16 +236,22 @@ export function Input({
 
       {inputRow}
 
-      {error && (
-        <p id={`${inputId}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400 font-body">
-          {error}
-        </p>
-      )}
-      {hint && !error && (
-        <p id={`${inputId}-hint`} className="text-xs text-ink-400 dark:text-ink-500 font-body">
-          {hint}
-        </p>
-      )}
+      {/*
+        Always rendered so the line height is permanently reserved — errors
+        appearing or disappearing never shift other fields down the page.
+      */}
+      <p
+        id={error ? `${inputId}-error` : `${inputId}-hint`}
+        role={error ? 'alert' : undefined}
+        className={[
+          'min-h-4 text-xs font-body leading-none',
+          error
+            ? 'text-red-700 dark:text-red-400'
+            : 'text-ink-500 dark:text-ink-300',
+        ].join(' ')}
+      >
+        {error || hint || ''}
+      </p>
     </div>
   );
 }

@@ -59,7 +59,7 @@ function MonthDemo() {
     <div className="max-w-4xl">
       <Calendar variant="month" events={EVENTS} selected={selected} onSelect={setSelected} />
       {selected && (
-        <p className="mt-3 text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="mt-3 text-sm font-body text-ink-500 dark:text-ink-300">
           Selected: <span className="font-semibold text-ink-900 dark:text-ink-50">{selected.toDateString()}</span>
         </p>
       )}
@@ -93,7 +93,7 @@ function MiniDemo() {
     <div className="flex flex-col gap-3 items-start">
       <Calendar variant="mini" events={EVENTS} selected={selected} onSelect={setSelected} />
       {selected && (
-        <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
           Selected: <span className="font-semibold text-ink-900 dark:text-ink-50">{selected.toDateString()}</span>
         </p>
       )}

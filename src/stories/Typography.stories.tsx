@@ -12,7 +12,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   return (
     <div className="flex items-baseline gap-6 py-4 border-b border-ink-100 dark:border-ink-700 last:border-0">
       <div className="w-36 shrink-0">
-        <p className="text-xs font-mono text-ink-400 dark:text-ink-500">{label}</p>
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{label}</p>
       </div>
       <div className="min-w-0">{children}</div>
     </div>
@@ -22,7 +22,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="mb-1 text-xs font-semibold font-body uppercase tracking-widest text-primary-600 dark:text-primary-400">
+      <h2 className="mb-1 text-xs font-semibold font-body uppercase tracking-widest text-ink-600 dark:text-ink-300">
         {title}
       </h2>
       <div className="rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-sm overflow-hidden px-6">
@@ -43,15 +43,15 @@ export const Typefaces = {
       <Section title="Font Families">
         <Row label="font-display">
           <p className="text-2xl font-display font-bold text-ink-900 dark:text-ink-50">Plus Jakarta Sans</p>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mt-0.5">Headings, titles, display text</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mt-0.5">Headings, titles, display text</p>
         </Row>
         <Row label="font-body">
           <p className="text-2xl font-body font-normal text-ink-900 dark:text-ink-50">DM Sans</p>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mt-0.5">Body copy, labels, UI text</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mt-0.5">Body copy, labels, UI text</p>
         </Row>
         <Row label="font-mono">
           <p className="text-2xl font-mono font-normal text-ink-900 dark:text-ink-50">JetBrains Mono</p>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mt-0.5">Code, tokens, technical values</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mt-0.5">Code, tokens, technical values</p>
         </Row>
       </Section>
 
@@ -111,12 +111,12 @@ export const Typefaces = {
           </p>
         </Row>
         <Row label="Secondary">
-          <p className="text-sm font-body text-ink-500 dark:text-ink-400">
+          <p className="text-sm font-body text-ink-500 dark:text-ink-300">
             Last updated 2 hours ago · 4 active members
           </p>
         </Row>
         <Row label="Label / caption">
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 uppercase tracking-wide">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 uppercase tracking-wide">
             Active workspaces
           </p>
         </Row>
@@ -126,7 +126,7 @@ export const Typefaces = {
           </p>
         </Row>
         <Row label="Link">
-          <a href="#" className="text-sm font-body font-medium text-primary-600 dark:text-primary-400 hover:underline">
+          <a href="#" className="text-sm font-body font-medium text-primary-800 dark:text-primary-400 hover:underline">
             View all projects →
           </a>
         </Row>
