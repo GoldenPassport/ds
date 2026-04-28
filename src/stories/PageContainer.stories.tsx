@@ -15,6 +15,7 @@ const meta = {
     paddingY:      { control: { type: 'select', options: ['none', 'sm', 'md', 'lg'] } },
     align:         { control: { type: 'select', options: ['left', 'center', 'right'] } },
     mobilePadding: { control: 'boolean' },
+    fullHeight:    { control: 'boolean' },
     children:      { control: false },
     className:     { control: 'text' },
   },
@@ -33,17 +34,28 @@ function Placeholder({ label, h = 'h-32' }: { label: string; h?: string }) {
   );
 }
 
+
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
+  // fullscreen removes Storybook's canvas padding so h-dvh fills exactly the
+  // visible viewport — required for the fullHeight control to show correctly.
+  parameters: { layout: 'fullscreen' },
   args: {
     maxWidth:      'xl',
     paddingX:      'md',
-    paddingY:      'none',
+    paddingY:      'md',
     align:         'center',
     mobilePadding: true,
-    children:      <Placeholder label="Page content" h="h-48" />,
+    fullHeight:    false,
+    children:      null,
   },
+  render: (args) => (
+    <PageContainer {...args}>
+      {/* flex-1 stretches to fill the column when fullHeight=true */}
+      <Placeholder label="Page content" h={args.fullHeight ? 'flex-1' : 'h-48'} />
+    </PageContainer>
+  ),
 };
 
 // ── Width variants ────────────────────────────────────────
@@ -242,6 +254,100 @@ export const FullWidth: Story = {
         </PageContainer>
       </div>
     </div>
+  ),
+};
+
+// ── Full height ───────────────────────────────────────────
+
+export const FullHeight: Story = {
+  name: 'Full height',
+  parameters: { layout: 'fullscreen' },
+  args: { children: null },
+  render: () => (
+    <PageContainer maxWidth="xl" paddingX="md" paddingY="md" fullHeight
+      className="bg-ink-50 dark:bg-ink-900">
+      <div className="flex flex-col gap-6 flex-1">
+        {/* Header row */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
+              Full-height container
+            </h1>
+            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">
+              Height locked to the viewport — scroll here, the page never scrolls.
+            </p>
+          </div>
+          <Button variant="primary" size="sm" className="self-start sm:self-auto">
+            <Plus className="w-3.5 h-3.5" />
+            New item
+          </Button>
+        </div>
+
+        {/* Cards that overflow the viewport to prove scrolling works */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <Card key={i}>
+              <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
+                Card {i + 1}
+              </p>
+              <p className="mt-1 text-xs font-body text-ink-400 dark:text-ink-500">
+                Scroll to see all cards — content stays inside the container.
+              </p>
+            </Card>
+          ))}
+        </div>
+
+        {/* Filler stretches to fill remaining space when content is short */}
+        <Placeholder label="Remaining height (flex-1)" h="flex-1" />
+      </div>
+    </PageContainer>
+  ),
+};
+
+// ── Full height — responsive ──────────────────────────────
+
+export const FullHeightResponsive: Story = {
+  name: 'Full height — responsive',
+  parameters: {
+    layout: 'fullscreen',
+    // Cycle through these viewports in Storybook's viewport toolbar
+    // to verify the container, padding, and gutter all adapt correctly.
+    viewport: { defaultViewport: 'mobile1' },
+  },
+  args: { children: null },
+  render: () => (
+    <PageContainer maxWidth="xl" paddingX="md" paddingY="md" fullHeight
+      className="bg-ink-50 dark:bg-ink-900">
+      <div className="flex flex-col gap-4 flex-1">
+        {/* Responsive header row — stacks on mobile, inline on sm+ */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
+              Responsive page
+            </h1>
+            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-400">
+              Padding, gutter, and layout all adapt across breakpoints.
+            </p>
+          </div>
+          <Button variant="primary" size="sm" className="self-start sm:self-auto">
+            <Plus className="w-3.5 h-3.5" />
+            New item
+          </Button>
+        </div>
+
+        {/* Responsive grid — 1 col → 2 col → 3 col */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {['px: none → md → lg', 'py: 24px → 32px', 'max-w: xl (80rem)', 'grid: 1 → 2 → 3 col', 'overscroll-contain', 'fixed inset-0'].map(label => (
+            <Card key={label}>
+              <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-400">{label}</p>
+            </Card>
+          ))}
+        </div>
+
+        {/* Filler that stretches to fill remaining height */}
+        <Placeholder label="Remaining height (flex-1)" h="flex-1" />
+      </div>
+    </PageContainer>
   ),
 };
 

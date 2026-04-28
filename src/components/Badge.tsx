@@ -1,8 +1,14 @@
+import type { ReactNode } from 'react';
+
 // ── Types ─────────────────────────────────────────────────
 
 export type BadgeVariant =
+  // Status variants
   | 'active' | 'running' | 'pending' | 'draft'
-  | 'failed' | 'ai' | 'neutral' | 'warning';
+  | 'failed' | 'ai' | 'neutral' | 'warning'
+  // Sentiment variants — used for chat message sentiment tags and CX analytics
+  | 'happy' | 'satisfied' | 'confused'
+  | 'frustrated' | 'angry' | 'sad' | 'urgent';
 
 export interface BadgeProps {
   label:      string;
@@ -13,8 +19,15 @@ export interface BadgeProps {
   shape?:     'pill' | 'rounded';
   /** Adds a ring border around the badge */
   outlined?:  boolean;
-  /** Show or hide the leading status dot — defaults to the variant's built-in dot */
+  /** Show or hide the leading status dot — defaults to the variant's built-in dot.
+   *  When `icon` is provided the dot is hidden by default. */
   dot?:       boolean;
+  /**
+   * Optional leading icon rendered before the label (e.g. an emoji or a small
+   * SVG element). When provided the status dot is hidden unless `dot` is
+   * explicitly set to `true`.
+   */
+  icon?:      ReactNode;
   /** Renders a remove (×) button; call this handler on click */
   onRemove?:  () => void;
   className?: string;
@@ -32,6 +45,7 @@ interface ColourCfg {
 }
 
 const cfg: Record<BadgeVariant, ColourCfg> = {
+  // ── Status ───────────────────────────────────────────────
   active:  {
     text:       'text-green-700 dark:text-green-400',
     flatBg:     'bg-green-100 dark:bg-green-900/40',
@@ -96,6 +110,64 @@ const cfg: Record<BadgeVariant, ColourCfg> = {
     dot:        'bg-ink-400',
     hasDot:     false,
   },
+
+  // ── Sentiment ─────────────────────────────────────────────
+  happy: {
+    text:       'text-green-700 dark:text-green-400',
+    flatBg:     'bg-green-100 dark:bg-green-900/40',
+    outlinedBg: 'bg-green-50 dark:bg-green-900/20',
+    ring:       'ring-green-600/20 dark:ring-green-500/30',
+    dot:        'bg-green-500 dark:bg-green-400',
+    hasDot:     false,
+  },
+  satisfied: {
+    text:       'text-sky-700 dark:text-sky-400',
+    flatBg:     'bg-sky-100 dark:bg-sky-900/40',
+    outlinedBg: 'bg-sky-50 dark:bg-sky-900/20',
+    ring:       'ring-sky-600/20 dark:ring-sky-500/30',
+    dot:        'bg-sky-500 dark:bg-sky-400',
+    hasDot:     false,
+  },
+  confused: {
+    text:       'text-yellow-700 dark:text-yellow-400',
+    flatBg:     'bg-yellow-100 dark:bg-yellow-900/40',
+    outlinedBg: 'bg-yellow-50 dark:bg-yellow-900/20',
+    ring:       'ring-yellow-600/20 dark:ring-yellow-500/30',
+    dot:        'bg-yellow-500 dark:bg-yellow-400',
+    hasDot:     false,
+  },
+  frustrated: {
+    text:       'text-orange-700 dark:text-orange-400',
+    flatBg:     'bg-orange-100 dark:bg-orange-900/40',
+    outlinedBg: 'bg-orange-50 dark:bg-orange-900/20',
+    ring:       'ring-orange-600/20 dark:ring-orange-500/30',
+    dot:        'bg-orange-500 dark:bg-orange-400',
+    hasDot:     false,
+  },
+  angry: {
+    text:       'text-red-700 dark:text-red-400',
+    flatBg:     'bg-red-100 dark:bg-red-900/40',
+    outlinedBg: 'bg-red-50 dark:bg-red-900/20',
+    ring:       'ring-red-600/20 dark:ring-red-500/30',
+    dot:        'bg-red-500 dark:bg-red-400',
+    hasDot:     false,
+  },
+  sad: {
+    text:       'text-blue-600 dark:text-blue-400',
+    flatBg:     'bg-blue-100 dark:bg-blue-900/40',
+    outlinedBg: 'bg-blue-50 dark:bg-blue-900/20',
+    ring:       'ring-blue-600/20 dark:ring-blue-500/30',
+    dot:        'bg-blue-400 dark:bg-blue-400',
+    hasDot:     false,
+  },
+  urgent: {
+    text:       'text-red-800 dark:text-red-300',
+    flatBg:     'bg-red-200 dark:bg-red-900/60',
+    outlinedBg: 'bg-red-100 dark:bg-red-900/30',
+    ring:       'ring-red-700/30 dark:ring-red-400/30',
+    dot:        'bg-red-700 dark:bg-red-400',
+    hasDot:     false,
+  },
 };
 
 // ── Size tokens ───────────────────────────────────────────
@@ -115,13 +187,15 @@ export function Badge({
   shape     = 'pill',
   outlined  = false,
   dot,
+  icon,
   onRemove,
   className = '',
 }: BadgeProps) {
   const c   = cfg[variant];
   const sz  = sizes[size];
 
-  const showDot = dot !== undefined ? dot : c.hasDot;
+  // Dot is hidden when an icon is provided, unless dot is explicitly forced on.
+  const showDot = dot !== undefined ? dot : (c.hasDot && !icon);
   const bgClass = outlined ? c.outlinedBg : c.flatBg;
   const radius  = shape === 'pill' ? 'rounded-full' : 'rounded-md';
 
@@ -139,6 +213,10 @@ export function Badge({
     >
       {showDot && (
         <span className={`shrink-0 rounded-full ${sz.dot} ${c.dot}`} />
+      )}
+
+      {icon && !showDot && (
+        <span className="shrink-0 leading-none" aria-hidden="true">{icon}</span>
       )}
 
       {label}

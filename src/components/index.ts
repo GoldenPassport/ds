@@ -15,14 +15,17 @@ export { SectionHeading } from './SectionHeading';
 export { Stats }          from './Stats';
 export { Calendar }       from './Calendar';
 export { Alert }       from './Alert';
+export { ErrorPage }   from './ErrorPage';
 export { Divider }     from './Divider';
 export { Button }      from './Button';
+export { Banner }      from './Banner';
 export { Badge }       from './Badge';
 export { Avatar }      from './Avatar';
 export { Input }       from './Input';
 export { SearchSet }  from './SearchSet';
 export { Textarea }     from './Textarea';
 export { Checkbox }     from './Checkbox';
+export { OtpInput }     from './OtpInput';
 export { ButtonGroup }  from './ButtonGroup';
 export { RadioGroup }   from './RadioGroup';
 export {
@@ -66,6 +69,7 @@ export { FabMenu }    from './FabMenu';
 export { FlyoutMenu, FlyoutTrigger } from './FlyoutMenu';
 export { Carousel }   from './Carousel';
 export { BottomNav }  from './BottomNav';
+export { Chat }       from './Chat';
 
 // Types
 export type { ActionPanelProps, ActionPanelVariant, ActionPanelLayout }  from './ActionPanel';
@@ -84,14 +88,17 @@ export type { SectionHeadingProps, SectionHeadingTab }                          
 export type { StatsProps, StatItem, StatsVariant }                                                        from './Stats';
 export type { CalendarProps, CalendarEvent, CalendarEventColor, CalendarVariant }                          from './Calendar';
 export type { AlertProps, AlertVariant, AlertAppearance, AlertAction } from './Alert';
+export type { ErrorPageProps, ErrorPageVariant, ErrorPageAction }       from './ErrorPage';
 export type { DividerProps, DividerOrientation, DividerAlign }         from './Divider';
 export type { ButtonProps, ButtonVariant, ButtonSize, ButtonRadius }         from './Button';
+export type { BannerProps, BannerVariant, BannerAction }                    from './Banner';
 export type { BadgeProps, BadgeVariant }                                    from './Badge';
 export type { AvatarProps }                                                 from './Avatar';
 export type { InputProps }                                                  from './Input';
 export type { SearchSetProps, SearchSetTag, SearchSetFilterDef, SearchSetFilterOption, SearchSetFilterValues } from './SearchSet';
 export type { TextareaProps }                                               from './Textarea';
 export type { CheckboxProps }                                               from './Checkbox';
+export type { OtpInputProps, OtpInputSize }                                 from './OtpInput';
 export type { ButtonGroupProps, ButtonGroupItem }                           from './ButtonGroup';
 export type { RadioGroupProps, RadioGroupOption, RadioGroupVariant }        from './RadioGroup';
 export type {
@@ -124,6 +131,7 @@ export type { FabMenuProps, FabMenuItem, FabMenuVariant, FabMenuColor, FabMenuPo
 export type { FlyoutMenuProps, FlyoutMenuItem, FlyoutMenuAction, FlyoutMenuVariant, FlyoutTriggerProps } from './FlyoutMenu';
 export type { CarouselProps, CarouselItem, CarouselVariant } from './Carousel';
 export type { BottomNavProps, BottomNavItem, BottomNavAppearance } from './BottomNav';
+export type { ChatProps, ChatMessage, ChatMessageSide, ChatMessageStatus, ChatMessageSentiment, ChatSender } from './Chat';
 export type {
   NotificationItem,
   NotificationAction,
