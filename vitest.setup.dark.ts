@@ -1,14 +1,25 @@
 /**
  * Vitest setup for the Dark-theme project.
  *
- * @storybook/addon-vitest (≥ 10.3) applies preview annotations automatically,
- * so setProjectAnnotations is no longer needed here.
+ * Two-layer approach so dark mode is applied regardless of execution order:
  *
- * We still toggle .dark on <html> directly so CSS custom properties resolved
- * at paint time (e.g. --link-primary via oklch) always pick up the dark
- * variant, regardless of when the withThemeByClassName decorator runs.
+ * 1. setProjectAnnotations globals: { theme: 'Dark' }
+ *    → tells withThemeByClassName to apply the 'dark' class via the decorator.
+ *    We intentionally omit the preview import — @storybook/addon-vitest ≥ 10.3
+ *    provisions preview annotations automatically, and passing them here too
+ *    would trigger a conflict warning.
+ *
+ * 2. beforeEach / afterEach DOM manipulation
+ *    → directly toggles .dark on <html> as a fallback so CSS custom properties
+ *      resolved at paint time (e.g. oklch dark tokens) always pick up the dark
+ *      variant even before the decorator runs.
  */
-import { beforeEach, afterEach } from 'vitest';
+import { setProjectAnnotations } from '@storybook/react';
+import { beforeAll, beforeEach, afterEach } from 'vitest';
+
+// Pass only the globals override — not the preview (plugin handles that).
+const annotations = setProjectAnnotations([{ globals: { theme: 'Dark' } }]);
+beforeAll(annotations.beforeAll);
 
 beforeEach(() => {
   document.documentElement.classList.add('dark');
