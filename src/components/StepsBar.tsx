@@ -90,7 +90,7 @@ function BarVariant({
             <li
               key={i}
               style={minStepWidth ? { minWidth: minStepWidth } : undefined}
-              className="group flex-1 flex flex-col min-w-0 cursor-pointer"
+              className={['group flex-1 flex flex-col min-w-0', onStepClick ? 'cursor-pointer' : ''].join(' ')}
             >
               {onStepClick ? (
                 <button
@@ -612,7 +612,7 @@ function MobilePanelsList({
           const isLast = i === steps.length - 1;
 
           const rowInner = (
-            <div className="flex items-center gap-3 px-4 py-3 w-full cursor-pointer">
+            <div className={['flex items-center gap-3 px-4 py-3 w-full', onStepClick ? 'cursor-pointer' : ''].join(' ')}>
               <span
                 className={[
                   'shrink-0 flex items-center justify-center w-9 h-9 rounded-full',
@@ -753,7 +753,8 @@ function MobileList({
             <li
               key={i}
               className={[
-                'group border-l-4 rounded-r-md transition-colors duration-150 cursor-pointer',
+                'group border-l-4 rounded-r-md transition-colors duration-150',
+                onStepClick ? 'cursor-pointer' : '',
                 active
                   ? 'border-primary-500 hover:border-primary-600'
                   : 'border-ink-200 dark:border-ink-700 hover:border-ink-300 dark:hover:border-ink-500',
