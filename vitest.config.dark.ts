@@ -11,6 +11,14 @@ const dirname = import.meta.dirname;
 // error that occurs when both configs share the same Storybook configDir.
 export default defineConfig({
   plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+    ],
+  },
   test: {
     retry: 1,
     browser: {

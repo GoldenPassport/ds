@@ -11,6 +11,16 @@ const dirname = import.meta.dirname;
 // VITEST_STORYBOOK=true so the Storybook test manager can filter to this project.
 export default defineConfig({
   plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
+  // Pre-bundle React JSX runtimes so Vite never discovers them mid-test and
+  // triggers an unexpected reload that can cause flaky / duplicated runs.
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+    ],
+  },
   test: {
     // Retry once so a transient browser-worker race during startup doesn't
     // fail the whole suite — the second attempt always connects cleanly.
