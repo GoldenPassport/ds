@@ -18,7 +18,10 @@ import { setProjectAnnotations } from '@storybook/react';
 import { beforeAll, beforeEach, afterEach } from 'vitest';
 
 // Pass only the globals override — not the preview (plugin handles that).
-const annotations = setProjectAnnotations([{ globals: { theme: 'Dark' } }]);
+// Cast to `any`: the Storybook type `NamedOrDefaultProjectAnnotations` doesn't
+// declare `globals` even though the runtime accepts it at this position.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const annotations = setProjectAnnotations([{ globals: { theme: 'Dark' } } as any]);
 beforeAll(annotations.beforeAll);
 
 beforeEach(() => {
