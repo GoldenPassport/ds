@@ -481,14 +481,14 @@ export const MultiSelectInteractions: Story = {
     const user   = userEvent.setup();
 
     await step('click Italic — adds to selection', async () => {
-      await user.click(canvas.getByRole('button', { name: /italic/i }));
+      await user.click(canvas.getByRole('checkbox', { name: /italic/i }));
       await waitFor(() => {
         expect(canvas.getByTestId('selected-formats')).toHaveTextContent('italic');
       });
     });
 
     await step('click Bold again — removes it from selection', async () => {
-      await user.click(canvas.getByRole('button', { name: /bold/i }));
+      await user.click(canvas.getByRole('checkbox', { name: /bold/i }));
       await waitFor(() => {
         expect(canvas.getByTestId('selected-formats')).not.toHaveTextContent('bold');
       });
