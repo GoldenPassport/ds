@@ -9,11 +9,10 @@ Golden Passport Design System — React component library built on **Tailwind CS
 - [Install](#install)
 - [Setup](#setup)
 - [Running Storybook](#running-storybook)
-- [Components](#components)
-- [Example Pages](#example-pages)
 - [Usage examples](#usage-examples)
 - [Theming & token overrides](#theming--token-overrides)
 - [Design tokens (JS)](#design-tokens-js)
+- [Stories](#stories)
 - [Build & publishing](#build--publishing)
 
 ---
@@ -124,153 +123,6 @@ pnpm build-storybook
 # outputs to storybook-static/ — deploy to any static host
 ```
 
-### Navigating Storybook
-
-The sidebar groups components by category:
-
-| Category | What's inside |
-|---|---|
-| **Styling** | Colour palette, typography scale, general tokens |
-| **Elements** | Button, ButtonGroup, Badge, Avatar, Menu |
-| **Forms** | Input, Textarea, Select, Toggle, Checkbox, RadioGroup, RatingGroup, DatePicker |
-| **Headings** | PageHeading, SectionHeader, SectionHeading |
-| **Layout** | Card, PageContainer, ContainerList, Divider, ListCard, MediaObject |
-| **Lists** | DataTable, GridList, StackedList |
-| **Data Display** | Stats, Calendar, DescriptionList |
-| **Navigation** | Navbar, SidebarNav, VerticalNav, BottomNav, Tabs, Breadcrumbs, Pagination, StepsBar, ProgressBar, Combobox, FabMenu |
-| **Overlays** | Dialog, Drawer, Tooltip |
-| **Feedback** | Alert, EmptyState |
-| **Components** | Carousel |
-| **Example Pages** | HomeScreen, DetailScreen |
-
-Each component has a **Playground** story at the top with interactive controls, followed by individual variant stories, and an **All Variants** overview at the bottom.
-
----
-
-## Components
-
-### Elements
-
-| Component | Description |
-|---|---|
-| `Button` | Primary, secondary, ghost, danger · sm / md / lg · loading spinner · pill / square radius |
-| `ButtonGroup` | Segmented button row sharing a border |
-| `Badge` | Status pill: active, running, pending, draft, failed, ai, warning, neutral |
-| `Avatar` | Gold-gradient initials avatar, configurable size |
-| `Menu` | Action dropdown (⋯ / context menus) with optional dividers and destructive items |
-
-### Forms
-
-| Component | Description |
-|---|---|
-| `Input` | Text input — label, hint, error, optional left icon, optional right action (e.g. show/hide) |
-| `Textarea` | Multi-line input with label, hint, error |
-| `Select` | Single-select dropdown with animated panel |
-| `Toggle` | Accessible on/off switch |
-| `Checkbox` | Labelled checkbox with indeterminate support |
-| `RadioGroup` | Labelled radio button group |
-| `RatingGroup` | Star rating — controlled/uncontrolled, half-steps, custom icons, RTL |
-| `DatePicker` | Custom date picker — calendar popover, no native browser UI |
-| `TimePicker` | Custom time picker — scrollable HH / MM columns |
-| `DateTimePicker` | Combined date + time picker in a single popover |
-| `Combobox` | Searchable select with real-time filtering |
-
-### Layout
-
-| Component | Description |
-|---|---|
-| `Card` | Content panel — default, muted, outlined, flush variants |
-| `PageContainer` | Max-width centred page wrapper |
-| `ContainerList` | Stacked list of card-style containers |
-| `Divider` | Horizontal rule with optional label |
-| `ListCard` | Card with a built-in list slot |
-| `MediaObject` | Icon / image + text side-by-side layout primitive |
-
-### Lists
-
-| Component | Description |
-|---|---|
-| `DataTable` | Sortable, clickable table with column headers |
-| `GridList` | Card-grid list with overflow menu per item |
-| `StackedList` | Divided list — bordered card or flat; custom `renderItem` slot |
-
-### Data Display
-
-| Component | Description |
-|---|---|
-| `Stats` | KPI stat cards — cards, simple, or bordered variants |
-| `Calendar` | Monthly calendar — full event grid or compact `mini` picker |
-| `DescriptionList` | Label / value definition list |
-
-### Navigation
-
-| Component | Description |
-|---|---|
-| `Navbar` | Top navigation bar — light / dark, search, user menu |
-| `SidebarNav` | Full-height sidebar — logo, nav groups, user section, footer slot |
-| `VerticalNav` | Standalone vertical nav list — default / gray / dark appearances |
-| `BottomNav` | Mobile bottom tab bar — fixed or inline, with badge support |
-| `Tabs` | Horizontal tab strip — underline and pill variants |
-| `Breadcrumbs` | Hierarchical path trail |
-| `Pagination` | Page navigation with prev / next and page numbers |
-| `StepsBar` | Multi-step progress indicator |
-| `ProgressBar` | Linear progress bar |
-| `FabMenu` | Floating action button with expandable menu |
-
-### Overlays
-
-| Component | Description |
-|---|---|
-| `Dialog` | Modal with focus trap, backdrop, animated entry · sm / md / lg / xl sizes |
-| `Drawer` | Slide-in panel — left / right / bottom |
-| `Tooltip` | Hover label — configurable placement and radius |
-
-### Feedback
-
-| Component | Description |
-|---|---|
-| `Alert` | Inline alert — info, success, warning, error |
-| `EmptyState` | Zero-state placeholder with icon, message, and action |
-
-### Headings
-
-| Component | Description |
-|---|---|
-| `PageHeading` | Page-level heading — title, breadcrumbs, tabs, actions · sticky support · master / small / medium / large mobile variants |
-| `SectionHeader` | Section heading with optional overflow menu |
-| `SectionHeading` | Lightweight sub-section label |
-
----
-
-## Example Pages
-
-Two full-page layout stories are included under **Example Pages** in Storybook. They show how components compose into real screens.
-
-### HomeScreen
-
-Two layout variants, each with light and dark stories:
-
-**Sidebar — Deployments** (`HomeScreen → Sidebar`)
-- `SidebarNav` with logo, grouped nav, teams section, and user profile
-- `PageHeading` master variant with search and hamburger (mobile)
-- Deployments list using `StackedList` (flat on page background)
-- Activity feed panel using `StackedList` (white card)
-- `BottomNav` on mobile (hidden on desktop)
-- Responsive: stacked on mobile, side-by-side on `sm+`
-
-**Stacked — Cashflow** (`HomeScreen → Stacked`)
-- `Navbar` with logo, nav links, bell action, user avatar
-- Filter tab strip with period selector and "New invoice" button
-- `Stats` KPI cards (responsive 1 → 2 → 4 columns)
-- Transaction list with responsive mobile-card / desktop-row layouts
-
-### DetailScreen
-
-A detail page layout showing:
-- `SidebarNav` or `Navbar` chrome
-- `PageHeading` with breadcrumbs, back navigation, and action buttons
-- `Card` / `DescriptionList` / `Stats` content sections
-
 ---
 
 ## Usage examples
@@ -315,7 +167,7 @@ import { Mail, Eye } from 'lucide-react';
 ### DatePicker / TimePicker
 
 ```tsx
-import { DatePicker, TimePicker, DateTimePicker } from '@golden-passport/ds';
+import { DatePicker, TimePicker, DateTimePicker, DateRangePicker } from '@golden-passport/ds';
 
 <DatePicker
   label="Passport expiry"
@@ -333,6 +185,12 @@ import { DatePicker, TimePicker, DateTimePicker } from '@golden-passport/ds';
   label="Appointment"
   value={dt}       // { date: Date, hour: number, minute: number }
   onChange={setDt}
+/>
+
+<DateRangePicker
+  label="Trip dates"
+  value={range}    // { start: Date | null, end: Date | null }
+  onChange={setRange}
 />
 ```
 
@@ -352,15 +210,13 @@ import { LayoutDashboard, Users, Settings } from 'lucide-react';
     ],
   }]}
   user={{ name: 'Tom Cook', email: 'tom@example.com' }}
-  appearance="light"
 />
 ```
 
 ### StackedList
 
 ```tsx
-import { StackedList } from '@golden-passport/ds';
-import { Avatar } from '@golden-passport/ds';
+import { StackedList, Avatar } from '@golden-passport/ds';
 
 // Default row (leading + title + subtitle + trailing)
 <StackedList
@@ -407,6 +263,30 @@ import { Heart } from 'lucide-react';
   iconEmpty={<Heart className="w-full h-full" strokeWidth={1.5} />}
   iconFull={<Heart  className="w-full h-full fill-current" strokeWidth={1.5} />}
 />
+```
+
+### Hyperlink
+
+```tsx
+import { Hyperlink } from '@golden-passport/ds';
+
+// Default — auto-darkens primary colour for 4.5:1 contrast on light backgrounds
+<Hyperlink href="/docs">Read the docs</Hyperlink>
+
+// Variants
+<Hyperlink href="/author" variant="muted">Alex Johnson</Hyperlink>
+<Hyperlink href="/delete" variant="danger">Delete account</Hyperlink>
+
+// External link (adds icon + rel="noopener noreferrer")
+<Hyperlink href="https://example.com" external>Open site</Hyperlink>
+
+// Always underlined
+<Hyperlink href="/terms" underline="always">Terms of Service</Hyperlink>
+
+// Override contrast for a white-background container
+<div style={{ '--link-primary': 'var(--color-primary-500)' }}>
+  <Hyperlink href="#">Bright gold on white</Hyperlink>
+</div>
 ```
 
 ### Dialog
@@ -482,6 +362,80 @@ tokens.fonts.display       // "'Plus Jakarta Sans', sans-serif"
 tokens.radius.xl           // '1rem'
 tokens.shadow.md           // '0 4px 12px 0 rgb(14 13 11 / 0.08)…'
 ```
+
+---
+
+## Stories
+
+All stories are browsable in Storybook. Each entry has a **Playground** story with interactive controls, individual variant stories, and an **All Variants** overview. The **Headless UI** column indicates which primitives the component delegates to.
+
+| Category | Name | Headless UI | Description |
+|---|---|---|---|
+| Styling | Colors | — | Full primary, ink, and slate colour palette swatches with hex values |
+| Styling | General | — | Design token reference — spacing, radius, shadow, animation |
+| Styling | Typography | — | Type scale, font families (display / body / mono), and weight samples |
+| Elements | Avatar | — | Gold-gradient initials avatar, configurable size |
+| Elements | Badge | — | Status pills: active, running, pending, draft, failed, ai, warning, neutral; dismissible variant |
+| Elements | Button | — | Primary / secondary / ghost / danger · sm / md / lg · loading spinner · pill / square radius |
+| Elements | ButtonGroup | — | Segmented button row sharing a border |
+| Elements | Hyperlink | — | Styled `<a>` with adaptive `--link-primary` contrast, muted / danger variants, underline control, external-link icon |
+| Elements | Menu | `Menu` | Action dropdown / context menu with optional dividers and destructive items |
+| Forms | ActionPanel | — | Call-to-action panel with title, body, and primary / secondary actions |
+| Forms | Checkbox | — | Labelled checkbox with indeterminate support |
+| Forms | DatePicker | `Popover` | Calendar popover date picker — Clear / Today shortcuts |
+| Forms | DateRangePicker | `Popover` | Two-field From / To range picker with hover-preview strip |
+| Forms | DateTimePicker | `Popover` | Combined date + time picker in a single popover |
+| Forms | Fieldset | — | Form layout primitives: Fieldset, Legend, FieldGroup, Field, Label, Description, ErrorMessage |
+| Forms | Input | — | Text input — label, hint, error, left icon, right action slot, corner-hint slot |
+| Forms | OtpInput | — | One-time password digit entry — sm / md / lg sizes, auto-advance, paste support |
+| Forms | RadioGroup | — | Labelled radio button group — default and card variants |
+| Forms | RatingGroup | — | Star rating — controlled / uncontrolled, half-steps, custom icons, RTL |
+| Forms | SearchSet | — | Search field with tag chips and a collapsible filter panel |
+| Forms | Select | `Listbox` | Single-select dropdown with animated panel |
+| Forms | Textarea | — | Multi-line input with label, hint, error, character count |
+| Forms | TimePicker | `Popover` | Scrollable HH / MM column time picker — Clear / Now shortcuts |
+| Forms | Toggle | `Switch` | Accessible on/off switch with optional label and description |
+| Headings | PageHeading | — | Page-level heading — title, back link, meta slot, tabs, action buttons, optional sticky |
+| Headings | SectionHeader | `Menu` | Section heading with optional overflow action menu |
+| Headings | SectionHeading | — | Lightweight sub-section label with optional tab strip |
+| Layout | Card | — | Content panel — default, muted, outlined, and flush variants |
+| Layout | ContainerList | — | Stacked list of card-style containers with action buttons |
+| Layout | Divider | — | Horizontal rule with optional centred or left-aligned label |
+| Layout | ListCard | — | Card with a built-in divided list slot |
+| Layout | MediaObject | — | Icon / image + text side-by-side layout primitive — left / right, gap variants |
+| Layout | PageContainer | — | Max-width centred page wrapper — xs / sm / md / lg / xl / full widths |
+| Lists | Carousel | — | Scrollable card carousel with dot indicators and auto-play |
+| Lists | DataTable | — | Sortable, clickable table with typed column headers and pagination |
+| Lists | GridList | `Menu` | Card-grid list with per-item overflow action menu |
+| Lists | StackedList | — | Divided list — bordered card or flat; custom `renderItem` slot |
+| Data Display | Calendar | — | Monthly event calendar or compact `mini` picker with range selection and month/year quick-picker |
+| Data Display | DescriptionList | — | Label / value definition list — stacked and side-by-side layouts |
+| Data Display | Stats | — | KPI stat cards — cards, simple, and bordered variants; trend indicators |
+| Navigation | BottomNav | — | Mobile bottom tab bar — fixed or inline, icon + label, badge support |
+| Navigation | Breadcrumbs | — | Hierarchical path trail with configurable separators |
+| Navigation | Combobox | `Combobox` | Searchable select with real-time filtering and custom option rendering |
+| Navigation | FabMenu | — | Floating action button with expandable radial / stacked item menu |
+| Navigation | FlyoutMenu | `Popover` | Mega-menu flyout — simple list, featured, and full-width variants |
+| Navigation | Navbar | `Menu` | Top navigation bar — logo, nav links, search, actions, user dropdown |
+| Navigation | Pagination | — | Page navigation with prev / next, page numbers, and jump-to input |
+| Navigation | ProgressBar | — | Linear and circular progress bars — labelled, striped, and animated variants |
+| Navigation | SidebarNav | `Menu`, `Disclosure` | Full-height sidebar — logo, grouped nav, collapsible sections, user profile |
+| Navigation | StepsBar | — | Multi-step progress indicator — horizontal and vertical orientations |
+| Navigation | Tabs | `TabGroup` | Horizontal tab strip — underline and pill variants |
+| Navigation | VerticalNav | — | Standalone vertical nav list — size, spacing, radius, shadow, border, active-indicator props |
+| Overlays | Dialog | `Dialog` | Modal with focus trap, backdrop, animated entry · sm / md / lg / xl sizes |
+| Overlays | Drawer | `Dialog` | Slide-in panel — left / right / bottom placements, configurable sizes |
+| Overlays | Notifications | — | Toast notification stack — info, success, warning, error; auto-dismiss; position variants |
+| Overlays | Tooltip | — | Hover/focus label — configurable placement, radius, and max-width (Tippy.js) |
+| Feedback | Alert | — | Inline alert — info, success, warning, error; dismissible; with-actions variant |
+| Feedback | EmptyState | — | Zero-state placeholder with icon, heading, body, and primary / secondary actions |
+| Feedback | ErrorPage | — | Full-page error states — 404, 500, 403, 503; icon or large code display |
+| Marketing | Banner | — | Announcement banner — dark, primary, and light variants; dismissible |
+| Messaging | Chat | — | iMessage-style chat thread — bubbles, timestamps, read receipts, reactions, image lightbox |
+| Example Pages | DetailScreen | — | Detail page with stacked (Navbar) or sidebar (SidebarNav) chrome, PageHeading, DescriptionList, attachments, activity feed |
+| Example Pages | HomeScreen | — | Dashboard with sidebar (deployments + activity) or stacked (cashflow + transactions) layout |
+| Example Pages | Login | — | Standard email + password, passwordless OTP, and email + 2FA authenticator login flows |
+| Example Pages | Register | — | Single-step and multi-step (with OTP verification) registration flows |
 
 ---
 
