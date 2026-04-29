@@ -221,40 +221,35 @@ export const DatePickerInteraction: Story = {
     const user = userEvent.setup();
 
     await step('click trigger → calendar opens', async () => {
-      const trigger = canvas.getByRole('button');
-      await user.click(trigger);
-      // Panel appears in a portal / popover
+      // The main trigger is the first (and only) button before any value is set
+      await user.click(canvas.getAllByRole('button')[0]);
+      // Panel is inline — "Today" link in footer confirms it's open
       await waitFor(() => {
-        const body = within(document.body);
-        expect(body.getByRole('grid')).toBeInTheDocument();
+        expect(canvas.getByRole('link', { name: /today/i })).toBeInTheDocument();
       });
     });
 
     await step('click "Today" link → date is set and calendar closes', async () => {
-      const body = within(document.body);
-      const todayLink = body.getByRole('link', { name: /today/i });
-      await user.click(todayLink);
+      await user.click(canvas.getByRole('link', { name: /today/i }));
       await waitFor(() => {
         expect(canvas.getByTestId('selected-date')).toBeInTheDocument();
       });
-      // Calendar should be closed
       await waitFor(() => {
-        expect(within(document.body).queryByRole('grid')).not.toBeInTheDocument();
+        expect(canvas.queryByRole('link', { name: /today/i })).not.toBeInTheDocument();
       });
     });
 
     await step('click trigger again → calendar re-opens', async () => {
-      const trigger = canvas.getByRole('button');
-      await user.click(trigger);
+      // After a value is set there are two buttons: trigger + Clear. First is trigger.
+      await user.click(canvas.getAllByRole('button')[0]);
       await waitFor(() => {
-        expect(within(document.body).getByRole('grid')).toBeInTheDocument();
+        expect(canvas.getByRole('link', { name: /today/i })).toBeInTheDocument();
       });
     });
 
     await step('click "Clear" link → value resets', async () => {
-      const body = within(document.body);
-      const clearLink = body.getByRole('link', { name: /clear/i });
-      await user.click(clearLink);
+      // Both "Clear" links are present (panel footer + aria Clear button) — use link
+      await user.click(canvas.getAllByRole('link', { name: /clear/i })[0]);
       await waitFor(() => {
         expect(canvas.queryByTestId('selected-date')).not.toBeInTheDocument();
       });
@@ -287,22 +282,27 @@ export const TimePickerInteraction: Story = {
     const canvas = within(canvasElement);
     const user = userEvent.setup();
 
-    await step('click trigger → time panel opens with hour and minute columns', async () => {
-      const trigger = canvas.getByRole('button');
-      await user.click(trigger);
+    await step('click trigger → time panel opens', async () => {
+      await user.click(canvas.getAllByRole('button')[0]);
+      // "Clear" link in the panel footer confirms it's open
       await waitFor(() => {
-        const body = within(document.body);
-        // Hour buttons exist (0-23)
-        expect(body.getByRole('button', { name: '09' })).toBeInTheDocument();
+        expect(canvas.getByRole('link', { name: /clear/i })).toBeInTheDocument();
       });
     });
 
-    await step('click hour 9 → time is committed', async () => {
-      const body = within(document.body);
-      const hour9 = body.getByRole('button', { name: '09' });
+    await step('click hour "09" button → time value is set', async () => {
+      // Both HH and MM columns have "09" — take the first (hours)
+      const hour9 = canvas.getAllByRole('button', { name: '09' })[0];
       await user.click(hour9);
       await waitFor(() => {
         expect(canvas.getByTestId('selected-time')).toBeInTheDocument();
+      });
+    });
+
+    await step('click "Clear" link → time resets', async () => {
+      await user.click(canvas.getByRole('link', { name: /clear/i }));
+      await waitFor(() => {
+        expect(canvas.queryByTestId('selected-time')).not.toBeInTheDocument();
       });
     });
   },
