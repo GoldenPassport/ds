@@ -36,16 +36,16 @@ export interface ErrorPageProps {
    */
   variant?:         ErrorPageVariant;
   /**
-   * Status code displayed both as a small labelled badge and as a large
-   * faded background watermark. Accepts any string so you can use
-   * custom codes like `"E_NETWORK"` or omit it entirely.
+   * Status code displayed as a large in-flow number above the title.
+   * Accepts any string so you can use custom codes like `"E_NETWORK"`.
    */
   code?:            string | number;
   title?:           string;
   description?:     string;
   /**
-   * Optional icon rendered above the title (replaces the faded watermark
-   * number). Pass a Lucide icon or any ReactNode sized at ~64 px.
+   * Optional icon rendered above the title. When provided, the large code
+   * number is hidden and the icon is shown instead. Pass a Lucide icon or
+   * any ReactNode sized at ~32 px.
    */
   icon?:            React.ReactNode;
   primaryAction?:   ErrorPageAction;
@@ -114,7 +114,6 @@ export function ErrorPage({
   fullScreen  = false,
   className   = '',
 }: ErrorPageProps) {
-  // Merge preset with explicit overrides (explicit wins)
   const preset = variant ? PRESETS[variant] : undefined;
   const code        = codeProp        ?? preset?.code;
   const title       = titleProp       ?? preset?.title       ?? 'An error occurred';
@@ -123,61 +122,55 @@ export function ErrorPage({
   return (
     <div
       className={[
-        fullScreen ? 'min-h-screen' : 'min-h-[520px]',
-        'relative flex flex-col items-center justify-center overflow-hidden',
+        fullScreen ? 'min-h-screen' : 'min-h-[480px]',
+        'flex flex-col items-center justify-center',
         'bg-white dark:bg-ink-900',
-        'px-6 py-24 text-center',
+        'px-6 py-16 text-center',
         className,
       ].join(' ')}
     >
-      {/* ── Watermark ── */}
-      {code && !icon && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none select-none absolute inset-0 flex items-center justify-center"
-        >
-          <span className="text-[clamp(8rem,30vw,18rem)] font-black font-display leading-none text-ink-400 dark:text-ink-300">
-            {code}
-          </span>
-        </div>
-      )}
+      <div className="flex flex-col items-center max-w-md w-full">
 
-      {/* ── Foreground content ── */}
-      <div className="relative z-10 flex flex-col items-center max-w-lg">
-
-        {/* Icon (replaces watermark when provided) */}
+        {/* Icon */}
         {icon && (
-          <div
-            aria-hidden="true"
-            className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-ink-100 dark:bg-ink-800 text-ink-500 dark:text-ink-300"
-          >
+          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink-100 dark:bg-ink-800 text-ink-600 dark:text-ink-200">
             {icon}
           </div>
         )}
 
-        {/* Status badge */}
+        {/* Large in-flow code number — only shown when no icon */}
+        {code && !icon && (
+          <p
+            aria-hidden="true"
+            className="text-8xl sm:text-9xl font-black font-display leading-none tracking-tight text-primary-700 dark:text-primary-500 select-none mb-2"
+          >
+            {code}
+          </p>
+        )}
+
+        {/* Status label */}
         {code && (
-          <p className="mb-3 text-xs font-semibold font-body uppercase tracking-[0.15em] text-primary-600 dark:text-primary-400">
+          <p className="text-xs font-semibold font-body uppercase tracking-[0.15em] text-primary-800 dark:text-primary-400 mb-3">
             Error&nbsp;{code}
           </p>
         )}
 
         {/* Title */}
-        <h1 className="text-3xl sm:text-4xl font-black font-display text-ink-900 dark:text-ink-50 leading-tight">
+        <h1 className="text-2xl sm:text-3xl font-black font-display leading-tight text-ink-900 dark:text-ink-50">
           {title}
         </h1>
 
         {/* Description */}
         {description && (
-          <p className="mt-4 text-base font-body text-ink-500 dark:text-ink-300 leading-relaxed max-w-md">
+          <p className="mt-3 text-base font-body text-ink-500 dark:text-ink-300 leading-relaxed">
             {description}
           </p>
         )}
 
         {/* Actions */}
         {(primaryAction || secondaryAction) && (
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            {primaryAction  && <ActionBtn action={primaryAction}  variant="primary" />}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            {primaryAction   && <ActionBtn action={primaryAction}   variant="primary" />}
             {secondaryAction && <ActionBtn action={secondaryAction} variant="ghost"   />}
           </div>
         )}

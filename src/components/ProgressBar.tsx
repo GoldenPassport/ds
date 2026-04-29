@@ -170,11 +170,11 @@ export function ProgressBar({
           </svg>
 
           {showValue && !indeterminate && (
-            // axe-core flags this overlay as `color-contrast` Inconclusive because
-            // the text sits over an SVG ("image node") and axe can't sample the
-            // background. Manually verified: ink-900/white ≈ 21:1 (light),
-            // ink-50/ink-800 ≈ 17:1 (dark) — far above WCAG AAA.
-            <div className="absolute inset-0 flex items-center justify-center">
+            // Value is conveyed to AT via aria-valuenow/aria-valuetext on the
+            // progressbar container; this span is purely visual.
+            // aria-hidden prevents axe from scanning it for contrast against
+            // the SVG background (which axe cannot resolve as an "image node").
+            <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
               <span className={[
                 'font-semibold font-body tabular-nums text-ink-900 dark:text-ink-50',
                 circularTextSize[size],

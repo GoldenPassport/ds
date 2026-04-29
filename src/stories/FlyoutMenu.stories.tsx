@@ -7,6 +7,7 @@ import {
 
 import { FlyoutMenu, FlyoutTrigger } from '../components/FlyoutMenu';
 import type { FlyoutMenuItem, FlyoutMenuAction } from '../components/FlyoutMenu';
+import { Hyperlink } from '../components/Hyperlink';
 
 const meta = {
   title: 'Navigation/FlyoutMenu',
@@ -228,9 +229,7 @@ export const NavbarExample: Story = {
         items={SIMPLE_ITEMS}
       />
 
-      <a href="#" className="ml-auto text-sm font-semibold font-body text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 transition-colors">
-        Sign in
-      </a>
+      <Hyperlink href="#" variant="muted" className="ml-auto text-sm font-semibold">Sign in</Hyperlink>
     </nav>
   ),
 };

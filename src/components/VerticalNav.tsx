@@ -3,7 +3,10 @@ import { ChevronRight } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────
 
-export type VerticalNavAppearance = 'default' | 'gray' | 'dark';
+export type VerticalNavSize    = 'sm' | 'md' | 'lg';
+export type VerticalNavSpacing = 'none' | 'xs' | 'sm' | 'md';
+export type VerticalNavRadius  = 'none' | 'sm' | 'md' | 'lg' | 'full';
+export type VerticalNavShadow  = 'none' | 'sm' | 'md' | 'lg';
 
 export interface VerticalNavItem {
   label:     string;
@@ -22,72 +25,86 @@ export interface VerticalNavGroup {
 }
 
 export interface VerticalNavProps {
-  groups:       VerticalNavGroup[];
-  appearance?:  VerticalNavAppearance;
+  groups:           VerticalNavGroup[];
+  /** Show a left border accent on the active item (default: false) */
+  activeIndicator?: boolean;
+  /** Item size — controls padding and text size (default: 'md') */
+  size?:            VerticalNavSize;
+  /** Gap between individual nav buttons (default: 'xs') */
+  spacing?:         VerticalNavSpacing;
+  /** Border radius of each item button (default: 'lg') */
+  radius?:          VerticalNavRadius;
+  /** Drop shadow on the nav wrapper (default: 'none') */
+  shadow?:          VerticalNavShadow;
+  /** Show a border around the nav wrapper (default: false) */
+  bordered?:        boolean;
   /** Accessible label for the nav landmark. Override when multiple VerticalNavs appear on the same page. */
-  'aria-label'?: string;
-  className?:   string;
+  'aria-label'?:    string;
+  className?:       string;
 }
 
-// ── Style tokens ───────────────────────────────────────────
+// ── Style tokens (light + dark: variants) ─────────────────
 
-interface Tokens {
-  item:        string;
-  itemActive:  string;
-  icon:        string;
-  iconActive:  string;
-  badge:       string;
-  groupLabel:  string;
-  childItem:   string;
-  childActive: string;
-  chevron:     string;
-  childBorder: string;
+const tokens = {
+  item:        'border-transparent font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+  itemActive:  'border-primary-500 font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
+  icon:        'text-ink-500 dark:text-ink-300',
+  iconActive:  'text-primary-500 dark:text-primary-400',
+  badge:       'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300',
+  groupLabel:  'text-ink-500 dark:text-ink-400',
+  childItem:   'font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
+  childActive: 'font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
+  chevron:     'text-ink-500 dark:text-ink-300',
+  childBorder: 'border-ink-200 dark:border-ink-700',
+  navBorder:   'border-ink-200 dark:border-ink-700',
+};
+
+// ── Size tokens ────────────────────────────────────────────
+
+interface SizeConfig {
+  text:    string;
+  px:      string;
+  pyTop:   string;
+  pyChild: string;
+  iconSz:  string;
+  itemGap: string;
 }
 
-const tokens: Record<VerticalNavAppearance, Tokens> = {
-  default: {
-    item:        'border-transparent font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
-    itemActive:  'border-primary-500 font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
-    icon:        'text-ink-500 dark:text-ink-300',
-    iconActive:  'text-primary-500',
-    badge:       'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300',
-    groupLabel:  'text-ink-500',
-    childItem:   'font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
-    childActive: 'font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
-    chevron:     'text-ink-500 dark:text-ink-300',
-    childBorder: 'border-ink-200 dark:border-ink-700',
-  },
-  gray: {
-    item:        'font-medium text-ink-600 hover:text-primary-600 hover:bg-ink-200',
-    itemActive:  'font-semibold text-primary-600 bg-ink-200',
-    icon:        'text-ink-400 group-hover:text-primary-600',
-    iconActive:  'text-primary-600',
-    badge:       'bg-ink-200 text-ink-600',
-    groupLabel:  'text-ink-400',
-    childItem:   'font-medium text-ink-500 hover:text-primary-600 hover:bg-ink-200',
-    childActive: 'font-semibold text-primary-600 bg-ink-200',
-    chevron:     'text-ink-400',
-    childBorder: 'border-ink-300',
-  },
-  dark: {
-    item:        'font-medium text-ink-400 hover:text-white hover:bg-ink-800',
-    itemActive:  'font-semibold text-primary-400 bg-ink-800',
-    icon:        'text-ink-500 group-hover:text-ink-200',
-    iconActive:  'text-primary-400',
-    badge:       'bg-ink-800 text-ink-300',
-    groupLabel:  'text-ink-500',
-    childItem:   'font-medium text-ink-400 hover:text-white hover:bg-ink-800',
-    childActive: 'font-semibold text-primary-400 bg-ink-800',
-    chevron:     'text-ink-500',
-    childBorder: 'border-ink-700',
-  },
+const sizeTokens: Record<VerticalNavSize, SizeConfig> = {
+  sm: { text: 'text-xs',   px: 'px-2.5', pyTop: 'py-1.5', pyChild: 'py-1',   iconSz: 'w-4 h-4', itemGap: 'gap-2' },
+  md: { text: 'text-sm',   px: 'px-3',   pyTop: 'py-2',   pyChild: 'py-1.5', iconSz: 'w-5 h-5', itemGap: 'gap-3' },
+  lg: { text: 'text-base', px: 'px-4',   pyTop: 'py-2.5', pyChild: 'py-2',   iconSz: 'w-5 h-5', itemGap: 'gap-3' },
+};
+
+// ── Spacing, radius, shadow maps ──────────────────────────
+
+const spacingCls: Record<VerticalNavSpacing, string> = {
+  none: 'gap-0',
+  xs:   'gap-0.5',
+  sm:   'gap-1',
+  md:   'gap-2',
+};
+
+const radiusCls: Record<VerticalNavRadius, string> = {
+  none: 'rounded-none',
+  sm:   'rounded-md',
+  md:   'rounded-lg',
+  lg:   'rounded-xl',
+  full: 'rounded-full',
+};
+
+const shadowCls: Record<VerticalNavShadow, string> = {
+  none: '',
+  sm:   'shadow-sm',
+  md:   'shadow',
+  lg:   'shadow-lg',
 };
 
 // ── Badge ──────────────────────────────────────────────────
 
-function NavBadge({ value, t }: { value: string | number; t: Tokens }) {
+function NavBadge({ value }: { value: string | number }) {
   return (
-    <span className={`ml-auto shrink-0 min-w-5 px-1.5 py-0.5 text-xs font-medium font-body rounded-full text-center ${t.badge}`}>
+    <span className={`ml-auto shrink-0 min-w-5 px-1.5 py-0.5 text-xs font-medium font-body rounded-full text-center ${tokens.badge}`}>
       {value}
     </span>
   );
@@ -95,30 +112,44 @@ function NavBadge({ value, t }: { value: string | number; t: Tokens }) {
 
 // ── NavItem ────────────────────────────────────────────────
 
-function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; depth?: number }) {
+function NavItem({
+  item, sz, radius, spacing,
+  depth           = 0,
+  activeIndicator = false,
+}: {
+  item:             VerticalNavItem;
+  sz:               SizeConfig;
+  radius:           string;
+  spacing:          string;
+  depth?:           number;
+  activeIndicator?: boolean;
+}) {
   const [open, setOpen] = useState(() => item.children?.some(c => c.active) ?? false);
   const hasChildren = item.children && item.children.length > 0;
 
   const baseCls = [
-    'group flex items-center gap-3 w-full rounded-xl text-sm font-body transition-colors text-left',
-    depth === 0 ? 'px-3 py-2 border-l-2' : 'px-3 py-1.5',
+    `group flex items-center ${sz.itemGap} w-full ${sz.text} font-body transition-colors text-left`,
+    radius,
+    depth === 0
+      ? `${sz.px} ${sz.pyTop}${activeIndicator ? ' border-l-2' : ''}`
+      : `${sz.px} ${sz.pyChild}`,
     item.active
-      ? (depth === 0 ? t.itemActive : t.childActive)
-      : (depth === 0 ? t.item       : t.childItem),
+      ? (depth === 0 ? tokens.itemActive : tokens.childActive)
+      : (depth === 0 ? tokens.item       : tokens.childItem),
   ].join(' ');
 
   const inner = (
     <>
       {item.icon && depth === 0 && (
-        <span className={`shrink-0 w-5 h-5 ${item.active ? t.iconActive : t.icon}`} aria-hidden="true">
+        <span className={`shrink-0 ${sz.iconSz} ${item.active ? tokens.iconActive : tokens.icon}`} aria-hidden="true">
           {item.icon}
         </span>
       )}
       <span className="flex-1 truncate">{item.label}</span>
-      {item.badge !== undefined && !hasChildren && <NavBadge value={item.badge} t={t} />}
+      {item.badge !== undefined && !hasChildren && <NavBadge value={item.badge} />}
       {hasChildren && (
         <ChevronRight
-          className={`shrink-0 w-4 h-4 transition-transform duration-200 ${t.chevron} ${open ? 'rotate-90' : ''}`}
+          className={`shrink-0 w-4 h-4 transition-transform duration-200 ${tokens.chevron} ${open ? 'rotate-90' : ''}`}
           aria-hidden="true"
         />
       )}
@@ -139,9 +170,17 @@ function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; dep
     <li>
       {trigger}
       {hasChildren && open && (
-        <ul className={`mt-1 ml-4 pl-3 border-l ${t.childBorder} flex flex-col gap-0.5`}>
+        <ul className={`mt-1 ml-4 pl-3 border-l ${tokens.childBorder} flex flex-col ${spacing}`}>
           {item.children!.map((child, i) => (
-            <NavItem key={i} item={child} t={t} depth={depth + 1} />
+            <NavItem
+              key={i}
+              item={child}
+              sz={sz}
+              radius={radius}
+              spacing={spacing}
+              depth={depth + 1}
+              activeIndicator={activeIndicator}
+            />
           ))}
         </ul>
       )}
@@ -153,24 +192,47 @@ function NavItem({ item, t, depth = 0 }: { item: VerticalNavItem; t: Tokens; dep
 
 export function VerticalNav({
   groups,
-  appearance   = 'default',
+  activeIndicator = false,
+  size            = 'md',
+  spacing         = 'xs',
+  radius          = 'lg',
+  shadow          = 'none',
+  bordered        = false,
   'aria-label': navAriaLabel = 'Sidebar navigation',
-  className    = '',
+  className       = '',
 }: VerticalNavProps) {
-  const t = tokens[appearance];
+  const sz    = sizeTokens[size];
+  const rCls  = radiusCls[radius];
+  const sCls  = spacingCls[spacing];
+  const shCls = shadowCls[shadow];
 
   return (
-    <nav className={`flex flex-col gap-6 ${className}`} aria-label={navAriaLabel}>
+    <nav
+      className={[
+        'flex flex-col gap-6',
+        shCls,
+        bordered ? `border ${tokens.navBorder} rounded-xl p-2` : '',
+        className,
+      ].filter(Boolean).join(' ')}
+      aria-label={navAriaLabel}
+    >
       {groups.map((group, gi) => (
         <div key={gi}>
           {group.label && (
-            <p className={`mb-1 px-3 text-xs font-semibold font-body uppercase tracking-wider ${t.groupLabel}`}>
+            <p className={`mb-1 px-3 text-xs font-semibold font-body uppercase tracking-wider ${tokens.groupLabel}`}>
               {group.label}
             </p>
           )}
-          <ul className="flex flex-col gap-0.5">
+          <ul className={`flex flex-col ${sCls}`}>
             {group.items.map((item, ii) => (
-              <NavItem key={ii} item={item} t={t} />
+              <NavItem
+                key={ii}
+                item={item}
+                sz={sz}
+                radius={rCls}
+                spacing={sCls}
+                activeIndicator={activeIndicator}
+              />
             ))}
           </ul>
         </div>

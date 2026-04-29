@@ -11,8 +11,13 @@ const meta = {
   component: VerticalNav,
   tags: ['autodocs'],
   argTypes: {
-    appearance: { control: { type: 'select', options: ['default', 'gray', 'dark'] } },
-    groups:     { control: false },
+    size:            { control: 'select', options: ['sm', 'md', 'lg'] },
+    spacing:         { control: 'select', options: ['none', 'xs', 'sm', 'md'] },
+    radius:          { control: 'select', options: ['none', 'sm', 'md', 'lg', 'full'] },
+    shadow:          { control: 'select', options: ['none', 'sm', 'md', 'lg'] },
+    bordered:        { control: 'boolean' },
+    activeIndicator: { control: 'boolean' },
+    groups:          { control: false },
   },
 } satisfies Meta<typeof VerticalNav>;
 
@@ -115,7 +120,15 @@ const GROUPED_GROUPS = [
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
-  args: { appearance: 'default', groups: [] },
+  args: {
+    size:            'md',
+    spacing:         'xs',
+    radius:          'lg',
+    shadow:          'none',
+    bordered:        false,
+    activeIndicator: false,
+    groups:          [],
+  },
   render: (args) => (
     <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 w-64">
       <VerticalNav {...args} groups={[{ items: ICON_ITEMS }]} />
@@ -183,30 +196,6 @@ export const WithSecondaryNav: Story = {
   ),
 };
 
-// ── Dark ──────────────────────────────────────────────────
-
-export const Dark: Story = {
-  name: 'Dark — with secondary nav',
-  args: { groups: [] },
-  render: () => (
-    <div className="bg-ink-900 rounded-2xl p-3 w-64">
-      <VerticalNav appearance="dark" groups={SECONDARY_GROUPS} />
-    </div>
-  ),
-};
-
-// ── Dark with groups ──────────────────────────────────────
-
-export const DarkWithGroups: Story = {
-  name: 'Dark — with section groups',
-  args: { groups: [] },
-  render: () => (
-    <div className="bg-ink-900 rounded-2xl p-3 w-64">
-      <VerticalNav appearance="dark" groups={GROUPED_GROUPS} />
-    </div>
-  ),
-};
-
 // ── With groups ───────────────────────────────────────────
 
 export const WithGroups: Story = {
@@ -215,18 +204,6 @@ export const WithGroups: Story = {
   render: () => (
     <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 w-64">
       <VerticalNav groups={GROUPED_GROUPS} />
-    </div>
-  ),
-};
-
-// ── On gray ───────────────────────────────────────────────
-
-export const OnGray: Story = {
-  name: 'On gray background',
-  args: { groups: [] },
-  render: () => (
-    <div className="bg-ink-50 dark:bg-ink-900 rounded-2xl p-4 w-64">
-      <VerticalNav appearance="gray" groups={[{ items: ICON_BADGE_ITEMS }]} />
     </div>
   ),
 };
@@ -291,7 +268,99 @@ export const AllVariants: Story = {
       <div className="flex flex-col gap-2">
         <p className="text-xs font-body text-ink-400 dark:text-ink-300">On gray</p>
         <div className="bg-ink-50 dark:bg-ink-900 rounded-2xl p-4 w-64">
-          <VerticalNav appearance="gray" groups={[{ items: ICON_BADGE_ITEMS }]} aria-label="Navigation on gray" />
+          <VerticalNav groups={[{ items: ICON_BADGE_ITEMS }]} aria-label="Navigation on gray" />
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+// ── Sizes ─────────────────────────────────────────────────
+
+export const Sizes: Story = {
+  name: 'Sizes',
+  args: { groups: [] },
+  render: () => (
+    <div className="flex gap-8 flex-wrap items-start">
+      {(['sm', 'md', 'lg'] as const).map(size => (
+        <div key={size} className="flex flex-col gap-2">
+          <p className="text-xs font-body text-ink-400 dark:text-ink-300 capitalize">{size}</p>
+          <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-56">
+            <VerticalNav size={size} groups={[{ items: ICON_ITEMS }]} aria-label={`${size} navigation`} />
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+// ── Spacing ───────────────────────────────────────────────
+
+export const Spacing: Story = {
+  name: 'Spacing',
+  args: { groups: [] },
+  render: () => (
+    <div className="flex gap-8 flex-wrap items-start">
+      {(['none', 'xs', 'sm', 'md'] as const).map(spacing => (
+        <div key={spacing} className="flex flex-col gap-2">
+          <p className="text-xs font-body text-ink-400 dark:text-ink-300">{spacing}</p>
+          <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52">
+            <VerticalNav spacing={spacing} groups={[{ items: ICON_ITEMS }]} aria-label={`${spacing} spacing navigation`} />
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+// ── Radius ────────────────────────────────────────────────
+
+export const Radius: Story = {
+  name: 'Radius',
+  args: { groups: [] },
+  render: () => (
+    <div className="flex gap-8 flex-wrap items-start">
+      {(['none', 'sm', 'md', 'lg', 'full'] as const).map(radius => (
+        <div key={radius} className="flex flex-col gap-2">
+          <p className="text-xs font-body text-ink-400 dark:text-ink-300">{radius}</p>
+          <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52">
+            <VerticalNav radius={radius} groups={[{ items: ICON_ITEMS }]} aria-label={`${radius} radius navigation`} />
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+// ── Elevation & border ────────────────────────────────────
+
+export const ElevationAndBorder: Story = {
+  name: 'Elevation & border',
+  args: { groups: [] },
+  render: () => (
+    <div className="flex gap-8 flex-wrap items-start">
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Bordered</p>
+        <div className="bg-white dark:bg-ink-900 p-4 w-60">
+          <VerticalNav bordered groups={[{ items: ICON_ITEMS }]} aria-label="Bordered navigation" />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Bordered + shadow sm</p>
+        <div className="bg-ink-50 dark:bg-ink-900 p-4 w-60">
+          <VerticalNav bordered shadow="sm" groups={[{ items: ICON_ITEMS }]} aria-label="Shadow sm navigation" />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Bordered + shadow md</p>
+        <div className="bg-ink-50 dark:bg-ink-900 p-4 w-60">
+          <VerticalNav bordered shadow="md" groups={[{ items: ICON_ITEMS }]} aria-label="Shadow md navigation" />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Bordered + shadow lg</p>
+        <div className="bg-ink-50 dark:bg-ink-900 p-4 w-60">
+          <VerticalNav bordered shadow="lg" groups={[{ items: ICON_ITEMS }]} aria-label="Shadow lg navigation" />
         </div>
       </div>
     </div>

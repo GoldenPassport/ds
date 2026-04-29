@@ -44,6 +44,8 @@ export interface NavbarProps {
   appearance?:        NavbarAppearance;
   /** Bottom border */
   bordered?:          boolean;
+  /** Stick to the top of the viewport on scroll (default: false) */
+  sticky?:            boolean;
   /** Accessible label for the <nav> landmark — required when multiple Navbars appear on the same page */
   ariaLabel?:         string;
   className?:         string;
@@ -78,7 +80,7 @@ const tokens: Record<NavbarAppearance, Tokens> = {
     border:            'border-ink-200 dark:border-ink-700',
     link:              'text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-50 dark:hover:bg-ink-700',
     linkActive:        'text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
-    searchWrap:        'bg-ink-50 dark:bg-ink-700 border-ink-200 dark:border-ink-600 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/25',
+    searchWrap:        'bg-ink-50 dark:bg-ink-700 border-ink-200 dark:border-ink-600 focus-within:border-primary-500',
     searchInput:       'text-ink-900 dark:text-white placeholder:text-ink-500 dark:placeholder:text-ink-400',
     searchIcon:        'text-ink-500 dark:text-ink-300',
     iconBtn:           'text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
@@ -98,7 +100,7 @@ const tokens: Record<NavbarAppearance, Tokens> = {
     border:            'border-ink-700',
     link:              'text-ink-300 hover:text-white hover:bg-ink-800',
     linkActive:        'text-white bg-ink-800',
-    searchWrap:        'bg-ink-800 border-ink-700 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/25',
+    searchWrap:        'bg-ink-800 border-ink-700 focus-within:border-primary-500',
     searchInput:       'text-white placeholder:text-ink-500',
     searchIcon:        'text-ink-500',
     iconBtn:           'text-ink-300 hover:text-ink-100 hover:bg-ink-800',
@@ -277,6 +279,7 @@ export function Navbar({
   moreMenu,
   appearance        = 'light',
   bordered          = true,
+  sticky            = false,
   ariaLabel,
   className         = '',
 }: NavbarProps) {
@@ -284,7 +287,7 @@ export function Navbar({
   const t = tokens[appearance];
 
   return (
-    <nav aria-label={ariaLabel || undefined} className={[t.nav, bordered ? `border-b ${t.border}` : '', className].filter(Boolean).join(' ')}>
+    <nav aria-label={ariaLabel || undefined} className={[t.nav, bordered ? `border-b ${t.border}` : '', sticky ? 'sticky top-0 z-30' : '', className].filter(Boolean).join(' ')}>
       <div className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
 

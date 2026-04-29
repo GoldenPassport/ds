@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────
 
@@ -19,7 +19,7 @@ export interface CalendarEvent {
 export interface CalendarProps {
   /** Uncontrolled initial month (defaults to current month) */
   defaultMonth?:   Date;
-  /** Controlled selected date */
+  /** Controlled selected date (single-select mode) */
   selected?:       Date | null;
   onSelect?:       (date: Date) => void;
   events?:         CalendarEvent[];
@@ -29,7 +29,13 @@ export interface CalendarProps {
   bordered?:       boolean;
   /** Shade Saturday and Sunday columns slightly darker. Default: false */
   shadeWeekends?:  boolean;
-  className?:      string;
+  // ── Range props (mini only) ──────────────────────────────
+  rangeStart?:    Date | null;
+  rangeEnd?:      Date | null;
+  /** Date the cursor is currently hovering — drives the live preview strip */
+  rangeHover?:    Date | null;
+  onRangeHover?:  (date: Date | null) => void;
+  className?:     string;
 }
 
 // ── Utilities ─────────────────────────────────────────────
@@ -48,6 +54,10 @@ function isSameDay(a: Date, b: Date): boolean {
     && a.getDate()     === b.getDate();
 }
 
+function stripTime(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
 /** Returns the 42-cell grid (6 weeks × 7 days) for a given month */
 function buildGrid(year: number, month: number): { date: Date; current: boolean }[] {
   const first   = new Date(year, month, 1).getDay(); // 0=Sun
@@ -55,19 +65,13 @@ function buildGrid(year: number, month: number): { date: Date; current: boolean 
   const daysInPrev  = new Date(year, month, 0).getDate();
   const cells: { date: Date; current: boolean }[] = [];
 
-  // trailing days from previous month
-  for (let i = first - 1; i >= 0; i--) {
+  for (let i = first - 1; i >= 0; i--)
     cells.push({ date: new Date(year, month - 1, daysInPrev - i), current: false });
-  }
-  // current month
-  for (let d = 1; d <= daysInMonth; d++) {
+  for (let d = 1; d <= daysInMonth; d++)
     cells.push({ date: new Date(year, month, d), current: true });
-  }
-  // leading days from next month
   const remaining = 42 - cells.length;
-  for (let d = 1; d <= remaining; d++) {
+  for (let d = 1; d <= remaining; d++)
     cells.push({ date: new Date(year, month + 1, d), current: false });
-  }
   return cells;
 }
 
@@ -122,7 +126,6 @@ function MonthCell({
         : '',
       ].join(' ')}
     >
-      {/* Day number */}
       <button
         type="button"
         onClick={() => onSelect(date)}
@@ -130,10 +133,10 @@ function MonthCell({
         aria-pressed={selected}
         className={[
           'self-start mb-1 w-7 h-7 flex items-center justify-center rounded-full text-sm font-medium font-body transition-colors',
-          today
-            ? 'bg-primary-700 dark:bg-primary-500 text-ink-900 font-bold'
-            : selected
-              ? 'bg-ink-900 dark:bg-ink-50 text-white dark:text-ink-900'
+          selected
+            ? 'bg-primary-500 text-ink-900 font-bold'
+            : today
+              ? 'ring-2 ring-primary-500 text-ink-900 dark:text-ink-50 font-bold hover:bg-ink-100 dark:hover:bg-ink-700'
               : current
                 ? 'text-ink-900 dark:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-700'
                 : 'text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
@@ -142,7 +145,6 @@ function MonthCell({
         {date.getDate()}
       </button>
 
-      {/* Events */}
       <div className="flex flex-col gap-0.5">
         {events.slice(0, MAX_VISIBLE).map(ev => {
           const c = eventColours[ev.color ?? 'slate'];
@@ -173,6 +175,7 @@ function MonthCell({
 
 function MiniCell({
   date, current, today, selected, hasEvents, bordered, shadeWeekends, onSelect,
+  isRangeStart, isRangeEnd, inRange, onMouseEnter,
 }: {
   date:          Date;
   current:       boolean;
@@ -182,33 +185,61 @@ function MiniCell({
   bordered:      boolean;
   shadeWeekends: boolean;
   onSelect:      (d: Date) => void;
+  isRangeStart?: boolean;
+  isRangeEnd?:   boolean;
+  inRange?:      boolean;
+  onMouseEnter?: () => void;
 }) {
   const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+  const isEndpoint = isRangeStart || isRangeEnd;
+
+  // Strip background behind the circle (connects start → end)
+  const stripCls = (() => {
+    const bg = 'bg-primary-100 dark:bg-primary-900/40';
+    if (isRangeStart && isRangeEnd) return '';           // single-day range — no strip
+    if (isRangeStart)               return `${bg} rounded-l-full ml-1`;
+    if (isRangeEnd)                 return `${bg} rounded-r-full mr-1`;
+    if (inRange)                    return bg;
+    return '';
+  })();
+
   return (
-    <div className={[
-      'flex flex-col items-center gap-0.5',
-      bordered ? 'border-r border-b border-ink-100 dark:border-ink-700 py-1' : '',
-      shadeWeekends && isWeekend ? 'bg-ink-100/60 dark:bg-ink-900/40 rounded' : '',
-    ].join(' ')}>
+    <div
+      className={[
+        'relative flex flex-col items-center gap-0.5',
+        bordered ? 'border-r border-b border-ink-100 dark:border-ink-700 py-1' : '',
+        shadeWeekends && isWeekend && !inRange && !isEndpoint ? 'bg-ink-100/60 dark:bg-ink-900/40 rounded' : '',
+      ].join(' ')}
+      onMouseEnter={onMouseEnter}
+    >
+      {/* Range strip */}
+      {stripCls && (
+        <div className={`absolute inset-x-0 top-0 h-8 ${stripCls}`} aria-hidden="true" />
+      )}
+
       <button
         type="button"
         onClick={() => onSelect(date)}
         aria-label={date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-        aria-pressed={selected}
+        aria-pressed={selected || isEndpoint}
         className={[
-          'w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium font-body transition-colors',
-          today
-            ? 'bg-primary-700 dark:bg-primary-500 text-ink-900 font-bold'
-            : selected
-              ? 'bg-ink-900 dark:bg-ink-50 text-white dark:text-ink-900'
-              : current
-                ? 'text-ink-900 dark:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-700'
-                : 'text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
+          'relative w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium font-body transition-colors z-10',
+          isEndpoint
+            ? 'bg-primary-500 text-ink-900 font-bold'
+            : inRange
+              ? 'text-ink-900 dark:text-ink-50 hover:bg-primary-200 dark:hover:bg-primary-800/50'
+              : selected
+                ? 'bg-primary-500 text-ink-900 font-bold'
+                : today
+                  ? 'ring-2 ring-primary-500 text-ink-900 dark:text-ink-50 font-bold hover:bg-ink-100 dark:hover:bg-ink-700'
+                  : current
+                    ? 'text-ink-900 dark:text-ink-50 hover:bg-ink-100 dark:hover:bg-ink-700'
+                    : 'text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
         ].join(' ')}
       >
         {date.getDate()}
       </button>
-      {/* Event dot */}
+
       <div className={`w-1 h-1 rounded-full ${hasEvents ? 'bg-primary-500' : 'bg-transparent'}`} />
     </div>
   );
@@ -220,24 +251,28 @@ export function Calendar({
   defaultMonth,
   selected,
   onSelect,
-  events    = [],
-  variant        = 'month',
-  bordered       = false,
-  shadeWeekends  = false,
-  className      = '',
+  events       = [],
+  variant      = 'month',
+  bordered     = false,
+  shadeWeekends = false,
+  rangeStart,
+  rangeEnd,
+  rangeHover,
+  onRangeHover,
+  className    = '',
 }: CalendarProps) {
   const today = new Date();
 
   const [viewDate, setViewDate] = useState<Date>(() => {
-    const d = defaultMonth ?? new Date();
-    return new Date(d.getFullYear(), d.getMonth(), 1);
+    // Default to the month of rangeStart or selected if provided
+    const anchor = rangeStart ?? (selected ?? defaultMonth ?? new Date());
+    return new Date(anchor.getFullYear(), anchor.getMonth(), 1);
   });
 
   const year  = viewDate.getFullYear();
   const month = viewDate.getMonth();
   const cells = buildGrid(year, month);
 
-  // Build event lookup map by ISO date
   const eventMap = React.useMemo(() => {
     const m: Record<string, CalendarEvent[]> = {};
     for (const ev of events) {
@@ -251,6 +286,29 @@ export function Calendar({
   const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
   const goToday   = () => setViewDate(new Date(today.getFullYear(), today.getMonth(), 1));
 
+  // ── Range helpers ──────────────────────────────────────────
+  // Compute effective lo/hi — use hover date as provisional end when end not set
+  const rangeInfo = React.useMemo(() => {
+    const start = rangeStart ? stripTime(rangeStart) : null;
+    const end   = rangeEnd   ? stripTime(rangeEnd)
+                : rangeHover ? stripTime(rangeHover)
+                : null;
+    if (!start || !end) return { lo: start, hi: null };
+    return start <= end ? { lo: start, hi: end } : { lo: end, hi: start };
+  }, [rangeStart, rangeEnd, rangeHover]);
+
+  const isInRange = (d: Date) => {
+    const { lo, hi } = rangeInfo;
+    if (!lo || !hi) return false;
+    const t = stripTime(d);
+    return t > lo && t < hi;
+  };
+
+  const isRangeEdge = (d: Date, edge: 'start' | 'end') => {
+    const ref = edge === 'start' ? rangeInfo.lo : rangeInfo.hi;
+    return !!ref && isSameDay(d, ref);
+  };
+
   const handleSelect = (date: Date) => onSelect?.(date);
 
   // ── Mini ────────────────────────────────────────────────
@@ -258,61 +316,129 @@ export function Calendar({
     const borderWrap = bordered
       ? 'border border-ink-200 dark:border-ink-700 rounded-2xl overflow-hidden p-3'
       : '';
+    const isRangeMode = rangeStart !== undefined || rangeEnd !== undefined;
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [view, setView]             = useState<'days' | 'monthYear'>('days');
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [pickerYear, setPickerYear] = useState(year);
+
+    const openMonthYear = () => { setPickerYear(year); setView('monthYear'); };
+    const pickMonth     = (m: number) => { setViewDate(new Date(pickerYear, m, 1)); setView('days'); };
 
     return (
-      <div className={['w-64 select-none', borderWrap, className].filter(Boolean).join(' ')}>
-        {/* Header */}
-        <div className="flex items-center justify-between mb-3">
-          <NavButton onClick={prevMonth} label="Previous month"><ChevronLeft className="w-4 h-4" /></NavButton>
-          <button
-            type="button"
-            onClick={goToday}
-            className="text-sm font-semibold font-display text-ink-900 dark:text-ink-50 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            {MONTHS[month]} {year}
-          </button>
-          <NavButton onClick={nextMonth} label="Next month"><ChevronRight className="w-4 h-4" /></NavButton>
-        </div>
-
-        {/* Day headers */}
-        <div className={[
-          'grid grid-cols-7',
-          bordered ? 'border-t border-l border-ink-100 dark:border-ink-700' : 'gap-y-1 mb-1',
-        ].join(' ')}>
-          {DAYS.map(d => (
-            <div
-              key={d}
-              className={[
-                'flex items-center justify-center py-1',
-                bordered ? 'border-r border-b border-ink-100 dark:border-ink-700' : '',
-              ].join(' ')}
-            >
-              <span className="text-xs font-medium font-body text-ink-500 dark:text-ink-300 w-8 text-center">
-                {d[0]}
-              </span>
+      <div
+        className={['w-64 select-none', borderWrap, className].filter(Boolean).join(' ')}
+        onMouseLeave={isRangeMode ? () => onRangeHover?.(null) : undefined}
+      >
+        {/* ── Month/year quick-picker ── */}
+        {view === 'monthYear' ? (
+          <>
+            {/* Year navigation header */}
+            <div className="flex items-center justify-between mb-3">
+              <NavButton onClick={() => setPickerYear(y => y - 1)} label="Previous year">
+                <ChevronLeft className="w-4 h-4" />
+              </NavButton>
+              <button
+                type="button"
+                onClick={() => setView('days')}
+                className="text-sm font-semibold font-display text-ink-900 dark:text-ink-50 hover:text-primary-500 dark:hover:text-primary-400 transition-colors flex items-center gap-1"
+              >
+                {pickerYear}
+                <ChevronDown className="w-3 h-3 rotate-180" aria-hidden="true" />
+              </button>
+              <NavButton onClick={() => setPickerYear(y => y + 1)} label="Next year">
+                <ChevronRight className="w-4 h-4" />
+              </NavButton>
             </div>
-          ))}
-        </div>
 
-        {/* Grid */}
-        <div className={[
-          'grid grid-cols-7',
-          bordered ? 'border-l border-ink-100 dark:border-ink-700' : 'gap-y-1',
-        ].join(' ')}>
-          {cells.map(({ date, current }, i) => (
-            <MiniCell
-              key={i}
-              date={date}
-              current={current}
-              today={isSameDay(date, today)}
-              selected={!!selected && isSameDay(date, selected)}
-              hasEvents={!!(eventMap[toISO(date)]?.length)}
-              bordered={bordered}
-              shadeWeekends={shadeWeekends}
-              onSelect={handleSelect}
-            />
-          ))}
-        </div>
+            {/* 3×4 month grid */}
+            <div className="grid grid-cols-3 gap-1">
+              {MONTHS.map((name, idx) => {
+                const isActive = pickerYear === year && idx === month;
+                const isTodayMonth = pickerYear === today.getFullYear() && idx === today.getMonth();
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => pickMonth(idx)}
+                    className={[
+                      'py-2 rounded-xl text-sm font-body font-medium transition-colors',
+                      isActive
+                        ? 'bg-primary-500 text-ink-900 font-bold'
+                        : isTodayMonth
+                          ? 'ring-2 ring-primary-500 text-ink-900 dark:text-ink-50'
+                          : 'text-ink-700 dark:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700',
+                    ].join(' ')}
+                  >
+                    {name.slice(0, 3)}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <>
+            {/* ── Day calendar header ── */}
+            <div className="flex items-center justify-between mb-3">
+              <NavButton onClick={prevMonth} label="Previous month"><ChevronLeft className="w-4 h-4" /></NavButton>
+              <button
+                type="button"
+                onClick={openMonthYear}
+                className="text-sm font-semibold font-display text-ink-900 dark:text-ink-50 hover:text-primary-500 dark:hover:text-primary-400 transition-colors flex items-center gap-1"
+                aria-label={`${MONTHS[month]} ${year} — click to change month or year`}
+              >
+                {MONTHS[month]} {year}
+                <ChevronDown className="w-3 h-3 text-ink-400 dark:text-ink-300" aria-hidden="true" />
+              </button>
+              <NavButton onClick={nextMonth} label="Next month"><ChevronRight className="w-4 h-4" /></NavButton>
+            </div>
+
+            {/* Day headers */}
+            <div className={[
+              'grid grid-cols-7',
+              bordered ? 'border-t border-l border-ink-100 dark:border-ink-700' : 'gap-y-1 mb-1',
+            ].join(' ')}>
+              {DAYS.map(d => (
+                <div
+                  key={d}
+                  className={[
+                    'flex items-center justify-center py-1',
+                    bordered ? 'border-r border-b border-ink-100 dark:border-ink-700' : '',
+                  ].join(' ')}
+                >
+                  <span className="text-xs font-medium font-body text-ink-500 dark:text-ink-300 w-8 text-center">
+                    {d[0]}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Day grid */}
+            <div className={[
+              'grid grid-cols-7',
+              bordered ? 'border-l border-ink-100 dark:border-ink-700' : 'gap-y-1',
+            ].join(' ')}>
+              {cells.map(({ date, current }, i) => (
+                <MiniCell
+                  key={i}
+                  date={date}
+                  current={current}
+                  today={isSameDay(date, today)}
+                  selected={!!selected && isSameDay(date, selected)}
+                  hasEvents={!!(eventMap[toISO(date)]?.length)}
+                  bordered={bordered}
+                  shadeWeekends={shadeWeekends}
+                  onSelect={handleSelect}
+                  isRangeStart={isRangeMode ? isRangeEdge(date, 'start') : undefined}
+                  isRangeEnd={isRangeMode ? isRangeEdge(date, 'end') : undefined}
+                  inRange={isRangeMode ? isInRange(date) : undefined}
+                  onMouseEnter={isRangeMode ? () => onRangeHover?.(date) : undefined}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     );
   }
@@ -320,7 +446,6 @@ export function Calendar({
   // ── Month ───────────────────────────────────────────────
   return (
     <div className={['flex flex-col select-none', className].filter(Boolean).join(' ')}>
-      {/* Header */}
       <div className="flex items-center justify-between px-1 mb-4">
         <h2 className="text-base font-bold font-display text-ink-900 dark:text-ink-50">
           {MONTHS[month]} {year}
@@ -338,13 +463,9 @@ export function Calendar({
         </div>
       </div>
 
-      {/* Day headers */}
       <div className="grid grid-cols-7 border-t border-l border-ink-100 dark:border-ink-700">
         {DAYS.map(d => (
-          <div
-            key={d}
-            className="border-b border-r border-ink-100 dark:border-ink-700 py-2 text-center"
-          >
+          <div key={d} className="border-b border-r border-ink-100 dark:border-ink-700 py-2 text-center">
             <span className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wide">
               {d}
             </span>
@@ -352,7 +473,6 @@ export function Calendar({
         ))}
       </div>
 
-      {/* Grid */}
       <div className="grid grid-cols-7 border-l border-ink-100 dark:border-ink-700">
         {cells.map(({ date, current }, i) => (
           <MonthCell

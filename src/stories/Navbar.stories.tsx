@@ -27,7 +27,7 @@ type Story = StoryObj<typeof meta>;
 const LOGO_LIGHT = (
   <div className="flex items-center gap-2">
     <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
-    <span className="text-[15px] font-extrabold font-display text-ink-900 tracking-tight leading-none">Golden Passport</span>
+    <span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-none">Golden Passport</span>
   </div>
 );
 
@@ -70,7 +70,7 @@ function IconBtn({ label, appearance = 'light' }: { label: string; appearance?: 
       className={[
         'flex items-center justify-center w-9 h-9 rounded-lg transition-colors',
         appearance === 'dark'
-          ? 'text-ink-400 hover:text-ink-100 hover:bg-ink-800'
+          ? 'text-ink-300 hover:text-ink-100 hover:bg-ink-800'
           : 'text-ink-500 hover:text-ink-700 hover:bg-ink-100',
       ].join(' ')}
     >
@@ -263,8 +263,8 @@ export const InContext: Story = {
           </>
         }
       />
-      <main className="flex-1 mx-auto max-w-[80rem] w-full px-4 sm:px-6 lg:px-8 py-8">
-        <p className="text-sm font-body text-ink-400 dark:text-ink-500">Page content goes here</p>
+      <main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8">
+        <p className="text-sm font-body text-ink-400 dark:text-ink-300">Page content goes here</p>
       </main>
     </div>
   ),
@@ -312,10 +312,11 @@ export const AllVariants: Story = {
   args: {},
   render: () => (
     <div className="flex flex-col gap-0">
-      <Navbar logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} />
-      <Navbar appearance="dark" logo={LOGO_DARK} items={NAV_ITEMS_SIMPLE} user={USER} />
-      <Navbar logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} search />
+      <Navbar ariaLabel="Light navigation" logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} />
+      <Navbar ariaLabel="Dark navigation" appearance="dark" logo={LOGO_DARK} items={NAV_ITEMS_SIMPLE} user={USER} />
+      <Navbar ariaLabel="Light navigation with search" logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} search />
       <Navbar
+        ariaLabel="Dark navigation with search and actions"
         appearance="dark"
         logo={LOGO_DARK}
         items={NAV_ITEMS_SIMPLE}

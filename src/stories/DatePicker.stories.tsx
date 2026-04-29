@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { DatePicker, TimePicker, DateTimePicker } from '../components/DatePicker';
+import { DatePicker, TimePicker, DateTimePicker, DateRangePicker } from '../components/DatePicker';
+import type { DateRange } from '../components/DatePicker';
 
 const meta = {
   title: 'Forms/DatePicker',
@@ -151,10 +152,51 @@ export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-6 max-w-xs">
       <DatePicker     label="Date"        placeholder="Select a date" />
-      <TimePicker     label="Time"        placeholder="Select a time" />
-      <DateTimePicker label="Date & Time" placeholder="Select date & time" />
-      <DatePicker     label="With hint"   placeholder="Select date" hint="Used for scheduling" />
-      <DatePicker     label="With error"  placeholder="Select date" error="Required field" />
+      <TimePicker       label="Time"        placeholder="Select a time" />
+      <DateTimePicker   label="Date & Time" placeholder="Select date & time" />
+      <DateRangePicker  label="Date range" />
+      <DatePicker       label="With hint"   placeholder="Select date" hint="Used for scheduling" />
+      <DatePicker       label="With error"  placeholder="Select date" error="Required field" />
+    </div>
+  ),
+};
+
+// ── DateRangePicker ───────────────────────────────────────
+
+export const RangePicker: Story = {
+  name: 'Date range picker',
+  args: { label: '', placeholder: '' },
+  render: () => {
+    const [range, setRange] = useState<DateRange>({ start: null, end: null });
+    return (
+      <div className="max-w-sm flex flex-col gap-3">
+        <DateRangePicker
+          label="Trip dates"
+          startLabel="Check-in"
+          endLabel="Check-out"
+          startPlaceholder="Add date"
+          endPlaceholder="Add date"
+          value={range}
+          onChange={setRange}
+        />
+        {(range.start || range.end) && (
+          <p className="text-xs font-body text-ink-500 dark:text-ink-400">
+            {range.start && <>From: <strong className="text-ink-900 dark:text-ink-50">{range.start.toDateString()}</strong></>}
+            {range.start && range.end && <span className="mx-1">→</span>}
+            {range.end && <>To: <strong className="text-ink-900 dark:text-ink-50">{range.end.toDateString()}</strong></>}
+          </p>
+        )}
+      </div>
+    );
+  },
+};
+
+export const RangePickerUncontrolled: Story = {
+  name: 'Date range — uncontrolled',
+  args: { label: '', placeholder: '' },
+  render: () => (
+    <div className="max-w-sm">
+      <DateRangePicker label="Select period" hint="Click to pick a start then end date" />
     </div>
   ),
 };

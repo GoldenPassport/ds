@@ -1,5 +1,5 @@
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 
 export type BannerVariant = 'dark' | 'primary' | 'light';
 
@@ -31,9 +31,9 @@ export interface BannerProps {
 // ── Variant token maps ─────────────────────────────────────
 
 const containerMap: Record<BannerVariant, string> = {
-  dark:    'bg-ink-900 after:bg-white/10',
-  primary: 'bg-primary-500 after:bg-ink-900/10',
-  light:   'bg-ink-50 dark:bg-ink-800 border-b border-ink-200 dark:border-ink-700 after:bg-ink-200 dark:after:bg-ink-700',
+  dark:    'bg-ink-900 border-b border-white/10',
+  primary: 'bg-primary-500 border-b border-ink-900/10',
+  light:   'bg-ink-50 dark:bg-ink-800 border-b border-ink-200 dark:border-ink-700',
 };
 
 const textMap: Record<BannerVariant, string> = {
@@ -51,7 +51,7 @@ const titleMap: Record<BannerVariant, string> = {
 const actionMap: Record<BannerVariant, string> = {
   dark:    'bg-white/10 text-white ring-1 ring-inset ring-white/20 hover:bg-white/20',
   primary: 'bg-ink-900/10 text-ink-900 ring-1 ring-inset ring-ink-900/20 hover:bg-ink-900/20',
-  light:   'bg-primary-600 text-white hover:bg-primary-700',
+  light:   'bg-primary-500 text-ink-900 hover:bg-primary-600',
 };
 
 const dismissMap: Record<BannerVariant, string> = {
@@ -87,7 +87,7 @@ export function Banner({
           actionMap[variant],
         ].join(' ')}
       >
-        {action.label} <span aria-hidden="true">→</span>
+        {action.label} <ArrowRight className="inline w-3.5 h-3.5 ml-1" aria-hidden="true" />
       </a>
     ) : (
       <button
@@ -99,7 +99,7 @@ export function Banner({
           actionMap[variant],
         ].join(' ')}
       >
-        {action.label} <span aria-hidden="true">→</span>
+        {action.label} <ArrowRight className="inline w-3.5 h-3.5 ml-1" aria-hidden="true" />
       </button>
     )
   ) : null;
@@ -108,8 +108,6 @@ export function Banner({
     <div
       className={[
         'relative isolate flex items-center gap-x-6 overflow-hidden px-6 py-2.5',
-        // Bottom-edge line
-        'after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px',
         'sm:px-3.5',
         // When a dismiss button is present, sm:before:flex-1 creates an equal
         // invisible spacer before the content so it stays visually centred.

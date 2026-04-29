@@ -7,7 +7,8 @@ import { Input }     from '../components/Input';
 import { Button }    from '../components/Button';
 import { Checkbox }  from '../components/Checkbox';
 import { OtpInput }  from '../components/OtpInput';
-import { Badge }     from '../components/Badge';
+import { Badge }      from '../components/Badge';
+import { Hyperlink }  from '../components/Hyperlink';
 import {
   Fieldset,
   Legend,
@@ -40,7 +41,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-      <p className="hidden md:block mt-6 text-xs font-body text-ink-400 dark:text-ink-500 text-center">
+      <p className="hidden md:block mt-6 text-xs font-body text-ink-500 dark:text-ink-300 text-center">
         © {new Date().getFullYear()} Golden Passport. All rights reserved.
       </p>
     </div>
@@ -54,7 +55,7 @@ function OrDivider() {
         <div className="w-full border-t border-ink-100 dark:border-ink-800" />
       </div>
       <div className="relative flex justify-center">
-        <span className="bg-white dark:bg-ink-900 px-3 text-xs font-body text-ink-400 dark:text-ink-500">
+        <span className="bg-white dark:bg-ink-900 px-3 text-xs font-body text-ink-500 dark:text-ink-300">
           or continue with
         </span>
       </div>
@@ -133,7 +134,7 @@ function StandardLogin() {
       <h1 className="text-xl font-bold font-display text-ink-900 dark:text-ink-50 mb-1">Sign in</h1>
       <p className="text-sm font-body text-ink-500 dark:text-ink-300 mb-6">
         Don't have an account?{' '}
-        <a href="#" className="font-semibold text-primary-600 dark:text-primary-400 hover:underline">Sign up</a>
+        <Hyperlink href="#" className="font-semibold">Sign up</Hyperlink>
       </p>
 
       <form onSubmit={handleSubmit} noValidate>
@@ -160,14 +161,12 @@ function StandardLogin() {
               onChange={e => { setPassword(e.target.value); setError(''); }}
               autoComplete="current-password"
               cornerHint={
-                <a href="#" className="text-primary-600 dark:text-primary-400 hover:underline">
-                  Forgot password?
-                </a>
+                <Hyperlink href="#">Forgot password?</Hyperlink>
               }
               rightAction={
                 <button type="button" onClick={() => setShowPw(v => !v)}
                   aria-label={showPw ? 'Hide password' : 'Show password'}
-                  className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1">
+                  className="text-ink-400 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 transition-colors p-1">
                   {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               }
@@ -270,11 +269,9 @@ function OtpLogin() {
 
         <OrDivider />
         <GoogleButton />
-        <p className="mt-6 text-center text-xs font-body text-ink-400 dark:text-ink-500">
+        <p className="mt-6 text-center text-xs font-body text-ink-500 dark:text-ink-300">
           Have a password?{' '}
-          <a href="#" className="font-semibold text-primary-600 dark:text-primary-400 hover:underline">
-            Sign in with password
-          </a>
+          <Hyperlink href="#" className="font-semibold">Sign in with password</Hyperlink>
         </p>
       </AuthShell>
     );
@@ -321,10 +318,10 @@ function OtpLogin() {
             <button type="button" onClick={handleResend}
               className="text-ink-500 hover:text-ink-700 dark:text-ink-300 dark:hover:text-ink-200 transition-colors">
               Didn't get a code?{' '}
-              <span className="font-semibold text-primary-600 dark:text-primary-400">Resend</span>
+              <span className="font-semibold text-primary-800 dark:text-primary-400">Resend</span>
             </button>
           )}
-          <span className="text-ink-400 dark:text-ink-500">Try: 123456</span>
+          <span className="text-ink-500 dark:text-ink-300">Try: 123456</span>
         </div>
       </AuthShell>
     );
@@ -418,17 +415,17 @@ function TwoFaLogin() {
                 rightAction={
                   <button type="button" onClick={() => setShowPw(v => !v)}
                     aria-label={showPw ? 'Hide password' : 'Show password'}
-                    className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1">
+                    className="text-ink-400 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 transition-colors p-1">
                     {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 }
               />
             </FieldGroup>
 
-            <div className="flex items-center gap-1.5 mt-4" aria-label="Step 1 of 2">
+            <div role="group" className="flex items-center gap-1.5 mt-4" aria-label="Step 1 of 2">
               <div className="h-1 flex-1 rounded-full bg-primary-500" />
               <div className="h-1 flex-1 rounded-full bg-ink-100 dark:bg-ink-800" />
-              <span className="text-[10px] font-body text-ink-400 dark:text-ink-500 ml-1">1 / 2</span>
+              <span className="text-[10px] font-body text-ink-500 dark:text-ink-300 ml-1">1 / 2</span>
             </div>
 
             <Button type="submit" variant="primary" loading={loading} className="w-full mt-4">
@@ -470,10 +467,10 @@ function TwoFaLogin() {
             />
           </FieldGroup>
 
-          <div className="flex items-center gap-1.5 mt-4" aria-label="Step 2 of 2">
+          <div role="group" className="flex items-center gap-1.5 mt-4" aria-label="Step 2 of 2">
             <div className="h-1 flex-1 rounded-full bg-primary-500" />
             <div className="h-1 flex-1 rounded-full bg-primary-500" />
-            <span className="text-[10px] font-body text-ink-400 dark:text-ink-500 ml-1">2 / 2</span>
+            <span className="text-[10px] font-body text-ink-500 dark:text-ink-300 ml-1">2 / 2</span>
           </div>
 
           <Button variant="primary" loading={loading} disabled={otp.length < 6 || loading}
@@ -482,11 +479,9 @@ function TwoFaLogin() {
           </Button>
         </Fieldset>
 
-        <p className="text-center text-xs font-body text-ink-400 dark:text-ink-500 mt-4">
+        <p className="text-center text-xs font-body text-ink-500 dark:text-ink-300 mt-4">
           Lost access to your authenticator?{' '}
-          <a href="#" className="font-semibold text-primary-600 dark:text-primary-400 hover:underline">
-            Use a recovery code
-          </a>
+          <Hyperlink href="#" className="font-semibold">Use a recovery code</Hyperlink>
         </p>
         <p className="text-center text-xs font-body text-ink-300 dark:text-ink-600 mt-1">
           Demo code: 123456

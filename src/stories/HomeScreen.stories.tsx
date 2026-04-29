@@ -3,7 +3,7 @@ import React from 'react';
 import {
   FolderOpen, Cpu, Activity, Globe, BarChart2, Settings,
   ChevronRight, ArrowUpCircle, ArrowDownCircle, RefreshCw,
-  Bell, Plus,
+  Bell, Plus, ArrowUpDown,
 } from 'lucide-react';
 
 import gpLogo          from '../../assets/gp-logo.png';
@@ -175,7 +175,7 @@ function DeploymentList({ rows }: { rows: Deployment[] }) {
           )}
         </h2>
         <button type="button" className="inline-flex items-center gap-1 text-sm font-body text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
-          Sort by <span className="text-xs">⇅</span>
+          Sort by <ArrowUpDown className="w-3.5 h-3.5" aria-hidden="true" />
         </button>
       </div>
       {rows.length === 0 ? (
@@ -335,11 +335,6 @@ export const Sidebar: Story = {
   render: () => <SidebarDemo />,
 };
 
-export const SidebarDark: Story = {
-  name: 'Sidebar — deployments (dark)',
-  render: () => <SidebarDemo dark />,
-};
-
 // ── Story 2: Stacked layout ───────────────────────────────
 
 const STATS = [
@@ -430,7 +425,7 @@ function TransactionRow({ t }: { t: Transaction }) {
 function TransactionTable() {
   return (
     <div>
-      <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50 pb-3 mb-4 border-b border-ink-200 dark:border-ink-700">Recent activity</h2>
+      <h2 className="text-base font-semibold font-display text-ink-900 dark:text-ink-50 pb-3 mb-4">Recent activity</h2>
       {TRANSACTIONS.map(group => (
         <div key={group.group} className="mb-6">
           <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 py-3 border-t border-b border-ink-200 dark:border-ink-700">
@@ -453,7 +448,10 @@ function CashflowFilterTabs() {
     { label: 'All-time',     value: 'all' },
   ];
   return (
-    <div className="border-b border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800">
+    <div className="relative bg-white dark:bg-ink-800">
+      {/* Divider — absolutely positioned so tab border-b-2 paints directly on top of it */}
+      <div className="absolute bottom-0 inset-x-0 h-px bg-ink-200 dark:bg-ink-700" aria-hidden="true" />
+
       {/* Mobile: title + button row, then scrollable tabs */}
       <div className="sm:hidden flex items-center justify-between px-4 pt-4 pb-0">
         <span className="text-base font-semibold font-display text-ink-900 dark:text-ink-50">Cashflow</span>
@@ -462,7 +460,7 @@ function CashflowFilterTabs() {
           New invoice
         </Button>
       </div>
-      <div className="flex items-center overflow-x-auto px-4 sm:px-6 gap-0 scrollbar-none">
+      <div className="relative z-10 flex items-center overflow-x-auto px-4 sm:px-6 gap-0 scrollbar-none">
         <span className="hidden sm:block text-base font-semibold font-display text-ink-900 dark:text-ink-50 mr-6 py-4 shrink-0">Cashflow</span>
         {tabs.map(t => (
           <button
@@ -472,8 +470,8 @@ function CashflowFilterTabs() {
             className={[
               'px-1 py-4 mr-6 text-sm font-medium font-body border-b-2 whitespace-nowrap transition-colors shrink-0',
               active === t.value
-                ? 'border-primary-500 text-primary-800 dark:text-primary-400'
-                : 'border-transparent text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200',
+                ? 'border-primary-500 text-ink-900 dark:text-ink-50'
+                : 'border-transparent text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-600',
             ].join(' ')}
           >
             {t.label}
@@ -533,7 +531,3 @@ export const Stacked: Story = {
   render: () => <StackedDemo />,
 };
 
-export const StackedDark: Story = {
-  name: 'Stacked — cashflow (dark)',
-  render: () => <StackedDemo dark />,
-};

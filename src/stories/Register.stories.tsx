@@ -6,7 +6,8 @@ import gpLogo       from '../../assets/gp-logo.png';
 import { Input }    from '../components/Input';
 import { Button }   from '../components/Button';
 import { Checkbox } from '../components/Checkbox';
-import { OtpInput } from '../components/OtpInput';
+import { OtpInput }  from '../components/OtpInput';
+import { Hyperlink } from '../components/Hyperlink';
 import {
   Fieldset,
   Legend,
@@ -182,7 +183,7 @@ function FullRegistrationForm() {
       </h1>
       <p className="text-sm font-body text-ink-500 dark:text-ink-300 mb-6">
         Already have an account?{' '}
-        <a href="#" className="font-semibold text-primary-800 dark:text-primary-400 hover:underline">Sign in</a>
+        <Hyperlink href="#" className="font-semibold">Sign in</Hyperlink>
       </p>
 
       <form onSubmit={handleSubmit} noValidate>
@@ -254,7 +255,7 @@ function FullRegistrationForm() {
                 rightAction={
                   <button type="button" onClick={() => setShowPw(v => !v)}
                     aria-label={showPw ? 'Hide' : 'Show'}
-                    className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1">
+                    className="text-ink-400 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 transition-colors p-1">
                     {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 }
@@ -274,7 +275,7 @@ function FullRegistrationForm() {
               rightAction={
                 <button type="button" onClick={() => setShowCf(v => !v)}
                   aria-label={showCf ? 'Hide' : 'Show'}
-                  className="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1">
+                  className="text-ink-400 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 transition-colors p-1">
                   {showCf ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               }
@@ -386,7 +387,7 @@ function EmailOnlyForm() {
 
         <p className="mt-6 text-center text-xs font-body text-ink-500 dark:text-ink-300">
           Already have an account?{' '}
-          <a href="#" className="font-semibold text-primary-800 dark:text-primary-400 hover:underline">Sign in</a>
+          <Hyperlink href="#" className="font-semibold">Sign in</Hyperlink>
         </p>
       </AuthShell>
     );

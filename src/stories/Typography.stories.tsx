@@ -1,4 +1,5 @@
 import type { Meta } from '@storybook/react';
+import { Hyperlink } from '../components/Hyperlink';
 
 const meta: Meta = {
   title: 'Styling/Typography',
@@ -126,9 +127,7 @@ export const Typefaces = {
           </p>
         </Row>
         <Row label="Link">
-          <a href="#" className="text-sm font-body font-medium text-primary-800 dark:text-primary-400 hover:underline">
-            View all projects →
-          </a>
+          <Hyperlink href="#" className="text-sm font-medium">View all projects →</Hyperlink>
         </Row>
       </Section>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Hyperlink } from './Hyperlink';
 
 // ── Types ─────────────────────────────────────────────────
 
@@ -38,11 +39,21 @@ export interface DescriptionListProps {
 // ── Action link ───────────────────────────────────────────
 
 function ActionLink({ action }: { action: DescriptionListAction }) {
-  const cls = 'text-xs font-semibold font-body text-primary-800 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-300 transition-colors shrink-0';
-  return action.href ? (
-    <a href={action.href} className={cls}>{action.label}</a>
-  ) : (
-    <button type="button" onClick={action.onClick} className={cls}>{action.label}</button>
+  if (action.href) {
+    return (
+      <Hyperlink href={action.href} className="text-xs font-semibold shrink-0">
+        {action.label}
+      </Hyperlink>
+    );
+  }
+  return (
+    <button
+      type="button"
+      onClick={action.onClick}
+      className="text-xs font-semibold font-body text-[var(--link-primary)] hover:underline underline-offset-2 transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 rounded-sm"
+    >
+      {action.label}
+    </button>
   );
 }
 

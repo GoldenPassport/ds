@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { X } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────
 
@@ -47,7 +48,7 @@ interface ColourCfg {
 const cfg: Record<BadgeVariant, ColourCfg> = {
   // ── Status ───────────────────────────────────────────────
   active:  {
-    text:       'text-green-700 dark:text-green-400',
+    text:       'text-green-800 dark:text-green-400',
     flatBg:     'bg-green-100 dark:bg-green-900/40',
     outlinedBg: 'bg-green-50 dark:bg-green-900/20',
     ring:       'ring-green-600/20 dark:ring-green-500/30',
@@ -55,7 +56,7 @@ const cfg: Record<BadgeVariant, ColourCfg> = {
     hasDot:     true,
   },
   running: {
-    text:       'text-primary-700 dark:text-primary-400',
+    text:       'text-primary-800 dark:text-primary-400',
     flatBg:     'bg-primary-100 dark:bg-primary-900/40',
     outlinedBg: 'bg-primary-50 dark:bg-primary-900/20',
     ring:       'ring-primary-600/20 dark:ring-primary-500/30',
@@ -71,7 +72,7 @@ const cfg: Record<BadgeVariant, ColourCfg> = {
     hasDot:     true,
   },
   warning: {
-    text:       'text-amber-700 dark:text-amber-400',
+    text:       'text-amber-800 dark:text-amber-400',
     flatBg:     'bg-amber-100 dark:bg-amber-900/40',
     outlinedBg: 'bg-amber-50 dark:bg-amber-900/20',
     ring:       'ring-amber-600/20 dark:ring-amber-500/30',
@@ -113,7 +114,7 @@ const cfg: Record<BadgeVariant, ColourCfg> = {
 
   // ── Sentiment ─────────────────────────────────────────────
   happy: {
-    text:       'text-green-700 dark:text-green-400',
+    text:       'text-green-800 dark:text-green-400',
     flatBg:     'bg-green-100 dark:bg-green-900/40',
     outlinedBg: 'bg-green-50 dark:bg-green-900/20',
     ring:       'ring-green-600/20 dark:ring-green-500/30',
@@ -129,7 +130,7 @@ const cfg: Record<BadgeVariant, ColourCfg> = {
     hasDot:     false,
   },
   confused: {
-    text:       'text-yellow-700 dark:text-yellow-400',
+    text:       'text-yellow-800 dark:text-yellow-400',
     flatBg:     'bg-yellow-100 dark:bg-yellow-900/40',
     outlinedBg: 'bg-yellow-50 dark:bg-yellow-900/20',
     ring:       'ring-yellow-600/20 dark:ring-yellow-500/30',
@@ -137,7 +138,7 @@ const cfg: Record<BadgeVariant, ColourCfg> = {
     hasDot:     false,
   },
   frustrated: {
-    text:       'text-orange-700 dark:text-orange-400',
+    text:       'text-orange-800 dark:text-orange-400',
     flatBg:     'bg-orange-100 dark:bg-orange-900/40',
     outlinedBg: 'bg-orange-50 dark:bg-orange-900/20',
     ring:       'ring-orange-600/20 dark:ring-orange-500/30',
@@ -153,7 +154,7 @@ const cfg: Record<BadgeVariant, ColourCfg> = {
     hasDot:     false,
   },
   sad: {
-    text:       'text-blue-600 dark:text-blue-400',
+    text:       'text-blue-700 dark:text-blue-400',
     flatBg:     'bg-blue-100 dark:bg-blue-900/40',
     outlinedBg: 'bg-blue-50 dark:bg-blue-900/20',
     ring:       'ring-blue-600/20 dark:ring-blue-500/30',
@@ -224,16 +225,15 @@ export function Badge({
       {onRemove && (
         <button
           type="button"
-          aria-label="Remove"
           onClick={(e) => { e.stopPropagation(); onRemove(); }}
           className={[
-            'shrink-0 -mr-0.5 font-normal leading-none text-[1.5em]',
+            'shrink-0 -mr-0.5 inline-flex items-center justify-center',
             'opacity-40 hover:opacity-70 transition-opacity',
             'focus:outline-none focus-visible:ring-1 focus-visible:ring-current',
           ].join(' ')}
-          aria-hidden="false"
         >
-          ×
+          <X className="w-[0.75em] h-[0.75em]" aria-hidden="true" />
+          <span className="sr-only">Remove</span>
         </button>
       )}
     </span>

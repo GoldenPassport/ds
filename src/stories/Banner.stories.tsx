@@ -101,7 +101,7 @@ function DismissibleDemo() {
           <button
             type="button"
             onClick={() => setVisible(true)}
-            className="text-xs font-body text-primary-600 dark:text-primary-400 hover:underline"
+            className="text-xs font-body text-primary-800 dark:text-primary-400 hover:underline"
           >
             Restore banner
           </button>

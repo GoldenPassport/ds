@@ -14,6 +14,8 @@ export { PageHeading }    from './PageHeading';
 export { SectionHeading } from './SectionHeading';
 export { Stats }          from './Stats';
 export { Calendar }       from './Calendar';
+export { DatePicker, TimePicker, DateTimePicker, DateRangePicker } from './DatePicker';
+export { Hyperlink }   from './Hyperlink';
 export { Alert }       from './Alert';
 export { ErrorPage }   from './ErrorPage';
 export { Divider }     from './Divider';
@@ -87,6 +89,8 @@ export type { PageHeadingProps, PageHeadingTab, PageHeadingAction }             
 export type { SectionHeadingProps, SectionHeadingTab }                                                    from './SectionHeading';
 export type { StatsProps, StatItem, StatsVariant }                                                        from './Stats';
 export type { CalendarProps, CalendarEvent, CalendarEventColor, CalendarVariant }                          from './Calendar';
+export type { DatePickerProps, TimePickerProps, DateTimePickerProps, DateRangePickerProps, DateRange }     from './DatePicker';
+export type { HyperlinkProps, HyperlinkVariant, HyperlinkUnderline }   from './Hyperlink';
 export type { AlertProps, AlertVariant, AlertAppearance, AlertAction } from './Alert';
 export type { ErrorPageProps, ErrorPageVariant, ErrorPageAction }       from './ErrorPage';
 export type { DividerProps, DividerOrientation, DividerAlign }         from './Divider';
@@ -123,7 +127,7 @@ export type { ProgressBarProps, ProgressBarVariant, ProgressBarSize }         fr
 export type { StepsBarProps, StepsBarStep, StepsBarVariant, StepsBarPanelAppearance, StepsBarFullWidth } from './StepsBar';
 export type { PaginationProps }                                             from './Pagination';
 export type { NavbarProps, NavbarItem, NavbarUser, NavbarUserItem, NavbarAppearance } from './Navbar';
-export type { VerticalNavProps, VerticalNavGroup, VerticalNavItem, VerticalNavAppearance } from './VerticalNav';
+export type { VerticalNavProps, VerticalNavGroup, VerticalNavItem, VerticalNavSize, VerticalNavSpacing, VerticalNavRadius, VerticalNavShadow } from './VerticalNav';
 export type { SidebarNavProps, SidebarNavUser, SidebarNavAppearance } from './SidebarNav';
 export type { MediaObjectProps, MediaObjectListProps, MediaObjectAlign, MediaObjectSide, MediaObjectGap } from './MediaObject';
 export type { DrawerProps, DrawerPlacement, DrawerSize } from './Drawer';

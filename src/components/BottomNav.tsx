@@ -27,20 +27,20 @@ export interface BottomNavProps {
 
 const tokens = {
   light: {
-    bar:            'bg-white dark:bg-ink-900 border-t border-ink-200 dark:border-ink-700',
-    itemInactive:   'text-ink-500 dark:text-ink-300',
-    itemActive:     'text-primary-600 dark:text-primary-400',
-    indicator:      'bg-primary-50 dark:bg-primary-900/30',
-    indicatorHover: 'hover:bg-ink-100 dark:hover:bg-ink-800',
-    badge:          'bg-primary-500 text-ink-900',
+    bar:             'bg-white dark:bg-ink-900 border-t border-ink-200 dark:border-ink-700',
+    itemInactive:    'text-ink-500 dark:text-ink-300',
+    iconActive:      'text-primary-500 dark:text-primary-400',
+    labelActive:     'text-ink-900 dark:text-primary-400',
+    indicatorHover:  'hover:bg-ink-100 dark:hover:bg-ink-800',
+    badge:           'bg-primary-500 text-ink-900',
   },
   dark: {
-    bar:            'bg-ink-900 border-t border-ink-700',
-    itemInactive:   'text-ink-400',
-    itemActive:     'text-primary-400',
-    indicator:      'bg-ink-700',
-    indicatorHover: 'hover:bg-ink-800',
-    badge:          'bg-primary-500 text-ink-900',
+    bar:             'bg-ink-900 border-t border-ink-700',
+    itemInactive:    'text-ink-300',
+    iconActive:      'text-primary-400',
+    labelActive:     'text-primary-400',
+    indicatorHover:  'hover:bg-ink-800',
+    badge:           'bg-primary-500 text-ink-900',
   },
 };
 
@@ -80,18 +80,20 @@ export function BottomNav({
               className={[
                 'flex-1 flex items-center justify-center py-2 min-h-[56px]',
                 'transition-colors duration-150 focus:outline-none',
-                isActive ? t.itemActive : t.itemInactive,
               ].join(' ')}
             >
               {/* Pill — wraps icon + label */}
               <span
                 className={[
                   'relative flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-200',
-                  isActive ? t.indicator : t.indicatorHover,
-                ].join(' ')}
+                  !isActive && t.indicatorHover,
+                ].filter(Boolean).join(' ')}
               >
                 {/* Icon */}
-                <span className="relative w-6 h-6 flex items-center justify-center shrink-0">
+                <span className={[
+                  'relative w-6 h-6 flex items-center justify-center shrink-0',
+                  isActive ? t.iconActive : t.itemInactive,
+                ].join(' ')}>
                   {item.icon}
                   {/* Badge */}
                   {item.badge != null && (
@@ -109,7 +111,7 @@ export function BottomNav({
                 {showLabels && (
                   <span className={[
                     'text-[11px] font-body leading-none transition-all duration-150',
-                    isActive ? 'font-semibold' : 'font-medium',
+                    isActive ? `font-semibold ${t.labelActive}` : `font-medium ${t.itemInactive}`,
                   ].join(' ')}>
                     {item.label}
                   </span>

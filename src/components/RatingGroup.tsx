@@ -178,7 +178,9 @@ export function RatingGroup({
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>, index: number) {
     const v = resolveValue(e, index);
-    const next = v === committedValue ? 0 : v;
+    // Clicking the first star while any rating is set clears the selection;
+    // clicking the currently-selected star also clears it.
+    const next = (index === 1 && committedValue > 0) || v === committedValue ? 0 : v;
     if (!isControlled) setInternal(next);
     onChange?.(next);
   }

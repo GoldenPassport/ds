@@ -63,7 +63,7 @@ const tokens: Record<SidebarNavAppearance, Tokens> = {
     item:        'border-transparent font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
     itemActive:  'border-primary-500 font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',
     icon:        'text-ink-500 dark:text-ink-300',
-    iconActive:  'text-primary-800',
+    iconActive:  'text-primary-500',
     badge:       'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300',
     groupLabel:  'text-ink-500 dark:text-ink-300',
     childItem:   'font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
@@ -86,10 +86,10 @@ const tokens: Record<SidebarNavAppearance, Tokens> = {
     icon:        'text-ink-500 group-hover:text-ink-200',
     iconActive:  'text-primary-400',
     badge:       'bg-ink-800 text-ink-300',
-    groupLabel:  'text-ink-500',
+    groupLabel:  'text-ink-400',
     childItem:   'font-medium text-ink-300 hover:text-white hover:bg-ink-800',
     childActive: 'font-medium text-primary-400 bg-ink-800',
-    chevron:     'text-ink-500',
+    chevron:     'text-ink-400',
     childBorder: 'border-ink-700',
     userName:    'text-white',
     userEmail:   'text-ink-300',
@@ -129,6 +129,9 @@ function NavItem({
 
   const baseCls = [
     'group flex items-center gap-3 w-full rounded-xl text-sm font-body transition-colors text-left',
+    // Explicit sidebar background ensures axe can resolve text contrast even
+    // when the item is near an overflow-y-auto scroll boundary.
+    t.sidebar,
     // border-l-2 is only added when the active indicator is enabled;
     // the border-primary-500 / border-transparent tokens are inert without it
     depth === 0 ? `px-3 py-2${activeIndicator ? ' border-l-2' : ''}` : 'px-3 py-1.5',
@@ -299,13 +302,13 @@ export function SidebarNav({
 
       {/* Scrollable nav */}
       <nav
-        className="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-6"
+        className="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-6 isolate"
         aria-label="Sidebar navigation"
       >
         {groups.map((group, gi) => (
           <div key={gi}>
             {group.label && (
-              <p className={`mb-1 px-3 text-xs font-semibold font-body uppercase tracking-wider ${t.groupLabel}`}>
+              <p className={`mb-1 px-3 text-xs font-semibold font-body uppercase tracking-wider ${t.groupLabel} ${t.sidebar}`}>
                 {group.label}
               </p>
             )}

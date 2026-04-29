@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Copy, Pencil, Play, Trash2, Download, Share2 } from 'lucide-react';
+import { Copy, Pencil, Play, Trash2, Download, Share2, MoreHorizontal } from 'lucide-react';
 import { Menu } from '../components/Menu';
 import { Button } from '../components/Button';
 
@@ -76,8 +76,8 @@ export const IconTrigger: Story = {
     <div className="flex justify-center pt-20">
       <Menu
         trigger={
-          <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-600 transition-colors border-0 cursor-pointer text-lg">
-            ⋯
+          <button aria-label="Actions" className="w-8 h-8 flex items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-600 transition-colors border-0 cursor-pointer">
+            <MoreHorizontal className="w-4 h-4" aria-hidden="true" />
           </button>
         }
         items={workflowItems}

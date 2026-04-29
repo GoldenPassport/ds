@@ -151,6 +151,22 @@ input[type="time"]::-webkit-datetime-edit-ampm-field:focus {
   border-radius: 2px;
 }
 
+/* ── Adaptive link colour ───────────────────────────────────
+ * --link-primary uses CSS relative-colour syntax to auto-darken
+ * primary-500 to a contrast-safe shade on light backgrounds.
+ * The OKLCH lightness is clamped to ≤ 0.45, giving ≈ 5.5:1 on white.
+ *
+ * Override on any container to tune for a specific background:
+ *   .my-dark-card { --link-primary: var(--color-primary-400); }
+ * ─────────────────────────────────────────────────────────── */
+:root {
+  --link-primary: oklch(from var(--color-primary-500) min(l, 0.45) c h);
+}
+.dark {
+  /* Bright gold on dark backgrounds — primary-500 passes 11:1 on ink-900 */
+  --link-primary: var(--color-primary-500);
+}
+
 @layer utilities {
   /* Focus ring — primary */
   .gp-focus {

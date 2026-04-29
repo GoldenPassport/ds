@@ -15,6 +15,7 @@ import { Badge }           from '../components/Badge';
 import { Button }          from '../components/Button';
 import { Avatar }          from '../components/Avatar';
 import { Divider }         from '../components/Divider';
+import { Hyperlink }       from '../components/Hyperlink';
 
 const meta = {
   title: 'Example Pages/DetailScreen',
@@ -80,7 +81,7 @@ const DESCRIPTION_ITEMS = [
     label: 'Location',
     value: (
       <span className="flex items-center gap-1.5">
-        <MapPin className="w-4 h-4 text-ink-500" />
+        <MapPin className="w-4 h-4 text-ink-500 dark:text-ink-300" />
         Remote — EMEA
       </span>
     ),
@@ -89,7 +90,7 @@ const DESCRIPTION_ITEMS = [
     label: 'Salary range',
     value: (
       <span className="flex items-center gap-1.5">
-        <DollarSign className="w-4 h-4 text-ink-500" />
+        <DollarSign className="w-4 h-4 text-ink-500 dark:text-ink-300" />
         $120,000 – $150,000
       </span>
     ),
@@ -98,7 +99,7 @@ const DESCRIPTION_ITEMS = [
     label: 'Closes',
     value: (
       <span className="flex items-center gap-1.5">
-        <CalendarDays className="w-4 h-4 text-ink-500" />
+        <CalendarDays className="w-4 h-4 text-ink-500 dark:text-ink-300" />
         30 April 2026
       </span>
     ),
@@ -142,11 +143,11 @@ function Attachments() {
         {ATTACHMENTS.map(a => (
           <li key={a.name} className="flex items-center justify-between gap-3 px-4 py-3 bg-white dark:bg-ink-900">
             <span className="flex items-center gap-2.5 min-w-0">
-              <Paperclip className="w-4 h-4 shrink-0 text-ink-500" />
+              <Paperclip className="w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300" />
               <span className="text-sm font-body text-ink-700 dark:text-ink-300 truncate">{a.name}</span>
-              <span className="text-xs font-body text-ink-500 shrink-0">{a.size}</span>
+              <span className="text-xs font-body text-ink-500 dark:text-ink-300 shrink-0">{a.size}</span>
             </span>
-            <a href="#" className="text-xs font-medium font-body text-primary-800 hover:text-primary-900 shrink-0">Download</a>
+            <Hyperlink href="#" className="text-xs font-semibold shrink-0">Download</Hyperlink>
           </li>
         ))}
       </ul>
@@ -180,7 +181,7 @@ function ActivityFeed() {
           <textarea
             rows={3}
             placeholder="Add a comment…"
-            className="block w-full px-4 pt-3 pb-2 text-sm font-body bg-white dark:bg-ink-900 text-ink-900 dark:text-ink-100 placeholder:text-ink-500 outline-none resize-none"
+            className="block w-full px-4 pt-3 pb-2 text-sm font-body bg-white dark:bg-ink-900 text-ink-900 dark:text-ink-100 placeholder:text-ink-500 dark:placeholder:text-ink-300 outline-none resize-none"
           />
           <div className="flex justify-end px-3 pb-3">
             <Button size="sm" variant="primary">
@@ -224,56 +225,13 @@ export const Stacked: Story = {
         items={NAV_ITEMS}
         user={NAVBAR_USER}
         bordered
+        sticky
       />
       <main className="flex-1 mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
         <PageHeading
           backHref="#"
           title="Senior Front-End Developer"
-          meta={
-            <div className="flex items-center gap-2 flex-wrap">
-              <Badge label="Open" variant="active" />
-              <Badge label="Full-time" variant="neutral" />
-              <Badge label="Remote" variant="neutral" />
-            </div>
-          }
-          actions={<DetailActions />}
-        />
-
-        <DescriptionList
-          layout="side-by-side"
-          bordered
-          striped
-          items={DESCRIPTION_ITEMS}
-        />
-
-        <Attachments />
-
-        <Divider />
-
-        <ActivityFeed />
-      </main>
-    </div>
-  ),
-};
-
-// ── 2. Stacked layout — dark ──────────────────────────────
-
-export const StackedDark: Story = {
-  name: 'Stacked layout — dark',
-  parameters: { backgrounds: { default: 'dark' } },
-  render: () => (
-    <div className="dark min-h-screen bg-ink-900 flex flex-col">
-      <Navbar
-        appearance="dark"
-        logo={<div className="flex items-center gap-2"><img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" /><span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">Golden Passport</span></div>}
-        items={NAV_ITEMS}
-        user={NAVBAR_USER}
-        bordered
-      />
-      <main className="flex-1 mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
-        <PageHeading
-          backHref="#"
-          title="Senior Front-End Developer"
+          sticky={false}
           meta={
             <div className="flex items-center gap-2 flex-wrap">
               <Badge label="Open" variant="active" />
@@ -320,6 +278,7 @@ export const WithSidebar: Story = {
           <PageHeading
             backHref="#"
             title="Senior Front-End Developer"
+            sticky={false}
             meta={
               <div className="flex items-center gap-2 flex-wrap">
                 <Badge label="Open" variant="active" />
@@ -348,50 +307,3 @@ export const WithSidebar: Story = {
   ),
 };
 
-// ── 4. Sidebar layout — dark ──────────────────────────────
-
-export const WithSidebarDark: Story = {
-  name: 'Sidebar layout — dark',
-  render: () => (
-    <div className="dark flex h-screen bg-ink-900">
-      <div className="w-64 shrink-0 h-full">
-        <SidebarNav
-          appearance="dark"
-          logo={<div className="flex items-center gap-2"><img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" /><span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">Golden Passport</span></div>}
-          groups={SIDEBAR_GROUPS}
-          user={NAVBAR_USER}
-        />
-      </div>
-
-      <main className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-3xl px-6 lg:px-8 py-8 flex flex-col gap-8">
-          <PageHeading
-            backHref="#"
-            title="Senior Front-End Developer"
-            meta={
-              <div className="flex items-center gap-2 flex-wrap">
-                <Badge label="Open" variant="active" />
-                <Badge label="Full-time" variant="neutral" />
-                <Badge label="Remote" variant="neutral" />
-              </div>
-            }
-            actions={<DetailActions />}
-          />
-
-          <DescriptionList
-            layout="side-by-side"
-            bordered
-            striped
-            items={DESCRIPTION_ITEMS}
-          />
-
-          <Attachments />
-
-          <Divider />
-
-          <ActivityFeed />
-        </div>
-      </main>
-    </div>
-  ),
-};

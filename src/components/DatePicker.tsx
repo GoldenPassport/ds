@@ -3,6 +3,7 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { CalendarDays, Clock, X } from 'lucide-react';
 import { Calendar } from './Calendar';
 import { ButtonGroup } from './ButtonGroup';
+import { Hyperlink } from './Hyperlink';
 
 // ── Helpers ────────────────────────────────────────────────
 
@@ -100,8 +101,8 @@ function PickerTrigger({
             'border rounded-xl',
             error ? borderErr : borderNormal,
             error
-              ? 'focus:border-red-500 focus:ring-2 focus:ring-red-500/30'
-              : 'focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25',
+              ? 'focus:border-red-500'
+              : 'focus:border-primary-500',
             'outline-none transition-all duration-150',
             'disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
             className,
@@ -184,7 +185,7 @@ function ScrollColumn({
           className={[
             'shrink-0 w-10 h-8 rounded-xl text-sm font-body font-medium text-center snap-start transition-colors',
             v === selected
-              ? 'bg-primary-400 text-ink-900 font-semibold'
+              ? 'bg-primary-500 text-ink-900 font-semibold'
               : 'text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
           ].join(' ')}
         >
@@ -273,23 +274,202 @@ export function DatePicker({
               onSelect={(d) => pick(d, close)}
             />
             <div className="mt-2 flex justify-between px-1">
-              <button
-                type="button"
-                onClick={() => { if (!isControlled) setInternal(null); onChange?.(null); close(); }}
-                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
-              >
-                Clear
-              </button>
-              <button
-                type="button"
-                onClick={() => pick(new Date(), close)}
-                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
-              >
-                Today
-              </button>
+              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); if (!isControlled) setInternal(null); onChange?.(null); close(); }}>Clear</Hyperlink>
+              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); pick(new Date(), close); }}>Today</Hyperlink>
             </div>
           </PopoverPanel>
         </PickerTrigger>
+      )}
+    </Popover>
+  );
+}
+
+// ── DateRangePicker ────────────────────────────────────────
+
+export interface DateRange {
+  start: Date | null;
+  end:   Date | null;
+}
+
+export interface DateRangePickerProps {
+  value?:              DateRange | null;
+  onChange?:           (range: DateRange) => void;
+  label?:              string;
+  startLabel?:         string;
+  endLabel?:           string;
+  startPlaceholder?:   string;
+  endPlaceholder?:     string;
+  hint?:               string;
+  error?:              string;
+  disabled?:           boolean;
+  wrapClassName?:      string;
+}
+
+export function DateRangePicker({
+  value,
+  onChange,
+  label,
+  startLabel        = 'From',
+  endLabel          = 'To',
+  startPlaceholder  = 'Start date',
+  endPlaceholder    = 'End date',
+  hint,
+  error,
+  disabled,
+  wrapClassName = '',
+}: DateRangePickerProps) {
+  const isControlled = value !== undefined;
+
+  const [internalStart, setInternalStart] = useState<Date | null>(null);
+  const [internalEnd,   setInternalEnd]   = useState<Date | null>(null);
+  // 'start' = waiting for user to pick start, 'end' = waiting for end
+  const [phase, setPhase] = useState<'start' | 'end'>('start');
+  const [hoverDate, setHoverDate] = useState<Date | null>(null);
+
+  const start = isControlled ? (value?.start ?? null) : internalStart;
+  const end   = isControlled ? (value?.end   ?? null) : internalEnd;
+
+  function commit(s: Date | null, e: Date | null) {
+    if (!isControlled) { setInternalStart(s); setInternalEnd(e); }
+    onChange?.({ start: s, end: e });
+  }
+
+  function handleDayClick(date: Date) {
+    if (phase === 'start') {
+      // Always start fresh from a new anchor
+      commit(date, null);
+      setPhase('end');
+    } else {
+      // If user clicks before current start, swap so lo is always ≤ hi
+      if (start && date < start) {
+        commit(date, start);
+      } else {
+        commit(start, date);
+      }
+      setPhase('start');
+    }
+    setHoverDate(null);
+  }
+
+  function clearAll(e: React.MouseEvent) {
+    e.stopPropagation();
+    commit(null, null);
+    setPhase('start');
+    setHoverDate(null);
+  }
+
+  const borderBase = error
+    ? 'border-red-500 dark:border-red-400'
+    : 'border-ink-200 dark:border-ink-600';
+
+  const startDisplay = start ? formatDate(start) : '';
+  const endDisplay   = end   ? formatDate(end)   : '';
+
+  // The provisional end for range preview (hover) — only when awaiting end
+  const effectiveRangeEnd = phase === 'end' ? end : end;
+
+  return (
+    <Popover>
+      {({ open, close }) => (
+        <div className={`flex flex-col gap-1.5 ${wrapClassName}`}>
+          {label && (
+            <span className="text-[13px] font-semibold font-body text-ink-900 dark:text-ink-50">
+              {label}
+            </span>
+          )}
+
+          {/* Two-field trigger row */}
+          <PopoverButton
+            disabled={disabled}
+            className={[
+              'relative flex items-stretch rounded-xl border text-sm font-body',
+              'bg-white dark:bg-ink-700',
+              borderBase,
+              open ? 'border-primary-500' : '',
+              'outline-none disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
+              'transition-all duration-150',
+            ].filter(Boolean).join(' ')}
+          >
+            {/* Start field */}
+            <span className="flex items-center gap-2 px-3 py-2.5 min-w-0 flex-1">
+              <CalendarDays className="w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300" aria-hidden="true" />
+              <span className="flex flex-col items-start min-w-0">
+                <span className="text-[10px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider leading-none mb-0.5">
+                  {startLabel}
+                </span>
+                <span className={startDisplay ? 'text-ink-900 dark:text-ink-50' : 'text-ink-500 dark:text-ink-400'}>
+                  {startDisplay || startPlaceholder}
+                </span>
+              </span>
+            </span>
+
+            {/* Divider */}
+            <span className="w-px self-stretch bg-ink-200 dark:bg-ink-600" aria-hidden="true" />
+
+            {/* End field */}
+            <span className="flex items-center gap-2 px-3 py-2.5 min-w-0 flex-1">
+              <CalendarDays className="w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300" aria-hidden="true" />
+              <span className="flex flex-col items-start min-w-0">
+                <span className="text-[10px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider leading-none mb-0.5">
+                  {endLabel}
+                </span>
+                <span className={endDisplay ? 'text-ink-900 dark:text-ink-50' : 'text-ink-500 dark:text-ink-400'}>
+                  {endDisplay || endPlaceholder}
+                </span>
+              </span>
+            </span>
+
+            {/* Clear button */}
+            {(start || end) && !disabled && (
+              <span
+                className="flex items-center pr-2 pl-1 z-10"
+                onClick={clearAll}
+              >
+                <span className="p-1 rounded-xl text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
+                  <X className="w-3.5 h-3.5" />
+                </span>
+              </span>
+            )}
+          </PopoverButton>
+
+          {/* Hint / error */}
+          <p
+            role={error ? 'alert' : undefined}
+            className={[
+              'min-h-4 text-xs font-body leading-none',
+              error ? 'text-red-700 dark:text-red-400' : 'text-ink-500 dark:text-ink-300',
+            ].join(' ')}
+          >
+            {error || hint || ''}
+          </p>
+
+          {/* Calendar panel */}
+          <PopoverPanel
+            transition
+            className={`${PANEL_CLS} w-[280px]`}
+          >
+            {/* Instruction */}
+            <p className="mb-2 text-xs font-body text-ink-500 dark:text-ink-300 text-center">
+              {phase === 'start' ? 'Select start date' : 'Select end date'}
+            </p>
+
+            <Calendar
+              variant="mini"
+              rangeStart={start}
+              rangeEnd={effectiveRangeEnd}
+              rangeHover={phase === 'end' ? hoverDate : null}
+              onRangeHover={phase === 'end' ? setHoverDate : undefined}
+              onSelect={handleDayClick}
+            />
+
+            <div className="mt-2 flex justify-between px-1">
+              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); clearAll(e); close(); }}>Clear</Hyperlink>
+              {start && end && (
+                <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); close(); }}>Done</Hyperlink>
+              )}
+            </div>
+          </PopoverPanel>
+        </div>
       )}
     </Popover>
   );
@@ -385,13 +565,7 @@ export function TimePicker({
               </div>
             </div>
             <div className="mt-2 flex justify-center">
-              <button
-                type="button"
-                onClick={(e) => clear(e)}
-                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
-              >
-                Clear
-              </button>
+              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); clear(e); }}>Clear</Hyperlink>
             </div>
           </PopoverPanel>
         </PickerTrigger>
@@ -536,20 +710,8 @@ export function DateTimePicker({
 
             {/* Footer actions */}
             <div className="mt-3 flex justify-between px-1">
-              <button
-                type="button"
-                onClick={() => { if (!isControlled) setInternal(null); onChange?.(null); close(); }}
-                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
-              >
-                Clear
-              </button>
-              <button
-                type="button"
-                onClick={() => { const now = new Date(); update({ date: now, hour: now.getHours(), minute: now.getMinutes() }); }}
-                className="text-xs font-body font-medium text-primary-800 dark:text-primary-400 hover:underline transition-colors"
-              >
-                Now
-              </button>
+              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); if (!isControlled) setInternal(null); onChange?.(null); close(); }}>Clear</Hyperlink>
+              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); const now = new Date(); update({ date: now, hour: now.getHours(), minute: now.getMinutes() }); }}>Now</Hyperlink>
             </div>
           </PopoverPanel>
         </PickerTrigger>
