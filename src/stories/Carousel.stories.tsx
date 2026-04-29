@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Carousel } from '../components/Carousel';
 import type { CarouselItem } from '../components/Carousel';
 
@@ -195,4 +196,58 @@ export const AllVariants: Story = {
       ))}
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions — arrow & indicator navigation',
+  args: { items: NATURE },
+  render: () => (
+    <div className="max-w-lg mx-auto">
+      <Carousel
+        items={NATURE.slice(0, 4)}
+        variant="hero"
+        aspectRatio="aspect-[4/3]"
+        showArrows
+        showIndicators
+        aria-label="Test carousel"
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('carousel mounts with prev, next and 4 indicator buttons', async () => {
+      // findByRole blocks until the component has mounted
+      await canvas.findByRole('button', { name: /^previous$/i });
+      expect(canvas.getByRole('button', { name: /^next$/i })).toBeInTheDocument();
+      expect(canvas.getAllByRole('button', { name: /go to slide/i })).toHaveLength(4);
+    });
+
+    await step('prev is disabled on the initial slide (active starts at 0)', async () => {
+      // Initial disabled state comes from useState(0), not IntersectionObserver —
+      // this is the only arrow-state assertion immune to scroll-observer races.
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /^previous$/i })).toBeDisabled();
+      });
+    });
+
+    await step('clicking the next arrow does not throw', async () => {
+      await user.click(canvas.getByRole('button', { name: /^next$/i }));
+      // Verify the component is still intact after the click
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /^previous$/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('clicking an indicator button does not throw', async () => {
+      const indicators = canvas.getAllByRole('button', { name: /go to slide/i });
+      await user.click(indicators[2]);
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /^next$/i })).toBeInTheDocument();
+      });
+    });
+  },
 };

@@ -299,6 +299,11 @@ function FilterDialogBody({
 
 // ── SearchSet ─────────────────────────────────────────────
 
+// Stable empty object used as the default for `filterValues`.
+// A literal `{}` in a default parameter is recreated on every render,
+// which would make the `useEffect([filterValues])` loop infinitely.
+const EMPTY_FILTER_VALUES: SearchSetFilterValues = {};
+
 export function SearchSet({
   value,
   onChange,
@@ -311,7 +316,7 @@ export function SearchSet({
   summary,
   filters,
   filterDefs,
-  filterValues     = {},
+  filterValues     = EMPTY_FILTER_VALUES,
   onFilterChange,
   filterTitle      = 'Filters',
   className        = '',

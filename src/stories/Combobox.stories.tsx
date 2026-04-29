@@ -141,16 +141,16 @@ export const Interactions: Story = {
     const canvas = within(canvasElement);
     const user   = userEvent.setup();
 
-    await step('focus input — options list opens', async () => {
-      const input = canvas.getByRole('combobox');
-      await user.click(input);
+    await step('click chevron button — options list opens', async () => {
+      // ComboboxInput click alone does not open in HUI v2 — use the ComboboxButton
+      await user.click(canvas.getByRole('button'));
       await waitFor(() => {
-        expect(within(document.body).getByRole('listbox')).toBeInTheDocument();
+        expect(canvas.getByRole('listbox')).toBeInTheDocument();
       });
     });
 
     await step('all options are visible initially', async () => {
-      const lb = within(document.body).getByRole('listbox');
+      const lb = canvas.getByRole('listbox');
       expect(within(lb).getByRole('option', { name: /alex morgan/i })).toBeInTheDocument();
       expect(within(lb).getByRole('option', { name: /sarah kim/i })).toBeInTheDocument();
     });
@@ -159,28 +159,27 @@ export const Interactions: Story = {
       const input = canvas.getByRole('combobox');
       await user.type(input, 'sarah');
       await waitFor(() => {
-        const lb = within(document.body).getByRole('listbox');
+        const lb = canvas.getByRole('listbox');
         expect(within(lb).getByRole('option', { name: /sarah kim/i })).toBeInTheDocument();
         expect(within(lb).queryByRole('option', { name: /alex morgan/i })).not.toBeInTheDocument();
       });
     });
 
     await step('click filtered option — value updates and panel closes', async () => {
-      const lb = within(document.body).getByRole('listbox');
+      const lb = canvas.getByRole('listbox');
       await user.click(within(lb).getByRole('option', { name: /sarah kim/i }));
       await waitFor(() => {
         expect(canvas.getByTestId('selected-user')).toHaveTextContent('sarah');
       });
       await waitFor(() => {
-        expect(within(document.body).queryByRole('listbox')).not.toBeInTheDocument();
+        expect(canvas.queryByRole('listbox')).not.toBeInTheDocument();
       });
     });
 
-    await step('clear query and re-open shows all options', async () => {
-      const input = canvas.getByRole('combobox');
-      await user.clear(input);
+    await step('click chevron button again — re-open shows all options', async () => {
+      await user.click(canvas.getByRole('button'));
       await waitFor(() => {
-        const lb = within(document.body).getByRole('listbox');
+        const lb = canvas.getByRole('listbox');
         expect(within(lb).getByRole('option', { name: /alex morgan/i })).toBeInTheDocument();
       });
     });
@@ -188,7 +187,7 @@ export const Interactions: Story = {
     await step('press Escape — panel closes', async () => {
       await user.keyboard('{Escape}');
       await waitFor(() => {
-        expect(within(document.body).queryByRole('listbox')).not.toBeInTheDocument();
+        expect(canvas.queryByRole('listbox')).not.toBeInTheDocument();
       });
     });
   },

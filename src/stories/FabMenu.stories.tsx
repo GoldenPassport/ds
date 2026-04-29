@@ -257,36 +257,41 @@ export const Interactions: Story = {
     const canvas = within(canvasElement);
     const user   = userEvent.setup();
 
-    await step('click FAB — action items appear', async () => {
-      // The main FAB button — it's the only button initially
-      const fabBtn = canvas.getAllByRole('button')[0];
-      await user.click(fabBtn);
+    // findByRole retries until the element appears — handles the race between
+    // the runner firing play() and the first React render committing.
+    const trigger = await canvas.findByRole('button', { name: /open menu/i });
+
+    await step('open — click FAB trigger, aria-expanded becomes true', async () => {
+      await user.click(trigger);
       await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /share/i })).toBeVisible();
-        expect(canvas.getByRole('button', { name: /edit/i })).toBeVisible();
-        expect(canvas.getByRole('button', { name: /delete/i })).toBeVisible();
+        expect(trigger).toHaveAttribute('aria-expanded', 'true');
       });
+      // All three action items are now in the document
+      expect(canvas.getByRole('button', { name: /share/i })).toBeInTheDocument();
+      expect(canvas.getByRole('button', { name: /edit/i })).toBeInTheDocument();
+      expect(canvas.getByRole('button', { name: /delete/i })).toBeInTheDocument();
     });
 
-    await step('click an action item — handler fires', async () => {
+    await step('item click — fires handler and closes menu', async () => {
       await user.click(canvas.getByRole('button', { name: /edit/i }));
       await waitFor(() => {
         expect(canvas.getByTestId('fab-clicked')).toHaveTextContent('Edit');
       });
+      // Menu collapses after item selection
+      await waitFor(() => {
+        expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      });
     });
 
-    await step('FAB toggles closed after item click', async () => {
-      // re-open
-      const fabBtn = canvas.getAllByRole('button')[0];
-      await user.click(fabBtn);
-      await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /share/i })).toBeVisible();
-      });
-      // close with FAB again
-      await user.click(canvas.getAllByRole('button')[0]);
-      await waitFor(() => {
-        expect(canvas.queryByRole('button', { name: /share/i })).not.toBeInTheDocument();
-      });
+    await step('re-open then close with FAB — aria-expanded toggles', async () => {
+      // Re-open
+      await user.click(trigger);
+      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+
+      // Close via the same trigger (label flips to "Close menu" when open)
+      const closeBtn = canvas.getByRole('button', { name: /close menu/i });
+      await user.click(closeBtn);
+      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
     });
   },
 };

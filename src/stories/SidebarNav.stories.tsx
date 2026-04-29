@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import gpLogo from '../../assets/gp-logo.png';
 import {
   LayoutDashboard, Users, FolderOpen, BarChart2, FileText, Settings,
@@ -418,4 +420,112 @@ export const BrandedDark: Story = {
       }
     />
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions — expand/collapse sections',
+  args: { groups: [] },
+  render: () => (
+    <div className="w-64 h-screen bg-white dark:bg-ink-900">
+      <SidebarNav
+        logo={<Logo />}
+        groups={EXPANDABLE_GROUPS}
+        user={USER}
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('expandable "Team" item starts collapsed', async () => {
+      const teamBtn = await canvas.findByRole('button', { name: /team/i });
+      expect(teamBtn).toHaveAttribute('aria-expanded', 'false');
+      expect(canvas.queryByRole('link', { name: /members/i })).not.toBeInTheDocument();
+    });
+
+    await step('click "Team" — expands and shows children', async () => {
+      await user.click(canvas.getByRole('button', { name: /team/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /team/i })).toHaveAttribute('aria-expanded', 'true');
+        expect(canvas.getByRole('link', { name: /members/i })).toBeInTheDocument();
+        expect(canvas.getByRole('link', { name: /invitations/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('click "Team" again — collapses and hides children', async () => {
+      await user.click(canvas.getByRole('button', { name: /team/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /team/i })).toHaveAttribute('aria-expanded', 'false');
+        expect(canvas.queryByRole('link', { name: /members/i })).not.toBeInTheDocument();
+      });
+    });
+
+    await step('expand "Projects" — different section opens independently', async () => {
+      await user.click(canvas.getByRole('button', { name: /projects/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /projects/i })).toHaveAttribute('aria-expanded', 'true');
+        expect(canvas.getByRole('link', { name: /all projects/i })).toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const UserMenuInteractions: Story = {
+  name: 'Interactions — user menu dropdown',
+  args: { groups: [] },
+  render: () => {
+    const [lastClicked, setLastClicked] = useState('');
+    return (
+      <div className="w-64 h-screen bg-white dark:bg-ink-900 flex flex-col">
+        <SidebarNav
+          logo={<Logo />}
+          groups={SIMPLE_GROUPS}
+          user={{
+            name:  'Alex Johnson',
+            email: 'alex@acme.com',
+            menuItems: [
+              { label: 'Your profile', href: '#' },
+              { label: 'Settings',     href: '#' },
+              { label: 'Sign out',     onClick: () => setLastClicked('Sign out'), dividerAbove: true },
+            ],
+          }}
+        />
+        {lastClicked && (
+          <p data-testid="user-menu-clicked" className="text-xs font-body text-ink-500 px-3 py-2">
+            Clicked: {lastClicked}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click user avatar/name button → dropdown opens', async () => {
+      // The user button is a Menu.Button containing the avatar + name
+      const userBtn = await canvas.findByRole('button', { name: /alex johnson/i });
+      await user.click(userBtn);
+      await waitFor(() => {
+        expect(within(document.body).getByRole('menuitem', { name: /your profile/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('"Sign out" item is present in menu', async () => {
+      expect(within(document.body).getByRole('menuitem', { name: /sign out/i })).toBeInTheDocument();
+    });
+
+    await step('click "Sign out" → handler fires and menu closes', async () => {
+      await user.click(within(document.body).getByRole('menuitem', { name: /sign out/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('user-menu-clicked')).toHaveTextContent('Sign out');
+      });
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('menuitem', { name: /your profile/i })).not.toBeInTheDocument();
+      });
+    });
+  },
 };

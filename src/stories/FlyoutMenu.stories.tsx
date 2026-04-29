@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
 import {
@@ -308,4 +309,119 @@ export const NavbarExample: Story = {
       <Hyperlink href="#" variant="muted" className="ml-auto text-sm font-semibold">Sign in</Hyperlink>
     </nav>
   ),
+};
+
+// ── onClick items interaction ─────────────────────────────
+
+export const OnClickInteraction: Story = {
+  name: 'Interactions — onClick items',
+  render: () => {
+    const [lastClicked, setLastClicked] = React.useState('');
+    return (
+      <div className="p-8 flex flex-col gap-3">
+        <FlyoutMenu
+          trigger={<FlyoutTrigger label="Actions" />}
+          variant="simple"
+          items={[
+            { label: 'Edit',     onClick: () => setLastClicked('Edit')   },
+            { label: 'Duplicate',onClick: () => setLastClicked('Duplicate') },
+            { label: 'Archive',  onClick: () => setLastClicked('Archive') },
+          ]}
+          footerActions={[
+            { label: 'Delete', onClick: () => setLastClicked('Delete') },
+          ]}
+        />
+        {lastClicked && (
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="flyout-clicked">
+            Clicked: {lastClicked}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    const trigger = await canvas.findByRole('button', { name: /actions/i });
+
+    await step('open flyout with onClick items', async () => {
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(within(document.body).getByRole('button', { name: /edit/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('click an onClick item — handler fires', async () => {
+      await user.click(within(document.body).getByRole('button', { name: /edit/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('flyout-clicked')).toHaveTextContent('Edit');
+      });
+    });
+
+    await step('press Escape — panel closes', async () => {
+      await user.keyboard('{Escape}');
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('button', { name: /duplicate/i })).not.toBeInTheDocument();
+      });
+    });
+
+    await step('re-open and click footer action', async () => {
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(within(document.body).getByRole('button', { name: /delete/i })).toBeInTheDocument();
+      });
+      await user.click(within(document.body).getByRole('button', { name: /delete/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('flyout-clicked')).toHaveTextContent('Delete');
+      });
+    });
+  },
+};
+
+// ── Two-column interaction ────────────────────────────────
+
+export const TwoColumnInteraction: Story = {
+  name: 'Interactions — two-column variant',
+  render: () => (
+    <div className="p-8">
+      <FlyoutMenu
+        trigger={<FlyoutTrigger label="Platform" />}
+        variant="two-column"
+        items={ICON_ITEMS.slice(0, 4)}
+        footerLinks={FOOTER_LINKS}
+        footerActions={FOOTER_ACTIONS}
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click trigger → two-column flyout opens', async () => {
+      await user.click(canvas.getByRole('button', { name: /platform/i }));
+      await waitFor(() => {
+        const body = within(document.body);
+        expect(body.getByRole('link', { name: /analytics/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('footer links are rendered', async () => {
+      const body = within(document.body);
+      expect(body.getByRole('link', { name: /documentation/i })).toBeInTheDocument();
+      expect(body.getByRole('link', { name: /help centre/i })).toBeInTheDocument();
+    });
+
+    await step('footer action links are rendered', async () => {
+      const body = within(document.body);
+      expect(body.getByRole('link', { name: /view all features/i })).toBeInTheDocument();
+    });
+
+    await step('press Escape → flyout closes', async () => {
+      await user.keyboard('{Escape}');
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('link', { name: /analytics/i })).not.toBeInTheDocument();
+      });
+    });
+  },
 };

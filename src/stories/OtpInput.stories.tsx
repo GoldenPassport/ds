@@ -252,18 +252,14 @@ export const Interactions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user = userEvent.setup();
+    // Use a small delay so focus-advance (flushSync + focus()) settles
+    // before the next keystroke fires
+    const user = userEvent.setup({ delay: 50 });
 
     await step('type digits one by one — auto-advance focus', async () => {
-      const cell1 = canvas.getByRole('textbox', { name: /digit 1/i });
-      await user.click(cell1);
-      await user.type(cell1, '1');
-      await waitFor(() => {
-        const cell2 = canvas.getByRole('textbox', { name: /digit 2/i });
-        expect(cell2).toHaveFocus();
-      });
-      // type remaining digits
-      await user.keyboard('23456');
+      await user.click(canvas.getByRole('textbox', { name: /digit 1/i }));
+      // Type all six digits; each auto-advances focus to the next cell
+      await user.keyboard('123456');
       await waitFor(() => {
         expect(canvas.getByTestId('entered-value')).toHaveTextContent('123456');
       });
@@ -272,6 +268,9 @@ export const Interactions: Story = {
     await step('backspace deletes and moves focus back', async () => {
       const cell6 = canvas.getByRole('textbox', { name: /digit 6/i });
       await user.click(cell6);
+      // First backspace: cell6 has a value → clears cell6, focus stays on cell6
+      await user.keyboard('{Backspace}');
+      // Second backspace: cell6 is now empty → clears cell5 and moves focus to cell5
       await user.keyboard('{Backspace}');
       await waitFor(() => {
         const cell5 = canvas.getByRole('textbox', { name: /digit 5/i });

@@ -452,3 +452,59 @@ export const AllVariantsInteraction: Story = {
     });
   },
 };
+
+export const ActionsInteraction: Story = {
+  name: 'Interactions — action buttons',
+  args: {
+    variant: 'warning', title: 'Subscription expiring', body: 'Your plan expires in 3 days.',
+    position: 'top-right', duration: 0, showActions: true, showDismiss: true,
+  },
+  render: () => {
+    const { notifications, add } = useNotifications();
+    const [lastAction, setLastAction] = React.useState('');
+
+    // Show a notification with action buttons immediately on mount
+    React.useEffect(() => {
+      add({
+        variant:  'warning',
+        title:    'Subscription expiring',
+        body:     'Your plan expires in 3 days.',
+        duration: 0,
+        actions: [
+          { label: 'Renew now', onClick: () => setLastAction('Renew now') },
+          { label: 'Later',     onClick: () => setLastAction('Later')     },
+        ],
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return (
+      <div className="relative min-h-36">
+        <NotificationStack notifications={notifications} onDismiss={() => {}} portal={false} />
+        {lastAction && (
+          <p data-testid="action-clicked" className="text-xs font-body text-ink-500 mt-2">
+            Clicked: {lastAction}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('notification with actions is visible', async () => {
+      await waitFor(() => {
+        expect(canvas.getByText('Subscription expiring')).toBeVisible();
+      });
+    });
+
+    await step('click "Renew now" action button → handler fires', async () => {
+      const renewBtn = await canvas.findByRole('button', { name: /renew now/i });
+      await user.click(renewBtn);
+      await waitFor(() => {
+        expect(canvas.getByTestId('action-clicked')).toHaveTextContent('Renew now');
+      });
+    });
+  },
+};

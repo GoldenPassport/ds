@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Chat } from '../components/Chat';
 import type { ChatMessage, ChatMessageSentiment } from '../components/Chat';
 
@@ -1192,6 +1193,173 @@ export const SentimentTags: Story = {
       />
     </ChatFrame>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions — send message & image lightbox',
+  args: { messages: [] },
+  render: () => {
+    const [messages, setMessages] = useState<ChatMessage[]>([
+      {
+        id: '1',
+        side: 'received',
+        content: 'Hey! Check out this photo 📸',
+        sender: { name: 'Alex' },
+        timestamp: t(5),
+      },
+      {
+        id: '2',
+        side: 'received',
+        type: 'image',
+        content: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&q=80',
+        sender: { name: 'Alex' },
+        timestamp: t(5),
+      },
+    ]);
+
+    function handleSend(text: string) {
+      setMessages(prev => [
+        ...prev,
+        {
+          id:        Date.now().toString(),
+          side:      'sent',
+          content:   text,
+          timestamp: new Date().toISOString(),
+          status:    'sent',
+        },
+      ]);
+    }
+
+    return (
+      <ChatFrame height={520}>
+        <Chat
+          className="h-full"
+          messages={messages}
+          onSend={handleSend}
+          placeholder="Type a message…"
+        />
+      </ChatFrame>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('send button is disabled when input is empty', async () => {
+      const sendBtn = await canvas.findByRole('button', { name: /send message/i });
+      expect(sendBtn).toBeDisabled();
+    });
+
+    await step('type a message → send button becomes enabled', async () => {
+      const input = canvas.getByRole('textbox', { name: /message input/i });
+      await user.click(input);
+      await user.type(input, 'Hello there!');
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /send message/i })).not.toBeDisabled();
+      });
+    });
+
+    await step('click send → message appears in the chat log', async () => {
+      await user.click(canvas.getByRole('button', { name: /send message/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('log', { name: /chat messages/i })).toHaveTextContent('Hello there!');
+      });
+    });
+
+    await step('send button is disabled again after sending', async () => {
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /send message/i })).toBeDisabled();
+      });
+    });
+
+    await step('click image thumbnail → lightbox dialog opens', async () => {
+      const imgBtn = canvas.getByRole('button', { name: /view full image/i });
+      await user.click(imgBtn);
+      await waitFor(() => {
+        expect(within(document.body).getByRole('dialog', { name: /image viewer/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('click close button → lightbox closes', async () => {
+      await user.click(within(document.body).getByRole('button', { name: /close image/i }));
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog', { name: /image viewer/i })).not.toBeInTheDocument();
+      });
+    });
+
+    await step('open lightbox again and press Escape → lightbox closes', async () => {
+      await user.click(canvas.getByRole('button', { name: /view full image/i }));
+      await waitFor(() => {
+        expect(within(document.body).getByRole('dialog', { name: /image viewer/i })).toBeInTheDocument();
+      });
+      await user.keyboard('{Escape}');
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog', { name: /image viewer/i })).not.toBeInTheDocument();
+      });
+    });
+  },
+};
+
+// ── Enter-to-send interaction ─────────────────────────────
+
+export const EnterToSend: Story = {
+  name: 'Interactions — Enter to send',
+  args: { messages: [] },
+  render: () => {
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const handleSend = (text: string) => {
+      setMessages(prev => [...prev, {
+        id:        String(Date.now()),
+        side:      'sent',
+        content:   text,
+        timestamp: new Date().toISOString(),
+        status:    'sent',
+      }]);
+    };
+    return (
+      <ChatFrame height={400}>
+        <Chat
+          className="h-full"
+          messages={messages}
+          onSend={handleSend}
+          placeholder="Type and press Enter…"
+        />
+      </ChatFrame>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('type a message and press Enter → message is sent', async () => {
+      const input = await canvas.findByRole('textbox', { name: /message input/i });
+      await user.click(input);
+      await user.type(input, 'Enter key test{Enter}');
+      await waitFor(() => {
+        expect(canvas.getByRole('log', { name: /chat messages/i })).toHaveTextContent('Enter key test');
+      });
+    });
+
+    await step('input is cleared after sending', async () => {
+      const input = canvas.getByRole('textbox', { name: /message input/i });
+      await waitFor(() => {
+        expect((input as HTMLTextAreaElement).value).toBe('');
+      });
+    });
+
+    await step('Shift+Enter inserts a newline instead of sending', async () => {
+      const input = canvas.getByRole('textbox', { name: /message input/i });
+      await user.click(input);
+      await user.type(input, 'line one');
+      await user.keyboard('{Shift>}{Enter}{/Shift}');
+      await user.type(input, 'line two');
+      // Message count should NOT have increased — no new message in log yet
+      const logText = canvas.getByRole('log', { name: /chat messages/i }).textContent ?? '';
+      expect(logText).not.toContain('line two');
+    });
+  },
 };
 
 // ── All sentiments reference ──────────────────────────────

@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import gpLogo from '../../assets/gp-logo.png';
 import { Bell, Plus, Settings, LayoutDashboard, Users, BarChart2, FileText } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
@@ -307,6 +309,133 @@ export const DarkWithMoreMenu: Story = {
 
 // ── All variants ──────────────────────────────────────────
 
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions — user menu & search',
+  args: {},
+  render: () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [lastClicked, setLastClicked] = useState('');
+    return (
+      <div className="flex flex-col gap-3">
+        <Navbar
+          logo={LOGO_LIGHT}
+          items={NAV_ITEMS_SIMPLE}
+          search
+          searchPlaceholder="Search…"
+          onSearch={setSearchQuery}
+          user={{
+            name: 'Alex Johnson',
+            email: 'alex@acme.com',
+            menuItems: [
+              { label: 'Your profile', href: '#' },
+              { label: 'Settings', href: '#' },
+              { label: 'Sign out', onClick: () => setLastClicked('Sign out'), dividerAbove: true },
+            ],
+          }}
+        />
+        {searchQuery && (
+          <p data-testid="search-output" className="text-xs font-body text-ink-500 px-4">
+            Search: {searchQuery}
+          </p>
+        )}
+        {lastClicked && (
+          <p data-testid="menu-clicked" className="text-xs font-body text-ink-500 px-4">
+            Clicked: {lastClicked}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('type into search input → onSearch fires', async () => {
+      const input = canvas.getByRole('searchbox');
+      await user.click(input);
+      await user.type(input, 'dashboard');
+      await waitFor(() => {
+        expect(canvas.getByTestId('search-output')).toHaveTextContent('dashboard');
+      });
+    });
+
+    await step('click user avatar button → dropdown opens with menu items', async () => {
+      // The user button is the only button that wraps an avatar/name
+      // It contains "Alex Johnson" visible text at lg breakpoints
+      // Use getAllByRole and pick the one with no aria-label (not hamburger/search)
+      const userBtn = canvas.getAllByRole('button').find(
+        btn => !btn.getAttribute('aria-label') && btn.querySelector('[class*="rounded-full"]'),
+      )!;
+      await user.click(userBtn);
+      await waitFor(() => {
+        expect(within(document.body).getByRole('menuitem', { name: /your profile/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('click "Sign out" — onClick fires and dropdown closes', async () => {
+      await user.click(within(document.body).getByRole('menuitem', { name: /sign out/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('menu-clicked')).toHaveTextContent('Sign out');
+      });
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('menuitem', { name: /your profile/i })).not.toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const MobileMenuInteractions: Story = {
+  name: 'Interactions — mobile menu open/close',
+  args: {},
+  render: () => (
+    // Force a narrow container so the hamburger is always visible
+    <div style={{ maxWidth: 480 }}>
+      <Navbar
+        logo={LOGO_LIGHT}
+        items={NAV_ITEMS_SIMPLE}
+        user={USER}
+        search
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('hamburger button starts with aria-expanded=false', async () => {
+      const burger = await canvas.findByRole('button', { name: /open menu/i, hidden: true });
+      expect(burger).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    await step('click hamburger → mobile menu opens (aria-expanded=true)', async () => {
+      const burger = canvas.getByRole('button', { name: /open menu/i, hidden: true });
+      await user.click(burger);
+      await waitFor(() => {
+        // aria-label switches to "Close menu" when open
+        expect(canvas.getByRole('button', { name: /close menu/i, hidden: true })).toHaveAttribute('aria-expanded', 'true');
+      });
+    });
+
+    await step('mobile nav links are now visible', async () => {
+      // Nav items are rendered in the mobile menu section
+      const links = canvas.getAllByRole('link', { name: /dashboard/i, hidden: true });
+      expect(links.length).toBeGreaterThan(0);
+    });
+
+    await step('click hamburger again → mobile menu closes', async () => {
+      const closeBtn = canvas.getByRole('button', { name: /close menu/i, hidden: true });
+      await user.click(closeBtn);
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /open menu/i, hidden: true })).toHaveAttribute('aria-expanded', 'false');
+      });
+    });
+  },
+};
+
+// ── All variants ──────────────────────────────────────────
+
 export const AllVariants: Story = {
   name: 'All variants',
   args: {},
@@ -330,4 +459,59 @@ export const AllVariants: Story = {
       />
     </div>
   ),
+};
+
+// ── MoreMenu interactions ─────────────────────────────────
+
+export const MoreMenuInteractions: Story = {
+  name: 'Interactions — more menu (⋮)',
+  args: {},
+  render: () => {
+    const [lastClicked, setLastClicked] = useState('');
+    return (
+      <div>
+        <Navbar
+          logo={LOGO_LIGHT}
+          items={NAV_ITEMS_SIMPLE}
+          user={USER}
+          moreMenu={[
+            { label: 'Help & support',     href: '#' },
+            { label: 'Keyboard shortcuts', href: '#' },
+            { label: 'Sign out',           onClick: () => setLastClicked('Sign out'), dividerAbove: true },
+          ]}
+        />
+        {lastClicked && (
+          <p data-testid="more-clicked" className="text-xs font-body text-ink-500 px-4 mt-2">
+            Clicked: {lastClicked}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click ⋮ button → more menu opens', async () => {
+      const moreBtn = await canvas.findByRole('button', { name: /more options/i });
+      await user.click(moreBtn);
+      await waitFor(() => {
+        expect(within(document.body).getByRole('menuitem', { name: /help & support/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('"Sign out" item is present with divider', async () => {
+      expect(within(document.body).getByRole('menuitem', { name: /sign out/i })).toBeInTheDocument();
+    });
+
+    await step('click "Sign out" → handler fires and menu closes', async () => {
+      await user.click(within(document.body).getByRole('menuitem', { name: /sign out/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('more-clicked')).toHaveTextContent('Sign out');
+      });
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('menuitem', { name: /help & support/i })).not.toBeInTheDocument();
+      });
+    });
+  },
 };

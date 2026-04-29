@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Badge } from '../components/Badge';
 
 const meta = {
@@ -383,4 +384,47 @@ export const AllVariants: Story = {
       </div>
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions — removable badge',
+  args: { label: '' },
+  render: () => {
+    const [removed, setRemoved] = useState(false);
+    return (
+      <div className="flex flex-col gap-4">
+        {!removed && (
+          <Badge
+            label="Active"
+            variant="active"
+            onRemove={() => setRemoved(true)}
+          />
+        )}
+        {removed && (
+          <p data-testid="badge-removed" className="text-xs font-body text-ink-500">
+            Badge removed
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('badge renders with remove button', async () => {
+      await canvas.findByRole('button', { name: /remove/i });
+      expect(canvas.getByText('Active')).toBeInTheDocument();
+    });
+
+    await step('click remove button → onRemove fires and badge is gone', async () => {
+      await user.click(canvas.getByRole('button', { name: /remove/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('badge-removed')).toBeInTheDocument();
+        expect(canvas.queryByText('Active')).not.toBeInTheDocument();
+      });
+    });
+  },
 };

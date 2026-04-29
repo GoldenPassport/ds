@@ -162,7 +162,7 @@ export const Interactions: Story = {
     const user   = userEvent.setup();
 
     await step('initial state — page 1 is active', async () => {
-      expect(canvas.getByRole('button', { name: /page 1/i })).toHaveAttribute('aria-current', 'page');
+      expect(canvas.getByRole('button', { name: /^page 1$/i })).toHaveAttribute('aria-current', 'page');
     });
 
     await step('click next — advances to page 2', async () => {
@@ -172,17 +172,18 @@ export const Interactions: Story = {
       });
     });
 
-    await step('click page 4 directly', async () => {
-      await user.click(canvas.getByRole('button', { name: /page 4/i }));
+    await step('click page 3 directly', async () => {
+      // On page 2 the window shows: 1, 2*, 3, …, 15 — click visible Page 3
+      await user.click(canvas.getByRole('button', { name: /^page 3$/i }));
       await waitFor(() => {
-        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 4');
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 3');
       });
     });
 
-    await step('click previous — goes to page 3', async () => {
+    await step('click previous — goes to page 2', async () => {
       await user.click(canvas.getByRole('button', { name: /previous/i }));
       await waitFor(() => {
-        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 3');
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 2');
       });
     });
 

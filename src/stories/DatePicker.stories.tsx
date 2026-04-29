@@ -317,3 +317,139 @@ export const RangePickerUncontrolled: Story = {
     </div>
   ),
 };
+
+export const RangePickerInteraction: Story = {
+  name: 'DateRangePicker — interactions',
+  args: { label: '', placeholder: '' },
+  render: () => {
+    const [range, setRange] = useState<{ start: Date | null; end: Date | null }>({ start: null, end: null });
+    return (
+      <div className="max-w-sm flex flex-col gap-3">
+        <DateRangePicker
+          label="Trip dates"
+          startLabel="Check-in"
+          endLabel="Check-out"
+          startPlaceholder="Add date"
+          endPlaceholder="Add date"
+          value={range}
+          onChange={setRange}
+        />
+        {range.start && (
+          <p data-testid="range-start" className="text-xs font-body text-ink-500">
+            Start: {range.start.toDateString()}
+          </p>
+        )}
+        {range.end && (
+          <p data-testid="range-end" className="text-xs font-body text-ink-500">
+            End: {range.end.toDateString()}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click range trigger → calendar opens showing "Select start date"', async () => {
+      await user.click(canvas.getAllByRole('button')[0]);
+      await waitFor(() => {
+        // The mini calendar panel shows phase instruction text
+        expect(canvas.getByText(/select start date/i)).toBeInTheDocument();
+      });
+    });
+
+    await step('click a day → start date is set, moves to "Select end date" phase', async () => {
+      // Pick the first enabled day button in the mini calendar
+      const dayBtns = canvas.getAllByRole('button').filter(
+        (b: HTMLElement) => /^\d{1,2}$/.test(b.textContent?.trim() ?? '') && !b.hasAttribute('disabled'),
+      );
+      await user.click(dayBtns[0]);
+      await waitFor(() => {
+        expect(canvas.getByTestId('range-start')).toBeInTheDocument();
+      });
+    });
+
+    await step('"Select end date" phase is now active', async () => {
+      await waitFor(() => {
+        expect(canvas.getByText(/select end date/i)).toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const DateTimePickerInteraction: Story = {
+  name: 'DateTimePicker — interactions',
+  args: { label: '', placeholder: '' },
+  render: () => {
+    const [val, setVal] = useState<{ date: Date; hour: number; minute: number } | null>(null);
+    return (
+      <div className="max-w-xs flex flex-col gap-3">
+        <DateTimePicker
+          label="Appointment"
+          placeholder="Select date & time"
+          value={val}
+          onChange={setVal}
+        />
+        {val && (
+          <p data-testid="datetime-value" className="text-xs font-body text-ink-500">
+            {val.date.toDateString()} {String(val.hour).padStart(2,'0')}:{String(val.minute).padStart(2,'0')}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click trigger → panel opens with Date/Time tabs', async () => {
+      await user.click(canvas.getAllByRole('button')[0]);
+      // ButtonGroup renders tabs as role="radio" within a role="radiogroup"
+      await waitFor(() => {
+        expect(canvas.getByRole('radio', { name: /^date$/i })).toBeInTheDocument();
+        expect(canvas.getByRole('radio', { name: /^time$/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('click "Time" tab → time picker is shown (HH column)', async () => {
+      await user.click(canvas.getByRole('radio', { name: /^time$/i }));
+      await waitFor(() => {
+        // Both HH and MM columns contain "09" — getAllByRole avoids the ambiguity
+        expect(canvas.getAllByRole('button', { name: '09' }).length).toBeGreaterThan(0);
+      });
+    });
+
+    await step('click "Date" tab → mini calendar returns', async () => {
+      await user.click(canvas.getByRole('radio', { name: /^date$/i }));
+      await waitFor(() => {
+        // Mini calendar shows navigation arrow
+        expect(canvas.getByRole('button', { name: /next month/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('click a day → auto-switches to Time tab', async () => {
+      const allBtns = canvas.getAllByRole('button');
+      const dayBtn  = allBtns.find(
+        (b: HTMLElement) =>
+          /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),/.test(
+            b.getAttribute('aria-label') ?? '',
+          ),
+      ) as HTMLElement;
+      await user.click(dayBtn);
+      await waitFor(() => {
+        // After selecting date the picker auto-switches to Time tab;
+        // both HH and MM columns contain "09" — use getAllByRole
+        expect(canvas.getAllByRole('button', { name: '09' }).length).toBeGreaterThan(0);
+      });
+    });
+
+    await step('click hour "09" → value contains date + time', async () => {
+      const hour9 = canvas.getAllByRole('button', { name: '09' })[0];
+      await user.click(hour9);
+      await waitFor(() => {
+        expect(canvas.getByTestId('datetime-value')).toBeInTheDocument();
+      });
+    });
+  },
+};

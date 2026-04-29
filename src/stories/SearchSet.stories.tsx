@@ -372,12 +372,8 @@ export const Interactions: Story = {
     });
 
     await step('clear button appears and clears the search', async () => {
-      // Look for the clear/X button (it may be inside the input area)
-      await waitFor(() => {
-        const clearBtn = canvasElement.querySelector('button[aria-label="Clear"]') as HTMLElement | null;
-        expect(clearBtn).toBeInTheDocument();
-      });
-      const clearBtn = canvasElement.querySelector('button[aria-label="Clear"]') as HTMLElement;
+      // The clear button has aria-label="Clear search" in SearchSet
+      const clearBtn = await canvas.findByRole('button', { name: /clear search/i });
       await user.click(clearBtn);
       await waitFor(() => {
         expect(canvas.queryByTestId('search-output')).not.toBeInTheDocument();
@@ -411,29 +407,104 @@ export const FilterDialogInteraction: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user = userEvent.setup();
+    const user   = userEvent.setup();
 
     await step('click filter button → filter dialog opens', async () => {
-      const filterBtn = canvas.getByRole('button', { name: /filter/i });
+      // Use the exact aria-label to avoid matching chip-dismiss buttons
+      // that also contain the word "filter" (e.g. "Remove filter …")
+      const filterBtn = canvas.getByRole('button', { name: /^open filters$/i });
       await user.click(filterBtn);
-      await waitFor(() => {
-        const body = within(document.body);
-        expect(body.getByRole('dialog')).toBeInTheDocument();
-      });
+      // findByRole has built-in retry — waits for the portal dialog to appear
+      await within(document.body).findByRole('dialog');
     });
 
     await step('select a status option and apply', async () => {
-      const body = within(document.body);
-      const dialog = body.getByRole('dialog');
+      const dialog   = within(document.body).getByRole('dialog');
       const dialogEl = within(dialog);
-      // Find the status select
-      const statusSelect = dialogEl.getByRole('combobox', { name: /status/i });
-      await user.selectOptions(statusSelect, 'active');
-      // Click Apply
-      const applyBtn = dialogEl.getByRole('button', { name: /apply/i });
-      await user.click(applyBtn);
+
+      await user.selectOptions(
+        dialogEl.getByRole('combobox', { name: /status/i }),
+        'active',
+      );
+
+      await user.click(dialogEl.getByRole('button', { name: /^apply$/i }));
+
+      // Dialog should close and the status output should reflect the new value
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+      });
       await waitFor(() => {
         expect(canvas.getByTestId('filter-status')).toHaveTextContent('active');
+      });
+    });
+  },
+};
+
+// ── Tag interaction ───────────────────────────────────────
+
+export const TagInteraction: Story = {
+  name: 'Interactions — search tags',
+  args: { value: '', onChange: () => {} },
+  render: () => {
+    const [query, setQuery] = useState('');
+    const [tags,  setTags]  = useState<SearchSetTag[]>([]);
+    return (
+      <div className="max-w-lg flex flex-col gap-3">
+        <SearchSet
+          value={query}
+          onChange={setQuery}
+          placeholder="Type and press Enter to add a tag…"
+          tags={tags}
+          onTagsChange={setTags}
+        />
+        <p data-testid="tag-count" className="text-xs font-body text-ink-500">
+          Tags: {tags.length}
+        </p>
+        {tags.map(t => (
+          <p key={t.term} data-testid={`tag-${t.term}`} className="text-xs font-body text-ink-500">
+            {t.term} ({t.op})
+          </p>
+        ))}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('type "alpha" and press Enter → AND tag is added', async () => {
+      const input = canvas.getByRole('searchbox');
+      await user.click(input);
+      await user.type(input, 'alpha');
+      await user.keyboard('{Enter}');
+      await waitFor(() => {
+        expect(canvas.getByTestId('tag-alpha')).toBeInTheDocument();
+        expect(canvas.getByTestId('tag-alpha')).toHaveTextContent('and');
+      });
+    });
+
+    await step('type "beta" and press Shift+Enter → OR tag is added', async () => {
+      const input = canvas.getByRole('searchbox');
+      await user.click(input);
+      await user.type(input, 'beta');
+      await user.keyboard('{Shift>}{Enter}{/Shift}');
+      await waitFor(() => {
+        expect(canvas.getByTestId('tag-beta')).toBeInTheDocument();
+        expect(canvas.getByTestId('tag-beta')).toHaveTextContent('or');
+      });
+    });
+
+    await step('two tags are present', async () => {
+      await waitFor(() => {
+        expect(canvas.getByTestId('tag-count')).toHaveTextContent('Tags: 2');
+      });
+    });
+
+    await step('click remove button on "alpha" tag → tag is removed', async () => {
+      await user.click(canvas.getByRole('button', { name: /remove "alpha"/i }));
+      await waitFor(() => {
+        expect(canvas.queryByTestId('tag-alpha')).not.toBeInTheDocument();
+        expect(canvas.getByTestId('tag-count')).toHaveTextContent('Tags: 1');
       });
     });
   },
@@ -660,5 +731,66 @@ export const WithDataTable: Story = {
         />
       </div>
     );
+  },
+};
+
+// ── Clear all interaction ─────────────────────────────────
+
+export const ClearAllInteraction: Story = {
+  name: 'Interactions — filter dialog clear all',
+  args: { value: '', onChange: () => {} },
+  render: () => {
+    const [query,   setQuery]   = useState('');
+    const [filters, setFilters] = useState<SearchSetFilterValues>(EMPTY_FILTERS);
+    return (
+      <div className="max-w-lg flex flex-col gap-3">
+        <SearchSet
+          value={query}
+          onChange={setQuery}
+          placeholder="Search workflows…"
+          filterDefs={FILTER_DEFS}
+          filterValues={filters}
+          onFilterChange={setFilters}
+          filterTitle="Filter workflows"
+        />
+        <p data-testid="filter-role" className="text-xs font-body text-ink-500">
+          Role: {(filters.role as string[]).join(',') || 'none'}
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('open filter dialog and set a role filter', async () => {
+      await user.click(canvas.getByRole('button', { name: /^open filters$/i }));
+      await within(document.body).findByRole('dialog');
+
+      const dialog   = within(document.body).getByRole('dialog');
+      const dialogEl = within(dialog);
+
+      // Check a role checkbox
+      const adminCheck = dialogEl.getByRole('checkbox', { name: /admin/i });
+      await user.click(adminCheck);
+
+      await user.click(dialogEl.getByRole('button', { name: /^apply$/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('filter-role')).toHaveTextContent('admin');
+      });
+    });
+
+    await step('open dialog again and click "Clear all" → filters reset', async () => {
+      await user.click(canvas.getByRole('button', { name: /^open filters$/i }));
+      await within(document.body).findByRole('dialog');
+
+      const dialog = within(document.body).getByRole('dialog');
+      await user.click(within(dialog).getByRole('button', { name: /clear all/i }));
+
+      await user.click(within(document.body).getByRole('button', { name: /^apply$/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('filter-role')).toHaveTextContent('none');
+      });
+    });
   },
 };

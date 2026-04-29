@@ -1,0 +1,51 @@
+version: 2
+
+updates:
+  # ── npm / pnpm packages ──────────────────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    # Keep PRs grouped to avoid inbox noise
+    groups:
+      storybook:
+        patterns:
+          - '@storybook/*'
+          - 'storybook'
+      vitest-playwright:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+          - 'playwright'
+          - '@playwright/*'
+      react-ecosystem:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      headlessui:
+        patterns:
+          - '@headlessui/*'
+    # Cap open PRs so the queue stays clean
+    open-pull-requests-limit: 10
+    # Always target main
+    target-branch: main
+    labels:
+      - dependencies
+
+  # ── GitHub Actions ───────────────────────────────────────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: UTC
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - github-actions

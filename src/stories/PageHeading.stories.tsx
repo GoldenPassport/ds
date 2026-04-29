@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Plus, Settings, Trash2, Share2, Bell } from 'lucide-react';
 import { PageHeading } from '../components/PageHeading';
 import { Button } from '../components/Button';
@@ -553,4 +554,77 @@ export const Master: Story = {
       <MasterDemo />
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions — tabs + back button',
+  args: { title: '' },
+  render: () => {
+    const [active, setActive] = React.useState('overview');
+    const [backClicked, setBackClicked] = React.useState(false);
+    return (
+      <div className="flex flex-col gap-3">
+        <PageHeading
+          onBack={() => setBackClicked(true)}
+          title="GraphQL API"
+          description="Last run 2 hours ago"
+          bordered
+          tabs={[
+            { label: 'Overview',    value: 'overview' },
+            { label: 'Runs',        value: 'runs',    badge: 12 },
+            { label: 'Deployments', value: 'deployments' },
+            { label: 'Settings',    value: 'settings' },
+          ]}
+          activeTab={active}
+          onTabChange={setActive}
+        />
+        <p data-testid="active-tab" className="text-xs font-body text-ink-500">
+          Active: {active}
+        </p>
+        {backClicked && (
+          <p data-testid="back-clicked" className="text-xs font-body text-ink-500">
+            Back clicked
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('back button is present (rendered for both mobile and desktop)', async () => {
+      // PageHeading renders two back buttons — one per breakpoint layout — so use findAllByRole
+      const backBtns = await canvas.findAllByRole('button', { name: /back/i });
+      expect(backBtns.length).toBeGreaterThan(0);
+    });
+
+    await step('click "Runs" tab → activeTab updates', async () => {
+      // PageHeading renders tab bars for both breakpoints — pick the first match
+      const runsBtns = canvas.getAllByRole('button', { name: /^runs/i });
+      await user.click(runsBtns[0]);
+      await waitFor(() => {
+        expect(canvas.getByTestId('active-tab')).toHaveTextContent('runs');
+      });
+    });
+
+    await step('click "Settings" tab → activeTab updates', async () => {
+      const settingsBtns = canvas.getAllByRole('button', { name: /^settings/i });
+      await user.click(settingsBtns[0]);
+      await waitFor(() => {
+        expect(canvas.getByTestId('active-tab')).toHaveTextContent('settings');
+      });
+    });
+
+    await step('click back button → onBack fires', async () => {
+      // Pick the first matching back button (mobile variant has aria-label="Back")
+      const backBtns = canvas.getAllByRole('button', { name: /back/i });
+      await user.click(backBtns[0]);
+      await waitFor(() => {
+        expect(canvas.getByTestId('back-clicked')).toBeInTheDocument();
+      });
+    });
+  },
 };

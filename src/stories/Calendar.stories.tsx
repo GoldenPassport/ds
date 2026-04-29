@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Calendar } from '../components/Calendar';
 import type { CalendarEvent } from '../components/Calendar';
 
@@ -248,4 +249,130 @@ export const WithSidePanel: Story = {
   name: 'In context — with side panel',
   args: { events: [] },
   render: () => <WithSidePanelDemo />,
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions — date selection & month navigation',
+  args: { events: [] },
+  render: () => {
+    const [selected, setSelected] = useState<Date | null>(null);
+    return (
+      <div className="max-w-3xl flex flex-col gap-3">
+        {/* No events — keeps day-cell buttons clean (text = day number only) */}
+        <Calendar variant="month" selected={selected} onSelect={setSelected} />
+        {selected && (
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="cal-selected">
+            Selected: {selected.toDateString()}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('navigation buttons are present', async () => {
+      await canvas.findByRole('button', { name: /next month/i });
+      expect(canvas.getByRole('button', { name: /^today$/i })).toBeInTheDocument();
+    });
+
+    await step('click a day — onSelect fires and selection is shown', async () => {
+      // Day-cell buttons in the month variant have aria-labels like
+      // "Thursday, April 10, 2025" (weekday prefix). Pick the first one.
+      const allBtns = canvas.getAllByRole('button');
+      const dayBtn  = allBtns.find(
+        (b: HTMLElement) =>
+          /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),/.test(
+            b.getAttribute('aria-label') ?? '',
+          ),
+      ) as HTMLElement;
+      await user.click(dayBtn);
+      await waitFor(() => {
+        expect(canvas.getByTestId('cal-selected')).toBeInTheDocument();
+      });
+    });
+
+    await step('click "Next month" — heading advances by one month', async () => {
+      const headingBefore = canvas.getByRole('heading').textContent ?? '';
+      await user.click(canvas.getByRole('button', { name: /next month/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('heading').textContent).not.toBe(headingBefore);
+      });
+    });
+
+    await step('click "Previous month" — heading reverts to previous month', async () => {
+      const headingBefore = canvas.getByRole('heading').textContent ?? '';
+      await user.click(canvas.getByRole('button', { name: /previous month/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('heading').textContent).not.toBe(headingBefore);
+      });
+    });
+
+    await step('click "Today" after advancing two months — heading returns to current', async () => {
+      // Advance two months ahead so "Today" has meaningful work to do
+      await user.click(canvas.getByRole('button', { name: /next month/i }));
+      await user.click(canvas.getByRole('button', { name: /next month/i }));
+      const headingFuture = canvas.getByRole('heading').textContent ?? '';
+      await user.click(canvas.getByRole('button', { name: /^today$/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('heading').textContent).not.toBe(headingFuture);
+      });
+    });
+  },
+};
+
+export const MiniInteractions: Story = {
+  name: 'Interactions — mini variant month/year picker',
+  args: { events: [] },
+  render: () => {
+    const [selected, setSelected] = useState<Date | null>(null);
+    return (
+      <div className="max-w-xs flex flex-col gap-3">
+        <Calendar variant="mini" bordered selected={selected} onSelect={setSelected} />
+        {selected && (
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="mini-selected">
+            Selected: {selected.toDateString()}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click a day — selection is set', async () => {
+      await canvas.findByRole('button', { name: /next month/i });
+      // Mini day buttons have full-date aria-labels — find the first weekday one
+      const allBtns = canvas.getAllByRole('button');
+      const dayBtn  = allBtns.find(
+        (b: HTMLElement) =>
+          /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),/.test(
+            b.getAttribute('aria-label') ?? '',
+          ),
+      ) as HTMLElement;
+      await user.click(dayBtn);
+      await waitFor(() => {
+        expect(canvas.getByTestId('mini-selected')).toBeInTheDocument();
+      });
+    });
+
+    await step('click month/year header — opens month picker grid', async () => {
+      await user.click(canvas.getByRole('button', { name: /click to change month or year/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /^jan$/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('click a month in the picker — navigates and returns to days view', async () => {
+      await user.click(canvas.getByRole('button', { name: /^mar$/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /click to change month or year/i })).toBeInTheDocument();
+        expect(canvas.queryByRole('button', { name: /^jan$/i })).not.toBeInTheDocument();
+      });
+    });
+  },
 };
