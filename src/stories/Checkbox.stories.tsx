@@ -72,7 +72,7 @@ export const Disabled: Story = {
 };
 
 export const Standalone: Story = {
-  args: { checked: true },
+  args: { checked: true, 'aria-label': 'Toggle option' },
 };
 
 export const CheckboxGroup: Story = {

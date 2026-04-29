@@ -10,6 +10,8 @@ export interface CheckboxProps {
   indeterminate?: boolean;
   className?:     string;
   id?:            string;
+  /** Accessible label when no visible `label` prop is provided */
+  'aria-label'?:  string;
 }
 
 export function Checkbox({
@@ -21,6 +23,7 @@ export function Checkbox({
   indeterminate = false,
   className     = '',
   id,
+  'aria-label': ariaLabel,
 }: CheckboxProps) {
   const checkId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
 
@@ -49,6 +52,7 @@ export function Checkbox({
         ref={el => { if (el) el.indeterminate = indeterminate; }}
         className="sr-only"
         aria-checked={indeterminate ? 'mixed' : checked}
+        aria-label={ariaLabel}
         aria-describedby={description ? `${checkId}-desc` : undefined}
       />
 
@@ -58,16 +62,16 @@ export function Checkbox({
         className={[
           'mt-0.5 shrink-0 w-4 h-4 rounded flex items-center justify-center',
           'border transition-all duration-150',
-          'focus-within:ring-2 focus-within:ring-primary-500/25',
+          '[&:has(:focus-visible)]:ring-2 [&:has(:focus-visible)]:ring-primary-500/25',
           isChecked
             ? 'bg-primary-500 border-primary-500'
             : 'bg-white dark:bg-ink-700 border-ink-300 dark:border-ink-600 group-hover:border-primary-400',
         ].join(' ')}
       >
         {indeterminate
-          ? <Minus  className="w-2.5 h-2.5 text-ink-900 stroke-[3]" />
+          ? <Minus  className="w-2.5 h-2.5 text-ink-900 stroke-3" />
           : checked
-            ? <Check className="w-2.5 h-2.5 text-ink-900 stroke-[3]" />
+            ? <Check className="w-2.5 h-2.5 text-ink-900 stroke-3" />
             : null}
       </span>
 
@@ -82,7 +86,7 @@ export function Checkbox({
           {description && (
             <span
               id={`${checkId}-desc`}
-              className="text-xs text-ink-400 dark:text-ink-500 font-body"
+              className="text-xs text-ink-500 dark:text-ink-300 font-body"
             >
               {description}
             </span>

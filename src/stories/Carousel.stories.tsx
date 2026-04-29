@@ -181,7 +181,7 @@ export const AllVariants: Story = {
     <div className="space-y-10">
       {(['hero', 'multi-browse', 'uncontained', 'full-screen'] as const).map(v => (
         <div key={v}>
-          <p className="text-xs font-semibold font-body text-ink-400 uppercase tracking-wider mb-3 px-4 capitalize">
+          <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 tracking-wider mb-3 px-4 capitalize">
             {v.replace('-', ' ')}
           </p>
           <Carousel
@@ -189,6 +189,7 @@ export const AllVariants: Story = {
             variant={v}
             aspectRatio={v === 'full-screen' ? 'aspect-[3/4]' : 'aspect-[4/3]'}
             showIndicators={v !== 'multi-browse'}
+            aria-label={`${v.replace('-', ' ')} carousel`}
           />
         </div>
       ))}

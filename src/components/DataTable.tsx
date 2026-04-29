@@ -193,7 +193,6 @@ export function DataTable<T extends { id: string | number }>({
                   key={row.id}
                   onClick={() => onRowClick?.(row)}
                   tabIndex={onRowClick ? 0 : undefined}
-                  role={onRowClick ? 'button' : undefined}
                   onKeyDown={onRowClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRowClick(row); } } : undefined}
                   className={[
                     'border-b border-ink-100 dark:border-ink-700 last:border-0',

@@ -298,9 +298,9 @@ export const BodyMuted: Story = {
         bodyMuted
       >
         <div className="flex flex-col gap-2 text-xs font-mono text-ink-600 dark:text-ink-300">
-          <div className="flex gap-4"><span className="text-ink-400 select-none">01</span> DATABASE_URL=postgres://...</div>
-          <div className="flex gap-4"><span className="text-ink-400 select-none">02</span> REDIS_URL=redis://...</div>
-          <div className="flex gap-4"><span className="text-ink-400 select-none">03</span> SECRET_KEY=••••••••••••</div>
+          <div className="flex gap-4"><span className="text-ink-400 dark:text-ink-300 select-none">01</span> DATABASE_URL=postgres://...</div>
+          <div className="flex gap-4"><span className="text-ink-400 dark:text-ink-300 select-none">02</span> REDIS_URL=redis://...</div>
+          <div className="flex gap-4"><span className="text-ink-400 dark:text-ink-300 select-none">03</span> SECRET_KEY=••••••••••••</div>
         </div>
       </Card>
     </div>

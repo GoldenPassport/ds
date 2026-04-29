@@ -200,17 +200,16 @@ export function OtpInput({
   // ── Render ────────────────────────────────────────────────
 
   const borderBase = error
-    ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500/30'
-    : 'border-ink-200 dark:border-ink-600 focus:border-primary-500 focus:ring-primary-500/25';
+    ? 'border-red-400 dark:border-red-500 focus:border-red-500'
+    : 'border-ink-200 dark:border-ink-600 focus:border-primary-500';
 
   const cellBase = [
     'text-center font-bold font-display tabular-nums select-none',
-    'border-2 outline-none',
+    'border outline-none',
     'bg-white dark:bg-ink-700',
     'text-ink-900 dark:text-ink-50',
     'caret-primary-500',
     'transition-all duration-150',
-    'focus:ring-2',
     borderBase,
     sizeCls[size],
   ].join(' ');

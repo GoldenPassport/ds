@@ -14,13 +14,10 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./styles": "./dist/styles/index.css",
-    "./tailwind-preset": "./tailwind.preset.ts"
+    "./styles": "./dist/styles/index.css"
   },
   "files": [
-    "dist",
-    "tailwind.preset.ts",
-    "tailwind.preset.js"
+    "dist"
   ],
   "sideEffects": [
     "**/*.css"
@@ -56,6 +53,7 @@
     "@storybook/addon-vitest": "^10.3.5",
     "@storybook/react-vite": "^10.3.5",
     "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^25.6.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.0",

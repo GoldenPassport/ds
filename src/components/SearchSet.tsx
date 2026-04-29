@@ -75,6 +75,8 @@ export interface SearchSetProps {
   /** Dialog title. Default "Filters" */
   filterTitle?:      string;
   className?:        string;
+  /** Extra classes applied only to the search-input row (not the tags/summary row below) */
+  searchClassName?:  string;
 }
 
 // ── InfoPopover ───────────────────────────────────────────
@@ -163,7 +165,7 @@ function InfoPopover() {
           'p-1 rounded-xl transition-colors',
           open
             ? 'text-primary-500 dark:text-primary-400'
-            : 'text-ink-400 hover:text-ink-600 dark:text-ink-500 dark:hover:text-ink-300',
+            : 'text-ink-400 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-200',
         ].join(' ')}
       >
         <Info className="w-3.5 h-3.5" />
@@ -193,7 +195,7 @@ function InfoPopover() {
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 shrink-0">
                 <Kbd>Shift</Kbd>
-                <span className="text-[10px] text-ink-400">+</span>
+                <span className="text-[10px] text-ink-500 dark:text-ink-300">+</span>
                 <Kbd>Enter</Kbd>
               </span>
               <span className="text-xs font-body text-ink-500 dark:text-ink-300">
@@ -313,6 +315,7 @@ export function SearchSet({
   onFilterChange,
   filterTitle      = 'Filters',
   className        = '',
+  searchClassName  = '',
 }: SearchSetProps) {
   const [draft,       setDraft]       = useState(value);
   const [dialogOpen,  setDialogOpen]  = useState(false);
@@ -377,19 +380,50 @@ export function SearchSet({
   const hasTags      = onTagsChange !== undefined;
   const activeTags   = tags ?? [];
   const showTags     = hasTags && activeTags.length > 0;
-  const showBottom   = !!summary || hasTags || !!filters;
+
+  // Derive dismissible chips from active filterValues
+  const filterChips: { id: string; label: string; remove: () => void }[] =
+    (filterDefs && filterValues && onFilterChange)
+      ? filterDefs.flatMap(def => {
+          const val = filterValues[def.key];
+          if (def.type === 'toggle') {
+            if (!val) return [];
+            return [{ id: def.key, label: def.label, remove: () => onFilterChange({ ...filterValues, [def.key]: false }) }];
+          }
+          if (def.type === 'select') {
+            if (!val) return [];
+            const opt = def.options?.find(o => o.value === val);
+            return [{ id: def.key, label: `${def.label}: ${opt?.label ?? val}`, remove: () => onFilterChange({ ...filterValues, [def.key]: '' }) }];
+          }
+          if (def.type === 'multi') {
+            const arr = Array.isArray(val) ? val as string[] : [];
+            return arr.map(v => {
+              const opt = def.options?.find(o => o.value === v);
+              return {
+                id:     `${def.key}:${v}`,
+                label:  `${def.label}: ${opt?.label ?? v}`,
+                remove: () => onFilterChange({ ...filterValues, [def.key]: arr.filter(x => x !== v) }),
+              };
+            });
+          }
+          return [];
+        })
+      : [];
+
+  const showBottom   = !!summary || hasTags || !!filters || filterChips.length > 0;
 
   return (
     <>
       <div className={['flex flex-col gap-2', className].join(' ')}>
         {/* ── Search row ──────────────────────────────────── */}
-        <div className="flex items-end gap-2">
+        <div className={['flex items-end gap-2', searchClassName].filter(Boolean).join(' ')}>
           <div className="flex-1 min-w-0">
             <Input
               type="search"
               value={draft}
               onChange={handleChange}
               onKeyDown={hasTags ? handleKeyDown : undefined}
+              wrapClassName="[&>p]:hidden"
               placeholder={placeholder}
               label={label}
               icon={
@@ -424,7 +458,7 @@ export function SearchSet({
                 className={[
                   'flex items-center justify-center w-[42px] h-[42px] rounded-xl border transition-colors',
                   activeCount > 0
-                    ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-400 text-primary-600 dark:text-primary-400'
+                    ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-400 text-primary-800 dark:text-primary-400'
                     : 'bg-white dark:bg-ink-700 border-ink-200 dark:border-ink-600 text-ink-400 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 hover:border-ink-300 dark:hover:border-ink-500',
                 ].join(' ')}
               >
@@ -451,7 +485,7 @@ export function SearchSet({
             )}
 
             {/* Right: AND/OR tags + external filter chips */}
-            {(showTags || !!filters) && (
+            {(showTags || !!filters || filterChips.length > 0) && (
               <div className="flex flex-wrap items-center gap-1.5 min-w-0">
                 {showTags && activeTags.map((tag, i) => (
                   <React.Fragment key={tag.term}>
@@ -485,6 +519,23 @@ export function SearchSet({
                       </button>
                     </span>
                   </React.Fragment>
+                ))}
+                {filterChips.map(chip => (
+                  <span
+                    key={chip.id}
+                    className="inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5 rounded-full text-[11px] font-semibold font-body border transition-colors bg-primary-50 dark:bg-primary-900/30 border-primary-200 dark:border-primary-700 text-primary-800 dark:text-primary-300"
+                  >
+                    <SlidersHorizontal className="w-2.5 h-2.5 opacity-60 shrink-0" aria-hidden="true" />
+                    {chip.label}
+                    <button
+                      type="button"
+                      aria-label={`Remove filter "${chip.label}"`}
+                      onClick={chip.remove}
+                      className="shrink-0 opacity-40 hover:opacity-80 transition-opacity ml-0.5 leading-none text-[1.2em] font-normal"
+                    >
+                      ×
+                    </button>
+                  </span>
                 ))}
                 {filters}
               </div>

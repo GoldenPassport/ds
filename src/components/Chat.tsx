@@ -221,14 +221,11 @@ function SenderAvatar({ sender }: { sender: ChatSender }) {
   }
   return (
     <span
+      role="img"
       aria-label={sender.name}
-      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold font-display text-ink-900 select-none"
-      style={{
-        background:
-          'linear-gradient(135deg, var(--color-primary-400), var(--color-primary-600))',
-      }}
+      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold font-display text-ink-900 select-none bg-primary-500"
     >
-      {getInitials(sender.name)}
+      <span aria-hidden="true">{getInitials(sender.name)}</span>
     </span>
   );
 }

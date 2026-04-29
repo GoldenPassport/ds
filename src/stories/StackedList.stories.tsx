@@ -242,8 +242,8 @@ export const CustomRenderItem: Story = {
               <span className="hidden sm:block text-sm font-body text-ink-500 dark:text-ink-300">{item.trailing}</span>
               <Menu
                 trigger={
-                  <button className="p-1 rounded text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors">
-                    <MoreVertical className="w-4 h-4" />
+                  <button aria-label={`More options for ${item.title}`} className="p-1 rounded text-ink-400 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors">
+                    <MoreVertical className="w-4 h-4" aria-hidden="true" />
                   </button>
                 }
                 items={[

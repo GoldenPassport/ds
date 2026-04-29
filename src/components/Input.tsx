@@ -23,7 +23,11 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
    * Small text shown in the top-right of the label row (e.g. "Optional", "0 / 140").
    * Only rendered when `label` is also set.
    */
-  cornerHint?:    React.ReactNode;
+  cornerHint?:            React.ReactNode;
+  /** Extra classes applied to the leading addon wrapper span */
+  leadingAddonClassName?: string;
+  /** Extra classes applied to the trailing addon wrapper span */
+  trailingAddonClassName?: string;
   wrapClassName?: string;
   /**
    * When to surface HTML5 constraint-validation errors (required, pattern, type, etc.).
@@ -47,6 +51,8 @@ export function Input({
   leadingAddon,
   trailingAddon,
   cornerHint,
+  leadingAddonClassName  = '',
+  trailingAddonClassName = '',
   wrapClassName = '',
   className     = '',
   id,
@@ -126,15 +132,14 @@ export function Input({
         // border: always present; radius shaped by addon presence
         'border',
         error ? borderErr : borderNormal,
-        // focus ring on standalone input (addons handle group ring separately)
+        // border colour change on focus; no ring so the border stays a single clean line
         !hasLeading && !hasTrailing
           ? error
-            ? 'rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-500/30'
-            : 'rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25'
+            ? 'rounded-xl focus:border-red-500'
+            : 'rounded-xl focus:border-primary-500'
           : [
               hasLeading  ? 'rounded-l-none border-l-0' : 'rounded-l-xl',
               hasTrailing ? 'rounded-r-none border-r-0' : 'rounded-r-xl',
-              // focus ring is subtle — the group ring shows on the wrapper
               error
                 ? 'focus:border-red-500'
                 : 'focus:border-primary-500',
@@ -183,10 +188,6 @@ export function Input({
     <div
       className={[
         'flex items-stretch rounded-xl',
-        'focus-within:ring-2',
-        error
-          ? 'focus-within:ring-red-500/30'
-          : 'focus-within:ring-primary-500/25',
       ].join(' ')}
     >
       {hasLeading && (
@@ -195,7 +196,8 @@ export function Input({
           'rounded-l-xl border',
           error ? borderErr : borderNormal,
           'border-r-0',
-        ].join(' ')}>
+          leadingAddonClassName,
+        ].filter(Boolean).join(' ')}>
           {leadingAddon}
         </span>
       )}
@@ -208,7 +210,8 @@ export function Input({
           'rounded-r-xl border',
           error ? borderErr : borderNormal,
           'border-l-0',
-        ].join(' ')}>
+          trailingAddonClassName,
+        ].filter(Boolean).join(' ')}>
           {trailingAddon}
         </span>
       )}

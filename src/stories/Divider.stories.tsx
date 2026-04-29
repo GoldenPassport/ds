@@ -72,15 +72,15 @@ export const Alignments: Story = {
   render: () => (
     <div className="max-w-xl flex flex-col gap-6 py-4">
       <div>
-        <p className="text-xs font-semibold font-body text-ink-500 uppercase tracking-wider mb-3">Left</p>
+        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">Left</p>
         <Divider align="left" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
       </div>
       <div>
-        <p className="text-xs font-semibold font-body text-ink-500 uppercase tracking-wider mb-3">Center</p>
+        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">Center</p>
         <Divider align="center" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
       </div>
       <div>
-        <p className="text-xs font-semibold font-body text-ink-500 uppercase tracking-wider mb-3">Right</p>
+        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">Right</p>
         <Divider align="right" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
       </div>
     </div>
@@ -180,13 +180,13 @@ export const Vertical: Story = {
   render: () => (
     <div className="flex flex-col gap-8 py-4">
       <div className="flex items-center gap-4 h-8">
-        <span className="text-sm font-body text-ink-500">Dashboard</span>
+        <span className="text-sm font-body text-ink-500 dark:text-ink-300">Dashboard</span>
         <Divider orientation="vertical" />
-        <span className="text-sm font-body text-ink-500">Workflows</span>
+        <span className="text-sm font-body text-ink-500 dark:text-ink-300">Workflows</span>
         <Divider orientation="vertical" />
-        <span className="text-sm font-body text-ink-500">Reports</span>
+        <span className="text-sm font-body text-ink-500 dark:text-ink-300">Reports</span>
         <Divider orientation="vertical" />
-        <span className="text-sm font-body text-ink-500">Settings</span>
+        <span className="text-sm font-body text-ink-500 dark:text-ink-300">Settings</span>
       </div>
 
       <div className="flex items-center gap-3 h-9">

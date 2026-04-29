@@ -88,7 +88,7 @@ export const Dismissible: Story = {
         You can now export reports as CSV. Go to Reports → Export.
       </Alert>
     ) : (
-      <p className="text-sm text-ink-400">Alert dismissed. Refresh to reset.</p>
+      <p className="text-sm text-ink-500 dark:text-ink-300">Alert dismissed. Refresh to reset.</p>
     );
   },
 };
@@ -139,7 +139,7 @@ export const WithActionsAndDismiss: Story = {
         Your changes have been saved and are now live.
       </Alert>
     ) : (
-      <p className="text-sm text-ink-400">Alert dismissed. Refresh to reset.</p>
+      <p className="text-sm text-ink-500 dark:text-ink-300">Alert dismissed. Refresh to reset.</p>
     );
   },
 };

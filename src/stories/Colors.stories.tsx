@@ -45,6 +45,21 @@ function gradeColour(grade: WcagGrade): string {
   return '#dc2626';                       // red-600
 }
 
+// Readable accessible label for each grade (✕ is a non-text symbol)
+function gradeLabel(grade: WcagGrade): string {
+  if (grade === '✕') return 'Fail';
+  return grade; // AAA, AA, AA* are already readable text
+}
+
+// Tailwind classes for the grade badge — light uses -700 (passes on white),
+// dark uses -300 (passes on ink-800).
+function gradeClasses(grade: WcagGrade): string {
+  if (grade === 'AAA') return 'text-green-700  border-green-700  dark:text-green-300  dark:border-green-300';
+  if (grade === 'AA')  return 'text-blue-700   border-blue-700   dark:text-blue-300   dark:border-blue-300';
+  if (grade === 'AA*') return 'text-amber-700  border-amber-700  dark:text-amber-300  dark:border-amber-300';
+  return                      'text-red-700    border-red-700    dark:text-red-300    dark:border-red-300';
+}
+
 // ── Swatch ────────────────────────────────────────────────
 
 const WHITE = '#FFFFFF';
@@ -54,9 +69,12 @@ function bestTextColor(bg: string): string {
   return contrastRatio(bg, WHITE) >= contrastRatio(bg, BLACK) ? WHITE : BLACK;
 }
 
-function Swatch({ shade, hex }: { shade: string; hex: string }) {
+function Swatch({ shade, hex, surface }: { shade: string; hex: string; surface?: 'light' | 'dark' }) {
   const best  = bestTextColor(hex);
   const grade = wcagGrade(contrastRatio(hex, best));
+  // Use inline colours matched to the card's forced background, not Tailwind dark: classes
+  const labelColor = surface === 'dark' ? '#F8F7F4' : '#0E0D0B';
+  const subColor   = surface === 'dark' ? '#B0ADA6' : '#55524C';
 
   return (
     <div className="flex flex-col gap-2">
@@ -65,13 +83,12 @@ function Swatch({ shade, hex }: { shade: string; hex: string }) {
         className="relative w-full rounded-2xl border border-black/5 flex flex-col items-center justify-center gap-1"
         style={{ backgroundColor: hex, height: 88 }}
       >
-        {/* Auto-selected "Aa" */}
-        <span style={{ color: best, fontSize: 18, fontWeight: 700, fontFamily: 'sans-serif' }}>
+        {/* Auto-selected "Aa" — decorative, grade shown in badge below */}
+        <span aria-hidden="true" style={{ color: best, fontSize: 18, fontWeight: 700, fontFamily: 'sans-serif' }}>
           Aa
         </span>
-        {/* WCAG grade */}
-        <span style={{
-          color: best, fontSize: 9, fontFamily: 'sans-serif', fontWeight: 600, opacity: 0.75,
+        <span aria-hidden="true" style={{
+          color: best, fontSize: 9, fontFamily: 'sans-serif', fontWeight: 600,
           letterSpacing: '0.05em',
         }}>
           {grade}
@@ -79,8 +96,8 @@ function Swatch({ shade, hex }: { shade: string; hex: string }) {
       </div>
       {/* Shade + hex */}
       <div>
-        <p className="text-xs font-semibold font-body text-ink-700 dark:text-ink-200">{shade}</p>
-        <p className="text-[10px] font-mono text-ink-400 dark:text-ink-500 uppercase">{hex}</p>
+        <p className="text-xs font-semibold font-body" style={{ color: labelColor }}>{shade}</p>
+        <p className="text-[10px] font-mono uppercase" style={{ color: subColor }}>{hex}</p>
       </div>
     </div>
   );
@@ -109,7 +126,7 @@ function PaletteSection({ name, description, swatches, surface }: {
         <p className="text-xs font-body mt-0.5" style={{ color: sub }}>{description}</p>
       </div>
       <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
-        {swatches.map(s => <Swatch key={s.shade} {...s} />)}
+        {swatches.map(s => <Swatch key={s.shade} {...s} surface={surface} />)}
       </div>
     </div>
   );
@@ -122,7 +139,7 @@ function PalettePair({ name, description, swatches }: {
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-xs font-semibold font-body uppercase tracking-widest text-primary-600 dark:text-primary-400">
+      <p className="text-xs font-semibold font-body uppercase tracking-widest text-primary-800 dark:text-primary-400">
         {name}
       </p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
@@ -150,17 +167,17 @@ function StatusSwatch({ name, fg, bg }: { name: string; fg: string; bg: string }
       <div>
         <p className="text-xs font-semibold font-body text-ink-700 dark:text-ink-200">{name}</p>
         <div className="flex gap-2 mt-0.5">
-          <span className="text-[10px] font-mono text-ink-400 dark:text-ink-500">{fg}</span>
-          <span className="text-[10px] font-mono text-ink-400 dark:text-ink-500">{bg}</span>
+          <span className="text-[10px] font-mono text-ink-500 dark:text-ink-300">{fg}</span>
+          <span className="text-[10px] font-mono text-ink-500 dark:text-ink-300">{bg}</span>
         </div>
         <div className="flex gap-3 mt-1">
           <span className="text-[10px] font-body text-ink-500 dark:text-ink-300">
             fg {fgRatio.toFixed(1)}:1{' '}
-            <span style={{ color: gradeColour(fgGrade), fontWeight: 700 }}>{fgGrade}</span>
+            <span className={`font-bold ${gradeClasses(fgGrade)}`}>{gradeLabel(fgGrade)}</span>
           </span>
           <span className="text-[10px] font-body text-ink-500 dark:text-ink-300">
             bg {bgRatio.toFixed(1)}:1{' '}
-            <span style={{ color: gradeColour(bgGrade), fontWeight: 700 }}>{bgGrade}</span>
+            <span className={`font-bold ${gradeClasses(bgGrade)}`}>{gradeLabel(bgGrade)}</span>
           </span>
         </div>
       </div>
@@ -184,15 +201,12 @@ function Legend() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {items.map(({ grade, min, desc }) => (
           <div key={grade} className="flex items-start gap-2">
-            <span
-              className="mt-0.5 shrink-0 text-[10px] font-bold rounded px-1"
-              style={{ color: gradeColour(grade as WcagGrade), border: `1px solid ${gradeColour(grade as WcagGrade)}` }}
-            >
-              {grade}
+            <span className={`mt-0.5 shrink-0 text-[10px] font-bold rounded px-1 border ${gradeClasses(grade as WcagGrade)}`}>
+              {gradeLabel(grade as WcagGrade)}
             </span>
             <div>
               <p className="text-xs font-mono font-medium text-ink-700 dark:text-ink-200">{min}</p>
-              <p className="text-[10px] font-body text-ink-400 dark:text-ink-500">{desc}</p>
+              <p className="text-[10px] font-body text-ink-500 dark:text-ink-300">{desc}</p>
             </div>
           </div>
         ))}
@@ -270,7 +284,7 @@ export const Palette = {
       />
 
       <div>
-        <p className="mb-3 text-xs font-semibold font-body uppercase tracking-widest text-primary-600 dark:text-primary-400">
+        <p className="mb-3 text-xs font-semibold font-body uppercase tracking-widest text-primary-800 dark:text-primary-400">
           Status
         </p>
         <p className="mb-4 text-xs font-body text-ink-500 dark:text-ink-300">

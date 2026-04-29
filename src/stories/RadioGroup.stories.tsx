@@ -432,25 +432,25 @@ export const AllVariants: Story = {
     return (
       <div className="flex flex-col gap-10 max-w-2xl">
         <div>
-          <p className="text-xs font-mono text-ink-500 mb-4">list</p>
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300 mb-4">list</p>
           <RadioGroup variant="list" label="Notifications" options={NOTIFY_OPTIONS} value={list} onChange={setList} />
         </div>
         <div>
-          <p className="text-xs font-mono text-ink-500 mb-4">cards</p>
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300 mb-4">cards</p>
           <div className="max-w-lg">
             <RadioGroup variant="cards" label="Server size" options={PLAN_OPTIONS} value={cards} onChange={setCards} />
           </div>
         </div>
         <div>
-          <p className="text-xs font-mono text-ink-500 mb-4">grid</p>
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300 mb-4">grid</p>
           <RadioGroup variant="grid" label="Mailing list" options={MAILING_OPTIONS} value={grid} onChange={setGrid} />
         </div>
         <div>
-          <p className="text-xs font-mono text-ink-500 mb-4">minicards</p>
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300 mb-4">minicards</p>
           <RadioGroup variant="minicards" label="RAM" options={RAM_OPTIONS} value={minicards} onChange={setMinicards} />
         </div>
         <div>
-          <p className="text-xs font-mono text-ink-500 mb-4">stacked</p>
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300 mb-4">stacked</p>
           <div className="max-w-sm">
             <RadioGroup variant="stacked" label="Deploy trigger" options={DEPLOY_OPTIONS} value={stacked} onChange={setStacked} />
           </div>

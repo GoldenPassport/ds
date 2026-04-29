@@ -50,41 +50,44 @@ const radiusClasses: Record<ButtonRadius, string> = {
 };
 
 // ── Component ─────────────────────────────────────────────
-export function Button({
-  variant  = 'primary',
-  size     = 'md',
-  radius   = 'rounded',
-  loading  = false,
-  iconOnly = false,
-  disabled,
-  className = '',
-  children,
-  ...props
-}: ButtonProps) {
-  const resolvedRadius = radius === 'rounded' ? defaultRadiusClasses[size] : radiusClasses[radius];
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button({
+    variant  = 'primary',
+    size     = 'md',
+    radius   = 'rounded',
+    loading  = false,
+    iconOnly = false,
+    disabled,
+    className = '',
+    children,
+    ...props
+  }, ref) {
+    const resolvedRadius = radius === 'rounded' ? defaultRadiusClasses[size] : radiusClasses[radius];
 
-  return (
-    <button
-      disabled={disabled}
-      aria-busy={loading || undefined}
-      className={[
-        'inline-flex items-center justify-center font-semibold font-body',
-        'cursor-pointer transition-all duration-150 border',
-        'disabled:opacity-40 disabled:cursor-not-allowed',
-        loading ? 'pointer-events-none' : '',
-        iconOnly ? iconOnlySizeClasses[size] : sizeClasses[size],
-        resolvedRadius,
-        variantClasses[variant],
-        className,
-      ].join(' ')}
-      {...props}
-    >
-      {loading ? (
-        <>
-          <Loader2 className="w-4 h-4 animate-spin shrink-0" aria-hidden="true" />
-          <span className="sr-only">{children}</span>
-        </>
-      ) : children}
-    </button>
-  );
-}
+    return (
+      <button
+        ref={ref}
+        disabled={disabled}
+        aria-busy={loading || undefined}
+        className={[
+          'inline-flex items-center justify-center font-semibold font-body',
+          'cursor-pointer transition-all duration-150 border',
+          'disabled:opacity-40 disabled:cursor-not-allowed',
+          loading ? 'pointer-events-none' : '',
+          iconOnly ? iconOnlySizeClasses[size] : sizeClasses[size],
+          resolvedRadius,
+          variantClasses[variant],
+          className,
+        ].join(' ')}
+        {...props}
+      >
+        {loading ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin shrink-0" aria-hidden="true" />
+            <span className="sr-only">{children}</span>
+          </>
+        ) : children}
+      </button>
+    );
+  }
+);

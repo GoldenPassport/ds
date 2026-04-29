@@ -56,7 +56,7 @@ function NotificationDemo({
 
   return (
     <div className="relative min-h-36">
-      <p className="text-sm text-ink-400 font-body mb-3">
+      <p className="text-sm text-ink-500 dark:text-ink-300 font-body mb-3">
         Use the controls panel to adjust the notification, then click the button to re-fire it.
       </p>
       <button
@@ -317,7 +317,7 @@ function LiveDemoWrapper() {
 
   return (
     <div className="relative min-h-48 space-y-4">
-      <p className="text-sm text-ink-500 font-body">
+      <p className="text-sm text-ink-500 dark:text-ink-300 font-body">
         Notifications auto-dismiss after 5 s. Click multiple times to stack them.
       </p>
       <div className="flex flex-wrap gap-2">
@@ -365,7 +365,7 @@ export const Positions: Story = {
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {ALL_POSITIONS.map(pos => (
         <div key={pos} className="space-y-1">
-          <p className="text-xs text-ink-400 font-mono">{pos}</p>
+          <p className="text-xs text-ink-500 dark:text-ink-300 font-mono">{pos}</p>
           <NotificationCard
             onDismiss={noop}
             item={{ id: pos, variant: 'info', title: 'Notification', body: `Position: "${pos}".` }}

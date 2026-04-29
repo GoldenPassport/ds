@@ -135,7 +135,7 @@ export const AllVariants: Story = {
     <div className="flex flex-col gap-10">
       {(['cards', 'bordered', 'simple'] as const).map(v => (
         <div key={v}>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">variant="{v}"</p>
+          <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-3">variant="{v}"</p>
           <Stats variant={v} items={BASIC} />
         </div>
       ))}

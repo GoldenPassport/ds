@@ -49,8 +49,8 @@ const triggerBase = [
   'disabled:opacity-40 disabled:cursor-not-allowed',
 ].join(' ');
 
-const triggerBorderNormal = 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25';
-const triggerBorderError  = 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/25';
+const triggerBorderNormal = 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-primary-500';
+const triggerBorderError  = 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500';
 
 // ── Custom variant (Headless UI Listbox) ──────────────────
 
@@ -107,7 +107,7 @@ function SelectCustom<T extends string | number>({
                   className={({ active, selected: sel }) => [
                     'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
                     active  ? 'bg-ink-50 dark:bg-ink-700' : '',
-                    sel     ? 'text-primary-600 dark:text-primary-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
+                    sel     ? 'text-primary-800 dark:text-primary-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
                     option.disabled ? 'opacity-40 cursor-not-allowed' : '',
                   ].join(' ')}
                 >

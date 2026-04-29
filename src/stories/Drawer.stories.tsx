@@ -113,7 +113,7 @@ export const NoHeader: Story = {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="mb-4 text-xs font-body text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 transition-colors"
+            className="mb-4 text-xs font-body text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 transition-colors"
           >
             ← Close
           </button>
@@ -261,9 +261,9 @@ export const UserProfile: Story = {
               { icon: <Calendar className="w-4 h-4"/>, label: 'Joined',   value: 'January 2023'        },
             ].map(row => (
               <div key={row.label} className="flex items-center gap-3">
-                <span className="text-ink-400 shrink-0">{row.icon}</span>
+                <span className="text-ink-500 dark:text-ink-300 shrink-0">{row.icon}</span>
                 <div>
-                  <dt className="text-xs font-body text-ink-400 dark:text-ink-500">{row.label}</dt>
+                  <dt className="text-xs font-body text-ink-400 dark:text-ink-300">{row.label}</dt>
                   <dd className="text-sm font-medium font-body text-ink-900 dark:text-ink-50">{row.value}</dd>
                 </div>
               </div>
@@ -315,9 +315,9 @@ export const FileDetails: Story = {
               { icon: <Link2     className="w-4 h-4" />, label: 'Size',        value: '2.4 MB'           },
             ].map(row => (
               <div key={row.label} className="flex items-center gap-3">
-                <span className="text-ink-400 shrink-0">{row.icon}</span>
+                <span className="text-ink-500 dark:text-ink-300 shrink-0">{row.icon}</span>
                 <div className="flex items-center gap-2 min-w-0">
-                  <dt className="text-xs font-body text-ink-400 dark:text-ink-500 w-24 shrink-0">{row.label}</dt>
+                  <dt className="text-xs font-body text-ink-400 dark:text-ink-300 w-24 shrink-0">{row.label}</dt>
                   <dd className="text-sm font-body text-ink-700 dark:text-ink-300 truncate">{row.value}</dd>
                 </div>
               </div>

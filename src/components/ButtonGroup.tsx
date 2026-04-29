@@ -142,14 +142,15 @@ export function ButtonGroup<T extends string | number = string>({
           const isLast     = i === count - 1;
 
           // Border between buttons:
-          // active|active   → visible gold divider so selections are distinguishable
+          // active|active   → darker amber divider so adjacent selections are distinguishable
+          //                   (primary-400 was lighter than primary-500 and read as invisible)
           // active|inactive → transparent (gold background provides enough contrast)
           // inactive|active → normal ink border
           // inactive|inactive → normal ink border
           const dividerClass = isFirst
             ? ''
             : active && prevActive
-              ? 'border-l border-primary-400 dark:border-primary-600'
+              ? 'border-l border-primary-700'
               : active
                 ? 'border-l border-transparent'
                 : 'border-l border-ink-200 dark:border-ink-600';

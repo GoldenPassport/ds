@@ -79,11 +79,19 @@ export const WithLabel: Story = {
 
 export const Bare: Story = {
   name: 'Bare — no label or value',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When no visible `label` is rendered, supply `aria-label` so the progressbar has an accessible name (axe rule `aria-progressbar-name`).',
+      },
+    },
+  },
   render: () => (
     <div className="flex flex-col gap-3 max-w-md">
-      <ProgressBar value={25} />
-      <ProgressBar value={55} variant="success" />
-      <ProgressBar value={80} variant="warning" />
+      <ProgressBar value={25} aria-label="Download progress" />
+      <ProgressBar value={55} variant="success" aria-label="Sync progress" />
+      <ProgressBar value={80} variant="warning" aria-label="Quota usage" />
     </div>
   ),
 };
@@ -113,7 +121,7 @@ export const Animated: Story = {
         />
         <button
           onClick={() => setValue(0)}
-          className="text-xs text-ink-400 hover:text-ink-600 font-body underline"
+          className="text-xs text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 font-body underline"
         >
           Reset
         </button>
@@ -219,7 +227,7 @@ export const CircularAnimated: Story = {
         />
         <button
           onClick={() => setValue(0)}
-          className="text-xs text-ink-400 hover:text-ink-600 font-body underline"
+          className="text-xs text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 font-body underline"
         >
           Reset
         </button>

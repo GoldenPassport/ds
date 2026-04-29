@@ -107,13 +107,13 @@ function IconItem({ item }: { item: FlyoutMenuItem }) {
   const inner = (
     <>
       {item.icon && (
-        <div className="mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700/50 text-ink-500 dark:text-ink-300 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-75">
+        <div className="mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700/50 text-ink-500 dark:text-ink-300 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 group-hover:text-primary-800 dark:group-hover:text-primary-400 transition-colors duration-75">
           <span className="size-6 flex items-center justify-center">{item.icon}</span>
         </div>
       )}
       <div className="flex-1 min-w-0">
         <span className="flex items-center gap-2">
-          <span className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-75">
+          <span className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 group-hover:text-primary-800 dark:group-hover:text-primary-400 transition-colors duration-75">
             {item.label}
           </span>
           {item.badge && (

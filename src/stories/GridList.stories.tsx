@@ -278,7 +278,7 @@ export const Folders: Story = {
   args: { items: [] },
   render: () => {
     const items: GridListItem[] = [
-      { id: 1, title: 'Design assets',       description: 'Logos, icons, and brand guidelines.',         leading: <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center"><FolderOpen className="w-5 h-5 text-primary-600 dark:text-primary-400" /></div>,    meta: [{ icon: <FolderOpen className="w-3.5 h-3.5" />, label: '142 files' }, { icon: <Globe className="w-3.5 h-3.5" />, label: 'Public' }],       menuItems: MENU_ITEMS },
+      { id: 1, title: 'Design assets',       description: 'Logos, icons, and brand guidelines.',         leading: <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center"><FolderOpen className="w-5 h-5 text-primary-800 dark:text-primary-400" /></div>,    meta: [{ icon: <FolderOpen className="w-3.5 h-3.5" />, label: '142 files' }, { icon: <Globe className="w-3.5 h-3.5" />, label: 'Public' }],       menuItems: MENU_ITEMS },
       { id: 2, title: 'Engineering docs',    description: 'Architecture diagrams and API references.',   leading: <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><FolderOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" /></div>,   meta: [{ icon: <FolderOpen className="w-3.5 h-3.5" />, label: '38 files' },  { icon: <Lock className="w-3.5 h-3.5" />, label: 'Private' }],       menuItems: MENU_ITEMS },
       { id: 3, title: 'Legal',               description: 'Contracts, NDAs, and compliance documents.',  leading: <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center"><FolderOpen className="w-5 h-5 text-red-600 dark:text-red-400" /></div>,    meta: [{ icon: <FolderOpen className="w-3.5 h-3.5" />, label: '21 files' },  { icon: <Lock className="w-3.5 h-3.5" />, label: 'Private' }],       menuItems: MENU_ITEMS },
       { id: 4, title: 'Marketing',           description: 'Campaign briefs, copy, and media assets.',   leading: <div className="w-10 h-10 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center"><FolderOpen className="w-5 h-5 text-green-600 dark:text-green-400" /></div>, meta: [{ icon: <FolderOpen className="w-3.5 h-3.5" />, label: '89 files' },  { icon: <Globe className="w-3.5 h-3.5" />, label: 'Public' }],       menuItems: MENU_ITEMS },
@@ -310,7 +310,7 @@ export const CustomRenderItem: Story = {
               {item.menuItems && item.menuItems.length > 0 && (
                 <Menu
                   trigger={
-                    <button className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
+                    <button aria-label={`More options for ${item.title}`} className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-ink-400 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
                       <MoreVertical className="w-4 h-4" aria-hidden="true" />
                     </button>
                   }

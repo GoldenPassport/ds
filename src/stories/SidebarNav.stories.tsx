@@ -150,7 +150,7 @@ function Shell({ sidebar }: { sidebar: React.ReactNode }) {
     <div className="flex h-screen">
       <div className="w-64 shrink-0 h-full">{sidebar}</div>
       <main className="flex-1 p-8 overflow-y-auto bg-white dark:bg-ink-900">
-        <p className="text-sm font-body text-ink-400 dark:text-ink-500">Page content</p>
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">Page content</p>
       </main>
     </div>
   );
@@ -322,8 +322,8 @@ export const WithFooter: Story = {
                 New project
               </Button>
               <div className="flex items-center gap-2 px-3 py-2">
-                <Bell className="w-4 h-4 text-ink-400" />
-                <span className="text-sm font-body text-ink-600 flex-1">Notifications</span>
+                <Bell className="w-4 h-4 text-ink-500 dark:text-ink-300" />
+                <span className="text-sm font-body text-ink-700 dark:text-ink-200 flex-1">Notifications</span>
                 <Badge label="4" variant="warning" />
               </div>
             </div>
@@ -350,7 +350,7 @@ export const RoundedCard: Story = {
         />
       </div>
       <main className="flex-1 p-6">
-        <p className="text-sm font-body text-ink-400 dark:text-ink-500">Page content</p>
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300">Page content</p>
       </main>
     </div>
   ),
@@ -373,7 +373,7 @@ export const RoundedCardDark: Story = {
         />
       </div>
       <main className="flex-1 p-6">
-        <p className="text-sm font-body text-ink-500">Page content</p>
+        <p className="text-sm font-body text-ink-300">Page content</p>
       </main>
     </div>
   ),

@@ -48,7 +48,7 @@ export const Playground: Story = {
       <div className="flex flex-col gap-3">
         <OtpInput {...args} value={val} onChange={setVal} />
         {val.length === (args.length ?? 6) && (
-          <p className="text-xs font-body text-ink-500">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300">
             Entered: <code className="text-ink-900 dark:text-ink-50 font-bold">{val}</code>
           </p>
         )}
@@ -100,7 +100,7 @@ export const SixDigitCode: Story = {
       return (
         <div className="flex items-center gap-2">
           <Badge label="Verified" variant="active" />
-          <span className="text-sm font-body text-ink-500">Phone number confirmed</span>
+          <span className="text-sm font-body text-ink-500 dark:text-ink-300">Phone number confirmed</span>
         </div>
       );
     }

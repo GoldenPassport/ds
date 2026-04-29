@@ -29,7 +29,7 @@ function PlaceholderImg({ size = 48, rounded = 'rounded-full' }: { size?: number
       style={{ width: size, height: size }}
       className={`${rounded} bg-ink-200 dark:bg-ink-700 flex items-center justify-center shrink-0`}
     >
-      <ImageIcon className="w-5 h-5 text-ink-600" />
+      <ImageIcon className="w-5 h-5 text-ink-600 dark:text-ink-300" />
     </div>
   );
 }
@@ -249,14 +249,14 @@ export const CommentFeed: Story = {
               <div>
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{c.author}</p>
-                  <p className="text-xs font-body text-ink-400 dark:text-ink-500 shrink-0">{c.time}</p>
+                  <p className="text-xs font-body text-ink-400 dark:text-ink-300 shrink-0">{c.time}</p>
                 </div>
                 <p className="text-sm font-body text-ink-600 dark:text-ink-300">{c.text}</p>
                 <div className="mt-2 flex gap-4">
-                  <button type="button" className="flex items-center gap-1.5 text-xs font-body text-ink-400 hover:text-ink-600 dark:text-ink-500 dark:hover:text-ink-300 transition-colors">
+                  <button type="button" className="flex items-center gap-1.5 text-xs font-body text-ink-400 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-200 transition-colors">
                     <ThumbsUp className="w-3.5 h-3.5" />Like
                   </button>
-                  <button type="button" className="flex items-center gap-1.5 text-xs font-body text-ink-400 hover:text-ink-600 dark:text-ink-500 dark:hover:text-ink-300 transition-colors">
+                  <button type="button" className="flex items-center gap-1.5 text-xs font-body text-ink-400 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-200 transition-colors">
                     <Reply className="w-3.5 h-3.5" />Reply
                   </button>
                 </div>
@@ -298,7 +298,7 @@ export const ActivityFeed: Story = {
                   {item.text}{' '}
                   <span className="font-medium text-ink-900 dark:text-ink-50">{item.target}</span>
                 </p>
-                <p className="text-xs font-body text-ink-400 dark:text-ink-500 shrink-0">{item.time}</p>
+                <p className="text-xs font-body text-ink-400 dark:text-ink-300 shrink-0">{item.time}</p>
               </div>
             </MediaObject>
           ))}
@@ -317,7 +317,7 @@ export const AllAlignments: Story = {
     <div className="max-w-xl flex flex-col gap-6">
       {(['top', 'center', 'bottom'] as const).map(align => (
         <div key={align} className="flex flex-col gap-1">
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-1">align="{align}"</p>
+          <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-1">align="{align}"</p>
           <MediaObject align={align} media={<PlaceholderImg size={56} rounded="rounded-xl" />} gap="lg">
             <Body title="Media object" sub={`align="${align}"`}>
               <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">

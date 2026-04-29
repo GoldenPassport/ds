@@ -104,7 +104,7 @@ export const AllVariants: Story = {
       <div className="space-y-10 max-w-lg">
         {(['underline', 'pills', 'pill', 'bar'] as const).map(v => (
           <div key={v} className="space-y-1">
-            <p className="text-xs font-mono text-ink-400">{v}</p>
+            <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v}</p>
             <Tabs tabs={simple} variant={v} />
           </div>
         ))}

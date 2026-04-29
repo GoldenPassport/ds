@@ -118,7 +118,7 @@ export function Pagination({
                 'text-[13px] font-body font-medium rounded-xl px-2.5 py-1.5',
                 'bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700',
                 'text-ink-900 dark:text-ink-50',
-                'focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/25',
+                'focus:outline-none focus:border-primary-500',
                 'transition-all duration-150 cursor-pointer',
               ].join(' ')}
             >

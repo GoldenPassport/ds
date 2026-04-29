@@ -40,8 +40,8 @@ const titleCls: Record<ActionPanelVariant, string> = {
 };
 
 const descCls: Record<ActionPanelVariant, string> = {
-  default: 'text-ink-500 dark:text-ink-400',
-  danger:  'text-red-700/80 dark:text-red-300/80',
+  default: 'text-ink-500 dark:text-ink-300',
+  danger:  'text-red-700 dark:text-red-300',
 };
 
 // ── Component ─────────────────────────────────────────────

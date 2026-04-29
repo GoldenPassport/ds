@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Search as SearchIcon, Mail, User, Lock, Globe } from 'lucide-react';
+import { Eye, EyeOff, Search as SearchIcon, Mail, User, Lock, Globe, ChevronDown } from 'lucide-react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from '../components/Input';
 import { DatePicker, TimePicker, DateTimePicker } from '../components/DatePicker';
-import { Select } from '../components/Select';
 
 const meta = {
   title: 'Forms/Input',
@@ -98,7 +97,7 @@ export const Password: Story = {
               type="button"
               onClick={() => setShow(v => !v)}
               aria-label={show ? 'Hide password' : 'Show password'}
-              className="text-ink-500 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1"
+              className="text-ink-500 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 transition-colors p-1"
             >
               {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -379,19 +378,20 @@ export const InlineSelect: Story = {
           placeholder="0.00"
           hint="Converted at today's mid-market rate"
           trailingAddon={
-            <Select
-              variant="native"
-              aria-label="Currency"
-              value={currency}
-              onChange={setCurrency}
-              options={[
-                { value: 'usd', label: 'USD' },
-                { value: 'eur', label: 'EUR' },
-                { value: 'gbp', label: 'GBP' },
-                { value: 'aud', label: 'AUD' },
-              ]}
-              className="border-none bg-transparent -mr-3 -my-1 pr-7 text-ink-500 dark:text-ink-300 focus:ring-0 cursor-pointer"
-            />
+            <div className="relative flex items-center">
+              <select
+                aria-label="Currency"
+                value={currency}
+                onChange={e => setCurrency(e.target.value)}
+                className="appearance-none bg-transparent border-none text-sm font-body text-ink-900 dark:text-ink-50 focus:outline-none cursor-pointer pr-5"
+              >
+                <option value="usd">USD</option>
+                <option value="eur">EUR</option>
+                <option value="gbp">GBP</option>
+                <option value="aud">AUD</option>
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-0 w-3.5 h-3.5 text-ink-500 dark:text-ink-300" />
+            </div>
           }
           value={amount}
           onChange={e => setAmount(e.target.value)}
@@ -639,7 +639,7 @@ export const AllTypes: Story = {
               type="button"
               onClick={() => setShowPw(v => !v)}
               aria-label={showPw ? 'Hide password' : 'Show password'}
-              className="text-ink-500 hover:text-ink-600 dark:hover:text-ink-300 transition-colors p-1"
+              className="text-ink-500 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 transition-colors p-1"
             >
               {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>

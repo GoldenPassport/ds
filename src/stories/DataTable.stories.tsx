@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Play, Copy, Trash2, ExternalLink } from 'lucide-react';
+import { Play, Copy, Trash2, ExternalLink, Sparkles } from 'lucide-react';
 import { DataTable } from '../components/DataTable';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
@@ -62,7 +62,7 @@ const columns = [
     render: (row: Workflow) => (
       <div>
         <div className="font-semibold text-ink-900 dark:text-ink-50">{row.name}</div>
-        <div className="text-xs text-ink-400 dark:text-ink-500 mt-0.5">{row.dept}</div>
+        <div className="text-xs text-ink-400 dark:text-ink-300 mt-0.5">{row.dept}</div>
       </div>
     ),
   },
@@ -156,7 +156,7 @@ export const ServerSidePagination: Story = {
 
     return (
       <div className="space-y-2">
-        <p className="text-xs text-ink-400 dark:text-ink-500 font-body">
+        <p className="text-xs text-ink-400 dark:text-ink-300 font-body">
           Simulates server fetch (400ms delay) on page/size change.
         </p>
         <DataTable
@@ -227,7 +227,7 @@ export const WithActionMenu: Story = {
             trigger={
               <button
                 onClick={e => e.stopPropagation()}
-                className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none"
+                className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-400 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none"
               >
                 ···
               </button>
@@ -265,7 +265,7 @@ export const WithBothActions: Story = {
             <Menu
               align="right"
               trigger={
-                <button className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none">
+                <button className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-400 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none">
                   ···
                 </button>
               }
@@ -297,9 +297,9 @@ export const Empty: Story = {
       data={[]}
       emptyState={
         <div className="flex flex-col items-center gap-2">
-          <span className="text-2xl">✦</span>
+          <Sparkles className="w-8 h-8 text-ink-300 dark:text-ink-500" aria-hidden="true" />
           <p className="font-semibold text-ink-700 dark:text-ink-300">No workflows yet</p>
-          <p className="text-ink-400 dark:text-ink-500 text-xs">Create your first workflow to get started</p>
+          <p className="text-ink-400 dark:text-ink-300 text-xs">Create your first workflow to get started</p>
         </div>
       }
     />
@@ -310,7 +310,7 @@ export const Sortable: Story = {
   args: { columns: [], data: [] },
   render: () => (
     <div className="space-y-2">
-      <p className="text-xs text-ink-400 dark:text-ink-500 font-body">Click column headers to sort</p>
+      <p className="text-xs text-ink-400 dark:text-ink-300 font-body">Click column headers to sort</p>
       <DataTable columns={columns} data={ALL_WORKFLOWS.slice(0, 6)} />
     </div>
   ),

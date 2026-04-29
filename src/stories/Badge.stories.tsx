@@ -178,7 +178,7 @@ export const WithIcon: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">sm</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">sm</p>
         <div className="flex flex-wrap gap-2">
           <Badge variant="active"  icon="✅" label="Verified"  size="sm" />
           <Badge variant="failed"  icon="⚠️" label="At risk"   size="sm" />
@@ -187,7 +187,7 @@ export const WithIcon: Story = {
         </div>
       </div>
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">md</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">md</p>
         <div className="flex flex-wrap gap-2">
           <Badge variant="active"  icon="✅" label="Verified"  />
           <Badge variant="failed"  icon="⚠️" label="At risk"   />
@@ -196,7 +196,7 @@ export const WithIcon: Story = {
         </div>
       </div>
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">lg</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">lg</p>
         <div className="flex flex-wrap gap-2">
           <Badge variant="active"  icon="✅" label="Verified"  size="lg" />
           <Badge variant="failed"  icon="⚠️" label="At risk"   size="lg" />
@@ -221,7 +221,7 @@ export const SentimentVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Flat · sm (chat use)</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Flat · sm (chat use)</p>
         <div className="flex flex-wrap gap-2">
           {SENTIMENT_VARIANTS.map(v => (
             <Badge key={v} variant={v} icon={SENTIMENT_ICONS[v]} label={v.charAt(0).toUpperCase() + v.slice(1)} size="sm" />
@@ -229,7 +229,7 @@ export const SentimentVariants: Story = {
         </div>
       </div>
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Flat · md</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Flat · md</p>
         <div className="flex flex-wrap gap-2">
           {SENTIMENT_VARIANTS.map(v => (
             <Badge key={v} variant={v} icon={SENTIMENT_ICONS[v]} label={v.charAt(0).toUpperCase() + v.slice(1)} />
@@ -237,7 +237,7 @@ export const SentimentVariants: Story = {
         </div>
       </div>
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Outlined · md</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Outlined · md</p>
         <div className="flex flex-wrap gap-2">
           {SENTIMENT_VARIANTS.map(v => (
             <Badge key={v} variant={v} icon={SENTIMENT_ICONS[v]} label={v.charAt(0).toUpperCase() + v.slice(1)} outlined />
@@ -267,7 +267,7 @@ export const Removable: Story = {
         ))}
         {tags.length === 0 && (
           <button
-            className="text-xs text-ink-400 hover:text-ink-600 underline font-body"
+            className="text-xs text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 underline font-body"
             onClick={() => setTags([...STATUS_VARIANTS])}
           >
             Reset
@@ -298,7 +298,7 @@ export const RemovableRounded: Story = {
         ))}
         {tags.length === 0 && (
           <button
-            className="text-xs text-ink-400 hover:text-ink-600 underline font-body"
+            className="text-xs text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 underline font-body"
             onClick={() => setTags([...STATUS_VARIANTS])}
           >
             Reset
@@ -318,7 +318,7 @@ export const AllVariants: Story = {
     <div className="flex flex-col gap-6">
       {/* Flat pill */}
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Flat · Pill</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Flat · Pill</p>
         <div className="flex flex-wrap gap-2">
           {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} shape="pill" />)}
         </div>
@@ -326,7 +326,7 @@ export const AllVariants: Story = {
 
       {/* Flat rounded */}
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Flat · Rounded</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Flat · Rounded</p>
         <div className="flex flex-wrap gap-2">
           {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} shape="rounded" />)}
         </div>
@@ -334,7 +334,7 @@ export const AllVariants: Story = {
 
       {/* Outlined pill */}
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Outlined · Pill</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Outlined · Pill</p>
         <div className="flex flex-wrap gap-2">
           {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} shape="pill" outlined />)}
         </div>
@@ -342,7 +342,7 @@ export const AllVariants: Story = {
 
       {/* Outlined rounded */}
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Outlined · Rounded</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Outlined · Rounded</p>
         <div className="flex flex-wrap gap-2">
           {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} shape="rounded" outlined />)}
         </div>
@@ -350,7 +350,7 @@ export const AllVariants: Story = {
 
       {/* Sizes */}
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Sizes</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Sizes</p>
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap gap-1.5 items-center">
             {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} size="lg" />)}
@@ -366,7 +366,7 @@ export const AllVariants: Story = {
 
       {/* Without dot */}
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Without dot</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Without dot</p>
         <div className="flex flex-wrap gap-2">
           {ALL_VARIANTS.map(v => <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} dot={false} />)}
         </div>
@@ -374,7 +374,7 @@ export const AllVariants: Story = {
 
       {/* Removable */}
       <div>
-        <p className="text-[11px] font-semibold font-body text-ink-400 uppercase tracking-wider mb-2">Removable</p>
+        <p className="text-[11px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-2">Removable</p>
         <div className="flex flex-wrap gap-2">
           {STATUS_VARIANTS.map(v => (
             <Badge key={v} label={v.charAt(0).toUpperCase() + v.slice(1)} variant={v} onRemove={() => {}} />

@@ -46,8 +46,8 @@ export function Textarea({
       <div className={[
         'relative rounded-xl overflow-hidden',
         error
-          ? 'border border-red-400 focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/30'
-          : 'border border-ink-200 dark:border-ink-600 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/25',
+          ? 'border border-red-400 focus-within:border-red-500'
+          : 'border border-ink-200 dark:border-ink-600 focus-within:border-primary-500',
         'transition-all duration-150',
       ].join(' ')}>
         <textarea

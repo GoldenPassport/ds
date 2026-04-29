@@ -114,11 +114,11 @@ function MiniBorderedDemo() {
   return (
     <div className="flex gap-8 items-start flex-wrap">
       <div className="flex flex-col gap-2 items-start">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500">bordered=false (default)</p>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">bordered=false (default)</p>
         <Calendar variant="mini" events={EVENTS} selected={selected} onSelect={setSelected} />
       </div>
       <div className="flex flex-col gap-2 items-start">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500">bordered=true</p>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300">bordered=true</p>
         <Calendar variant="mini" bordered events={EVENTS} selected={selected} onSelect={setSelected} />
       </div>
     </div>
@@ -139,18 +139,18 @@ export const ShadeWeekends: Story = {
   render: () => (
     <div className="flex flex-col gap-8">
       <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">Month — shadeWeekends</p>
+        <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-3">Month — shadeWeekends</p>
         <div className="max-w-4xl">
           <Calendar variant="month" events={EVENTS} shadeWeekends />
         </div>
       </div>
       <div className="flex gap-8 flex-wrap">
         <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">Mini — shadeWeekends</p>
+          <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-3">Mini — shadeWeekends</p>
           <Calendar variant="mini" events={EVENTS} shadeWeekends />
         </div>
         <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-500 mb-3">Mini — bordered + shadeWeekends</p>
+          <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-3">Mini — bordered + shadeWeekends</p>
           <Calendar variant="mini" bordered events={EVENTS} shadeWeekends />
         </div>
       </div>
@@ -206,11 +206,11 @@ function WithSidePanelDemo() {
 
             {/* Event list for selected day */}
             <div className="rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-sm p-4">
-              <p className="text-xs font-semibold font-body uppercase tracking-wider text-ink-400 dark:text-ink-500 mb-3">
+              <p className="text-xs font-semibold font-body uppercase tracking-wider text-ink-400 dark:text-ink-300 mb-3">
                 {selected ? selected.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) : 'Select a day'}
               </p>
               {dayEvents.length === 0 ? (
-                <p className="text-sm font-body text-ink-400 dark:text-ink-500">No events</p>
+                <p className="text-sm font-body text-ink-400 dark:text-ink-300">No events</p>
               ) : (
                 <div className="flex flex-col gap-2">
                   {dayEvents.map(ev => {

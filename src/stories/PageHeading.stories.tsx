@@ -309,7 +309,7 @@ function InContextDemo() {
   const [active, setActive] = React.useState('overview');
   return (
     <div className="min-h-screen bg-ink-50 dark:bg-ink-900">
-      <div className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8 pt-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8">
         <PageHeading
           breadcrumbs={[
             { label: 'Projects', href: '#' },
@@ -394,7 +394,7 @@ function StickyDemo() {
       <div className="px-6 py-4 space-y-4">
         {Array.from({ length: 20 }, (_, i) => (
           <div key={i} className="h-12 rounded-xl bg-ink-200 dark:bg-ink-700 flex items-center px-4">
-            <span className="text-sm font-body text-ink-500 dark:text-ink-300">Content row {i + 1}</span>
+            <span className="text-sm font-body text-ink-500 dark:text-ink-400">Content row {i + 1}</span>
           </div>
         ))}
       </div>
@@ -463,7 +463,7 @@ function MasterDemo() {
         searchSummary={summary}
         actions={
           <>
-            <button type="button" aria-label="Notifications" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+            <button type="button" aria-label="Notifications" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
               <Bell className="w-5 h-5" aria-hidden="true" />
             </button>
             <Avatar name="Leslie Alexander" size={36} />
@@ -474,12 +474,12 @@ function MasterDemo() {
       {/* Results list */}
       <div className="divide-y divide-ink-100 dark:divide-ink-700">
         {filtered.length === 0 ? (
-          <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-300">No workflows found</p>
+          <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-400">No workflows found</p>
         ) : filtered.map(item => (
           <div key={item.id} className="flex items-center justify-between px-4 py-3">
             <div>
               <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.name}</p>
-              <p className="text-xs font-body text-ink-500 dark:text-ink-300">{item.dept}</p>
+              <p className="text-xs font-body text-ink-500 dark:text-ink-400">{item.dept}</p>
             </div>
             <Badge
               label={item.status}
@@ -518,7 +518,7 @@ export const MasterSimple: Story = {
           onSearchChange={setQuery}
           actions={
             <>
-              <button type="button" aria-label="Notifications" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+              <button type="button" aria-label="Notifications" className="inline-flex items-center justify-center w-10 h-10 rounded-full text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
                 <Bell className="w-5 h-5" aria-hidden="true" />
               </button>
               <Avatar name="Leslie Alexander" size={36} />
@@ -527,12 +527,12 @@ export const MasterSimple: Story = {
         />
         <div className="divide-y divide-ink-100 dark:divide-ink-700">
           {filtered.length === 0 ? (
-            <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-300">No workflows found</p>
+            <p className="px-4 py-8 text-sm font-body text-center text-ink-500 dark:text-ink-400">No workflows found</p>
           ) : filtered.map(item => (
             <div key={item.id} className="flex items-center justify-between px-4 py-3">
               <div>
                 <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.name}</p>
-                <p className="text-xs font-body text-ink-500 dark:text-ink-300">{item.dept}</p>
+                <p className="text-xs font-body text-ink-500 dark:text-ink-400">{item.dept}</p>
               </div>
               <Badge label={item.status} variant={item.status === 'Active' ? 'active' : item.status === 'Running' ? 'running' : item.status === 'Pending' ? 'pending' : 'draft'} size="sm" />
             </div>

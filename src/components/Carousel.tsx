@@ -32,6 +32,8 @@ export interface CarouselProps {
   autoPlayInterval?:  number;
   /** Aspect ratio of each item — Tailwind aspect class e.g. 'aspect-video' */
   aspectRatio?:       string;
+  /** Accessible label for the carousel region. Override when multiple carousels appear on the same page. */
+  'aria-label'?:      string;
   className?:         string;
 }
 
@@ -84,35 +86,34 @@ function CarouselCard({
   radius: string;
   aspect: string;
 }) {
+  // Compose a full accessible description from all text fields for the img alt
+  const altText = [item.label, item.title, item.subtitle].filter(Boolean).join(' — ') || '';
+
   return (
     <div className={`relative overflow-hidden bg-ink-200 dark:bg-ink-700 ${radius} ${aspect} h-full`}>
       {item.image && (
         <img
           src={item.image}
-          alt={item.title ?? ''}
+          alt={altText}
           className="absolute inset-0 w-full h-full object-cover"
           draggable={false}
         />
       )}
-      {/* Scrim */}
+      {/* Caption strip — solid bg so axe can compute contrast; aria-hidden since img alt carries the info */}
       {(item.title || item.subtitle || item.label || item.content) && (
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
-      )}
-      {/* Content overlay */}
-      {(item.title || item.subtitle || item.label || item.content) && (
-        <div className="absolute bottom-0 left-0 right-0 p-4">
+        <div aria-hidden="true" className="absolute bottom-0 left-0 right-0 bg-ink-900 px-4 py-3">
           {item.label && (
-            <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-medium font-body">
+            <span className="inline-block mb-1 px-2 py-0.5 rounded-full bg-ink-700 text-ink-50 text-xs font-medium font-body">
               {item.label}
             </span>
           )}
           {item.title && (
-            <p className="text-white font-semibold font-display text-base leading-snug line-clamp-2">
+            <p className="text-ink-50 font-semibold font-display text-base leading-snug line-clamp-2">
               {item.title}
             </p>
           )}
           {item.subtitle && (
-            <p className="mt-0.5 text-white/75 text-xs font-body line-clamp-1">
+            <p className="mt-0.5 text-ink-300 text-xs font-body line-clamp-1">
               {item.subtitle}
             </p>
           )}
@@ -133,6 +134,7 @@ export function Carousel({
   autoPlay          = false,
   autoPlayInterval  = 4000,
   aspectRatio       = 'aspect-[4/3]',
+  'aria-label':     trackAriaLabel = 'Carousel items',
   className         = '',
 }: CarouselProps) {
   const trackRef    = React.useRef<HTMLDivElement>(null);
@@ -187,8 +189,9 @@ export function Carousel({
       {/* ── Track ── */}
       <div
         ref={trackRef}
+        role="region"
         tabIndex={0}
-        aria-label="Carousel items"
+        aria-label={trackAriaLabel}
         className={[
           'flex overflow-x-auto scroll-smooth',
           'scrollbar-hide',

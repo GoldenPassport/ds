@@ -58,7 +58,7 @@ function DefaultCard({ item }: { item: GridListItem }) {
     item.href ? (
       <a
         href={item.href}
-        className="font-semibold text-sm text-ink-900 dark:text-ink-50 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-snug focus:outline-none focus-visible:underline"
+        className="font-semibold text-sm text-ink-900 dark:text-ink-50 hover:text-primary-800 dark:hover:text-primary-400 transition-colors leading-snug focus:outline-none focus-visible:underline"
       >
         {item.title}
       </a>
@@ -66,7 +66,7 @@ function DefaultCard({ item }: { item: GridListItem }) {
       <button
         type="button"
         onClick={item.onClick}
-        className="font-semibold text-sm text-ink-900 dark:text-ink-50 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-snug text-left focus:outline-none focus-visible:underline"
+        className="font-semibold text-sm text-ink-900 dark:text-ink-50 hover:text-primary-800 dark:hover:text-primary-400 transition-colors leading-snug text-left focus:outline-none focus-visible:underline"
       >
         {item.title}
       </button>
@@ -97,7 +97,7 @@ function DefaultCard({ item }: { item: GridListItem }) {
             {hasMenu && (
               <Menu
                 trigger={
-                  <button className="inline-flex items-center justify-center w-7 h-7 rounded-xl text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
+                  <button aria-label={`More options for ${item.title}`} className="inline-flex items-center justify-center w-7 h-7 rounded-xl text-ink-400 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
                     <MoreVertical className="w-4 h-4" aria-hidden="true" />
                   </button>
                 }

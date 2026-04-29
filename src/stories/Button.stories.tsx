@@ -71,7 +71,7 @@ export const Radius: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="text-xs font-body text-ink-400 mb-2">Rounded (default)</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Rounded (default)</p>
         <div className="flex gap-3 items-center">
           <Button variant="primary" radius="rounded">Deploy</Button>
           <Button variant="secondary" radius="rounded"><Plus className="w-4 h-4" /> New</Button>
@@ -79,7 +79,7 @@ export const Radius: Story = {
         </div>
       </div>
       <div>
-        <p className="text-xs font-body text-ink-400 mb-2">Pill</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Pill</p>
         <div className="flex gap-3 items-center">
           <Button variant="primary" radius="pill">Deploy</Button>
           <Button variant="secondary" radius="pill"><Plus className="w-4 h-4" /> New</Button>
@@ -87,7 +87,7 @@ export const Radius: Story = {
         </div>
       </div>
       <div>
-        <p className="text-xs font-body text-ink-400 mb-2">Square</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Square</p>
         <div className="flex gap-3 items-center">
           <Button variant="primary" radius="square">Deploy</Button>
           <Button variant="secondary" radius="square"><Plus className="w-4 h-4" /> New</Button>
@@ -130,7 +130,7 @@ export const AllLayouts: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="text-xs font-body text-ink-400 mb-2">Text only</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Text only</p>
         <div className="flex flex-wrap gap-3 items-center">
           <Button variant="primary">Deploy</Button>
           <Button variant="secondary">Duplicate</Button>
@@ -139,7 +139,7 @@ export const AllLayouts: Story = {
         </div>
       </div>
       <div>
-        <p className="text-xs font-body text-ink-400 mb-2">Icon + text</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Icon + text</p>
         <div className="flex flex-wrap gap-3 items-center">
           <Button variant="primary"><Play className="w-4 h-4" /> Deploy</Button>
           <Button variant="secondary"><Plus className="w-4 h-4" /> Duplicate</Button>
@@ -148,7 +148,7 @@ export const AllLayouts: Story = {
         </div>
       </div>
       <div>
-        <p className="text-xs font-body text-ink-400 mb-2">Icon only</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Icon only</p>
         <div className="flex flex-wrap gap-3 items-center">
           <Button variant="primary"   iconOnly aria-label="Deploy"><Play     className="w-4 h-4" /></Button>
           <Button variant="secondary" iconOnly aria-label="Add"><Plus        className="w-4 h-4" /></Button>

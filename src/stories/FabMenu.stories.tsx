@@ -145,8 +145,8 @@ export const Colors: Story = {
   render: () => (
     <div className="grid grid-cols-3 gap-4">
       {(['primary', 'secondary', 'surface'] as const).map(color => (
-        <div key={color} className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden">
-          <p className="absolute top-3 left-3 text-xs font-body text-ink-500 dark:text-ink-300 capitalize">{color}</p>
+        <div key={color} className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden p-3">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 capitalize">{color}</p>
           <FabMenu
             icon={<Plus className="w-5 h-5" />}
             items={EDIT_ITEMS}
@@ -168,8 +168,8 @@ export const Positions: Story = {
   render: () => (
     <div className="grid grid-cols-3 gap-4">
       {(['bottom-left', 'bottom-center', 'bottom-right'] as const).map(position => (
-        <div key={position} className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden">
-          <p className="absolute top-3 left-3 text-xs font-body text-ink-500 dark:text-ink-300">{position}</p>
+        <div key={position} className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden p-3">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300">{position}</p>
           <FabMenu
             icon={<Plus className="w-5 h-5" />}
             items={EDIT_ITEMS}

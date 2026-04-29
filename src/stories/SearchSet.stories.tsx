@@ -90,7 +90,7 @@ export const Playground: Story = {
           showSummary
         />
         {query && (
-          <p className="text-xs font-body text-ink-400">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300">
             Server would receive: <code className="text-ink-700 dark:text-ink-200">query="{query}"</code>
           </p>
         )}
@@ -441,14 +441,40 @@ const TABLE_DATA = ALL_USERS.map(u => ({
   status: u.id % 3 === 0 ? 'Inactive' : 'Active',
 }));
 
+const TABLE_FILTER_DEFS: SearchSetFilterDef[] = [
+  {
+    key:   'status',
+    label: 'Status',
+    type:  'select',
+    options: [
+      { value: 'Active',   label: 'Active'   },
+      { value: 'Inactive', label: 'Inactive' },
+    ],
+  },
+  {
+    key:   'role',
+    label: 'Role',
+    type:  'multi',
+    options: [
+      { value: 'Admin',   label: 'Admin'   },
+      { value: 'Editor',  label: 'Editor'  },
+      { value: 'Viewer',  label: 'Viewer'  },
+      { value: 'Billing', label: 'Billing' },
+    ],
+  },
+];
+
+const TABLE_EMPTY_FILTERS: SearchSetFilterValues = { status: '', role: [] };
+
 export const WithDataTable: Story = {
   name: 'Paired with DataTable',
   args: { value: '', onChange: () => {} },
   render: () => {
-    const [query, setQuery] = useState('');
-    const [tags,  setTags]  = useState<SearchSetTag[]>([]);
-    const [page,  setPage]  = useState(1);
-    const [size,  setSize]  = useState(5);
+    const [query,   setQuery]   = useState('');
+    const [tags,    setTags]    = useState<SearchSetTag[]>([]);
+    const [filters, setFilters] = useState<SearchSetFilterValues>(TABLE_EMPTY_FILTERS);
+    const [page,    setPage]    = useState(1);
+    const [size,    setSize]    = useState(5);
 
     // Boolean filter: AND tags narrow the set, OR tags widen it.
     // Live query is always AND-ed on top of committed tags.
@@ -471,11 +497,19 @@ export const WithDataTable: Story = {
       return result;
     }
 
-    const filtered = TABLE_DATA.filter(matchesTags);
+    function matchesFilters(u: typeof TABLE_DATA[0]): boolean {
+      const status = filters.status as string;
+      const roles  = filters.role  as string[];
+      if (status && u.status !== status) return false;
+      if (roles.length > 0 && !roles.includes(u.role)) return false;
+      return true;
+    }
+
+    const filtered = TABLE_DATA.filter(u => matchesTags(u) && matchesFilters(u));
     const total    = filtered.length;
     const pageRows = filtered.slice((page - 1) * size, page * size);
 
-    React.useEffect(() => setPage(1), [query, tags]);
+    React.useEffect(() => setPage(1), [query, tags, filters]);
 
     const summaryText = total === TABLE_DATA.length
       ? `${total} members`
@@ -488,9 +522,13 @@ export const WithDataTable: Story = {
           onChange={setQuery}
           tags={tags}
           onTagsChange={setTags}
+          filterDefs={TABLE_FILTER_DEFS}
+          filterValues={filters}
+          onFilterChange={(f) => { setFilters(f); setPage(1); }}
+          filterTitle="Filter members"
           placeholder="Search team…"
           summary={summaryText}
-          className="max-w-sm"
+          searchClassName="max-w-sm"
         />
         <DataTable
           columns={[
