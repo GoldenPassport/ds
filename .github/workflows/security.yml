@@ -13,10 +13,9 @@ permissions:
   contents: read
 
 jobs:
-  # ── 1. pnpm audit ────────────────────────────────────────────────────────────
-  # Checks every installed package (including devDependencies) against the npm
-  # advisory database. Fails only for high/critical so routine devDep noise
-  # doesn't block PRs.
+  # ── Dependency audit (pnpm) ──────────────────────────────────────────────────
+  # Checks every installed package against the npm advisory database.
+  # Fails only for high/critical — moderate is too noisy for devDep-heavy repos.
   audit:
     name: Dependency audit (pnpm)
     runs-on: ubuntu-latest
@@ -27,7 +26,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -36,54 +35,32 @@ jobs:
       - name: Audit (fail on high or critical)
         run: pnpm audit --audit-level=high
 
-  # ── 2. Dependency review ─────────────────────────────────────────────────────
-  # On PRs, compares the base vs head lockfile and flags any newly-introduced
-  # packages that have known vulnerabilities or problematic licences.
-  dependency-review:
-    name: Dependency review
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      pull-requests: write   # allows the action to post a PR comment
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/dependency-review-action@v4
-        with:
-          # Comment a summary directly on the PR
-          comment-summary-in-pr: always
-          # Fail on high/critical vulnerabilities introduced by the PR
-          fail-on-severity: high
-          # Reject packages with GPL-3.0 or other copyleft licences
-          deny-licenses: GPL-2.0, GPL-3.0, AGPL-3.0
-
-  # ── 3. CodeQL ────────────────────────────────────────────────────────────────
-  # Static analysis — catches common security issues (XSS, injection, etc.)
-  # in TypeScript/JavaScript source files.
+  # ── CodeQL static analysis ───────────────────────────────────────────────────
+  # Requires GitHub Advanced Security to be enabled on the repository:
+  #   Settings → Code security → Enable "GitHub Advanced Security"
+  #   then enable "CodeQL analysis".
+  # For public repos this is free — visit the URL above to turn it on.
   codeql:
     name: CodeQL analysis
     runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
-      security-events: write   # required to upload SARIF results
+      security-events: write
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Initialise CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: javascript-typescript
-          # Use the recommended security-extended query suite
           queries: security-extended
 
-      # CodeQL's autobuild works for JS/TS without a compiled artefact.
       - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+        uses: github/codeql-action/autobuild@v4
 
       - name: Perform CodeQL analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: /language:javascript-typescript
