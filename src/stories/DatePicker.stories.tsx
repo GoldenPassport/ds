@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { DatePicker, TimePicker, DateTimePicker, DateRangePicker } from '../components/DatePicker';
 import type { DateRange } from '../components/DatePicker';
 
@@ -188,6 +189,122 @@ export const RangePicker: Story = {
         )}
       </div>
     );
+  },
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const DatePickerInteraction: Story = {
+  name: 'DatePicker — interactions',
+  args: { label: '', placeholder: '' },
+  render: () => {
+    const [val, setVal] = useState<Date | null>(null);
+    return (
+      <div className="max-w-xs flex flex-col gap-3">
+        <DatePicker
+          label="Start date"
+          placeholder="Select date"
+          hint="Pick a date"
+          value={val}
+          onChange={setVal}
+        />
+        {val && (
+          <p data-testid="selected-date" className="text-xs font-body text-ink-500">
+            Selected: {val.toDateString()}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click trigger → calendar opens', async () => {
+      const trigger = canvas.getByRole('button');
+      await user.click(trigger);
+      // Panel appears in a portal / popover
+      await waitFor(() => {
+        const body = within(document.body);
+        expect(body.getByRole('grid')).toBeInTheDocument();
+      });
+    });
+
+    await step('click "Today" link → date is set and calendar closes', async () => {
+      const body = within(document.body);
+      const todayLink = body.getByRole('link', { name: /today/i });
+      await user.click(todayLink);
+      await waitFor(() => {
+        expect(canvas.getByTestId('selected-date')).toBeInTheDocument();
+      });
+      // Calendar should be closed
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('grid')).not.toBeInTheDocument();
+      });
+    });
+
+    await step('click trigger again → calendar re-opens', async () => {
+      const trigger = canvas.getByRole('button');
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(within(document.body).getByRole('grid')).toBeInTheDocument();
+      });
+    });
+
+    await step('click "Clear" link → value resets', async () => {
+      const body = within(document.body);
+      const clearLink = body.getByRole('link', { name: /clear/i });
+      await user.click(clearLink);
+      await waitFor(() => {
+        expect(canvas.queryByTestId('selected-date')).not.toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const TimePickerInteraction: Story = {
+  name: 'TimePicker — interactions',
+  args: { label: '', placeholder: '' },
+  render: () => {
+    const [val, setVal] = useState<string | null>(null);
+    return (
+      <div className="max-w-xs flex flex-col gap-3">
+        <TimePicker
+          label="Time"
+          placeholder="Select time"
+          value={val ?? undefined}
+          onChange={setVal}
+        />
+        {val && (
+          <p data-testid="selected-time" className="text-xs font-body text-ink-500">
+            Selected: {val}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click trigger → time panel opens with hour and minute columns', async () => {
+      const trigger = canvas.getByRole('button');
+      await user.click(trigger);
+      await waitFor(() => {
+        const body = within(document.body);
+        // Hour buttons exist (0-23)
+        expect(body.getByRole('button', { name: '09' })).toBeInTheDocument();
+      });
+    });
+
+    await step('click hour 9 → time is committed', async () => {
+      const body = within(document.body);
+      const hour9 = body.getByRole('button', { name: '09' });
+      await user.click(hour9);
+      await waitFor(() => {
+        expect(canvas.getByTestId('selected-time')).toBeInTheDocument();
+      });
+    });
   },
 };
 

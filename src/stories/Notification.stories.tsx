@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Bell, Star, Upload, MessageSquare } from 'lucide-react';
 import {
   NotificationCard,
@@ -374,4 +375,80 @@ export const Positions: Story = {
       ))}
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  args: {
+    variant: 'success', title: 'Saved', body: 'Your workflow has been saved.',
+    position: 'top-right', duration: 0, showActions: false, showDismiss: true,
+  },
+  render: () => {
+    const { notifications, add, dismiss } = useNotifications();
+    return (
+      <div className="relative min-h-36">
+        <button
+          onClick={() => add({ variant: 'success', title: 'Saved', body: 'Workflow saved.', duration: 0 })}
+          className="px-4 py-2 rounded-lg bg-primary-500 text-ink-900 text-sm font-semibold font-body hover:bg-primary-600 transition-colors"
+        >
+          Show notification
+        </button>
+        <NotificationStack notifications={notifications} onDismiss={dismiss} portal={false} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click button — notification appears', async () => {
+      await user.click(canvas.getByRole('button', { name: /show notification/i }));
+      await waitFor(() => {
+        expect(canvas.getByText('Saved')).toBeVisible();
+      });
+    });
+
+    await step('dismiss button removes the notification', async () => {
+      const dismissBtn = canvas.getByRole('button', { name: /dismiss/i });
+      await user.click(dismissBtn);
+      await waitFor(() => {
+        expect(canvas.queryByText('Saved')).not.toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const AllVariantsInteraction: Story = {
+  name: 'All variant icons render',
+  args: {
+    variant: 'info', title: 'Info', body: 'Test',
+    position: 'top-right', duration: 0, showActions: false, showDismiss: true,
+  },
+  render: () => {
+    const noop = () => {};
+    return (
+      <div className="flex flex-col gap-3 p-4">
+        {(['default', 'info', 'success', 'warning', 'error'] as const).map(v => (
+          <NotificationCard
+            key={v}
+            item={{ id: v, variant: v, title: v.charAt(0).toUpperCase() + v.slice(1), body: `A ${v} notification.`, duration: 0 }}
+            onDismiss={noop}
+          />
+        ))}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('all 5 variant cards render', async () => {
+      expect(canvas.getByText('Default')).toBeVisible();
+      expect(canvas.getByText('Info')).toBeVisible();
+      expect(canvas.getByText('Success')).toBeVisible();
+      expect(canvas.getByText('Warning')).toBeVisible();
+      expect(canvas.getByText('Error')).toBeVisible();
+    });
+  },
 };

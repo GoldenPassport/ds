@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { OtpInput } from '../components/OtpInput';
 import { Button }   from '../components/Button';
 import { Badge }    from '../components/Badge';
@@ -222,6 +223,149 @@ export const Disabled: Story = {
       onChange={() => {}}
     />
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  args: STUB,
+  render: () => {
+    const [val, setVal] = useState('');
+    return (
+      <div className="flex flex-col gap-3">
+        <OtpInput
+          length={6}
+          numeric
+          label="Verification code"
+          hint="Enter the 6-digit code"
+          value={val}
+          onChange={setVal}
+        />
+        {val && (
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="entered-value">
+            Entered: <code>{val}</code>
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('type digits one by one — auto-advance focus', async () => {
+      const cell1 = canvas.getByRole('textbox', { name: /digit 1/i });
+      await user.click(cell1);
+      await user.type(cell1, '1');
+      await waitFor(() => {
+        const cell2 = canvas.getByRole('textbox', { name: /digit 2/i });
+        expect(cell2).toHaveFocus();
+      });
+      // type remaining digits
+      await user.keyboard('23456');
+      await waitFor(() => {
+        expect(canvas.getByTestId('entered-value')).toHaveTextContent('123456');
+      });
+    });
+
+    await step('backspace deletes and moves focus back', async () => {
+      const cell6 = canvas.getByRole('textbox', { name: /digit 6/i });
+      await user.click(cell6);
+      await user.keyboard('{Backspace}');
+      await waitFor(() => {
+        const cell5 = canvas.getByRole('textbox', { name: /digit 5/i });
+        expect(cell5).toHaveFocus();
+      });
+    });
+
+    await step('arrow left / right navigation', async () => {
+      const cell5 = canvas.getByRole('textbox', { name: /digit 5/i });
+      await user.click(cell5);
+      await user.keyboard('{ArrowLeft}');
+      await waitFor(() => {
+        expect(canvas.getByRole('textbox', { name: /digit 4/i })).toHaveFocus();
+      });
+      await user.keyboard('{ArrowRight}');
+      await waitFor(() => {
+        expect(canvas.getByRole('textbox', { name: /digit 5/i })).toHaveFocus();
+      });
+    });
+  },
+};
+
+export const PasteInteraction: Story = {
+  name: 'Paste interaction',
+  args: STUB,
+  render: () => {
+    const [val, setVal] = useState('');
+    return (
+      <div className="flex flex-col gap-3">
+        <OtpInput
+          length={6}
+          numeric
+          label="Paste code"
+          value={val}
+          onChange={setVal}
+        />
+        {val.length === 6 && (
+          <p data-testid="paste-result" className="text-xs font-body text-ink-500">
+            Code: {val}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('paste a full 6-digit code', async () => {
+      const cell1 = canvas.getByRole('textbox', { name: /digit 1/i });
+      await user.click(cell1);
+      await user.paste('654321');
+      await waitFor(() => {
+        expect(canvas.getByTestId('paste-result')).toHaveTextContent('654321');
+      });
+    });
+  },
+};
+
+export const ErrorReset: Story = {
+  name: 'Error state reset',
+  args: STUB,
+  render: () => {
+    const [val, setVal] = useState('999999');
+    const [error, setError] = useState('Invalid code. Please try again.');
+    return (
+      <OtpInput
+        length={6}
+        label="Verification code"
+        error={error}
+        value={val}
+        onChange={(v) => { setVal(v); if (v === '') setError(''); }}
+      />
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('error message is visible', async () => {
+      await expect(canvas.getByRole('alert')).toBeInTheDocument();
+    });
+
+    await step('pressing Backspace while error is set clears all cells', async () => {
+      const cell1 = canvas.getByRole('textbox', { name: /digit 1/i });
+      await user.click(cell1);
+      await user.keyboard('{Backspace}');
+      await waitFor(() => {
+        // After error-reset all cells should be empty
+        const cells = canvas.getAllByRole('textbox');
+        cells.forEach((cell: HTMLElement) => expect(cell).toHaveValue(''));
+      });
+    });
+  },
 };
 
 // ── Full auth flow ────────────────────────────────────────

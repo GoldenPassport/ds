@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import {
   AlignLeft, AlignCenter, AlignRight,
   Bold, Italic, Underline,
@@ -405,5 +406,92 @@ export const ToolbarComposition: Story = {
         />
       </div>
     );
+  },
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions — single select',
+  render: () => {
+    const [active, setActive] = React.useState('months');
+    return (
+      <div className="flex flex-col gap-4 p-4">
+        <ButtonGroup
+          items={['Years', 'Months', 'Days'].map(p => ({
+            label:   p,
+            active:  active === p.toLowerCase(),
+            onClick: () => setActive(p.toLowerCase()),
+          }))}
+        />
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="active-period">
+          Active: {active}
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('initial state — Months is active', async () => {
+      expect(canvas.getByTestId('active-period')).toHaveTextContent('months');
+    });
+
+    await step('click Years — becomes active', async () => {
+      await user.click(canvas.getByRole('button', { name: /years/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('active-period')).toHaveTextContent('years');
+      });
+    });
+
+    await step('click Days — becomes active', async () => {
+      await user.click(canvas.getByRole('button', { name: /days/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('active-period')).toHaveTextContent('days');
+      });
+    });
+  },
+};
+
+export const MultiSelectInteractions: Story = {
+  name: 'Interactions — multi select',
+  render: () => {
+    const [selected, setSelected] = React.useState<string[]>(['bold']);
+    return (
+      <div className="flex flex-col gap-4 p-4">
+        <ButtonGroup
+          multiple
+          value={selected}
+          onChange={v => setSelected(v as string[])}
+          items={[
+            { label: 'Bold',      value: 'bold',      icon: <Bold      className="w-4 h-4" /> },
+            { label: 'Italic',    value: 'italic',    icon: <Italic    className="w-4 h-4" /> },
+            { label: 'Underline', value: 'underline', icon: <Underline className="w-4 h-4" /> },
+          ]}
+        />
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="selected-formats">
+          Formats: {selected.join(', ') || 'none'}
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click Italic — adds to selection', async () => {
+      await user.click(canvas.getByRole('button', { name: /italic/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('selected-formats')).toHaveTextContent('italic');
+      });
+    });
+
+    await step('click Bold again — removes it from selection', async () => {
+      await user.click(canvas.getByRole('button', { name: /bold/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('selected-formats')).not.toHaveTextContent('bold');
+      });
+    });
   },
 };

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import {
   Plus, Pencil, Share2, Trash2, Download, Upload,
   Camera, Image, FileText, Link, Mail, Phone,
@@ -223,4 +224,69 @@ export const Dark: Story = {
       </Demo>
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  args: { icon: null, items: [] },
+  render: () => {
+    const [lastClicked, setLastClicked] = React.useState('');
+    return (
+      <div className="relative h-64 bg-ink-50 dark:bg-ink-900 rounded-2xl overflow-hidden border border-ink-200 dark:border-ink-800">
+        <FabMenu
+          icon={<Plus className="w-5 h-5" />}
+          items={[
+            { label: 'Share',  icon: <Share2 className="w-4 h-4" />, onClick: () => setLastClicked('Share')  },
+            { label: 'Edit',   icon: <Pencil className="w-4 h-4" />, onClick: () => setLastClicked('Edit')   },
+            { label: 'Delete', icon: <Trash2 className="w-4 h-4" />, onClick: () => setLastClicked('Delete') },
+          ]}
+          position="bottom-right"
+          fixed={false}
+        />
+        {lastClicked && (
+          <p className="absolute top-4 left-4 text-sm font-body text-ink-700 dark:text-ink-300" data-testid="fab-clicked">
+            Clicked: {lastClicked}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click FAB — action items appear', async () => {
+      // The main FAB button — it's the only button initially
+      const fabBtn = canvas.getAllByRole('button')[0];
+      await user.click(fabBtn);
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /share/i })).toBeVisible();
+        expect(canvas.getByRole('button', { name: /edit/i })).toBeVisible();
+        expect(canvas.getByRole('button', { name: /delete/i })).toBeVisible();
+      });
+    });
+
+    await step('click an action item — handler fires', async () => {
+      await user.click(canvas.getByRole('button', { name: /edit/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('fab-clicked')).toHaveTextContent('Edit');
+      });
+    });
+
+    await step('FAB toggles closed after item click', async () => {
+      // re-open
+      const fabBtn = canvas.getAllByRole('button')[0];
+      await user.click(fabBtn);
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /share/i })).toBeVisible();
+      });
+      // close with FAB again
+      await user.click(canvas.getAllByRole('button')[0]);
+      await waitFor(() => {
+        expect(canvas.queryByRole('button', { name: /share/i })).not.toBeInTheDocument();
+      });
+    });
+  },
 };

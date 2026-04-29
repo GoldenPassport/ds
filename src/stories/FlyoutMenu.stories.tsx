@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import {
   BarChart2, Cpu, Globe, Shield, Zap, Users, BookOpen,
   LifeBuoy, Settings, Layers, Bell, Lock,
@@ -189,6 +190,81 @@ export const RightAligned: Story = {
       />
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  render: () => (
+    <div className="p-8">
+      <FlyoutMenu
+        trigger={<FlyoutTrigger label="Resources" />}
+        variant="simple"
+        items={SIMPLE_ITEMS}
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click trigger → flyout panel opens', async () => {
+      const trigger = canvas.getByRole('button', { name: /resources/i });
+      await user.click(trigger);
+      await waitFor(() => {
+        // Items appear in the portal / popover panel
+        const body = within(document.body);
+        expect(body.getByRole('link', { name: /blog/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('flyout shows all items including badge item', async () => {
+      const body = within(document.body);
+      expect(body.getByRole('link', { name: /changelog/i })).toBeInTheDocument();
+      expect(body.getByText('New')).toBeInTheDocument();
+    });
+
+    await step('click trigger again → flyout closes', async () => {
+      const trigger = canvas.getByRole('button', { name: /resources/i });
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('link', { name: /blog/i })).not.toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const InteractionsWithIcons: Story = {
+  name: 'Interactions — icon variant',
+  render: () => (
+    <div className="p-8">
+      <FlyoutMenu
+        trigger={<FlyoutTrigger label="Solutions" />}
+        variant="icons"
+        items={ICON_ITEMS.slice(0, 3)}
+        footerActions={FOOTER_ACTIONS}
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click trigger → flyout with icon items opens', async () => {
+      const trigger = canvas.getByRole('button', { name: /solutions/i });
+      await user.click(trigger);
+      await waitFor(() => {
+        const body = within(document.body);
+        expect(body.getByRole('link', { name: /analytics/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('footer actions are rendered', async () => {
+      const body = within(document.body);
+      expect(body.getByRole('link', { name: /view all features/i })).toBeInTheDocument();
+    });
+  },
 };
 
 // ── 9. Navbar example ─────────────────────────────────────

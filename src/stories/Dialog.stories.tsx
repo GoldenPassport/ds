@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Trash2 } from 'lucide-react';
 import { Dialog } from '../components/Dialog';
 import { Button } from '../components/Button';
@@ -125,6 +126,76 @@ export const InfoDialog: Story = {
       </Dialog.Footer>
     </DialogDemo>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  args: { open: false, onClose: () => {}, children: null },
+  render: () => {
+    const [open, setOpen] = React.useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Open Dialog</Button>
+        <Dialog open={open} onClose={setOpen} title="Confirm Action" size="sm">
+          <p className="text-ink-600 dark:text-ink-300">Are you sure you want to proceed?</p>
+          <Dialog.Footer>
+            <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="primary" onClick={() => setOpen(false)}>Confirm</Button>
+          </Dialog.Footer>
+        </Dialog>
+      </>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('click trigger — dialog opens', async () => {
+      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
+      await waitFor(() => {
+        expect(within(document.body).getByRole('dialog')).toBeInTheDocument();
+      });
+    });
+
+    await step('dialog title and body are visible', async () => {
+      const dialog = within(document.body).getByRole('dialog');
+      expect(within(dialog).getByText('Confirm Action')).toBeVisible();
+      expect(within(dialog).getByText(/are you sure/i)).toBeVisible();
+    });
+
+    await step('click Cancel — dialog closes', async () => {
+      const dialog = within(document.body).getByRole('dialog');
+      await user.click(within(dialog).getByRole('button', { name: /cancel/i }));
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+
+    await step('re-open and close via X button', async () => {
+      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
+      await waitFor(() => {
+        expect(within(document.body).getByRole('dialog')).toBeInTheDocument();
+      });
+      const dialog = within(document.body).getByRole('dialog');
+      await user.click(within(dialog).getByRole('button', { name: /close/i }));
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+
+    await step('re-open and close with Escape key', async () => {
+      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
+      await waitFor(() => {
+        expect(within(document.body).getByRole('dialog')).toBeInTheDocument();
+      });
+      await user.keyboard('{Escape}');
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+  },
 };
 
 export const LargeDialog: Story = {

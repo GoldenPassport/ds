@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Pagination } from '../components/Pagination';
 
 const meta = {
@@ -130,4 +131,67 @@ export const SinglePage: Story = {
       <Pagination page={1} pageSize={25} total={8} onChange={() => {}} />
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
+  render: () => {
+    const [page, setPage]         = React.useState(1);
+    const [pageSize, setPageSize] = React.useState(10);
+    return (
+      <div className="w-full max-w-2xl flex flex-col gap-3">
+        <Pagination
+          page={page}
+          pageSize={pageSize}
+          total={150}
+          pageSizeOptions={[10, 25, 50]}
+          showSummary
+          onChange={(p, ps) => { setPage(p); setPageSize(ps); }}
+        />
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="page-info">
+          Page {page}, size {pageSize}
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('initial state — page 1 is active', async () => {
+      expect(canvas.getByRole('button', { name: /page 1/i })).toHaveAttribute('aria-current', 'page');
+    });
+
+    await step('click next — advances to page 2', async () => {
+      await user.click(canvas.getByRole('button', { name: /next/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 2');
+      });
+    });
+
+    await step('click page 4 directly', async () => {
+      await user.click(canvas.getByRole('button', { name: /page 4/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 4');
+      });
+    });
+
+    await step('click previous — goes to page 3', async () => {
+      await user.click(canvas.getByRole('button', { name: /previous/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 3');
+      });
+    });
+
+    await step('change page size to 25 — resets to page 1', async () => {
+      const select = canvas.getByRole('combobox');
+      await user.selectOptions(select, '25');
+      await waitFor(() => {
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('size 25');
+      });
+    });
+  },
 };

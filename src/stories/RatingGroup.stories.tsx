@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Heart, Flame, ThumbsUp } from 'lucide-react';
 import { RatingGroup } from '../components/RatingGroup';
 
@@ -178,6 +179,103 @@ export const CustomIcons: Story = {
       </div>
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  render: () => {
+    const [val, setVal] = useState(0);
+    return (
+      <div className="p-6 flex flex-col gap-4">
+        <RatingGroup value={val} onChange={setVal} />
+        <p className="text-sm font-body text-ink-500 dark:text-ink-300" data-testid="rating-value">
+          Value: <strong>{val}</strong>
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click star 3 → value becomes 3', async () => {
+      const star3 = canvas.getByRole('button', { name: /3 of 5 stars/i });
+      await user.click(star3);
+      await waitFor(() => {
+        expect(canvas.getByTestId('rating-value')).toHaveTextContent('3');
+      });
+    });
+
+    await step('click star 3 again → clears (returns to 0)', async () => {
+      const star3 = canvas.getByRole('button', { name: /3 of 5 stars/i });
+      await user.click(star3);
+      await waitFor(() => {
+        expect(canvas.getByTestId('rating-value')).toHaveTextContent('0');
+      });
+    });
+
+    await step('keyboard ArrowRight increments value', async () => {
+      const star1 = canvas.getByRole('button', { name: /1 of 5 stars/i });
+      await user.click(star1);
+      // wait for value = 1
+      await waitFor(() => {
+        expect(canvas.getByTestId('rating-value')).toHaveTextContent('1');
+      });
+      // Focus the group and press ArrowRight
+      const group = canvasElement.querySelector('[role="group"]') as HTMLElement;
+      group?.focus();
+      await user.keyboard('{ArrowRight}');
+      await waitFor(() => {
+        expect(canvas.getByTestId('rating-value')).toHaveTextContent('2');
+      });
+    });
+
+    await step('keyboard ArrowLeft decrements value', async () => {
+      const group = canvasElement.querySelector('[role="group"]') as HTMLElement;
+      group?.focus();
+      await user.keyboard('{ArrowLeft}');
+      await waitFor(() => {
+        expect(canvas.getByTestId('rating-value')).toHaveTextContent('1');
+      });
+    });
+  },
+};
+
+export const HoverInteraction: Story = {
+  name: 'Hover interaction',
+  render: () => {
+    const [val, setVal] = useState(2);
+    const [hover, setHover] = useState<number | null>(null);
+    return (
+      <div className="p-6 flex flex-col gap-4">
+        <RatingGroup value={val} onChange={setVal} onHoverChange={setHover} />
+        <p data-testid="hover-value" className="text-sm font-body text-ink-500">
+          Hover: <strong>{hover ?? 'none'}</strong>
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('hover over star 4 → hover state shows 4', async () => {
+      const star4 = canvas.getByRole('button', { name: /4 of 5 stars/i });
+      await user.hover(star4);
+      await waitFor(() => {
+        expect(canvas.getByTestId('hover-value')).toHaveTextContent('4');
+      });
+    });
+
+    await step('mouse leave → hover resets', async () => {
+      await user.unhover(canvas.getByRole('button', { name: /4 of 5 stars/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('hover-value')).toHaveTextContent('none');
+      });
+    });
+  },
 };
 
 // ── RTL ───────────────────────────────────────────────────

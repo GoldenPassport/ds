@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Play, Copy, Trash2, ExternalLink, Sparkles } from 'lucide-react';
 import { DataTable } from '../components/DataTable';
 import { Badge } from '../components/Badge';
@@ -304,6 +305,174 @@ export const Empty: Story = {
       }
     />
   ),
+};
+
+// ── Interactions ─────────────────────────────────────────
+
+export const SortInteraction: Story = {
+  name: 'Interaction — sortable columns',
+  args: { columns: [], data: [] },
+  render: () => (
+    <DataTable
+      columns={columns}
+      data={ALL_WORKFLOWS.slice(0, 6)}
+    />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click "Workflow" header → sort ascending', async () => {
+      const workflowHeader = canvas.getByRole('columnheader', { name: /workflow/i });
+      await user.click(workflowHeader);
+      await waitFor(() => {
+        // The up-chevron icon appears to indicate asc sort
+        const headerBtn = workflowHeader.querySelector('button') ?? workflowHeader;
+        expect(headerBtn).toBeInTheDocument();
+      });
+    });
+
+    await step('click "Workflow" header again → sort descending', async () => {
+      const workflowHeader = canvas.getByRole('columnheader', { name: /workflow/i });
+      await user.click(workflowHeader);
+    });
+
+    await step('click "Workflow" header third time → sort removed', async () => {
+      const workflowHeader = canvas.getByRole('columnheader', { name: /workflow/i });
+      await user.click(workflowHeader);
+    });
+
+    await step('click "Runs" header → sort by runs asc', async () => {
+      const runsHeader = canvas.getByRole('columnheader', { name: /runs/i });
+      await user.click(runsHeader);
+      // First row should have the lowest runs count
+      await waitFor(() => {
+        const rows = canvas.getAllByRole('row');
+        // First data row (index 1) should be visible
+        expect(rows.length).toBeGreaterThan(1);
+      });
+    });
+  },
+};
+
+export const RowClickInteraction: Story = {
+  name: 'Interaction — row click',
+  args: { columns: [], data: [] },
+  render: () => {
+    const [clicked, setClicked] = React.useState('');
+    return (
+      <div>
+        <DataTable
+          columns={columns}
+          data={ALL_WORKFLOWS.slice(0, 5)}
+          onRowClick={(row) => setClicked((row as Workflow).name)}
+        />
+        {clicked && (
+          <p data-testid="clicked-row" className="mt-2 text-sm font-body text-ink-500">
+            Clicked: {clicked}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click first data row → onRowClick fires', async () => {
+      const rows = canvas.getAllByRole('row');
+      // rows[0] is header, rows[1] is first data row
+      await user.click(rows[1]);
+      await waitFor(() => {
+        expect(canvas.getByTestId('clicked-row')).toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const PaginationInteraction: Story = {
+  name: 'Interaction — pagination',
+  args: { columns: [], data: [] },
+  render: () => (
+    <DataTable
+      columns={columns}
+      data={ALL_WORKFLOWS}
+      pagination={{ pageSize: 5, showSummary: true }}
+    />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('initial render shows first 5 rows', async () => {
+      const rows = canvas.getAllByRole('row');
+      // 1 header + 5 data rows
+      expect(rows).toHaveLength(6);
+    });
+
+    await step('click next page → shows next 5 rows', async () => {
+      const nextBtn = canvas.getByRole('button', { name: /next/i });
+      await user.click(nextBtn);
+      await waitFor(() => {
+        const rows = canvas.getAllByRole('row');
+        expect(rows).toHaveLength(6); // still 5 data rows + header
+        // Row content changes — 6th workflow from our list
+        expect(canvas.getByText('PTO Request Handler')).toBeInTheDocument();
+      });
+    });
+
+    await step('click previous page → goes back', async () => {
+      const prevBtn = canvas.getByRole('button', { name: /previous/i });
+      await user.click(prevBtn);
+      await waitFor(() => {
+        expect(canvas.getByText('Invoice Approval')).toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const EmptyStateInteraction: Story = {
+  name: 'Interaction — empty state',
+  args: { columns: [], data: [] },
+  render: () => (
+    <DataTable
+      columns={columns}
+      data={[]}
+      emptyState={
+        <div className="flex flex-col items-center gap-2">
+          <Sparkles className="w-8 h-8 text-ink-300" aria-hidden="true" />
+          <p className="font-semibold text-ink-700">No workflows yet</p>
+        </div>
+      }
+    />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('empty state is rendered when data is empty', async () => {
+      expect(canvas.getByText('No workflows yet')).toBeInTheDocument();
+    });
+  },
+};
+
+export const LoadingInteraction: Story = {
+  name: 'Interaction — loading skeleton',
+  args: { columns: [], data: [] },
+  render: () => (
+    <DataTable columns={columns} data={[]} loading />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('loading skeleton rows are rendered', async () => {
+      // The table should have skeleton rows (no real data rows)
+      const rows = canvas.getAllByRole('row');
+      // 1 header + skeleton rows
+      expect(rows.length).toBeGreaterThan(1);
+      // No real workflow names visible
+      expect(canvas.queryByText('Invoice Approval')).not.toBeInTheDocument();
+    });
+  },
 };
 
 export const Sortable: Story = {

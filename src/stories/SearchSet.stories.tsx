@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { SearchSet } from '../components/SearchSet';
 import type { SearchSetTag, SearchSetFilterDef, SearchSetFilterValues } from '../components/SearchSet';
 import { Card } from '../components/Card';
@@ -331,6 +332,110 @@ export const WithFilterDialog: Story = {
         />
       </div>
     );
+  },
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  args: { value: '', onChange: () => {} },
+  render: () => {
+    const [query, setQuery] = useState('');
+    return (
+      <div className="max-w-lg flex flex-col gap-3">
+        <SearchSet
+          value={query}
+          onChange={setQuery}
+          placeholder="Search users…"
+          summary={query ? `Searching for "${query}"` : ''}
+        />
+        {query && (
+          <p data-testid="search-output" className="text-xs font-body text-ink-500">
+            Query: {query}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('type into search input → query updates', async () => {
+      const input = canvas.getByRole('searchbox');
+      await user.click(input);
+      await user.type(input, 'alice');
+      await waitFor(() => {
+        expect(canvas.getByTestId('search-output')).toHaveTextContent('alice');
+      });
+    });
+
+    await step('clear button appears and clears the search', async () => {
+      // Look for the clear/X button (it may be inside the input area)
+      await waitFor(() => {
+        const clearBtn = canvasElement.querySelector('button[aria-label="Clear"]') as HTMLElement | null;
+        expect(clearBtn).toBeInTheDocument();
+      });
+      const clearBtn = canvasElement.querySelector('button[aria-label="Clear"]') as HTMLElement;
+      await user.click(clearBtn);
+      await waitFor(() => {
+        expect(canvas.queryByTestId('search-output')).not.toBeInTheDocument();
+      });
+    });
+  },
+};
+
+export const FilterDialogInteraction: Story = {
+  name: 'Interactions — filter dialog',
+  args: { value: '', onChange: () => {} },
+  render: () => {
+    const [query, setQuery] = useState('');
+    const [filters, setFilters] = useState<SearchSetFilterValues>(EMPTY_FILTERS);
+    return (
+      <div className="max-w-lg flex flex-col gap-3">
+        <SearchSet
+          value={query}
+          onChange={setQuery}
+          placeholder="Search workflows…"
+          filterDefs={FILTER_DEFS}
+          filterValues={filters}
+          onFilterChange={setFilters}
+          filterTitle="Filter workflows"
+        />
+        <p data-testid="filter-status" className="text-xs font-body text-ink-500">
+          Status: {String(filters.status) || 'none'}
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click filter button → filter dialog opens', async () => {
+      const filterBtn = canvas.getByRole('button', { name: /filter/i });
+      await user.click(filterBtn);
+      await waitFor(() => {
+        const body = within(document.body);
+        expect(body.getByRole('dialog')).toBeInTheDocument();
+      });
+    });
+
+    await step('select a status option and apply', async () => {
+      const body = within(document.body);
+      const dialog = body.getByRole('dialog');
+      const dialogEl = within(dialog);
+      // Find the status select
+      const statusSelect = dialogEl.getByRole('combobox', { name: /status/i });
+      await user.selectOptions(statusSelect, 'active');
+      // Click Apply
+      const applyBtn = dialogEl.getByRole('button', { name: /apply/i });
+      await user.click(applyBtn);
+      await waitFor(() => {
+        expect(canvas.getByTestId('filter-status')).toHaveTextContent('active');
+      });
+    });
   },
 };
 

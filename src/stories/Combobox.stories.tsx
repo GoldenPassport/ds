@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Combobox } from '../components/Combobox';
 
 const USERS = [
@@ -112,4 +113,83 @@ export const Disabled: Story = {
       />
     </div>
   ),
+};
+
+// ── Interactions ──────────────────────────────────────────
+
+export const Interactions: Story = {
+  name: 'Interactions',
+  args: { value: null, onChange: () => {}, options: [] },
+  render: () => {
+    const [val, setVal] = React.useState<string | null>(null);
+    return (
+      <div className="w-72 flex flex-col gap-3">
+        <Combobox
+          label="Assign approver"
+          placeholder="Search team members…"
+          value={val}
+          onChange={setVal}
+          options={USERS}
+        />
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="selected-user">
+          Selected: {val ?? 'none'}
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('focus input — options list opens', async () => {
+      const input = canvas.getByRole('combobox');
+      await user.click(input);
+      await waitFor(() => {
+        expect(within(document.body).getByRole('listbox')).toBeInTheDocument();
+      });
+    });
+
+    await step('all options are visible initially', async () => {
+      const lb = within(document.body).getByRole('listbox');
+      expect(within(lb).getByRole('option', { name: /alex morgan/i })).toBeInTheDocument();
+      expect(within(lb).getByRole('option', { name: /sarah kim/i })).toBeInTheDocument();
+    });
+
+    await step('type to filter — shows only matching options', async () => {
+      const input = canvas.getByRole('combobox');
+      await user.type(input, 'sarah');
+      await waitFor(() => {
+        const lb = within(document.body).getByRole('listbox');
+        expect(within(lb).getByRole('option', { name: /sarah kim/i })).toBeInTheDocument();
+        expect(within(lb).queryByRole('option', { name: /alex morgan/i })).not.toBeInTheDocument();
+      });
+    });
+
+    await step('click filtered option — value updates and panel closes', async () => {
+      const lb = within(document.body).getByRole('listbox');
+      await user.click(within(lb).getByRole('option', { name: /sarah kim/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('selected-user')).toHaveTextContent('sarah');
+      });
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('listbox')).not.toBeInTheDocument();
+      });
+    });
+
+    await step('clear query and re-open shows all options', async () => {
+      const input = canvas.getByRole('combobox');
+      await user.clear(input);
+      await waitFor(() => {
+        const lb = within(document.body).getByRole('listbox');
+        expect(within(lb).getByRole('option', { name: /alex morgan/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('press Escape — panel closes', async () => {
+      await user.keyboard('{Escape}');
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('listbox')).not.toBeInTheDocument();
+      });
+    });
+  },
 };
