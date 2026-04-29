@@ -14,7 +14,7 @@ export default defineConfig({
       provider: playwright(),
       instances: [{ browser: 'chromium' }],
     },
-    setupFiles: ['./.storybook/vitest.setup.ts'],
+    setupFiles: ['./vitest.setup.dark.ts'],
     plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
   },
 });
