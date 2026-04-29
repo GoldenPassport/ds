@@ -48,6 +48,11 @@ export function Divider({
   }
 
   // ── Horizontal — with label ───────────────────────────
+  // role="separator" forbids focusable descendants (ARIA spec §5.15).
+  // When a label (text, icon, or interactive element like a button) is
+  // present the wrapper becomes purely presentational — role="none" removes
+  // it from the accessibility tree so screen readers only encounter the
+  // label content itself, not a spurious separator container around it.
   const labelNode = (
     <span className="shrink-0 flex items-center">
       {label}
@@ -58,8 +63,7 @@ export function Divider({
 
   return (
     <div
-      role="separator"
-      aria-orientation="horizontal"
+      role="none"
       className={['flex items-center gap-3', className].join(' ')}
     >
       {align === 'right'  && line}
