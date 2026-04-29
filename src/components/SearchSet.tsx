@@ -325,7 +325,7 @@ export function SearchSet({
   const [draft,       setDraft]       = useState(value);
   const [dialogOpen,  setDialogOpen]  = useState(false);
   const [filterDraft, setFilterDraft] = useState<SearchSetFilterValues>(filterValues);
-  const timer = useRef<ReturnType<typeof setTimeout>>();
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => { setDraft(value); }, [value]);
   useEffect(() => { setFilterDraft(filterValues); }, [filterValues]);

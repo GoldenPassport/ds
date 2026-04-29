@@ -38,13 +38,6 @@ function wcagGrade(ratio: number): WcagGrade {
   return '✕';
 }
 
-function gradeColour(grade: WcagGrade): string {
-  if (grade === 'AAA') return '#16a34a'; // green-600
-  if (grade === 'AA')  return '#2563eb'; // blue-600
-  if (grade === 'AA*') return '#d97706'; // amber-600
-  return '#dc2626';                       // red-600
-}
-
 // Readable accessible label for each grade (✕ is a non-text symbol)
 function gradeLabel(grade: WcagGrade): string {
   if (grade === '✕') return 'Fail';

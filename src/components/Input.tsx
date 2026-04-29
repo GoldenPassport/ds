@@ -93,7 +93,7 @@ export function Input({
     e.preventDefault(); // suppress the browser's native validation tooltip
     if (validate === 'onSubmit' || validate === 'both') {
       setTouched(true);
-      setInternalError(e.target.validationMessage);
+      setInternalError((e.target as HTMLInputElement).validationMessage);
     }
   }
 
