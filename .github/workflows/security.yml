@@ -46,6 +46,10 @@ jobs:
   codeql:
     name: CodeQL analysis
     runs-on: ubuntu-latest
+    # CodeQL requires GitHub Advanced Security (free for public repos).
+    # Enable at: Settings → Code security → GitHub Advanced Security.
+    # Until then this job is best-effort and won't block CI.
+    continue-on-error: true
     permissions:
       actions: read
       contents: read
