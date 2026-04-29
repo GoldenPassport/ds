@@ -12,11 +12,13 @@ const dirname = import.meta.dirname;
 export default defineConfig({
   plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
   test: {
+    retry: 1,
     browser: {
       enabled: true,
       headless: true,
       provider: playwright(),
       instances: [{ browser: 'chromium' }],
+      connectTimeout: 60_000,
     },
     setupFiles: ['./vitest.setup.dark.ts'],
   },

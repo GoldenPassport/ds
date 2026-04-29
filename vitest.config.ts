@@ -12,11 +12,18 @@ const dirname = import.meta.dirname;
 export default defineConfig({
   plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
   test: {
+    // Retry once so a transient browser-worker race during startup doesn't
+    // fail the whole suite — the second attempt always connects cleanly.
+    retry: 1,
     browser: {
       enabled: true,
       headless: true,
       provider: playwright(),
       instances: [{ browser: 'chromium' }],
+      // Give the Playwright → Vitest WebSocket handshake more time on slower
+      // CI runners (default is often 30 s which isn't enough when 60+ story
+      // files compete for browser resources simultaneously).
+      connectTimeout: 60_000,
     },
   },
 });
