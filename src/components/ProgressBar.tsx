@@ -1,43 +1,43 @@
 import { useId } from 'react';
 
 export type ProgressBarVariant = 'default' | 'success' | 'warning' | 'error';
-export type ProgressBarSize    = 'xs' | 'sm' | 'md' | 'lg';
-export type ProgressBarShape   = 'linear' | 'circular';
+export type ProgressBarSize = 'xs' | 'sm' | 'md' | 'lg';
+export type ProgressBarShape = 'linear' | 'circular';
 
 export interface ProgressBarProps {
   /** Current progress value (0–max) */
-  value:           number;
+  value: number;
   /** Maximum value. Defaults to 100. */
-  max?:            number;
-  size?:           ProgressBarSize;
-  variant?:        ProgressBarVariant;
-  shape?:          ProgressBarShape;
+  max?: number;
+  size?: ProgressBarSize;
+  variant?: ProgressBarVariant;
+  shape?: ProgressBarShape;
   /**
    * Visible text label rendered above-left (linear) or below (circular).
    * When set, the progressbar's accessible name is linked to it via
    * `aria-labelledby` automatically.
    */
-  label?:          string;
+  label?: string;
   /** Show the computed percentage */
-  showValue?:      boolean;
+  showValue?: boolean;
   /** Pulse animation on the fill — useful for active/uploading states */
-  animated?:       boolean;
+  animated?: boolean;
   /** Indeterminate state: hides value and shows a sweeping fill */
-  indeterminate?:  boolean;
+  indeterminate?: boolean;
   /**
    * Accessible name when no visible `label` is rendered. Required for a11y
    * if `label` is omitted (axe rule `aria-progressbar-name`). Ignored when
    * `label` is provided (the visible label is used instead via labelledby).
    */
-  'aria-label'?:        string;
+  'aria-label'?: string;
   /** Id of an external element labelling this progressbar. */
-  'aria-labelledby'?:   string;
+  'aria-labelledby'?: string;
   /**
    * Human-readable value description for assistive tech. Defaults to the
    * computed percentage when `showValue` is true, otherwise unset.
    */
-  'aria-valuetext'?:    string;
-  className?:      string;
+  'aria-valuetext'?: string;
+  className?: string;
 }
 
 // ── Linear config ─────────────────────────────────────────
@@ -53,7 +53,7 @@ const fillColor: Record<ProgressBarVariant, string> = {
   default: 'bg-primary-500',
   success: 'bg-green-500',
   warning: 'bg-amber-500',
-  error:   'bg-red-500',
+  error: 'bg-red-500',
 };
 
 // ── Circular config ───────────────────────────────────────
@@ -83,43 +83,43 @@ const strokeColor: Record<ProgressBarVariant, string> = {
   default: 'text-primary-500',
   success: 'text-green-500',
   warning: 'text-amber-500',
-  error:   'text-red-500',
+  error: 'text-red-500',
 };
 
 // ── Component ─────────────────────────────────────────────
 
 export function ProgressBar({
   value,
-  max           = 100,
-  size          = 'md',
-  variant       = 'default',
-  shape         = 'linear',
+  max = 100,
+  size = 'md',
+  variant = 'default',
+  shape = 'linear',
   label,
-  showValue     = false,
-  animated      = false,
+  showValue = false,
+  animated = false,
   indeterminate = false,
-  className     = '',
-  'aria-label':       ariaLabel,
-  'aria-labelledby':  ariaLabelledBy,
-  'aria-valuetext':   ariaValueText,
+  className = '',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-valuetext': ariaValueText,
 }: ProgressBarProps) {
-  const pct     = indeterminate ? 100 : Math.min(100, Math.max(0, (value / max) * 100));
+  const pct = indeterminate ? 100 : Math.min(100, Math.max(0, (value / max) * 100));
   const display = `${Math.round(pct)}%`;
 
   // Wire the visible label as the accessible name when present.
   const labelId = useId();
   const resolvedLabelledBy = ariaLabelledBy ?? (label ? labelId : undefined);
-  const resolvedAriaLabel  = resolvedLabelledBy ? undefined : (ariaLabel ?? 'Progress');
-  const resolvedValueText  =
+  const resolvedAriaLabel = resolvedLabelledBy ? undefined : (ariaLabel ?? 'Progress');
+  const resolvedValueText =
     ariaValueText ?? (indeterminate ? undefined : showValue ? display : undefined);
 
   // ── Circular ──────────────────────────────────────────
 
   if (shape === 'circular') {
-    const sz  = circularSizePx[size];
-    const sw  = circularStrokePx[size];
-    const r   = (sz - sw) / 2;
-    const c   = 2 * Math.PI * r;
+    const sz = circularSizePx[size];
+    const sw = circularStrokePx[size];
+    const r = (sz - sw) / 2;
+    const c = 2 * Math.PI * r;
     const offset = indeterminate ? 0 : c - (pct / 100) * c;
 
     return (
@@ -135,12 +135,7 @@ export function ProgressBar({
           className="relative"
           style={{ width: sz, height: sz }}
         >
-          <svg
-            width={sz}
-            height={sz}
-            className="-rotate-90"
-            style={{ display: 'block' }}
-          >
+          <svg width={sz} height={sz} className="-rotate-90" style={{ display: 'block' }}>
             {/* Track */}
             <circle
               cx={sz / 2}
@@ -175,10 +170,12 @@ export function ProgressBar({
             // aria-hidden prevents axe from scanning it for contrast against
             // the SVG background (which axe cannot resolve as an "image node").
             <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
-              <span className={[
-                'font-semibold font-body tabular-nums text-ink-900 dark:text-ink-50',
-                circularTextSize[size],
-              ].join(' ')}>
+              <span
+                className={[
+                  'font-semibold font-body tabular-nums text-ink-900 dark:text-ink-50',
+                  circularTextSize[size],
+                ].join(' ')}
+              >
                 {display}
               </span>
             </div>

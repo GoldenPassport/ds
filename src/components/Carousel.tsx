@@ -4,12 +4,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 // ── Types ─────────────────────────────────────────────────
 
 export interface CarouselItem {
-  id:        string | number;
-  image?:    string;
-  title?:    string;
+  id: string | number;
+  image?: string;
+  title?: string;
   subtitle?: string;
-  label?:    string;
-  content?:  React.ReactNode;
+  label?: string;
+  content?: React.ReactNode;
 }
 
 /**
@@ -22,49 +22,49 @@ export interface CarouselItem {
 export type CarouselVariant = 'multi-browse' | 'hero' | 'uncontained' | 'full-screen';
 
 export interface CarouselProps {
-  items:              CarouselItem[];
-  variant?:           CarouselVariant;
+  items: CarouselItem[];
+  variant?: CarouselVariant;
   /** Show previous/next arrow buttons */
-  showArrows?:        boolean;
+  showArrows?: boolean;
   /** Show dot indicators */
-  showIndicators?:    boolean;
-  autoPlay?:          boolean;
-  autoPlayInterval?:  number;
+  showIndicators?: boolean;
+  autoPlay?: boolean;
+  autoPlayInterval?: number;
   /** Aspect ratio of each item — Tailwind aspect class e.g. 'aspect-video' */
-  aspectRatio?:       string;
+  aspectRatio?: string;
   /** Accessible label for the carousel region. Override when multiple carousels appear on the same page. */
-  'aria-label'?:      string;
-  className?:         string;
+  'aria-label'?: string;
+  className?: string;
 }
 
 // ── Item sizes per variant ─────────────────────────────────
 
 const variantItemCls: Record<CarouselVariant, string> = {
   'multi-browse': 'snap-start shrink-0',
-  'hero':         'snap-center shrink-0 w-[85%]',
-  'uncontained':  'snap-start shrink-0 w-[78%]',
-  'full-screen':  'snap-start shrink-0 w-full',
+  hero: 'snap-center shrink-0 w-[85%]',
+  uncontained: 'snap-start shrink-0 w-[78%]',
+  'full-screen': 'snap-start shrink-0 w-full',
 };
 
 const containerPadding: Record<CarouselVariant, string> = {
   'multi-browse': 'px-4',
-  'hero':         'px-[7.5%]',
-  'uncontained':  'px-4',
-  'full-screen':  'px-0',
+  hero: 'px-[7.5%]',
+  uncontained: 'px-4',
+  'full-screen': 'px-0',
 };
 
 const itemGap: Record<CarouselVariant, string> = {
   'multi-browse': 'gap-3',
-  'hero':         'gap-3',
-  'uncontained':  'gap-3',
-  'full-screen':  'gap-0',
+  hero: 'gap-3',
+  uncontained: 'gap-3',
+  'full-screen': 'gap-0',
 };
 
 const itemRadius: Record<CarouselVariant, string> = {
   'multi-browse': 'rounded-3xl',
-  'hero':         'rounded-[28px]',
-  'uncontained':  'rounded-3xl',
-  'full-screen':  'rounded-none',
+  hero: 'rounded-[28px]',
+  uncontained: 'rounded-3xl',
+  'full-screen': 'rounded-none',
 };
 
 // ── Multi-browse item widths (first=large, rest=smaller) ──
@@ -82,7 +82,7 @@ function CarouselCard({
   radius,
   aspect,
 }: {
-  item:   CarouselItem;
+  item: CarouselItem;
   radius: string;
   aspect: string;
 }) {
@@ -90,7 +90,9 @@ function CarouselCard({
   const altText = [item.label, item.title, item.subtitle].filter(Boolean).join(' — ') || '';
 
   return (
-    <div className={`relative overflow-hidden bg-ink-200 dark:bg-ink-700 ${radius} ${aspect} h-full`}>
+    <div
+      className={`relative overflow-hidden bg-ink-200 dark:bg-ink-700 ${radius} ${aspect} h-full`}
+    >
       {item.image && (
         <img
           src={item.image}
@@ -113,9 +115,7 @@ function CarouselCard({
             </p>
           )}
           {item.subtitle && (
-            <p className="mt-0.5 text-ink-300 text-xs font-body line-clamp-1">
-              {item.subtitle}
-            </p>
+            <p className="mt-0.5 text-ink-300 text-xs font-body line-clamp-1">{item.subtitle}</p>
           )}
           {item.content}
         </div>
@@ -128,16 +128,16 @@ function CarouselCard({
 
 export function Carousel({
   items,
-  variant           = 'hero',
-  showArrows        = true,
-  showIndicators    = true,
-  autoPlay          = false,
-  autoPlayInterval  = 4000,
-  aspectRatio       = 'aspect-[4/3]',
-  'aria-label':     trackAriaLabel = 'Carousel items',
-  className         = '',
+  variant = 'hero',
+  showArrows = true,
+  showIndicators = true,
+  autoPlay = false,
+  autoPlayInterval = 4000,
+  aspectRatio = 'aspect-[4/3]',
+  'aria-label': trackAriaLabel = 'Carousel items',
+  className = '',
 }: CarouselProps) {
-  const trackRef    = React.useRef<HTMLDivElement>(null);
+  const trackRef = React.useRef<HTMLDivElement>(null);
   const [active, setActive] = React.useState(0);
 
   // ── Track active item via IntersectionObserver ────────────
@@ -148,35 +148,42 @@ export function Carousel({
     const children = Array.from(track.children) as HTMLElement[];
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
             const idx = children.indexOf(entry.target as HTMLElement);
             if (idx >= 0) setActive(idx);
           }
         });
       },
-      { root: track, threshold: 0.5 }
+      { root: track, threshold: 0.5 },
     );
-    children.forEach(c => observer.observe(c));
+    children.forEach((c) => observer.observe(c));
     return () => observer.disconnect();
   }, [items]);
+
+  // ── Scroll helpers ────────────────────────────────────────
+  const scrollTo = React.useCallback(
+    (index: number) => {
+      const track = trackRef.current;
+      if (!track) return;
+      const child = track.children[index] as HTMLElement;
+      if (!child) return;
+      child.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: variant === 'hero' ? 'center' : 'start',
+      });
+      setActive(index);
+    },
+    [trackRef, variant],
+  );
 
   // ── Auto play ─────────────────────────────────────────────
   React.useEffect(() => {
     if (!autoPlay) return;
     const id = setInterval(() => scrollTo((active + 1) % items.length), autoPlayInterval);
     return () => clearInterval(id);
-  }, [autoPlay, autoPlayInterval, active, items.length]);
-
-  // ── Scroll helpers ────────────────────────────────────────
-  const scrollTo = (index: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const child = track.children[index] as HTMLElement;
-    if (!child) return;
-    child.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: variant === 'hero' ? 'center' : 'start' });
-    setActive(index);
-  };
+  }, [autoPlay, autoPlayInterval, active, items.length, scrollTo]);
 
   const prev = () => scrollTo(Math.max(0, active - 1));
   const next = () => scrollTo(Math.min(items.length - 1, active + 1));
@@ -185,7 +192,6 @@ export function Carousel({
 
   return (
     <div className={`relative w-full select-none ${className}`}>
-
       {/* ── Track ── */}
       <div
         ref={trackRef}
@@ -195,7 +201,7 @@ export function Carousel({
         className={[
           'flex overflow-x-auto scroll-smooth',
           'scrollbar-hide',
-          'scroll-snap-type-x-mandatory',   // handled inline below
+          'scroll-snap-type-x-mandatory', // handled inline below
           containerPadding[variant],
           itemGap[variant],
           'py-2',
@@ -203,9 +209,10 @@ export function Carousel({
         style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
       >
         {items.map((item, i) => {
-          const widthCls = variant === 'multi-browse'
-            ? multiBrowseWidth(i, items.length)
-            : variantItemCls[variant].split(' ').find(c => c.startsWith('w-')) ?? '';
+          const widthCls =
+            variant === 'multi-browse'
+              ? multiBrowseWidth(i, items.length)
+              : (variantItemCls[variant].split(' ').find((c) => c.startsWith('w-')) ?? '');
 
           const snapCls = variant === 'hero' ? 'snap-center' : 'snap-start';
 

@@ -5,52 +5,52 @@ import { X } from 'lucide-react';
 // ── Types ─────────────────────────────────────────────────
 
 export type DrawerPlacement = 'left' | 'right' | 'top' | 'bottom';
-export type DrawerSize      = 'sm' | 'md' | 'lg' | 'xl' | 'full';
+export type DrawerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
 export interface DrawerProps {
-  open:        boolean;
-  onClose:     () => void;
-  title?:      string;
+  open: boolean;
+  onClose: () => void;
+  title?: string;
   description?: string;
-  children:    React.ReactNode;
+  children: React.ReactNode;
   /** Which edge the drawer slides in from */
-  placement?:  DrawerPlacement;
+  placement?: DrawerPlacement;
   /** Width (for left/right) or height (for top/bottom) */
-  size?:       DrawerSize;
+  size?: DrawerSize;
   /** Show close button inside the header */
   closeButton?: boolean;
   /** Show close button outside the panel (above/beside it) */
   closeOutside?: boolean;
   /** Slot rendered as a sticky footer */
-  footer?:     React.ReactNode;
-  className?:  string;
+  footer?: React.ReactNode;
+  className?: string;
 }
 
 // ── Size maps ──────────────────────────────────────────────
 
 const sideSizes: Record<DrawerSize, string> = {
-  sm:   'w-72',
-  md:   'w-80',
-  lg:   'w-96',
-  xl:   'w-[32rem]',
+  sm: 'w-72',
+  md: 'w-80',
+  lg: 'w-96',
+  xl: 'w-[32rem]',
   full: 'w-full',
 };
 
 const edgeSizes: Record<DrawerSize, string> = {
-  sm:   'h-1/3',
-  md:   'h-1/2',
-  lg:   'h-2/3',
-  xl:   'h-3/4',
+  sm: 'h-1/3',
+  md: 'h-1/2',
+  lg: 'h-2/3',
+  xl: 'h-3/4',
   full: 'h-full',
 };
 
 // ── Slide transitions per placement ───────────────────────
 
 const slides: Record<DrawerPlacement, { from: string; to: string; panel: string }> = {
-  left:   { from: '-translate-x-full', to: 'translate-x-0', panel: 'inset-y-0 left-0 h-full' },
-  right:  { from: 'translate-x-full',  to: 'translate-x-0', panel: 'inset-y-0 right-0 h-full' },
-  top:    { from: '-translate-y-full', to: 'translate-y-0', panel: 'inset-x-0 top-0 w-full'  },
-  bottom: { from: 'translate-y-full',  to: 'translate-y-0', panel: 'inset-x-0 bottom-0 w-full' },
+  left: { from: '-translate-x-full', to: 'translate-x-0', panel: 'inset-y-0 left-0 h-full' },
+  right: { from: 'translate-x-full', to: 'translate-x-0', panel: 'inset-y-0 right-0 h-full' },
+  top: { from: '-translate-y-full', to: 'translate-y-0', panel: 'inset-x-0 top-0 w-full' },
+  bottom: { from: 'translate-y-full', to: 'translate-y-0', panel: 'inset-x-0 bottom-0 w-full' },
 };
 
 // ── Drawer ─────────────────────────────────────────────────
@@ -61,34 +61,37 @@ export function Drawer({
   title,
   description,
   children,
-  placement    = 'right',
-  size         = 'md',
-  closeButton  = true,
+  placement = 'right',
+  size = 'md',
+  closeButton = true,
   closeOutside = false,
   footer,
-  className    = '',
+  className = '',
 }: DrawerProps) {
   const isHorizontal = placement === 'left' || placement === 'right';
   const sizeCls = isHorizontal ? sideSizes[size] : edgeSizes[size];
-  const slide   = slides[placement];
+  const slide = slides[placement];
 
   // Outside close button position
   const outsidePos: Record<DrawerPlacement, string> = {
-    right:  'absolute top-4 left-0 -translate-x-full pr-2',
-    left:   'absolute top-4 right-0 translate-x-full pl-2',
+    right: 'absolute top-4 left-0 -translate-x-full pr-2',
+    left: 'absolute top-4 right-0 translate-x-full pl-2',
     bottom: 'absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full pb-2',
-    top:    'absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full pt-2',
+    top: 'absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full pt-2',
   };
 
   return (
     <Transition appear show={open} as={React.Fragment}>
       <HLDialog as="div" className="relative z-50" onClose={onClose}>
-
         {/* Backdrop */}
         <Transition.Child
           as={React.Fragment}
-          enter="ease-out duration-200" enterFrom="opacity-0" enterTo="opacity-100"
-          leave="ease-in duration-200"  leaveFrom="opacity-100" leaveTo="opacity-0"
+          enter="ease-out duration-200"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-ink-900/50 dark:bg-ink-900/80" />
         </Transition.Child>
@@ -110,13 +113,15 @@ export function Drawer({
                   className={[
                     'relative flex flex-col bg-white dark:bg-ink-800',
                     'shadow-xl border-ink-200 dark:border-ink-700',
-                    placement === 'right'  ? 'border-l h-full' : '',
-                    placement === 'left'   ? 'border-r h-full' : '',
-                    placement === 'top'    ? 'border-b w-full' : '',
+                    placement === 'right' ? 'border-l h-full' : '',
+                    placement === 'left' ? 'border-r h-full' : '',
+                    placement === 'top' ? 'border-b w-full' : '',
                     placement === 'bottom' ? 'border-t w-full' : '',
                     sizeCls,
                     className,
-                  ].filter(Boolean).join(' ')}
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
                 >
                   {/* Outside close button */}
                   {closeOutside && (
@@ -161,9 +166,7 @@ export function Drawer({
                   )}
 
                   {/* Scrollable body */}
-                  <div className="flex-1 overflow-y-auto px-6 py-5">
-                    {children}
-                  </div>
+                  <div className="flex-1 overflow-y-auto px-6 py-5">{children}</div>
 
                   {/* Sticky footer */}
                   {footer && (
@@ -176,7 +179,6 @@ export function Drawer({
             </div>
           </div>
         </div>
-
       </HLDialog>
     </Transition>
   );

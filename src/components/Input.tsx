@@ -2,18 +2,18 @@ import React from 'react';
 import { useFieldId } from './Fieldset';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?:         string;
-  hint?:          string;
-  error?:         string;
+  label?: string;
+  hint?: string;
+  error?: string;
   /** Lucide icon (or any ReactNode) rendered inside the left edge of the input */
-  icon?:          React.ReactNode;
+  icon?: React.ReactNode;
   /** Arbitrary element (e.g. show/hide button) rendered inside the right edge */
-  rightAction?:   React.ReactNode;
+  rightAction?: React.ReactNode;
   /**
    * Text or element joined to the LEFT of the input (e.g. "https://", "@", "$").
    * Renders a rounded left-side addon that shares a single border with the input.
    */
-  leadingAddon?:  React.ReactNode;
+  leadingAddon?: React.ReactNode;
   /**
    * Text or element joined to the RIGHT of the input (e.g. "USD", ".com", "%").
    * Renders a rounded right-side addon that shares a single border with the input.
@@ -23,7 +23,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
    * Small text shown in the top-right of the label row (e.g. "Optional", "0 / 140").
    * Only rendered when `label` is also set.
    */
-  cornerHint?:            React.ReactNode;
+  cornerHint?: React.ReactNode;
   /** Extra classes applied to the leading addon wrapper span */
   leadingAddonClassName?: string;
   /** Extra classes applied to the trailing addon wrapper span */
@@ -39,7 +39,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
    *
    * When unset the component behaves as before: only the `error` prop is displayed.
    */
-  validate?:      'onBlur' | 'onSubmit' | 'both';
+  validate?: 'onBlur' | 'onSubmit' | 'both';
 }
 
 export function Input({
@@ -51,25 +51,25 @@ export function Input({
   leadingAddon,
   trailingAddon,
   cornerHint,
-  leadingAddonClassName  = '',
+  leadingAddonClassName = '',
   trailingAddonClassName = '',
   wrapClassName = '',
-  className     = '',
+  className = '',
   id,
   validate,
-  onBlur:   userOnBlur,
+  onBlur: userOnBlur,
   onChange: userOnChange,
   ...props
 }: InputProps) {
   // Fall back to the nearest <Field>'s generated id when no explicit id is given.
   // This auto-wires Label ↔ Input when used inside the Fieldset system.
   const fieldId = useFieldId(); // returns '' when not inside a Field
-  const autoId  = React.useId();
+  const autoId = React.useId();
   const inputId = id ?? (fieldId || undefined) ?? autoId;
 
   // ── Constraint-validation state (only active when `validate` is set) ──
   const [internalError, setInternalError] = React.useState('');
-  const [touched,       setTouched]       = React.useState(false);
+  const [touched, setTouched] = React.useState(false);
 
   function runValidation(el: HTMLInputElement) {
     setInternalError(el.checkValidity() ? '' : el.validationMessage);
@@ -100,11 +100,11 @@ export function Input({
   // External `error` prop always wins; fall back to internal constraint message
   const displayError = errorProp || (validate ? internalError : '');
 
-  const hasLeading  = !!leadingAddon;
+  const hasLeading = !!leadingAddon;
   const hasTrailing = !!trailingAddon;
 
   // ── Border / radius tokens based on addon presence ────────
-  const borderErr    = 'border-red-400 dark:border-red-500';
+  const borderErr = 'border-red-400 dark:border-red-500';
   const borderNormal = 'border-ink-200 dark:border-ink-600';
 
   // Use displayError everywhere `error` was referenced below
@@ -123,7 +123,7 @@ export function Input({
       className={[
         'w-full py-2.5 text-sm font-body',
         // left padding: icon overrides leading addon (icon is inside the input)
-        icon        ? 'pl-9'  : 'pl-3',
+        icon ? 'pl-9' : 'pl-3',
         rightAction ? 'pr-10' : 'pr-3',
         'bg-white dark:bg-ink-700 text-ink-900 dark:text-ink-50',
         'placeholder:text-ink-500 dark:placeholder:text-ink-400',
@@ -138,17 +138,17 @@ export function Input({
             ? 'rounded-xl focus:border-red-500'
             : 'rounded-xl focus:border-primary-500'
           : [
-              hasLeading  ? 'rounded-l-none border-l-0' : 'rounded-l-xl',
+              hasLeading ? 'rounded-l-none border-l-0' : 'rounded-l-xl',
               hasTrailing ? 'rounded-r-none border-r-0' : 'rounded-r-xl',
-              error
-                ? 'focus:border-red-500'
-                : 'focus:border-primary-500',
+              error ? 'focus:border-red-500' : 'focus:border-primary-500',
             ].join(' '),
         'disabled:opacity-40 disabled:cursor-not-allowed',
         className,
       ].join(' ')}
       aria-invalid={!!error}
-      aria-describedby={error || hint ? (error ? `${inputId}-error` : `${inputId}-hint`) : undefined}
+      aria-describedby={
+        error || hint ? (error ? `${inputId}-error` : `${inputId}-hint`) : undefined
+      }
       onBlur={handleBlur}
       onChange={handleChange}
       onInvalid={handleInvalid}
@@ -157,66 +157,74 @@ export function Input({
   );
 
   // ── Icon + rightAction overlay (relative wrapper needed) ──
-  const inputWithOverlays = (icon || rightAction) ? (
-    <div className="relative flex-1 min-w-0">
-      {icon && (
-        <span
-          className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500 dark:text-ink-300 pointer-events-none"
-          aria-hidden="true"
-        >
-          {icon}
-        </span>
-      )}
-      {inputEl}
-      {rightAction && (
-        <span className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
-          {rightAction}
-        </span>
-      )}
-    </div>
-  ) : (
-    // No overlays — just the input, but still needs flex-1 inside addon group
-    hasLeading || hasTrailing
-      ? <div className="flex-1 min-w-0">{inputEl}</div>
-      : inputEl
-  );
+  const inputWithOverlays =
+    icon || rightAction ? (
+      <div className="relative flex-1 min-w-0">
+        {icon && (
+          <span
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500 dark:text-ink-300 pointer-events-none"
+            aria-hidden="true"
+          >
+            {icon}
+          </span>
+        )}
+        {inputEl}
+        {rightAction && (
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
+            {rightAction}
+          </span>
+        )}
+      </div>
+    ) : // No overlays — just the input, but still needs flex-1 inside addon group
+    hasLeading || hasTrailing ? (
+      <div className="flex-1 min-w-0">{inputEl}</div>
+    ) : (
+      inputEl
+    );
 
   // ── Addon group wrapper ────────────────────────────────────
   // When addons are present we wrap everything in a flex row and add a
   // focus-within ring so the whole group highlights together.
-  const inputRow = (hasLeading || hasTrailing) ? (
-    <div
-      className={[
-        'flex items-stretch rounded-xl',
-      ].join(' ')}
-    >
-      {hasLeading && (
-        <span className={[
-          addonBase,
-          'rounded-l-xl border',
-          error ? borderErr : borderNormal,
-          'border-r-0',
-          leadingAddonClassName,
-        ].filter(Boolean).join(' ')}>
-          {leadingAddon}
-        </span>
-      )}
+  const inputRow =
+    hasLeading || hasTrailing ? (
+      <div className={['flex items-stretch rounded-xl'].join(' ')}>
+        {hasLeading && (
+          <span
+            className={[
+              addonBase,
+              'rounded-l-xl border',
+              error ? borderErr : borderNormal,
+              'border-r-0',
+              leadingAddonClassName,
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
+            {leadingAddon}
+          </span>
+        )}
 
-      {inputWithOverlays}
+        {inputWithOverlays}
 
-      {hasTrailing && (
-        <span className={[
-          addonBase,
-          'rounded-r-xl border',
-          error ? borderErr : borderNormal,
-          'border-l-0',
-          trailingAddonClassName,
-        ].filter(Boolean).join(' ')}>
-          {trailingAddon}
-        </span>
-      )}
-    </div>
-  ) : inputWithOverlays;
+        {hasTrailing && (
+          <span
+            className={[
+              addonBase,
+              'rounded-r-xl border',
+              error ? borderErr : borderNormal,
+              'border-l-0',
+              trailingAddonClassName,
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
+            {trailingAddon}
+          </span>
+        )}
+      </div>
+    ) : (
+      inputWithOverlays
+    );
 
   return (
     <div className={`flex flex-col gap-1.5 ${wrapClassName}`}>
@@ -248,9 +256,7 @@ export function Input({
         role={error ? 'alert' : undefined}
         className={[
           'min-h-4 text-xs font-body leading-none',
-          error
-            ? 'text-red-700 dark:text-red-400'
-            : 'text-ink-500 dark:text-ink-300',
+          error ? 'text-red-700 dark:text-red-400' : 'text-ink-500 dark:text-ink-300',
         ].join(' ')}
       >
         {error || hint || ''}

@@ -12,13 +12,13 @@ const meta = {
   component: SectionHeading,
   tags: ['autodocs'],
   argTypes: {
-    title:       { control: 'text' },
+    title: { control: 'text' },
     description: { control: 'text' },
-    label:       { control: 'text' },
-    divider:     { control: 'boolean' },
-    as:          { control: { type: 'select', options: ['h2', 'h3'] } },
-    actions:     { control: false },
-    tabs:        { control: false },
+    label: { control: 'text' },
+    divider: { control: 'boolean' },
+    as: { control: { type: 'select', options: ['h2', 'h3'] } },
+    actions: { control: false },
+    tabs: { control: false },
   },
 } satisfies Meta<typeof SectionHeading>;
 
@@ -28,18 +28,35 @@ type Story = StoryObj<typeof meta>;
 // ── Shared fixtures ───────────────────────────────────────
 
 const PEOPLE = [
-  { name: 'Leslie Alexander',  email: 'leslie.alexander@example.com',  role: 'Co-Founder / CEO',    status: 'active'  as const },
-  { name: 'Michael Foster',    email: 'michael.foster@example.com',    role: 'Co-Founder / CTO',    status: 'active'  as const },
-  { name: 'Dries Vincent',     email: 'dries.vincent@example.com',     role: 'Business Relations',  status: 'pending' as const },
+  {
+    name: 'Leslie Alexander',
+    email: 'leslie.alexander@example.com',
+    role: 'Co-Founder / CEO',
+    status: 'active' as const,
+  },
+  {
+    name: 'Michael Foster',
+    email: 'michael.foster@example.com',
+    role: 'Co-Founder / CTO',
+    status: 'active' as const,
+  },
+  {
+    name: 'Dries Vincent',
+    email: 'dries.vincent@example.com',
+    role: 'Business Relations',
+    status: 'pending' as const,
+  },
 ];
 
-function PersonRow({ name, email, role, status }: typeof PEOPLE[0]) {
+function PersonRow({ name, email, role, status }: (typeof PEOPLE)[0]) {
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex items-center gap-3 min-w-0">
         <Avatar name={name} size={36} />
         <div className="min-w-0">
-          <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{name}</p>
+          <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+            {name}
+          </p>
           <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{email}</p>
         </div>
       </div>
@@ -51,15 +68,15 @@ function PersonRow({ name, email, role, status }: typeof PEOPLE[0]) {
   );
 }
 
-const LIST_ITEMS = PEOPLE.map(p => <PersonRow key={p.email} {...p} />);
+const LIST_ITEMS = PEOPLE.map((p) => <PersonRow key={p.email} {...p} />);
 
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
   args: {
-    title:       'Team members',
+    title: 'Team members',
     description: 'Manage who has access to this workspace.',
-    divider:     false,
+    divider: false,
   },
 };
 
@@ -83,10 +100,7 @@ export const WithDescription: Story = {
   args: { title: '' },
   render: () => (
     <div className="max-w-2xl flex flex-col gap-4">
-      <SectionHeading
-        title="Team members"
-        description="Manage who has access to this workspace."
-      />
+      <SectionHeading title="Team members" description="Manage who has access to this workspace." />
       <ContainerList variant="divided" items={LIST_ITEMS} />
     </div>
   ),
@@ -172,9 +186,9 @@ function WithTabsDemo() {
         title="Team"
         divider
         tabs={[
-          { label: 'Members',     value: 'members',     badge: 12 },
-          { label: 'Invitations', value: 'invitations', badge: 3  },
-          { label: 'Roles',       value: 'roles' },
+          { label: 'Members', value: 'members', badge: 12 },
+          { label: 'Invitations', value: 'invitations', badge: 3 },
+          { label: 'Roles', value: 'roles' },
         ]}
         activeTab={active}
         onTabChange={setActive}
@@ -214,10 +228,7 @@ export const AsH3: Story = {
         />
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <SectionHeading
-              as="h3"
-              title="Personal details"
-            />
+            <SectionHeading as="h3" title="Personal details" />
             <div className="h-20 rounded-xl border-2 border-dashed border-ink-200 dark:border-ink-700 flex items-center justify-center">
               <span className="text-xs font-body text-ink-500 dark:text-ink-300">Form fields</span>
             </div>
@@ -226,10 +237,16 @@ export const AsH3: Story = {
             <SectionHeading
               as="h3"
               title="Notifications"
-              actions={<Button variant="secondary" size="sm" aria-label="Settings"><Settings className="w-3.5 h-3.5" /></Button>}
+              actions={
+                <Button variant="secondary" size="sm" aria-label="Settings">
+                  <Settings className="w-3.5 h-3.5" />
+                </Button>
+              }
             />
             <div className="h-20 rounded-xl border-2 border-dashed border-ink-200 dark:border-ink-700 flex items-center justify-center">
-              <span className="text-xs font-body text-ink-500 dark:text-ink-300">Toggle settings</span>
+              <span className="text-xs font-body text-ink-500 dark:text-ink-300">
+                Toggle settings
+              </span>
             </div>
           </div>
         </div>
@@ -246,20 +263,67 @@ export const AllVariants: Story = {
   render: () => (
     <div className="max-w-2xl flex flex-col gap-10">
       {[
-        { name: 'Simple',              node: <SectionHeading title="Team members" /> },
-        { name: 'With description',    node: <SectionHeading title="Team members" description="Manage who has access to this workspace." /> },
-        { name: 'With divider',        node: <SectionHeading title="Team members" description="Manage who has access to this workspace." divider /> },
-        { name: 'With label',          node: <SectionHeading label="Workspace" title="Team members" description="Manage who has access to this workspace." /> },
-        { name: 'With actions',        node: <SectionHeading title="Team members" actions={<Button variant="primary" size="sm"><Plus className="w-3.5 h-3.5" />Invite</Button>} /> },
-        { name: 'Label + divider + actions', node: (
-          <SectionHeading
-            label="Workspace"
-            title="Team members"
-            description="Manage who has access to this workspace."
-            divider
-            actions={<Button variant="primary" size="sm"><Plus className="w-3.5 h-3.5" />Invite</Button>}
-          />
-        )},
+        { name: 'Simple', node: <SectionHeading title="Team members" /> },
+        {
+          name: 'With description',
+          node: (
+            <SectionHeading
+              title="Team members"
+              description="Manage who has access to this workspace."
+            />
+          ),
+        },
+        {
+          name: 'With divider',
+          node: (
+            <SectionHeading
+              title="Team members"
+              description="Manage who has access to this workspace."
+              divider
+            />
+          ),
+        },
+        {
+          name: 'With label',
+          node: (
+            <SectionHeading
+              label="Workspace"
+              title="Team members"
+              description="Manage who has access to this workspace."
+            />
+          ),
+        },
+        {
+          name: 'With actions',
+          node: (
+            <SectionHeading
+              title="Team members"
+              actions={
+                <Button variant="primary" size="sm">
+                  <Plus className="w-3.5 h-3.5" />
+                  Invite
+                </Button>
+              }
+            />
+          ),
+        },
+        {
+          name: 'Label + divider + actions',
+          node: (
+            <SectionHeading
+              label="Workspace"
+              title="Team members"
+              description="Manage who has access to this workspace."
+              divider
+              actions={
+                <Button variant="primary" size="sm">
+                  <Plus className="w-3.5 h-3.5" />
+                  Invite
+                </Button>
+              }
+            />
+          ),
+        },
       ].map(({ name, node }) => (
         <div key={name}>
           <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">{name}</p>

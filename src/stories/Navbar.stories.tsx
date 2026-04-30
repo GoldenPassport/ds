@@ -13,11 +13,11 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     appearance: { control: { type: 'select', options: ['light', 'dark'] } },
-    actions:    { control: false },
-    moreMenu:   { control: false },
-    logo:       { control: false },
-    items:      { control: false },
-    user:       { control: false },
+    actions: { control: false },
+    moreMenu: { control: false },
+    logo: { control: false },
+    items: { control: false },
+    user: { control: false },
   },
 } satisfies Meta<typeof Navbar>;
 
@@ -29,42 +29,52 @@ type Story = StoryObj<typeof meta>;
 const LOGO_LIGHT = (
   <div className="flex items-center gap-2">
     <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
-    <span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-none">Golden Passport</span>
+    <span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-none">
+      Golden Passport
+    </span>
   </div>
 );
 
 const LOGO_DARK = (
   <div className="flex items-center gap-2">
     <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
-    <span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">Golden Passport</span>
+    <span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">
+      Golden Passport
+    </span>
   </div>
 );
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', href: '#', active: true,  icon: <LayoutDashboard className="w-4 h-4" /> },
-  { label: 'Team',      href: '#', active: false, icon: <Users           className="w-4 h-4" /> },
-  { label: 'Reports',   href: '#', active: false, icon: <BarChart2       className="w-4 h-4" /> },
-  { label: 'Documents', href: '#', active: false, icon: <FileText        className="w-4 h-4" /> },
+  { label: 'Dashboard', href: '#', active: true, icon: <LayoutDashboard className="w-4 h-4" /> },
+  { label: 'Team', href: '#', active: false, icon: <Users className="w-4 h-4" /> },
+  { label: 'Reports', href: '#', active: false, icon: <BarChart2 className="w-4 h-4" /> },
+  { label: 'Documents', href: '#', active: false, icon: <FileText className="w-4 h-4" /> },
 ];
 
 const NAV_ITEMS_SIMPLE = [
-  { label: 'Dashboard', href: '#', active: true  },
-  { label: 'Team',      href: '#', active: false },
-  { label: 'Projects',  href: '#', active: false },
-  { label: 'Calendar',  href: '#', active: false },
+  { label: 'Dashboard', href: '#', active: true },
+  { label: 'Team', href: '#', active: false },
+  { label: 'Projects', href: '#', active: false },
+  { label: 'Calendar', href: '#', active: false },
 ];
 
 const USER = {
-  name:  'Alex Johnson',
+  name: 'Alex Johnson',
   email: 'alex@acme.com',
   menuItems: [
-    { label: 'Your profile',   href: '#' },
-    { label: 'Settings',       href: '#', icon: <Settings className="w-4 h-4" /> },
-    { label: 'Sign out',       onClick: () => {}, dividerAbove: true },
+    { label: 'Your profile', href: '#' },
+    { label: 'Settings', href: '#', icon: <Settings className="w-4 h-4" /> },
+    { label: 'Sign out', onClick: () => {}, dividerAbove: true },
   ],
 };
 
-function IconBtn({ label, appearance = 'light' }: { label: string; appearance?: 'light' | 'dark' }) {
+function IconBtn({
+  label,
+  appearance = 'light',
+}: {
+  label: string;
+  appearance?: 'light' | 'dark';
+}) {
   return (
     <button
       type="button"
@@ -86,8 +96,8 @@ function IconBtn({ label, appearance = 'light' }: { label: string; appearance?: 
 export const Playground: Story = {
   args: {
     appearance: 'light',
-    search:     true,
-    bordered:   true,
+    search: true,
+    bordered: true,
   },
   render: (args) => (
     <Navbar
@@ -104,13 +114,7 @@ export const Playground: Story = {
 export const Simple: Story = {
   name: 'Simple',
   args: {},
-  render: () => (
-    <Navbar
-      logo={LOGO_LIGHT}
-      items={NAV_ITEMS_SIMPLE}
-      user={USER}
-    />
-  ),
+  render: () => <Navbar logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} />,
 };
 
 // ── Simple dark ───────────────────────────────────────────
@@ -118,14 +122,7 @@ export const Simple: Story = {
 export const SimpleDark: Story = {
   name: 'Simple — dark',
   args: {},
-  render: () => (
-    <Navbar
-      appearance="dark"
-      logo={LOGO_DARK}
-      items={NAV_ITEMS_SIMPLE}
-      user={USER}
-    />
-  ),
+  render: () => <Navbar appearance="dark" logo={LOGO_DARK} items={NAV_ITEMS_SIMPLE} user={USER} />,
 };
 
 // ── With search ───────────────────────────────────────────
@@ -150,13 +147,7 @@ export const DarkWithSearch: Story = {
   name: 'Dark — with search',
   args: {},
   render: () => (
-    <Navbar
-      appearance="dark"
-      logo={LOGO_DARK}
-      items={NAV_ITEMS_SIMPLE}
-      user={USER}
-      search
-    />
+    <Navbar appearance="dark" logo={LOGO_DARK} items={NAV_ITEMS_SIMPLE} user={USER} search />
   ),
 };
 
@@ -235,8 +226,12 @@ export const NoUser: Story = {
       search
       actions={
         <div className="flex gap-2">
-          <Button size="sm" variant="secondary">Log in</Button>
-          <Button size="sm" variant="primary">Sign up</Button>
+          <Button size="sm" variant="secondary">
+            Log in
+          </Button>
+          <Button size="sm" variant="primary">
+            Sign up
+          </Button>
         </div>
       }
     />
@@ -275,7 +270,7 @@ export const InContext: Story = {
 // ── More menu ─────────────────────────────────────────────
 
 const MORE_ITEMS = [
-  { label: 'Help & support',  href: '#' },
+  { label: 'Help & support', href: '#' },
   { label: 'Keyboard shortcuts', href: '#' },
   { label: 'Sign out', onClick: () => {}, dividerAbove: true },
 ];
@@ -284,12 +279,7 @@ export const WithMoreMenu: Story = {
   name: 'With more menu (⋮)',
   args: {},
   render: () => (
-    <Navbar
-      logo={LOGO_LIGHT}
-      items={NAV_ITEMS_SIMPLE}
-      user={USER}
-      moreMenu={MORE_ITEMS}
-    />
+    <Navbar logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} moreMenu={MORE_ITEMS} />
   ),
 };
 
@@ -350,7 +340,7 @@ export const Interactions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('type into search input → onSearch fires', async () => {
       const input = canvas.getByRole('searchbox');
@@ -365,12 +355,16 @@ export const Interactions: Story = {
       // The user button is the only button that wraps an avatar/name
       // It contains "Alex Johnson" visible text at lg breakpoints
       // Use getAllByRole and pick the one with no aria-label (not hamburger/search)
-      const userBtn = canvas.getAllByRole('button').find(
-        btn => !btn.getAttribute('aria-label') && btn.querySelector('[class*="rounded-full"]'),
-      )!;
+      const userBtn = canvas
+        .getAllByRole('button')
+        .find(
+          (btn) => !btn.getAttribute('aria-label') && btn.querySelector('[class*="rounded-full"]'),
+        )!;
       await user.click(userBtn);
       await waitFor(() => {
-        expect(within(document.body).getByRole('menuitem', { name: /your profile/i })).toBeInTheDocument();
+        expect(
+          within(document.body).getByRole('menuitem', { name: /your profile/i }),
+        ).toBeInTheDocument();
       });
     });
 
@@ -380,7 +374,9 @@ export const Interactions: Story = {
         expect(canvas.getByTestId('menu-clicked')).toHaveTextContent('Sign out');
       });
       await waitFor(() => {
-        expect(within(document.body).queryByRole('menuitem', { name: /your profile/i })).not.toBeInTheDocument();
+        expect(
+          within(document.body).queryByRole('menuitem', { name: /your profile/i }),
+        ).not.toBeInTheDocument();
       });
     });
   },
@@ -392,17 +388,12 @@ export const MobileMenuInteractions: Story = {
   render: () => (
     // Force a narrow container so the hamburger is always visible
     <div style={{ maxWidth: 480 }}>
-      <Navbar
-        logo={LOGO_LIGHT}
-        items={NAV_ITEMS_SIMPLE}
-        user={USER}
-        search
-      />
+      <Navbar logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} search />
     </div>
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('hamburger button starts with aria-expanded=false', async () => {
       const burger = await canvas.findByRole('button', { name: /open menu/i, hidden: true });
@@ -414,7 +405,10 @@ export const MobileMenuInteractions: Story = {
       await user.click(burger);
       await waitFor(() => {
         // aria-label switches to "Close menu" when open
-        expect(canvas.getByRole('button', { name: /close menu/i, hidden: true })).toHaveAttribute('aria-expanded', 'true');
+        expect(canvas.getByRole('button', { name: /close menu/i, hidden: true })).toHaveAttribute(
+          'aria-expanded',
+          'true',
+        );
       });
     });
 
@@ -428,7 +422,10 @@ export const MobileMenuInteractions: Story = {
       const closeBtn = canvas.getByRole('button', { name: /close menu/i, hidden: true });
       await user.click(closeBtn);
       await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /open menu/i, hidden: true })).toHaveAttribute('aria-expanded', 'false');
+        expect(canvas.getByRole('button', { name: /open menu/i, hidden: true })).toHaveAttribute(
+          'aria-expanded',
+          'false',
+        );
       });
     });
   },
@@ -442,8 +439,20 @@ export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-0">
       <Navbar ariaLabel="Light navigation" logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} />
-      <Navbar ariaLabel="Dark navigation" appearance="dark" logo={LOGO_DARK} items={NAV_ITEMS_SIMPLE} user={USER} />
-      <Navbar ariaLabel="Light navigation with search" logo={LOGO_LIGHT} items={NAV_ITEMS_SIMPLE} user={USER} search />
+      <Navbar
+        ariaLabel="Dark navigation"
+        appearance="dark"
+        logo={LOGO_DARK}
+        items={NAV_ITEMS_SIMPLE}
+        user={USER}
+      />
+      <Navbar
+        ariaLabel="Light navigation with search"
+        logo={LOGO_LIGHT}
+        items={NAV_ITEMS_SIMPLE}
+        user={USER}
+        search
+      />
       <Navbar
         ariaLabel="Dark navigation with search and actions"
         appearance="dark"
@@ -453,7 +462,8 @@ export const AllVariants: Story = {
         search
         actions={
           <Button size="sm" variant="primary">
-            <Plus className="w-4 h-4 mr-1" />New
+            <Plus className="w-4 h-4 mr-1" />
+            New
           </Button>
         }
       />
@@ -475,9 +485,9 @@ export const MoreMenuInteractions: Story = {
           items={NAV_ITEMS_SIMPLE}
           user={USER}
           moreMenu={[
-            { label: 'Help & support',     href: '#' },
+            { label: 'Help & support', href: '#' },
             { label: 'Keyboard shortcuts', href: '#' },
-            { label: 'Sign out',           onClick: () => setLastClicked('Sign out'), dividerAbove: true },
+            { label: 'Sign out', onClick: () => setLastClicked('Sign out'), dividerAbove: true },
           ]}
         />
         {lastClicked && (
@@ -490,18 +500,22 @@ export const MoreMenuInteractions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click ⋮ button → more menu opens', async () => {
       const moreBtn = await canvas.findByRole('button', { name: /more options/i });
       await user.click(moreBtn);
       await waitFor(() => {
-        expect(within(document.body).getByRole('menuitem', { name: /help & support/i })).toBeInTheDocument();
+        expect(
+          within(document.body).getByRole('menuitem', { name: /help & support/i }),
+        ).toBeInTheDocument();
       });
     });
 
     await step('"Sign out" item is present with divider', async () => {
-      expect(within(document.body).getByRole('menuitem', { name: /sign out/i })).toBeInTheDocument();
+      expect(
+        within(document.body).getByRole('menuitem', { name: /sign out/i }),
+      ).toBeInTheDocument();
     });
 
     await step('click "Sign out" → handler fires and menu closes', async () => {
@@ -510,7 +524,9 @@ export const MoreMenuInteractions: Story = {
         expect(canvas.getByTestId('more-clicked')).toHaveTextContent('Sign out');
       });
       await waitFor(() => {
-        expect(within(document.body).queryByRole('menuitem', { name: /help & support/i })).not.toBeInTheDocument();
+        expect(
+          within(document.body).queryByRole('menuitem', { name: /help & support/i }),
+        ).not.toBeInTheDocument();
       });
     });
   },

@@ -25,10 +25,14 @@ import React from 'react';
 
 // ── Context ───────────────────────────────────────────────
 
-interface FieldsetCtx { disabled: boolean }
+interface FieldsetCtx {
+  disabled: boolean;
+}
 const FieldsetContext = React.createContext<FieldsetCtx>({ disabled: false });
 
-interface FieldCtx { id: string }
+interface FieldCtx {
+  id: string;
+}
 const FieldContext = React.createContext<FieldCtx>({ id: '' });
 
 /** Read the nearest Fieldset's disabled state. */
@@ -45,23 +49,18 @@ export function useFieldId() {
 
 export interface FieldsetProps {
   /** Disables all native form controls inside and dims the UI. */
-  disabled?:   boolean;
+  disabled?: boolean;
   /** Accessible label when no visible Legend is rendered. */
   'aria-label'?: string;
-  className?:   string;
-  children:     React.ReactNode;
+  className?: string;
+  children: React.ReactNode;
 }
 
 /**
  * Top-level grouping wrapper.  Renders a `<fieldset>` so that
  * `disabled` propagates to all native form controls automatically.
  */
-export function Fieldset({
-  disabled = false,
-  className = '',
-  children,
-  ...rest
-}: FieldsetProps) {
+export function Fieldset({ disabled = false, className = '', children, ...rest }: FieldsetProps) {
   return (
     <FieldsetContext.Provider value={{ disabled }}>
       <fieldset
@@ -70,7 +69,9 @@ export function Fieldset({
           'min-w-0 border-none p-0 m-0',
           disabled ? 'opacity-50 pointer-events-none' : '',
           className,
-        ].filter(Boolean).join(' ')}
+        ]
+          .filter(Boolean)
+          .join(' ')}
         {...rest}
       >
         {children}
@@ -83,7 +84,7 @@ export function Fieldset({
 
 export interface LegendProps {
   className?: string;
-  children:   React.ReactNode;
+  children: React.ReactNode;
 }
 
 /**
@@ -107,9 +108,9 @@ export function Legend({ className = '', children }: LegendProps) {
 
 export interface FieldGroupProps {
   /** Vertical spacing between fields. Default `'md'` (space-y-5). */
-  gap?:       'sm' | 'md' | 'lg';
+  gap?: 'sm' | 'md' | 'lg';
   className?: string;
-  children:   React.ReactNode;
+  children: React.ReactNode;
 }
 
 const gapCls: Record<NonNullable<FieldGroupProps['gap']>, string> = {
@@ -123,11 +124,7 @@ const gapCls: Record<NonNullable<FieldGroupProps['gap']>, string> = {
  * Can be swapped for any layout div for grid/multi-column forms.
  */
 export function FieldGroup({ gap = 'md', className = '', children }: FieldGroupProps) {
-  return (
-    <div className={[gapCls[gap], className].join(' ')}>
-      {children}
-    </div>
-  );
+  return <div className={[gapCls[gap], className].join(' ')}>{children}</div>;
 }
 
 // ── Field ─────────────────────────────────────────────────
@@ -137,9 +134,9 @@ export interface FieldProps {
    * `'vertical'` — label above, control below (default).
    * `'horizontal'` — label left, control right (useful on wide screens).
    */
-  layout?:    'vertical' | 'horizontal';
+  layout?: 'vertical' | 'horizontal';
   className?: string;
-  children:   React.ReactNode;
+  children: React.ReactNode;
 }
 
 /**
@@ -168,9 +165,9 @@ export function Field({ layout = 'vertical', className = '', children }: FieldPr
 
 export interface LabelProps {
   /** Marks the field as required with a visual asterisk. */
-  required?:  boolean;
+  required?: boolean;
   className?: string;
-  children:   React.ReactNode;
+  children: React.ReactNode;
 }
 
 /**
@@ -192,7 +189,9 @@ export function Label({ required = false, className = '', children }: LabelProps
     >
       {children}
       {required && (
-        <span className="ml-0.5 text-red-600" aria-hidden="true">*</span>
+        <span className="ml-0.5 text-red-600" aria-hidden="true">
+          *
+        </span>
       )}
     </label>
   );
@@ -202,7 +201,7 @@ export function Label({ required = false, className = '', children }: LabelProps
 
 export interface DescriptionProps {
   className?: string;
-  children:   React.ReactNode;
+  children: React.ReactNode;
 }
 
 /**
@@ -210,12 +209,7 @@ export interface DescriptionProps {
  */
 export function Description({ className = '', children }: DescriptionProps) {
   return (
-    <p
-      className={[
-        'text-xs font-body text-ink-500 dark:text-ink-300',
-        className,
-      ].join(' ')}
-    >
+    <p className={['text-xs font-body text-ink-500 dark:text-ink-300', className].join(' ')}>
       {children}
     </p>
   );
@@ -225,7 +219,7 @@ export function Description({ className = '', children }: DescriptionProps) {
 
 export interface ErrorMessageProps {
   className?: string;
-  children:   React.ReactNode;
+  children: React.ReactNode;
 }
 
 /**
@@ -236,10 +230,7 @@ export function ErrorMessage({ className = '', children }: ErrorMessageProps) {
   return (
     <p
       role="alert"
-      className={[
-        'text-xs font-body text-red-600 dark:text-red-400',
-        className,
-      ].join(' ')}
+      className={['text-xs font-body text-red-600 dark:text-red-400', className].join(' ')}
     >
       {children}
     </p>
@@ -256,10 +247,5 @@ export interface FieldDividerProps {
  * Optional thin separator between field groups or sections.
  */
 export function FieldDivider({ className = '' }: FieldDividerProps) {
-  return (
-    <hr className={[
-      'border-t border-ink-200 dark:border-ink-700',
-      className,
-    ].join(' ')} />
-  );
+  return <hr className={['border-t border-ink-200 dark:border-ink-700', className].join(' ')} />;
 }

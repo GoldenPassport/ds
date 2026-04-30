@@ -10,12 +10,20 @@ const meta = {
   component: Tooltip,
   tags: ['autodocs'],
   argTypes: {
-    content:   { control: 'text',   description: 'Text or ReactNode shown inside the tooltip' },
-    placement: { control: 'select', options: ['top', 'bottom', 'left', 'right'], description: 'Preferred placement relative to the trigger' },
-    radius:    { control: 'select', options: ['sm', 'md', 'lg', 'full'], description: 'Border radius of the tooltip bubble' },
-    delay:     { control: 'number', description: 'Hover delay before the tooltip appears (ms)' },
-    children:  { control: false,    description: 'The element that triggers the tooltip on hover' },
-    className: { control: 'text',   description: 'Extra CSS class on the tooltip bubble' },
+    content: { control: 'text', description: 'Text or ReactNode shown inside the tooltip' },
+    placement: {
+      control: 'select',
+      options: ['top', 'bottom', 'left', 'right'],
+      description: 'Preferred placement relative to the trigger',
+    },
+    radius: {
+      control: 'select',
+      options: ['sm', 'md', 'lg', 'full'],
+      description: 'Border radius of the tooltip bubble',
+    },
+    delay: { control: 'number', description: 'Hover delay before the tooltip appears (ms)' },
+    children: { control: false, description: 'The element that triggers the tooltip on hover' },
+    className: { control: 'text', description: 'Extra CSS class on the tooltip bubble' },
   },
 } satisfies Meta<typeof Tooltip>;
 
@@ -24,15 +32,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   args: {
-    content:   'Run this workflow immediately',
+    content: 'Run this workflow immediately',
     placement: 'top',
-    delay:     0,
-    children:  React.createElement('span'),
+    delay: 0,
+    children: React.createElement('span'),
   },
   render: (args) => (
     <div className="flex justify-center pt-16">
       <Tooltip {...args}>
-        <Button variant="primary"><Play className="w-4 h-4" /> Deploy</Button>
+        <Button variant="primary">
+          <Play className="w-4 h-4" /> Deploy
+        </Button>
       </Tooltip>
     </div>
   ),
@@ -43,7 +53,9 @@ export const OnButton: Story = {
   render: () => (
     <div className="flex justify-center pt-16">
       <Tooltip content="Run this workflow immediately" placement="top">
-        <Button variant="primary"><Play className="w-4 h-4" /> Deploy</Button>
+        <Button variant="primary">
+          <Play className="w-4 h-4" /> Deploy
+        </Button>
       </Tooltip>
     </div>
   ),
@@ -54,12 +66,18 @@ export const OnIconButton: Story = {
   render: () => (
     <div className="flex justify-center gap-4 pt-16">
       <Tooltip content="Copy workflow" placement="top">
-        <button aria-label="Copy workflow" className="w-9 h-9 flex items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-600 transition-colors border-0 cursor-pointer">
+        <button
+          aria-label="Copy workflow"
+          className="w-9 h-9 flex items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-600 transition-colors border-0 cursor-pointer"
+        >
           <Copy className="w-4 h-4" aria-hidden="true" />
         </button>
       </Tooltip>
       <Tooltip content="Delete permanently" placement="top">
-        <button aria-label="Delete permanently" className="w-9 h-9 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100 transition-colors border-0 cursor-pointer">
+        <button
+          aria-label="Delete permanently"
+          className="w-9 h-9 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100 transition-colors border-0 cursor-pointer"
+        >
           <Trash2 className="w-4 h-4" aria-hidden="true" />
         </button>
       </Tooltip>
@@ -111,7 +129,7 @@ export const Radius: Story = {
   args: { content: null, children: React.createElement('span') },
   render: () => (
     <div className="flex flex-wrap justify-center gap-6 pt-16">
-      {(['sm', 'md', 'lg', 'full'] as const).map(r => (
+      {(['sm', 'md', 'lg', 'full'] as const).map((r) => (
         <Tooltip key={r} content="Tooltip text" placement="top" radius={r} delay={0}>
           <Badge label={r} variant="neutral" />
         </Tooltip>

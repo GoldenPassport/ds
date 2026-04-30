@@ -7,21 +7,21 @@ import type { MenuItem } from './Menu';
 
 export interface ListCardProps {
   // ── Optional header ──────────────────────────────────────
-  title?:         string;
-  subtitle?:      string;
+  title?: string;
+  subtitle?: string;
   primaryAction?: SectionHeaderAction;
-  menuItems?:     MenuItem[];
+  menuItems?: MenuItem[];
 
   /**
    * Rendered below the sm breakpoint (mobile).
    * Pass a <StackedList /> without `bordered`.
    */
-  list?:    React.ReactNode;
+  list?: React.ReactNode;
   /**
    * Rendered at sm+ breakpoint (desktop).
    * Pass a <DataTable flat /> to skip the DataTable's own card wrapper.
    */
-  table?:   React.ReactNode;
+  table?: React.ReactNode;
 
   className?: string;
 }
@@ -40,12 +40,13 @@ export function ListCard({
   const hasHeader = !!(title || subtitle || primaryAction || (menuItems && menuItems.length > 0));
 
   return (
-    <div className={[
-      'rounded-2xl border border-ink-200 dark:border-ink-700',
-      'bg-white dark:bg-ink-800 shadow-sm overflow-hidden',
-      className,
-    ].join(' ')}>
-
+    <div
+      className={[
+        'rounded-2xl border border-ink-200 dark:border-ink-700',
+        'bg-white dark:bg-ink-800 shadow-sm overflow-hidden',
+        className,
+      ].join(' ')}
+    >
       {/* Header */}
       {hasHeader && (
         <div className="px-6 py-4 border-b border-ink-100 dark:border-ink-700">
@@ -59,18 +60,10 @@ export function ListCard({
       )}
 
       {/* Mobile: list slot */}
-      {list && (
-        <div className="sm:hidden px-6">
-          {list}
-        </div>
-      )}
+      {list && <div className="sm:hidden px-6">{list}</div>}
 
       {/* Desktop: table slot */}
-      {table && (
-        <div className="hidden sm:block">
-          {table}
-        </div>
-      )}
+      {table && <div className="hidden sm:block">{table}</div>}
     </div>
   );
 }

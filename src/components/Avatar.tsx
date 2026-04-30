@@ -1,13 +1,13 @@
 export interface AvatarProps {
-  name:      string;
-  size?:     number;
+  name: string;
+  size?: number;
   className?: string;
 }
 
 export function Avatar({ name, size = 32, className = '' }: AvatarProps) {
   const initials = name
     .split(' ')
-    .map(w => w[0])
+    .map((w) => w[0])
     .join('')
     .slice(0, 2)
     .toUpperCase();

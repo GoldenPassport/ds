@@ -8,10 +8,10 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
-    variant:   { control: 'select', options: ['dark', 'primary', 'light'] },
-    title:     { control: 'text' },
-    message:   { control: 'text' },
-    action:    { control: false },
+    variant: { control: 'select', options: ['dark', 'primary', 'light'] },
+    title: { control: 'text' },
+    message: { control: 'text' },
+    action: { control: false },
     onDismiss: { control: false },
   },
 } satisfies Meta<typeof Banner>;
@@ -22,20 +22,18 @@ type Story = StoryObj<typeof meta>;
 // ── Shared fixtures ───────────────────────────────────────
 
 const registerAction = { label: 'Register now', href: '#' };
-const learnAction    = { label: 'Learn more',   href: '#' };
-const updateAction   = { label: 'View changes', href: '#' };
+const learnAction = { label: 'Learn more', href: '#' };
+const updateAction = { label: 'View changes', href: '#' };
 
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
   args: {
     variant: 'dark',
-    title:   'GeneriCon 2025',
-    message: 'Join us in Denver from June 7–9 to see what\'s coming next.',
+    title: 'GeneriCon 2025',
+    message: "Join us in Denver from June 7–9 to see what's coming next.",
   },
-  render: (args) => (
-    <Banner {...args} action={registerAction} />
-  ),
+  render: (args) => <Banner {...args} action={registerAction} />,
 };
 
 // ── Dark (default) ────────────────────────────────────────

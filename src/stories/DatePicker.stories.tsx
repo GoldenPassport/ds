@@ -10,11 +10,11 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
-    label:       { control: 'text' },
+    label: { control: 'text' },
     placeholder: { control: 'text' },
-    hint:        { control: 'text' },
-    error:       { control: 'text' },
-    disabled:    { control: 'boolean' },
+    hint: { control: 'text' },
+    error: { control: 'text' },
+    disabled: { control: 'boolean' },
   },
 } satisfies Meta<typeof DatePicker>;
 
@@ -26,11 +26,11 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
   name: 'DatePicker',
   args: {
-    label:       'Date',
+    label: 'Date',
     placeholder: 'Select a date',
-    hint:        '',
-    error:       '',
-    disabled:    false,
+    hint: '',
+    error: '',
+    disabled: false,
   },
   render: (args) => {
     const [val, setVal] = useState<Date | null>(null);
@@ -39,7 +39,8 @@ export const Playground: Story = {
         <DatePicker {...args} value={val} onChange={setVal} />
         {val && (
           <p className="text-xs font-body text-ink-500 dark:text-ink-300">
-            Selected: <strong className="text-ink-900 dark:text-ink-50">{val.toDateString()}</strong>
+            Selected:{' '}
+            <strong className="text-ink-900 dark:text-ink-50">{val.toDateString()}</strong>
           </p>
         )}
       </div>
@@ -66,11 +67,7 @@ export const DateWithError: Story = {
   args: { label: '', placeholder: '' },
   render: () => (
     <div className="max-w-xs">
-      <DatePicker
-        label="Date of birth"
-        placeholder="Select date"
-        error="Date is required"
-      />
+      <DatePicker label="Date of birth" placeholder="Select date" error="Date is required" />
     </div>
   ),
 };
@@ -80,11 +77,11 @@ export const DateWithError: Story = {
 export const Time_: Story = {
   name: 'TimePicker',
   args: {
-    label:       'Time',
+    label: 'Time',
     placeholder: 'Select a time',
-    hint:        '',
-    error:       '',
-    disabled:    false,
+    hint: '',
+    error: '',
+    disabled: false,
   },
   render: (args) => {
     const [val, setVal] = useState<string | null>(null);
@@ -114,11 +111,11 @@ export const Time_: Story = {
 export const DateTime_: Story = {
   name: 'DateTimePicker',
   args: {
-    label:       'Appointment',
+    label: 'Appointment',
     placeholder: 'Select date & time',
-    hint:        '',
-    error:       '',
-    disabled:    false,
+    hint: '',
+    error: '',
+    disabled: false,
   },
   render: (args) => {
     const [val, setVal] = useState<{ date: Date; hour: number; minute: number } | null>(null);
@@ -135,8 +132,10 @@ export const DateTime_: Story = {
         />
         {val && (
           <p className="text-xs font-body text-ink-500 dark:text-ink-300">
-            Selected: <strong className="text-ink-900 dark:text-ink-50">
-              {val.date.toDateString()} {String(val.hour).padStart(2,'0')}:{String(val.minute).padStart(2,'0')}
+            Selected:{' '}
+            <strong className="text-ink-900 dark:text-ink-50">
+              {val.date.toDateString()} {String(val.hour).padStart(2, '0')}:
+              {String(val.minute).padStart(2, '0')}
             </strong>
           </p>
         )}
@@ -152,12 +151,12 @@ export const AllVariants: Story = {
   args: { label: '', placeholder: '' },
   render: () => (
     <div className="flex flex-col gap-6 max-w-xs">
-      <DatePicker     label="Date"        placeholder="Select a date" />
-      <TimePicker       label="Time"        placeholder="Select a time" />
-      <DateTimePicker   label="Date & Time" placeholder="Select date & time" />
-      <DateRangePicker  label="Date range" />
-      <DatePicker       label="With hint"   placeholder="Select date" hint="Used for scheduling" />
-      <DatePicker       label="With error"  placeholder="Select date" error="Required field" />
+      <DatePicker label="Date" placeholder="Select a date" />
+      <TimePicker label="Time" placeholder="Select a time" />
+      <DateTimePicker label="Date & Time" placeholder="Select date & time" />
+      <DateRangePicker label="Date range" />
+      <DatePicker label="With hint" placeholder="Select date" hint="Used for scheduling" />
+      <DatePicker label="With error" placeholder="Select date" error="Required field" />
     </div>
   ),
 };
@@ -182,9 +181,23 @@ export const RangePicker: Story = {
         />
         {(range.start || range.end) && (
           <p className="text-xs font-body text-ink-500 dark:text-ink-400">
-            {range.start && <>From: <strong className="text-ink-900 dark:text-ink-50">{range.start.toDateString()}</strong></>}
+            {range.start && (
+              <>
+                From:{' '}
+                <strong className="text-ink-900 dark:text-ink-50">
+                  {range.start.toDateString()}
+                </strong>
+              </>
+            )}
             {range.start && range.end && <span className="mx-1">→</span>}
-            {range.end && <>To: <strong className="text-ink-900 dark:text-ink-50">{range.end.toDateString()}</strong></>}
+            {range.end && (
+              <>
+                To:{' '}
+                <strong className="text-ink-900 dark:text-ink-50">
+                  {range.end.toDateString()}
+                </strong>
+              </>
+            )}
           </p>
         )}
       </div>
@@ -322,7 +335,10 @@ export const RangePickerInteraction: Story = {
   name: 'DateRangePicker — interactions',
   args: { label: '', placeholder: '' },
   render: () => {
-    const [range, setRange] = useState<{ start: Date | null; end: Date | null }>({ start: null, end: null });
+    const [range, setRange] = useState<{ start: Date | null; end: Date | null }>({
+      start: null,
+      end: null,
+    });
     return (
       <div className="max-w-sm flex flex-col gap-3">
         <DateRangePicker
@@ -349,7 +365,7 @@ export const RangePickerInteraction: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click range trigger → calendar opens showing "Select start date"', async () => {
       await user.click(canvas.getAllByRole('button')[0]);
@@ -361,9 +377,12 @@ export const RangePickerInteraction: Story = {
 
     await step('click a day → start date is set, moves to "Select end date" phase', async () => {
       // Pick the first enabled day button in the mini calendar
-      const dayBtns = canvas.getAllByRole('button').filter(
-        (b: HTMLElement) => /^\d{1,2}$/.test(b.textContent?.trim() ?? '') && !b.hasAttribute('disabled'),
-      );
+      const dayBtns = canvas
+        .getAllByRole('button')
+        .filter(
+          (b: HTMLElement) =>
+            /^\d{1,2}$/.test(b.textContent?.trim() ?? '') && !b.hasAttribute('disabled'),
+        );
       await user.click(dayBtns[0]);
       await waitFor(() => {
         expect(canvas.getByTestId('range-start')).toBeInTheDocument();
@@ -393,7 +412,8 @@ export const DateTimePickerInteraction: Story = {
         />
         {val && (
           <p data-testid="datetime-value" className="text-xs font-body text-ink-500">
-            {val.date.toDateString()} {String(val.hour).padStart(2,'0')}:{String(val.minute).padStart(2,'0')}
+            {val.date.toDateString()} {String(val.hour).padStart(2, '0')}:
+            {String(val.minute).padStart(2, '0')}
           </p>
         )}
       </div>
@@ -401,7 +421,7 @@ export const DateTimePickerInteraction: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click trigger → panel opens with Date/Time tabs', async () => {
       await user.click(canvas.getAllByRole('button')[0]);
@@ -430,11 +450,10 @@ export const DateTimePickerInteraction: Story = {
 
     await step('click a day → auto-switches to Time tab', async () => {
       const allBtns = canvas.getAllByRole('button');
-      const dayBtn  = allBtns.find(
-        (b: HTMLElement) =>
-          /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),/.test(
-            b.getAttribute('aria-label') ?? '',
-          ),
+      const dayBtn = allBtns.find((b: HTMLElement) =>
+        /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),/.test(
+          b.getAttribute('aria-label') ?? '',
+        ),
       ) as HTMLElement;
       await user.click(dayBtn);
       await waitFor(() => {

@@ -3,24 +3,24 @@ import { ChevronRight, Home } from 'lucide-react';
 // ── Types ─────────────────────────────────────────────────
 
 export interface BreadcrumbItem {
-  label:  string;
-  href?:  string;
+  label: string;
+  href?: string;
 }
 
 export type BreadcrumbSeparator = 'slash' | 'chevron';
 
 export interface BreadcrumbsProps {
-  items:         BreadcrumbItem[];
+  items: BreadcrumbItem[];
   /** Separator style. Default: 'chevron' */
-  separator?:    BreadcrumbSeparator;
+  separator?: BreadcrumbSeparator;
   /** Replace the first item's label with a home icon */
-  homeIcon?:     boolean;
+  homeIcon?: boolean;
   /** Wrap in a full-width contained bar */
-  contained?:    boolean;
+  contained?: boolean;
   /** Accessible label for the <nav> landmark. Default: 'Breadcrumb'.
    *  Must be unique when multiple breadcrumb navs appear on the same page. */
-  ariaLabel?:    string;
-  className?:    string;
+  ariaLabel?: string;
+  className?: string;
 }
 
 // ── Separator ─────────────────────────────────────────────
@@ -46,7 +46,7 @@ function Separator({ type }: { type: BreadcrumbSeparator }) {
 export function Breadcrumbs({
   items,
   separator = 'chevron',
-  homeIcon  = false,
+  homeIcon = false,
   contained = false,
   ariaLabel = 'Breadcrumb',
   className = '',
@@ -58,14 +58,15 @@ export function Breadcrumbs({
           const isLast = i === items.length - 1;
           const isFirst = i === 0;
 
-          const labelNode = isFirst && homeIcon ? (
-            <>
-              <Home className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span className="sr-only">{item.label}</span>
-            </>
-          ) : (
-            item.label
-          );
+          const labelNode =
+            isFirst && homeIcon ? (
+              <>
+                <Home className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <span className="sr-only">{item.label}</span>
+              </>
+            ) : (
+              item.label
+            );
 
           return (
             <li key={i} className="flex items-center">
@@ -75,9 +76,7 @@ export function Breadcrumbs({
                 <span
                   className={[
                     'text-sm font-body font-medium',
-                    isLast
-                      ? 'text-ink-900 dark:text-ink-100'
-                      : 'text-ink-600 dark:text-ink-300',
+                    isLast ? 'text-ink-900 dark:text-ink-100' : 'text-ink-600 dark:text-ink-300',
                   ].join(' ')}
                   {...(isLast ? { 'aria-current': 'page' as const } : {})}
                 >
@@ -100,13 +99,13 @@ export function Breadcrumbs({
 
   if (contained) {
     return (
-      <div className={[
-        'border-b border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800',
-        className,
-      ].join(' ')}>
-        <div className="px-6 py-3">
-          {nav}
-        </div>
+      <div
+        className={[
+          'border-b border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800',
+          className,
+        ].join(' ')}
+      >
+        <div className="px-6 py-3">{nav}</div>
       </div>
     );
   }

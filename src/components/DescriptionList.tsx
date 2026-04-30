@@ -4,14 +4,14 @@ import { Hyperlink } from './Hyperlink';
 // ── Types ─────────────────────────────────────────────────
 
 export interface DescriptionListAction {
-  label:    string;
+  label: string;
   onClick?: () => void;
-  href?:    string;
+  href?: string;
 }
 
 export interface DescriptionListItem {
-  label:   string;
-  value:   React.ReactNode;
+  label: string;
+  value: React.ReactNode;
   /** Optional inline action — "Edit", "Update", etc. */
   action?: DescriptionListAction;
 }
@@ -19,20 +19,20 @@ export interface DescriptionListItem {
 export type DescriptionListLayout = 'stacked' | 'side-by-side';
 
 export interface DescriptionListProps {
-  items:      DescriptionListItem[];
+  items: DescriptionListItem[];
   /**
    * stacked     — label above value (default)
    * side-by-side — label left, value right in a 3-column grid
    */
-  layout?:    DescriptionListLayout;
+  layout?: DescriptionListLayout;
   /** Alternating row backgrounds */
-  striped?:   boolean;
+  striped?: boolean;
   /** Wraps in a bordered rounded card with overflow-hidden */
-  bordered?:  boolean;
+  bordered?: boolean;
   /** Optional title rendered above the list — only shown when bordered=true */
-  title?:     string;
+  title?: string;
   /** Optional subtitle rendered below the title */
-  subtitle?:  string;
+  subtitle?: string;
   className?: string;
 }
 
@@ -59,19 +59,24 @@ function ActionLink({ action }: { action: DescriptionListAction }) {
 
 // ── Row — stacked layout ──────────────────────────────────
 
-function StackedRow({ item, striped, index }: { item: DescriptionListItem; striped: boolean; index: number }) {
+function StackedRow({
+  item,
+  striped,
+  index,
+}: {
+  item: DescriptionListItem;
+  striped: boolean;
+  index: number;
+}) {
   return (
-    <div className={[
-      'px-6 py-4',
-      striped && index % 2 === 0 ? 'bg-ink-50 dark:bg-ink-900/40' : '',
-    ].filter(Boolean).join(' ')}>
-      <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-300">
-        {item.label}
-      </dt>
+    <div
+      className={['px-6 py-4', striped && index % 2 === 0 ? 'bg-ink-50 dark:bg-ink-900/40' : '']
+        .filter(Boolean)
+        .join(' ')}
+    >
+      <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-300">{item.label}</dt>
       <dd className="mt-1 flex items-start justify-between gap-4">
-        <span className="text-sm font-body text-ink-900 dark:text-ink-50">
-          {item.value}
-        </span>
+        <span className="text-sm font-body text-ink-900 dark:text-ink-50">{item.value}</span>
         {item.action && <ActionLink action={item.action} />}
       </dd>
     </div>
@@ -80,12 +85,24 @@ function StackedRow({ item, striped, index }: { item: DescriptionListItem; strip
 
 // ── Row — side-by-side layout ─────────────────────────────
 
-function SideBySideRow({ item, striped, index }: { item: DescriptionListItem; striped: boolean; index: number }) {
+function SideBySideRow({
+  item,
+  striped,
+  index,
+}: {
+  item: DescriptionListItem;
+  striped: boolean;
+  index: number;
+}) {
   return (
-    <div className={[
-      'grid grid-cols-3 gap-4 px-6 py-4',
-      striped && index % 2 === 0 ? 'bg-ink-50 dark:bg-ink-900/40' : '',
-    ].filter(Boolean).join(' ')}>
+    <div
+      className={[
+        'grid grid-cols-3 gap-4 px-6 py-4',
+        striped && index % 2 === 0 ? 'bg-ink-50 dark:bg-ink-900/40' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       <dt className="text-sm font-medium font-body text-ink-500 dark:text-ink-300 col-span-1 self-start pt-px">
         {item.label}
       </dt>
@@ -101,35 +118,38 @@ function SideBySideRow({ item, striped, index }: { item: DescriptionListItem; st
 
 export function DescriptionList({
   items,
-  layout   = 'side-by-side',
-  striped  = false,
+  layout = 'side-by-side',
+  striped = false,
   bordered = false,
   title,
   subtitle,
   className = '',
 }: DescriptionListProps) {
   const list = (
-    <dl className={[
-      'divide-y divide-ink-100 dark:divide-ink-700',
-      !bordered ? className : '',
-    ].filter(Boolean).join(' ')}>
+    <dl
+      className={['divide-y divide-ink-100 dark:divide-ink-700', !bordered ? className : '']
+        .filter(Boolean)
+        .join(' ')}
+    >
       {items.map((item, i) =>
         layout === 'side-by-side' ? (
           <SideBySideRow key={i} item={item} striped={striped} index={i} />
         ) : (
           <StackedRow key={i} item={item} striped={striped} index={i} />
-        )
+        ),
       )}
     </dl>
   );
 
   if (bordered) {
     return (
-      <div className={[
-        'rounded-2xl border border-ink-200 dark:border-ink-700',
-        'bg-white dark:bg-ink-800 shadow-sm overflow-hidden',
-        className,
-      ].join(' ')}>
+      <div
+        className={[
+          'rounded-2xl border border-ink-200 dark:border-ink-700',
+          'bg-white dark:bg-ink-800 shadow-sm overflow-hidden',
+          className,
+        ].join(' ')}
+      >
         {(title || subtitle) && (
           <div className="px-6 py-5 border-b border-ink-200 dark:border-ink-700">
             {title && (
@@ -138,9 +158,7 @@ export function DescriptionList({
               </h3>
             )}
             {subtitle && (
-              <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
-                {subtitle}
-              </p>
+              <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">{subtitle}</p>
             )}
           </div>
         )}

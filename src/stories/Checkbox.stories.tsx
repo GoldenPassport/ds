@@ -9,17 +9,20 @@ const meta = {
   component: Checkbox,
   tags: ['autodocs'],
   argTypes: {
-    checked:       { control: 'boolean', description: 'Checked state (controlled)' },
-    indeterminate: { control: 'boolean', description: 'Indeterminate state — shown as a dash, overrides checked visually' },
-    disabled:      { control: 'boolean', description: 'Disables interaction' },
-    label:         { control: 'text',    description: 'Label text next to the checkbox' },
-    description:   { control: 'text',    description: 'Secondary helper text below the label' },
-    onChange:      { control: false,     description: 'Called with the new boolean value on change' },
-    className:     { control: 'text' },
+    checked: { control: 'boolean', description: 'Checked state (controlled)' },
+    indeterminate: {
+      control: 'boolean',
+      description: 'Indeterminate state — shown as a dash, overrides checked visually',
+    },
+    disabled: { control: 'boolean', description: 'Disables interaction' },
+    label: { control: 'text', description: 'Label text next to the checkbox' },
+    description: { control: 'text', description: 'Secondary helper text below the label' },
+    onChange: { control: false, description: 'Called with the new boolean value on change' },
+    className: { control: 'text' },
   },
   // Default args satisfy required props; individual stories override as needed.
   args: {
-    checked:  false,
+    checked: false,
     onChange: () => {},
   },
   // Meta-level render: useArgs keeps checked in sync with the controls panel
@@ -40,7 +43,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
-  args: { checked: false, label: 'Enable feature', description: 'This will apply to all workflows.', disabled: false },
+  args: {
+    checked: false,
+    label: 'Enable feature',
+    description: 'This will apply to all workflows.',
+    disabled: false,
+  },
 };
 
 export const Unchecked: Story = {
@@ -53,23 +61,28 @@ export const Checked: Story = {
 
 export const WithDescription: Story = {
   args: {
-    checked:     true,
-    label:       'AI Suggestions',
+    checked: true,
+    label: 'AI Suggestions',
     description: 'Show prompt suggestions while building workflows.',
   },
 };
 
 export const Indeterminate: Story = {
   args: {
-    checked:       false,
+    checked: false,
     indeterminate: true,
-    label:         'Select all workflows',
-    description:   '3 of 8 selected',
+    label: 'Select all workflows',
+    description: '3 of 8 selected',
   },
 };
 
 export const Disabled: Story = {
-  args: { checked: true, label: 'Enforce 2FA', description: 'Managed by your org admin.', disabled: true },
+  args: {
+    checked: true,
+    label: 'Enforce 2FA',
+    description: 'Managed by your org admin.',
+    disabled: true,
+  },
 };
 
 export const Standalone: Story = {
@@ -84,17 +97,31 @@ export const CheckboxGroup: Story = {
       completions: false,
       digest: true,
     });
-    const toggle = (key: keyof typeof vals) =>
-      setVals(v => ({ ...v, [key]: !v[key] }));
+    const toggle = (key: keyof typeof vals) => setVals((v) => ({ ...v, [key]: !v[key] }));
 
     return (
       <div className="flex flex-col gap-4">
         <span className="text-[13px] font-semibold font-body text-ink-900 dark:text-ink-50">
           Notify me about
         </span>
-        <Checkbox checked={vals.failures}    onChange={() => toggle('failures')}    label="Workflow failures"   description="Get notified when a run fails" />
-        <Checkbox checked={vals.completions} onChange={() => toggle('completions')} label="Run completions"     description="Notify on every successful run" />
-        <Checkbox checked={vals.digest}      onChange={() => toggle('digest')}      label="Weekly digest"       description="Summary of activity every Monday" />
+        <Checkbox
+          checked={vals.failures}
+          onChange={() => toggle('failures')}
+          label="Workflow failures"
+          description="Get notified when a run fails"
+        />
+        <Checkbox
+          checked={vals.completions}
+          onChange={() => toggle('completions')}
+          label="Run completions"
+          description="Notify on every successful run"
+        />
+        <Checkbox
+          checked={vals.digest}
+          onChange={() => toggle('digest')}
+          label="Weekly digest"
+          description="Summary of activity every Monday"
+        />
       </div>
     );
   },
@@ -103,15 +130,20 @@ export const CheckboxGroup: Story = {
 export const SelectAllPattern: Story = {
   args: { checked: false, onChange: () => {} },
   render: () => {
-    const items = ['Invoice Approval', 'Employee Onboarding', 'PTO Request Handler', 'Vendor Onboarding'];
+    const items = [
+      'Invoice Approval',
+      'Employee Onboarding',
+      'PTO Request Handler',
+      'Vendor Onboarding',
+    ];
     const [selected, setSelected] = React.useState<string[]>([items[0]]);
 
-    const allChecked   = selected.length === items.length;
-    const someChecked  = selected.length > 0 && !allChecked;
+    const allChecked = selected.length === items.length;
+    const someChecked = selected.length > 0 && !allChecked;
 
     const toggleAll = () => setSelected(allChecked ? [] : [...items]);
-    const toggle    = (item: string) =>
-      setSelected(s => s.includes(item) ? s.filter(x => x !== item) : [...s, item]);
+    const toggle = (item: string) =>
+      setSelected((s) => (s.includes(item) ? s.filter((x) => x !== item) : [...s, item]));
 
     return (
       <div className="flex flex-col gap-3">
@@ -123,7 +155,7 @@ export const SelectAllPattern: Story = {
           description={`${selected.length} of ${items.length} selected`}
         />
         <div className="pl-6 flex flex-col gap-3 border-l-2 border-ink-100 dark:border-ink-700">
-          {items.map(item => (
+          {items.map((item) => (
             <Checkbox
               key={item}
               checked={selected.includes(item)}
@@ -152,7 +184,10 @@ export const Interactions: Story = {
       <div className="flex flex-col gap-4 max-w-xs">
         <Checkbox
           checked={checked}
-          onChange={v => { setChecked(v); setClickCount(c => c + 1); }}
+          onChange={(v) => {
+            setChecked(v);
+            setClickCount((c) => c + 1);
+          }}
           label="Toggle me"
           description="Click to toggle checked state"
         />
@@ -161,7 +196,7 @@ export const Interactions: Story = {
         </p>
         <Checkbox
           checked={false}
-          onChange={() => setClickCount(c => c + 1)}
+          onChange={() => setClickCount((c) => c + 1)}
           disabled
           label="Disabled"
           description="Should not fire onChange"
@@ -173,7 +208,10 @@ export const Interactions: Story = {
           label="Indeterminate → checked"
           description="Starts indeterminate; click sets checked"
         />
-        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="indeterminate-state">
+        <p
+          className="text-xs font-body text-ink-500 dark:text-ink-300"
+          data-testid="indeterminate-state"
+        >
           indeterminate={String(indeterminate)}
         </p>
       </div>
@@ -181,7 +219,7 @@ export const Interactions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click unchecked checkbox → becomes checked, onChange fires', async () => {
       await user.click(canvas.getByRole('checkbox', { name: /toggle me/i }));

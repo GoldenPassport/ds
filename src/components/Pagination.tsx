@@ -5,18 +5,18 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface PaginationProps {
   /** Current page, 1-indexed */
-  page:              number;
+  page: number;
   /** Number of rows per page */
-  pageSize:          number;
+  pageSize: number;
   /** Total number of items across all pages */
-  total:             number;
+  total: number;
   /** Called when page or pageSize changes */
-  onChange:          (page: number, pageSize: number) => void;
+  onChange: (page: number, pageSize: number) => void;
   /** Available page-size options. Set to [] to hide the selector. */
-  pageSizeOptions?:  number[];
+  pageSizeOptions?: number[];
   /** Show "Showing X–Y of Z" summary label */
-  showSummary?:      boolean;
-  className?:        string;
+  showSummary?: boolean;
+  className?: string;
 }
 
 // ── Helpers ───────────────────────────────────────────────
@@ -28,7 +28,7 @@ function pageNumbers(page: number, totalPages: number): (number | '…')[] {
   if (page > 3) pages.push('…');
 
   const start = Math.max(2, page - 1);
-  const end   = Math.min(totalPages - 1, page + 1);
+  const end = Math.min(totalPages - 1, page + 1);
   for (let i = start; i <= end; i++) pages.push(i);
 
   if (page < totalPages - 2) pages.push('…');
@@ -46,10 +46,10 @@ function PageBtn({
   onClick,
   ariaLabel,
 }: {
-  children:  React.ReactNode;
-  active?:   boolean;
+  children: React.ReactNode;
+  active?: boolean;
   disabled?: boolean;
-  onClick?:  () => void;
+  onClick?: () => void;
   ariaLabel?: string;
 }) {
   return (
@@ -80,12 +80,12 @@ export function Pagination({
   total,
   onChange,
   pageSizeOptions = [10, 25, 50, 100],
-  showSummary     = true,
-  className       = '',
+  showSummary = true,
+  className = '',
 }: PaginationProps) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const from       = Math.min((page - 1) * pageSize + 1, total);
-  const to         = Math.min(page * pageSize, total);
+  const from = Math.min((page - 1) * pageSize + 1, total);
+  const to = Math.min(page * pageSize, total);
 
   const goTo = (p: number) => {
     if (p < 1 || p > totalPages || p === page) return;
@@ -102,7 +102,6 @@ export function Pagination({
 
   return (
     <div className={`flex flex-wrap items-center justify-between gap-3 ${className}`}>
-
       {/* Left: page-size picker + summary */}
       <div className="flex items-center gap-3">
         {pageSizeOptions.length > 0 && (
@@ -112,7 +111,7 @@ export function Pagination({
             </span>
             <select
               value={pageSize}
-              onChange={e => changePageSize(Number(e.target.value))}
+              onChange={(e) => changePageSize(Number(e.target.value))}
               aria-label="Rows per page"
               className={[
                 'text-[13px] font-body font-medium rounded-xl px-2.5 py-1.5',
@@ -122,8 +121,10 @@ export function Pagination({
                 'transition-all duration-150 cursor-pointer',
               ].join(' ')}
             >
-              {pageSizeOptions.map(o => (
-                <option key={o} value={o}>{o}</option>
+              {pageSizeOptions.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
               ))}
             </select>
           </div>
@@ -138,7 +139,11 @@ export function Pagination({
 
       {/* Right: prev / page numbers / next */}
       <nav aria-label="Pagination" className="flex items-center gap-1">
-        <PageBtn onClick={() => goTo(page - 1)} disabled={page <= 1} ariaLabel="Go to previous page">
+        <PageBtn
+          onClick={() => goTo(page - 1)}
+          disabled={page <= 1}
+          ariaLabel="Go to previous page"
+        >
           <ChevronLeft className="w-4 h-4" />
         </PageBtn>
 
@@ -152,18 +157,17 @@ export function Pagination({
               …
             </span>
           ) : (
-            <PageBtn
-              key={p}
-              active={p === page}
-              onClick={() => goTo(p)}
-              ariaLabel={`Page ${p}`}
-            >
+            <PageBtn key={p} active={p === page} onClick={() => goTo(p)} ariaLabel={`Page ${p}`}>
               {p}
             </PageBtn>
-          )
+          ),
         )}
 
-        <PageBtn onClick={() => goTo(page + 1)} disabled={page >= totalPages} ariaLabel="Go to next page">
+        <PageBtn
+          onClick={() => goTo(page + 1)}
+          disabled={page >= totalPages}
+          ariaLabel="Go to next page"
+        >
           <ChevronRight className="w-4 h-4" />
         </PageBtn>
       </nav>

@@ -14,12 +14,12 @@ import {
 // Gives Storybook individual controls for every meaningful prop.
 
 interface NotificationDemoProps {
-  variant:     NotificationVariant;
-  title:       string;
-  body:        string;
-  position:    NotificationPosition;
+  variant: NotificationVariant;
+  title: string;
+  body: string;
+  position: NotificationPosition;
   /** Auto-dismiss delay in ms. 0 = persistent. */
-  duration:    number;
+  duration: number;
   showActions: boolean;
   showDismiss: boolean;
 }
@@ -52,7 +52,7 @@ function NotificationDemo({
           ]
         : undefined,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -82,7 +82,10 @@ function NotificationDemo({
 
       <NotificationStack
         notifications={notifications}
-        onDismiss={id => { if (showDismiss) dismiss(id); else dismiss(id); }}
+        onDismiss={(id) => {
+          if (showDismiss) dismiss(id);
+          else dismiss(id);
+        }}
         position={position}
         portal={false}
       />
@@ -93,27 +96,42 @@ function NotificationDemo({
 // ── Meta ──────────────────────────────────────────────────
 
 const meta = {
-  title:     'Overlays/Notifications',
+  title: 'Overlays/Notifications',
   component: NotificationDemo,
-  tags:      ['autodocs'],
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
   args: {
-    variant:     'success',
-    title:       'Changes saved',
-    body:        'Your workflow was updated successfully.',
-    position:    'top-right',
-    duration:    5000,
+    variant: 'success',
+    title: 'Changes saved',
+    body: 'Your workflow was updated successfully.',
+    position: 'top-right',
+    duration: 5000,
     showActions: false,
     showDismiss: true,
   },
   argTypes: {
-    variant:     { control: 'select',  options: ['default', 'info', 'success', 'warning', 'error'],                                          description: 'Semantic colour and default icon' },
-    title:       { control: 'text',                                                                                                           description: 'Bold heading line' },
-    body:        { control: 'text',                                                                                                           description: 'Supporting body text' },
-    position:    { control: 'select',  options: ['top-left','top-center','top-right','bottom-left','bottom-center','bottom-right'],           description: 'Corner / edge the stack anchors to' },
-    duration:    { control: 'number',                                                                                                         description: 'Auto-dismiss after ms. Set 0 for persistent.' },
-    showActions: { control: 'boolean',                                                                                                        description: 'Append Confirm / Dismiss action buttons' },
-    showDismiss: { control: 'boolean',                                                                                                        description: 'Show the × dismiss button' },
+    variant: {
+      control: 'select',
+      options: ['default', 'info', 'success', 'warning', 'error'],
+      description: 'Semantic colour and default icon',
+    },
+    title: { control: 'text', description: 'Bold heading line' },
+    body: { control: 'text', description: 'Supporting body text' },
+    position: {
+      control: 'select',
+      options: [
+        'top-left',
+        'top-center',
+        'top-right',
+        'bottom-left',
+        'bottom-center',
+        'bottom-right',
+      ],
+      description: 'Corner / edge the stack anchors to',
+    },
+    duration: { control: 'number', description: 'Auto-dismiss after ms. Set 0 for persistent.' },
+    showActions: { control: 'boolean', description: 'Append Confirm / Dismiss action buttons' },
+    showDismiss: { control: 'boolean', description: 'Show the × dismiss button' },
   },
 } satisfies Meta<typeof NotificationDemo>;
 
@@ -132,11 +150,51 @@ export const AllVariants: Story = {
   name: 'All variants',
   render: () => (
     <div className="flex flex-col gap-3">
-      <NotificationCard onDismiss={noop} item={{ id: '1', variant: 'default', title: 'Default',  body: 'A general-purpose notification with no semantic colour.' }} />
-      <NotificationCard onDismiss={noop} item={{ id: '2', variant: 'info',    title: 'Info',     body: 'Your account is pending email verification.' }} />
-      <NotificationCard onDismiss={noop} item={{ id: '3', variant: 'success', title: 'Success',  body: 'Payment of $120.00 was processed successfully.' }} />
-      <NotificationCard onDismiss={noop} item={{ id: '4', variant: 'warning', title: 'Warning',  body: 'Your subscription expires in 3 days.' }} />
-      <NotificationCard onDismiss={noop} item={{ id: '5', variant: 'error',   title: 'Error',    body: 'Failed to send the report. Please try again.' }} />
+      <NotificationCard
+        onDismiss={noop}
+        item={{
+          id: '1',
+          variant: 'default',
+          title: 'Default',
+          body: 'A general-purpose notification with no semantic colour.',
+        }}
+      />
+      <NotificationCard
+        onDismiss={noop}
+        item={{
+          id: '2',
+          variant: 'info',
+          title: 'Info',
+          body: 'Your account is pending email verification.',
+        }}
+      />
+      <NotificationCard
+        onDismiss={noop}
+        item={{
+          id: '3',
+          variant: 'success',
+          title: 'Success',
+          body: 'Payment of $120.00 was processed successfully.',
+        }}
+      />
+      <NotificationCard
+        onDismiss={noop}
+        item={{
+          id: '4',
+          variant: 'warning',
+          title: 'Warning',
+          body: 'Your subscription expires in 3 days.',
+        }}
+      />
+      <NotificationCard
+        onDismiss={noop}
+        item={{
+          id: '5',
+          variant: 'error',
+          title: 'Error',
+          body: 'Failed to send the report. Please try again.',
+        }}
+      />
     </div>
   ),
 };
@@ -147,8 +205,14 @@ export const TitleOnly: Story = {
   name: 'Title only',
   render: () => (
     <div className="flex flex-col gap-3">
-      <NotificationCard onDismiss={noop} item={{ id: '1', variant: 'success', title: 'Workflow published' }} />
-      <NotificationCard onDismiss={noop} item={{ id: '2', variant: 'error',   title: 'Deployment failed'  }} />
+      <NotificationCard
+        onDismiss={noop}
+        item={{ id: '1', variant: 'success', title: 'Workflow published' }}
+      />
+      <NotificationCard
+        onDismiss={noop}
+        item={{ id: '2', variant: 'error', title: 'Deployment failed' }}
+      />
     </div>
   ),
 };
@@ -157,8 +221,14 @@ export const BodyOnly: Story = {
   name: 'Body only — no title',
   render: () => (
     <div className="flex flex-col gap-3">
-      <NotificationCard onDismiss={noop} item={{ id: '1', variant: 'info',    body: 'A new version of the app is available.' }} />
-      <NotificationCard onDismiss={noop} item={{ id: '2', variant: 'warning', body: 'You are running low on storage space.'  }} />
+      <NotificationCard
+        onDismiss={noop}
+        item={{ id: '1', variant: 'info', body: 'A new version of the app is available.' }}
+      />
+      <NotificationCard
+        onDismiss={noop}
+        item={{ id: '2', variant: 'warning', body: 'You are running low on storage space.' }}
+      />
     </div>
   ),
 };
@@ -172,19 +242,19 @@ export const WithAvatar: Story = {
       <NotificationCard
         onDismiss={noop}
         item={{
-          id:     '1',
+          id: '1',
           avatar: { name: 'Sarah Chen' },
-          title:  'Sarah Chen commented',
-          body:   'Looks great — ready to merge when you are.',
+          title: 'Sarah Chen commented',
+          body: 'Looks great — ready to merge when you are.',
         }}
       />
       <NotificationCard
         onDismiss={noop}
         item={{
-          id:     '2',
+          id: '2',
           avatar: { src: 'https://i.pravatar.cc/64?img=47', name: 'James Okafor' },
-          title:  'James Okafor mentioned you',
-          body:   'Hey @you — can you review PR #142?',
+          title: 'James Okafor mentioned you',
+          body: 'Hey @you — can you review PR #142?',
         }}
       />
     </div>
@@ -200,25 +270,25 @@ export const WithActions: Story = {
       <NotificationCard
         onDismiss={noop}
         item={{
-          id:      '1',
+          id: '1',
           variant: 'warning',
-          title:   'Subscription expiring',
-          body:    'Your Pro plan expires in 3 days.',
+          title: 'Subscription expiring',
+          body: 'Your Pro plan expires in 3 days.',
           actions: [
-            { label: 'Renew now', onClick: () => alert('Renew')   },
-            { label: 'Dismiss',   onClick: () => alert('Dismiss') },
+            { label: 'Renew now', onClick: () => alert('Renew') },
+            { label: 'Dismiss', onClick: () => alert('Dismiss') },
           ],
         }}
       />
       <NotificationCard
         onDismiss={noop}
         item={{
-          id:      '2',
-          avatar:  { name: 'Alex Rivera' },
-          title:   'Alex Rivera invited you',
-          body:    'Join the "Product Analytics" workspace.',
+          id: '2',
+          avatar: { name: 'Alex Rivera' },
+          title: 'Alex Rivera invited you',
+          body: 'Join the "Product Analytics" workspace.',
           actions: [
-            { label: 'Accept',  onClick: () => alert('Accepted') },
+            { label: 'Accept', onClick: () => alert('Accepted') },
             { label: 'Decline', onClick: () => alert('Declined') },
           ],
         }}
@@ -236,28 +306,28 @@ export const CustomIcon: Story = {
       <NotificationCard
         onDismiss={noop}
         item={{
-          id:    '1',
-          icon:  <Bell className="w-5 h-5 text-primary-500 shrink-0" />,
+          id: '1',
+          icon: <Bell className="w-5 h-5 text-primary-500 shrink-0" />,
           title: 'Reminder',
-          body:  'Your scheduled report runs in 15 minutes.',
+          body: 'Your scheduled report runs in 15 minutes.',
         }}
       />
       <NotificationCard
         onDismiss={noop}
         item={{
-          id:    '2',
-          icon:  <Upload className="w-5 h-5 text-slate-500 shrink-0" />,
+          id: '2',
+          icon: <Upload className="w-5 h-5 text-slate-500 shrink-0" />,
           title: 'Upload complete',
-          body:  'report-q1-2026.pdf was uploaded successfully.',
+          body: 'report-q1-2026.pdf was uploaded successfully.',
         }}
       />
       <NotificationCard
         onDismiss={noop}
         item={{
-          id:    '3',
-          icon:  <Star className="w-5 h-5 text-primary-500 shrink-0" />,
+          id: '3',
+          icon: <Star className="w-5 h-5 text-primary-500 shrink-0" />,
           title: 'Milestone reached',
-          body:  'Your workflow has processed 10,000 records.',
+          body: 'Your workflow has processed 10,000 records.',
         }}
       />
     </div>
@@ -272,15 +342,20 @@ export const NoIcon: Story = {
     <div className="flex flex-col gap-3">
       <NotificationCard
         onDismiss={noop}
-        item={{ id: '1', icon: null, title: 'Scheduled maintenance', body: 'Offline from 02:00–03:00 UTC on Saturday.' }}
+        item={{
+          id: '1',
+          icon: null,
+          title: 'Scheduled maintenance',
+          body: 'Offline from 02:00–03:00 UTC on Saturday.',
+        }}
       />
       <NotificationCard
         onDismiss={noop}
         item={{
-          id:      '2',
-          icon:    null,
-          title:   'Review requested',
-          body:    'PR #207 is ready for your review.',
+          id: '2',
+          icon: null,
+          title: 'Review requested',
+          body: 'PR #207 is ready for your review.',
           actions: [{ label: 'Open PR', onClick: () => alert('Open') }],
         }}
       />
@@ -291,22 +366,30 @@ export const NoIcon: Story = {
 // ── Interactive live stack ────────────────────────────────
 
 const EXAMPLES: Array<Omit<import('../components/Notification').NotificationItem, 'id'>> = [
-  { variant: 'success', title: 'Changes saved',       body: 'Your workflow was updated and deployed.' },
-  { variant: 'error',   title: 'Deployment failed',   body: 'Build #408 encountered an error. Check the logs.' },
-  { variant: 'warning', title: 'Nearing rate limit',  body: 'You have used 90% of your monthly API quota.' },
-  { variant: 'info',    title: 'New teammate joined',  body: 'Maya Patel has joined your workspace.' },
+  { variant: 'success', title: 'Changes saved', body: 'Your workflow was updated and deployed.' },
   {
-    avatar:  { src: 'https://i.pravatar.cc/64?img=12', name: 'Jordan Lee' },
-    title:   'Jordan Lee replied',
-    body:    'Agreed — ship it.',
+    variant: 'error',
+    title: 'Deployment failed',
+    body: 'Build #408 encountered an error. Check the logs.',
+  },
+  {
+    variant: 'warning',
+    title: 'Nearing rate limit',
+    body: 'You have used 90% of your monthly API quota.',
+  },
+  { variant: 'info', title: 'New teammate joined', body: 'Maya Patel has joined your workspace.' },
+  {
+    avatar: { src: 'https://i.pravatar.cc/64?img=12', name: 'Jordan Lee' },
+    title: 'Jordan Lee replied',
+    body: 'Agreed — ship it.',
     actions: [{ label: 'View thread', onClick: () => alert('View') }],
   },
   {
-    icon:    <MessageSquare className="w-5 h-5 text-slate-500 shrink-0" />,
-    title:   'New comment',
-    body:    'Someone commented on your dashboard.',
+    icon: <MessageSquare className="w-5 h-5 text-slate-500 shrink-0" />,
+    title: 'New comment',
+    body: 'Someone commented on your dashboard.',
     actions: [
-      { label: 'Reply',   onClick: () => alert('Reply')   },
+      { label: 'Reply', onClick: () => alert('Reply') },
       { label: 'Dismiss', onClick: () => alert('Dismiss') },
     ],
   },
@@ -356,15 +439,19 @@ export const Interactive: Story = {
 // ── All positions ─────────────────────────────────────────
 
 const ALL_POSITIONS: NotificationPosition[] = [
-  'top-left', 'top-center', 'top-right',
-  'bottom-left', 'bottom-center', 'bottom-right',
+  'top-left',
+  'top-center',
+  'top-right',
+  'bottom-left',
+  'bottom-center',
+  'bottom-right',
 ];
 
 export const Positions: Story = {
   name: 'Positions — static preview',
   render: () => (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      {ALL_POSITIONS.map(pos => (
+      {ALL_POSITIONS.map((pos) => (
         <div key={pos} className="space-y-1">
           <p className="text-xs text-ink-500 dark:text-ink-300 font-mono">{pos}</p>
           <NotificationCard
@@ -382,15 +469,22 @@ export const Positions: Story = {
 export const Interactions: Story = {
   name: 'Interactions',
   args: {
-    variant: 'success', title: 'Saved', body: 'Your workflow has been saved.',
-    position: 'top-right', duration: 0, showActions: false, showDismiss: true,
+    variant: 'success',
+    title: 'Saved',
+    body: 'Your workflow has been saved.',
+    position: 'top-right',
+    duration: 0,
+    showActions: false,
+    showDismiss: true,
   },
   render: () => {
     const { notifications, add, dismiss } = useNotifications();
     return (
       <div className="relative min-h-36">
         <button
-          onClick={() => add({ variant: 'success', title: 'Saved', body: 'Workflow saved.', duration: 0 })}
+          onClick={() =>
+            add({ variant: 'success', title: 'Saved', body: 'Workflow saved.', duration: 0 })
+          }
           className="px-4 py-2 rounded-lg bg-primary-500 text-ink-900 text-sm font-semibold font-body hover:bg-primary-600 transition-colors"
         >
           Show notification
@@ -401,7 +495,7 @@ export const Interactions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click button — notification appears', async () => {
       await user.click(canvas.getByRole('button', { name: /show notification/i }));
@@ -423,17 +517,28 @@ export const Interactions: Story = {
 export const AllVariantsInteraction: Story = {
   name: 'All variant icons render',
   args: {
-    variant: 'info', title: 'Info', body: 'Test',
-    position: 'top-right', duration: 0, showActions: false, showDismiss: true,
+    variant: 'info',
+    title: 'Info',
+    body: 'Test',
+    position: 'top-right',
+    duration: 0,
+    showActions: false,
+    showDismiss: true,
   },
   render: () => {
     const noop = () => {};
     return (
       <div className="flex flex-col gap-3 p-4">
-        {(['default', 'info', 'success', 'warning', 'error'] as const).map(v => (
+        {(['default', 'info', 'success', 'warning', 'error'] as const).map((v) => (
           <NotificationCard
             key={v}
-            item={{ id: v, variant: v, title: v.charAt(0).toUpperCase() + v.slice(1), body: `A ${v} notification.`, duration: 0 }}
+            item={{
+              id: v,
+              variant: v,
+              title: v.charAt(0).toUpperCase() + v.slice(1),
+              body: `A ${v} notification.`,
+              duration: 0,
+            }}
             onDismiss={noop}
           />
         ))}
@@ -456,8 +561,13 @@ export const AllVariantsInteraction: Story = {
 export const ActionsInteraction: Story = {
   name: 'Interactions — action buttons',
   args: {
-    variant: 'warning', title: 'Subscription expiring', body: 'Your plan expires in 3 days.',
-    position: 'top-right', duration: 0, showActions: true, showDismiss: true,
+    variant: 'warning',
+    title: 'Subscription expiring',
+    body: 'Your plan expires in 3 days.',
+    position: 'top-right',
+    duration: 0,
+    showActions: true,
+    showDismiss: true,
   },
   render: () => {
     const { notifications, add } = useNotifications();
@@ -466,16 +576,16 @@ export const ActionsInteraction: Story = {
     // Show a notification with action buttons immediately on mount
     React.useEffect(() => {
       add({
-        variant:  'warning',
-        title:    'Subscription expiring',
-        body:     'Your plan expires in 3 days.',
+        variant: 'warning',
+        title: 'Subscription expiring',
+        body: 'Your plan expires in 3 days.',
         duration: 0,
         actions: [
           { label: 'Renew now', onClick: () => setLastAction('Renew now') },
-          { label: 'Later',     onClick: () => setLastAction('Later')     },
+          { label: 'Later', onClick: () => setLastAction('Later') },
         ],
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -491,7 +601,7 @@ export const ActionsInteraction: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('notification with actions is visible', async () => {
       await waitFor(() => {

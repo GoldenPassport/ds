@@ -3,8 +3,19 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
 import gpLogo from '../../assets/gp-logo.png';
 import {
-  LayoutDashboard, Users, FolderOpen, BarChart2, FileText, Settings,
-  Bell, HelpCircle, ShieldCheck, Zap, GitBranch, Database, Globe,
+  LayoutDashboard,
+  Users,
+  FolderOpen,
+  BarChart2,
+  FileText,
+  Settings,
+  Bell,
+  HelpCircle,
+  ShieldCheck,
+  Zap,
+  GitBranch,
+  Database,
+  Globe,
   Plus,
 } from 'lucide-react';
 import { SidebarNav } from '../components/SidebarNav';
@@ -18,10 +29,10 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     appearance: { control: { type: 'select', options: ['light', 'dark'] } },
-    groups:     { control: false },
-    logo:       { control: false },
-    user:       { control: false },
-    footer:     { control: false },
+    groups: { control: false },
+    logo: { control: false },
+    user: { control: false },
+    footer: { control: false },
   },
 } satisfies Meta<typeof SidebarNav>;
 
@@ -31,24 +42,24 @@ type Story = StoryObj<typeof meta>;
 // ── Fixtures ──────────────────────────────────────────────
 
 const USER = {
-  name:  'Alex Johnson',
+  name: 'Alex Johnson',
   email: 'alex@acme.com',
   menuItems: [
     { label: 'Your profile', href: '#' },
-    { label: 'Settings',     href: '#' },
-    { label: 'Sign out',     onClick: () => {}, dividerAbove: true },
+    { label: 'Settings', href: '#' },
+    { label: 'Sign out', onClick: () => {}, dividerAbove: true },
   ],
 };
 
 const SIMPLE_GROUPS = [
   {
     items: [
-      { label: 'Dashboard', href: '#', active: true  },
-      { label: 'Team',      href: '#'                },
-      { label: 'Projects',  href: '#'                },
-      { label: 'Calendar',  href: '#'                },
-      { label: 'Documents', href: '#'                },
-      { label: 'Reports',   href: '#'                },
+      { label: 'Dashboard', href: '#', active: true },
+      { label: 'Team', href: '#' },
+      { label: 'Projects', href: '#' },
+      { label: 'Calendar', href: '#' },
+      { label: 'Documents', href: '#' },
+      { label: 'Reports', href: '#' },
     ],
   },
 ];
@@ -56,11 +67,16 @@ const SIMPLE_GROUPS = [
 const ICON_GROUPS = [
   {
     items: [
-      { label: 'Dashboard', href: '#', active: true, icon: <LayoutDashboard className="w-5 h-5" /> },
-      { label: 'Team',      href: '#',               icon: <Users           className="w-5 h-5" /> },
-      { label: 'Projects',  href: '#',               icon: <FolderOpen      className="w-5 h-5" /> },
-      { label: 'Reports',   href: '#',               icon: <BarChart2       className="w-5 h-5" /> },
-      { label: 'Documents', href: '#',               icon: <FileText        className="w-5 h-5" /> },
+      {
+        label: 'Dashboard',
+        href: '#',
+        active: true,
+        icon: <LayoutDashboard className="w-5 h-5" />,
+      },
+      { label: 'Team', href: '#', icon: <Users className="w-5 h-5" /> },
+      { label: 'Projects', href: '#', icon: <FolderOpen className="w-5 h-5" /> },
+      { label: 'Reports', href: '#', icon: <BarChart2 className="w-5 h-5" /> },
+      { label: 'Documents', href: '#', icon: <FileText className="w-5 h-5" /> },
     ],
   },
 ];
@@ -68,11 +84,17 @@ const ICON_GROUPS = [
 const BADGE_GROUPS = [
   {
     items: [
-      { label: 'Dashboard', href: '#', active: true, icon: <LayoutDashboard className="w-5 h-5" />, badge: 5    },
-      { label: 'Team',      href: '#',               icon: <Users           className="w-5 h-5" />, badge: 12   },
-      { label: 'Projects',  href: '#',               icon: <FolderOpen      className="w-5 h-5" />              },
-      { label: 'Documents', href: '#',               icon: <FileText        className="w-5 h-5" />, badge: 'New'},
-      { label: 'Reports',   href: '#',               icon: <BarChart2       className="w-5 h-5" />              },
+      {
+        label: 'Dashboard',
+        href: '#',
+        active: true,
+        icon: <LayoutDashboard className="w-5 h-5" />,
+        badge: 5,
+      },
+      { label: 'Team', href: '#', icon: <Users className="w-5 h-5" />, badge: 12 },
+      { label: 'Projects', href: '#', icon: <FolderOpen className="w-5 h-5" /> },
+      { label: 'Documents', href: '#', icon: <FileText className="w-5 h-5" />, badge: 'New' },
+      { label: 'Reports', href: '#', icon: <BarChart2 className="w-5 h-5" /> },
     ],
   },
 ];
@@ -80,14 +102,19 @@ const BADGE_GROUPS = [
 const EXPANDABLE_GROUPS = [
   {
     items: [
-      { label: 'Dashboard', href: '#', active: true, icon: <LayoutDashboard className="w-5 h-5" /> },
+      {
+        label: 'Dashboard',
+        href: '#',
+        active: true,
+        icon: <LayoutDashboard className="w-5 h-5" />,
+      },
       {
         label: 'Team',
         icon: <Users className="w-5 h-5" />,
         children: [
-          { label: 'Members',     href: '#' },
+          { label: 'Members', href: '#' },
           { label: 'Invitations', href: '#' },
-          { label: 'Roles',       href: '#' },
+          { label: 'Roles', href: '#' },
         ],
       },
       {
@@ -95,12 +122,12 @@ const EXPANDABLE_GROUPS = [
         icon: <FolderOpen className="w-5 h-5" />,
         children: [
           { label: 'All projects', href: '#' },
-          { label: 'Archived',     href: '#' },
-          { label: 'Templates',    href: '#' },
+          { label: 'Archived', href: '#' },
+          { label: 'Templates', href: '#' },
         ],
       },
-      { label: 'Reports',   href: '#', icon: <BarChart2 className="w-5 h-5" /> },
-      { label: 'Documents', href: '#', icon: <FileText  className="w-5 h-5" /> },
+      { label: 'Reports', href: '#', icon: <BarChart2 className="w-5 h-5" /> },
+      { label: 'Documents', href: '#', icon: <FileText className="w-5 h-5" /> },
     ],
   },
 ];
@@ -109,27 +136,32 @@ const GROUPED_GROUPS = [
   {
     label: 'General',
     items: [
-      { label: 'Dashboard',  href: '#', active: true, icon: <LayoutDashboard className="w-5 h-5" /> },
-      { label: 'Analytics',  href: '#',               icon: <BarChart2       className="w-5 h-5" />, badge: 'New' },
-      { label: 'Documents',  href: '#',               icon: <FileText        className="w-5 h-5" /> },
+      {
+        label: 'Dashboard',
+        href: '#',
+        active: true,
+        icon: <LayoutDashboard className="w-5 h-5" />,
+      },
+      { label: 'Analytics', href: '#', icon: <BarChart2 className="w-5 h-5" />, badge: 'New' },
+      { label: 'Documents', href: '#', icon: <FileText className="w-5 h-5" /> },
     ],
   },
   {
     label: 'Platform',
     items: [
-      { label: 'Workflows',    href: '#', icon: <Zap        className="w-5 h-5" /> },
-      { label: 'Pipelines',    href: '#', icon: <GitBranch  className="w-5 h-5" /> },
-      { label: 'Integrations', href: '#', icon: <Globe      className="w-5 h-5" /> },
-      { label: 'Databases',    href: '#', icon: <Database   className="w-5 h-5" /> },
+      { label: 'Workflows', href: '#', icon: <Zap className="w-5 h-5" /> },
+      { label: 'Pipelines', href: '#', icon: <GitBranch className="w-5 h-5" /> },
+      { label: 'Integrations', href: '#', icon: <Globe className="w-5 h-5" /> },
+      { label: 'Databases', href: '#', icon: <Database className="w-5 h-5" /> },
     ],
   },
   {
     label: 'Settings',
     items: [
-      { label: 'Team',        href: '#', icon: <Users       className="w-5 h-5" /> },
+      { label: 'Team', href: '#', icon: <Users className="w-5 h-5" /> },
       { label: 'Permissions', href: '#', icon: <ShieldCheck className="w-5 h-5" /> },
-      { label: 'Settings',    href: '#', icon: <Settings    className="w-5 h-5" /> },
-      { label: 'Help',        href: '#', icon: <HelpCircle  className="w-5 h-5" /> },
+      { label: 'Settings', href: '#', icon: <Settings className="w-5 h-5" /> },
+      { label: 'Help', href: '#', icon: <HelpCircle className="w-5 h-5" /> },
     ],
   },
 ];
@@ -138,7 +170,9 @@ function Logo({ dark = false }: { dark?: boolean }) {
   return (
     <div className="flex items-center gap-2">
       <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
-      <span className={`text-[15px] font-extrabold font-display tracking-tight leading-none ${dark ? 'text-white' : 'text-ink-900 dark:text-white'}`}>
+      <span
+        className={`text-[15px] font-extrabold font-display tracking-tight leading-none ${dark ? 'text-white' : 'text-ink-900 dark:text-white'}`}
+      >
         Golden Passport
       </span>
     </div>
@@ -181,17 +215,7 @@ export const Playground: Story = {
 export const Light: Story = {
   name: 'Light',
   args: { groups: [] },
-  render: () => (
-    <Shell
-      sidebar={
-        <SidebarNav
-          logo={<Logo />}
-          groups={ICON_GROUPS}
-          user={USER}
-        />
-      }
-    />
-  ),
+  render: () => <Shell sidebar={<SidebarNav logo={<Logo />} groups={ICON_GROUPS} user={USER} />} />,
 };
 
 // ── Dark ──────────────────────────────────────────────────
@@ -202,12 +226,7 @@ export const Dark: Story = {
   render: () => (
     <Shell
       sidebar={
-        <SidebarNav
-          appearance="dark"
-          logo={<Logo dark />}
-          groups={ICON_GROUPS}
-          user={USER}
-        />
+        <SidebarNav appearance="dark" logo={<Logo dark />} groups={ICON_GROUPS} user={USER} />
       }
     />
   ),
@@ -219,15 +238,7 @@ export const WithBadges: Story = {
   name: 'With badges',
   args: { groups: [] },
   render: () => (
-    <Shell
-      sidebar={
-        <SidebarNav
-          logo={<Logo />}
-          groups={BADGE_GROUPS}
-          user={USER}
-        />
-      }
-    />
+    <Shell sidebar={<SidebarNav logo={<Logo />} groups={BADGE_GROUPS} user={USER} />} />
   ),
 };
 
@@ -237,15 +248,7 @@ export const WithExpandable: Story = {
   name: 'With expandable sections',
   args: { groups: [] },
   render: () => (
-    <Shell
-      sidebar={
-        <SidebarNav
-          logo={<Logo />}
-          groups={EXPANDABLE_GROUPS}
-          user={USER}
-        />
-      }
-    />
+    <Shell sidebar={<SidebarNav logo={<Logo />} groups={EXPANDABLE_GROUPS} user={USER} />} />
   ),
 };
 
@@ -257,12 +260,7 @@ export const DarkExpandable: Story = {
   render: () => (
     <Shell
       sidebar={
-        <SidebarNav
-          appearance="dark"
-          logo={<Logo dark />}
-          groups={EXPANDABLE_GROUPS}
-          user={USER}
-        />
+        <SidebarNav appearance="dark" logo={<Logo dark />} groups={EXPANDABLE_GROUPS} user={USER} />
       }
     />
   ),
@@ -274,15 +272,7 @@ export const WithGroups: Story = {
   name: 'With section groups',
   args: { groups: [] },
   render: () => (
-    <Shell
-      sidebar={
-        <SidebarNav
-          logo={<Logo />}
-          groups={GROUPED_GROUPS}
-          user={USER}
-        />
-      }
-    />
+    <Shell sidebar={<SidebarNav logo={<Logo />} groups={GROUPED_GROUPS} user={USER} />} />
   ),
 };
 
@@ -294,12 +284,7 @@ export const DarkGroups: Story = {
   render: () => (
     <Shell
       sidebar={
-        <SidebarNav
-          appearance="dark"
-          logo={<Logo dark />}
-          groups={GROUPED_GROUPS}
-          user={USER}
-        />
+        <SidebarNav appearance="dark" logo={<Logo dark />} groups={GROUPED_GROUPS} user={USER} />
       }
     />
   ),
@@ -325,7 +310,9 @@ export const WithFooter: Story = {
               </Button>
               <div className="flex items-center gap-2 px-3 py-2">
                 <Bell className="w-4 h-4 text-ink-500 dark:text-ink-300" />
-                <span className="text-sm font-body text-ink-700 dark:text-ink-200 flex-1">Notifications</span>
+                <span className="text-sm font-body text-ink-700 dark:text-ink-200 flex-1">
+                  Notifications
+                </span>
                 <Badge label="4" variant="warning" />
               </div>
             </div>
@@ -344,12 +331,7 @@ export const RoundedCard: Story = {
   render: () => (
     <div className="flex h-screen bg-ink-100 dark:bg-ink-800 p-4">
       <div className="w-64 shrink-0 h-full">
-        <SidebarNav
-          rounded
-          logo={<Logo />}
-          groups={BADGE_GROUPS}
-          user={USER}
-        />
+        <SidebarNav rounded logo={<Logo />} groups={BADGE_GROUPS} user={USER} />
       </div>
       <main className="flex-1 p-6">
         <p className="text-sm font-body text-ink-500 dark:text-ink-300">Page content</p>
@@ -386,16 +368,7 @@ export const RoundedCardDark: Story = {
 export const NoUser: Story = {
   name: 'No user section',
   args: { groups: [] },
-  render: () => (
-    <Shell
-      sidebar={
-        <SidebarNav
-          logo={<Logo />}
-          groups={SIMPLE_GROUPS}
-        />
-      }
-    />
-  ),
+  render: () => <Shell sidebar={<SidebarNav logo={<Logo />} groups={SIMPLE_GROUPS} />} />,
 };
 
 // ── Branded dark ──────────────────────────────────────────
@@ -411,7 +384,9 @@ export const BrandedDark: Story = {
           logo={
             <div className="flex items-center gap-2">
               <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
-              <span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">Golden Passport</span>
+              <span className="text-[15px] font-extrabold font-display text-white tracking-tight leading-none">
+                Golden Passport
+              </span>
             </div>
           }
           groups={GROUPED_GROUPS}
@@ -429,16 +404,12 @@ export const Interactions: Story = {
   args: { groups: [] },
   render: () => (
     <div className="w-64 h-screen bg-white dark:bg-ink-900">
-      <SidebarNav
-        logo={<Logo />}
-        groups={EXPANDABLE_GROUPS}
-        user={USER}
-      />
+      <SidebarNav logo={<Logo />} groups={EXPANDABLE_GROUPS} user={USER} />
     </div>
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('expandable "Team" item starts collapsed', async () => {
       const teamBtn = await canvas.findByRole('button', { name: /team/i });
@@ -449,7 +420,10 @@ export const Interactions: Story = {
     await step('click "Team" — expands and shows children', async () => {
       await user.click(canvas.getByRole('button', { name: /team/i }));
       await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /team/i })).toHaveAttribute('aria-expanded', 'true');
+        expect(canvas.getByRole('button', { name: /team/i })).toHaveAttribute(
+          'aria-expanded',
+          'true',
+        );
         expect(canvas.getByRole('link', { name: /members/i })).toBeInTheDocument();
         expect(canvas.getByRole('link', { name: /invitations/i })).toBeInTheDocument();
       });
@@ -458,7 +432,10 @@ export const Interactions: Story = {
     await step('click "Team" again — collapses and hides children', async () => {
       await user.click(canvas.getByRole('button', { name: /team/i }));
       await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /team/i })).toHaveAttribute('aria-expanded', 'false');
+        expect(canvas.getByRole('button', { name: /team/i })).toHaveAttribute(
+          'aria-expanded',
+          'false',
+        );
         expect(canvas.queryByRole('link', { name: /members/i })).not.toBeInTheDocument();
       });
     });
@@ -466,7 +443,10 @@ export const Interactions: Story = {
     await step('expand "Projects" — different section opens independently', async () => {
       await user.click(canvas.getByRole('button', { name: /projects/i }));
       await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /projects/i })).toHaveAttribute('aria-expanded', 'true');
+        expect(canvas.getByRole('button', { name: /projects/i })).toHaveAttribute(
+          'aria-expanded',
+          'true',
+        );
         expect(canvas.getByRole('link', { name: /all projects/i })).toBeInTheDocument();
       });
     });
@@ -484,12 +464,12 @@ export const UserMenuInteractions: Story = {
           logo={<Logo />}
           groups={SIMPLE_GROUPS}
           user={{
-            name:  'Alex Johnson',
+            name: 'Alex Johnson',
             email: 'alex@acme.com',
             menuItems: [
               { label: 'Your profile', href: '#' },
-              { label: 'Settings',     href: '#' },
-              { label: 'Sign out',     onClick: () => setLastClicked('Sign out'), dividerAbove: true },
+              { label: 'Settings', href: '#' },
+              { label: 'Sign out', onClick: () => setLastClicked('Sign out'), dividerAbove: true },
             ],
           }}
         />
@@ -503,19 +483,23 @@ export const UserMenuInteractions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click user avatar/name button → dropdown opens', async () => {
       // The user button is a Menu.Button containing the avatar + name
       const userBtn = await canvas.findByRole('button', { name: /alex johnson/i });
       await user.click(userBtn);
       await waitFor(() => {
-        expect(within(document.body).getByRole('menuitem', { name: /your profile/i })).toBeInTheDocument();
+        expect(
+          within(document.body).getByRole('menuitem', { name: /your profile/i }),
+        ).toBeInTheDocument();
       });
     });
 
     await step('"Sign out" item is present in menu', async () => {
-      expect(within(document.body).getByRole('menuitem', { name: /sign out/i })).toBeInTheDocument();
+      expect(
+        within(document.body).getByRole('menuitem', { name: /sign out/i }),
+      ).toBeInTheDocument();
     });
 
     await step('click "Sign out" → handler fires and menu closes', async () => {
@@ -524,7 +508,9 @@ export const UserMenuInteractions: Story = {
         expect(canvas.getByTestId('user-menu-clicked')).toHaveTextContent('Sign out');
       });
       await waitFor(() => {
-        expect(within(document.body).queryByRole('menuitem', { name: /your profile/i })).not.toBeInTheDocument();
+        expect(
+          within(document.body).queryByRole('menuitem', { name: /your profile/i }),
+        ).not.toBeInTheDocument();
       });
     });
   },

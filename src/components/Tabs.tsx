@@ -12,34 +12,34 @@ import React from 'react';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react';
 
 export interface TabItem {
-  label:    string;
-  content:  React.ReactNode;
-  badge?:   string | number;
+  label: string;
+  content: React.ReactNode;
+  badge?: string | number;
   disabled?: boolean;
-  icon?:    React.ReactNode;
+  icon?: React.ReactNode;
 }
 
 export interface TabsProps {
-  tabs:          TabItem[];
+  tabs: TabItem[];
   defaultIndex?: number;
-  onChange?:     (index: number) => void;
+  onChange?: (index: number) => void;
   /**
    * underline  — gold bottom-border indicator (default)
    * pills      — each tab is an independent pill button
    * pill       — segmented control in a rounded container
    * bar        — full-width tabs with underline indicator
    */
-  variant?:      'underline' | 'pills' | 'pill' | 'bar';
-  className?:    string;
+  variant?: 'underline' | 'pills' | 'pill' | 'bar';
+  className?: string;
 }
 
 // ── Per-variant TabList wrapper classes ───────────────────
 
 const listClass: Record<NonNullable<TabsProps['variant']>, string> = {
   underline: 'flex gap-0 border-b border-ink-200 dark:border-ink-700',
-  pills:     'flex gap-2 flex-wrap',
-  pill:      'flex gap-0.5 bg-ink-100 dark:bg-ink-700 p-1 rounded-xl',
-  bar:       'flex border-b border-ink-200 dark:border-ink-700',
+  pills: 'flex gap-2 flex-wrap',
+  pill: 'flex gap-0.5 bg-ink-100 dark:bg-ink-700 p-1 rounded-xl',
+  bar: 'flex border-b border-ink-200 dark:border-ink-700',
 };
 
 // ── Per-variant Tab button classes ────────────────────────
@@ -109,18 +109,10 @@ export function Tabs({
     <TabGroup defaultIndex={defaultIndex} onChange={onChange} className={className}>
       <TabList className={listClass[variant]}>
         {tabs.map((tab, i) => (
-          <Tab
-            key={i}
-            disabled={tab.disabled}
-            className={tabClass[variant]}
-          >
+          <Tab key={i} disabled={tab.disabled} className={tabClass[variant]}>
             {tab.icon && <span className="shrink-0">{tab.icon}</span>}
             {tab.label}
-            {tab.badge !== undefined && (
-              <span className={BADGE_BASE}>
-                {tab.badge}
-              </span>
-            )}
+            {tab.badge !== undefined && <span className={BADGE_BASE}>{tab.badge}</span>}
           </Tab>
         ))}
       </TabList>

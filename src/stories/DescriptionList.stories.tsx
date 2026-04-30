@@ -7,13 +7,13 @@ const meta = {
   component: DescriptionList,
   tags: ['autodocs'],
   argTypes: {
-    layout:   { control: { type: 'select', options: ['stacked', 'side-by-side'] } },
-    striped:  { control: 'boolean' },
+    layout: { control: { type: 'select', options: ['stacked', 'side-by-side'] } },
+    striped: { control: 'boolean' },
     bordered: { control: 'boolean' },
-    title:    { control: 'text' },
+    title: { control: 'text' },
     subtitle: { control: 'text' },
-    items:    { control: false },
-    className:{ control: 'text' },
+    items: { control: false },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof DescriptionList>;
 
@@ -23,38 +23,47 @@ type Story = StoryObj<typeof meta>;
 // ── Shared fixtures ────────────────────────────────────────
 
 const PROFILE: DescriptionListItem[] = [
-  { label: 'Full name',       value: 'Leslie Alexander' },
-  { label: 'Email address',   value: 'leslie.alexander@example.com' },
-  { label: 'Job title',       value: 'Co-Founder / CEO' },
-  { label: 'Department',      value: 'Executive' },
-  { label: 'Location',        value: 'Toronto, Canada' },
+  { label: 'Full name', value: 'Leslie Alexander' },
+  { label: 'Email address', value: 'leslie.alexander@example.com' },
+  { label: 'Job title', value: 'Co-Founder / CEO' },
+  { label: 'Department', value: 'Executive' },
+  { label: 'Location', value: 'Toronto, Canada' },
 ];
 
 const PROFILE_WITH_ACTIONS: DescriptionListItem[] = [
-  { label: 'Full name',     value: 'Leslie Alexander',                    action: { label: 'Edit', onClick: () => {} } },
-  { label: 'Email address', value: 'leslie.alexander@example.com',        action: { label: 'Edit', onClick: () => {} } },
-  { label: 'Job title',     value: 'Co-Founder / CEO',                    action: { label: 'Edit', onClick: () => {} } },
-  { label: 'Department',    value: 'Executive',                            action: { label: 'Edit', onClick: () => {} } },
-  { label: 'Location',      value: 'Toronto, Canada',                     action: { label: 'Edit', onClick: () => {} } },
-  { label: 'About',         value: 'Passionate about building products that solve real problems. Previously co-founded two SaaS companies.', action: { label: 'Edit', onClick: () => {} } },
+  { label: 'Full name', value: 'Leslie Alexander', action: { label: 'Edit', onClick: () => {} } },
+  {
+    label: 'Email address',
+    value: 'leslie.alexander@example.com',
+    action: { label: 'Edit', onClick: () => {} },
+  },
+  { label: 'Job title', value: 'Co-Founder / CEO', action: { label: 'Edit', onClick: () => {} } },
+  { label: 'Department', value: 'Executive', action: { label: 'Edit', onClick: () => {} } },
+  { label: 'Location', value: 'Toronto, Canada', action: { label: 'Edit', onClick: () => {} } },
+  {
+    label: 'About',
+    value:
+      'Passionate about building products that solve real problems. Previously co-founded two SaaS companies.',
+    action: { label: 'Edit', onClick: () => {} },
+  },
 ];
 
 const PROJECT: DescriptionListItem[] = [
-  { label: 'Project name',   value: 'GraphQL API' },
-  { label: 'Status',         value: <Badge label="Active"  variant="active"  /> },
-  { label: 'Environment',    value: 'Production' },
-  { label: 'Region',         value: 'us-east-1' },
-  { label: 'Last deployed',  value: '23 April 2026 at 09:41' },
-  { label: 'Created',        value: '1 January 2024' },
+  { label: 'Project name', value: 'GraphQL API' },
+  { label: 'Status', value: <Badge label="Active" variant="active" /> },
+  { label: 'Environment', value: 'Production' },
+  { label: 'Region', value: 'us-east-1' },
+  { label: 'Last deployed', value: '23 April 2026 at 09:41' },
+  { label: 'Created', value: '1 January 2024' },
 ];
 
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
   args: {
-    items:    PROFILE,
-    layout:   'side-by-side',
-    striped:  false,
+    items: PROFILE,
+    layout: 'side-by-side',
+    striped: false,
     bordered: false,
   },
 };
@@ -122,12 +131,7 @@ export const Bordered: Story = {
         title="Personal information"
         subtitle="Update your photo and personal details here."
       />
-      <DescriptionList
-        items={PROJECT}
-        layout="side-by-side"
-        bordered
-        title="Project details"
-      />
+      <DescriptionList items={PROJECT} layout="side-by-side" bordered title="Project details" />
     </div>
   ),
 };
@@ -175,16 +179,32 @@ export const WithRichValues: Story = {
   args: { items: [] },
   render: () => {
     const items: DescriptionListItem[] = [
-      { label: 'Name',          value: 'GraphQL API',                               action: { label: 'Edit', onClick: () => {} } },
-      { label: 'Status',        value: <Badge label="Active"  variant="active"  />, action: { label: 'Change', onClick: () => {} } },
-      { label: 'Plan',          value: <Badge label="Running" variant="running" />, action: { label: 'Upgrade', onClick: () => {} } },
-      { label: 'Region',        value: 'us-east-1 (N. Virginia)',                   action: { label: 'Edit', onClick: () => {} } },
+      { label: 'Name', value: 'GraphQL API', action: { label: 'Edit', onClick: () => {} } },
+      {
+        label: 'Status',
+        value: <Badge label="Active" variant="active" />,
+        action: { label: 'Change', onClick: () => {} },
+      },
+      {
+        label: 'Plan',
+        value: <Badge label="Running" variant="running" />,
+        action: { label: 'Upgrade', onClick: () => {} },
+      },
+      {
+        label: 'Region',
+        value: 'us-east-1 (N. Virginia)',
+        action: { label: 'Edit', onClick: () => {} },
+      },
       { label: 'Last deployed', value: '23 April 2026 at 09:41' },
-      { label: 'Team',
+      {
+        label: 'Team',
         value: (
           <div className="flex flex-wrap gap-1.5">
-            {['Leslie A.', 'Michael F.', 'Dries V.'].map(n => (
-              <span key={n} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-ink-100 dark:bg-ink-700 text-ink-600 dark:text-ink-300 font-body">
+            {['Leslie A.', 'Michael F.', 'Dries V.'].map((n) => (
+              <span
+                key={n}
+                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-ink-100 dark:bg-ink-700 text-ink-600 dark:text-ink-300 font-body"
+              >
                 {n}
               </span>
             ))}

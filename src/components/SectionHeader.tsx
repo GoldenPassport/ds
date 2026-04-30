@@ -8,23 +8,23 @@ import type { MenuItem } from './Menu';
 // ── Types ─────────────────────────────────────────────────
 
 export interface SectionHeaderAction {
-  label:    string;
-  onClick:  () => void;
-  icon?:    React.ReactNode;
+  label: string;
+  onClick: () => void;
+  icon?: React.ReactNode;
   variant?: ButtonVariant;
 }
 
 export interface SectionHeaderProps {
-  title:          string;
-  subtitle?:      string;
+  title: string;
+  subtitle?: string;
   /** Renders a Button on the right */
   primaryAction?: SectionHeaderAction;
   /**
    * Renders a ⋮ menu button on the right.
    * Combined with primaryAction → Button + ⋮ menu.
    */
-  menuItems?:     MenuItem[];
-  className?:     string;
+  menuItems?: MenuItem[];
+  className?: string;
 }
 
 // ── Component ─────────────────────────────────────────────
@@ -41,7 +41,10 @@ export function SectionHeader({
   const menuButton = menuItems && menuItems.length > 0 && (
     <Menu
       trigger={
-        <button aria-label="More options" className="inline-flex items-center justify-center w-8 h-8 rounded-xl text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer">
+        <button
+          aria-label="More options"
+          className="inline-flex items-center justify-center w-8 h-8 rounded-xl text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors border-0 bg-transparent cursor-pointer"
+        >
           <MoreVertical className="w-4 h-4" aria-hidden="true" />
         </button>
       }

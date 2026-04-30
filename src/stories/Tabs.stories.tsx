@@ -10,10 +10,15 @@ const tabContent = (label: string) => (
 );
 
 const sampleTabs = [
-  { label: 'Overview',  icon: <Activity  className="w-4 h-4" />, content: tabContent('Overview')  },
-  { label: 'Run Logs',  icon: <FileText  className="w-4 h-4" />, badge: 142, content: tabContent('Run Logs')  },
-  { label: 'Steps',     icon: <GitBranch className="w-4 h-4" />, content: tabContent('Steps')     },
-  { label: 'Settings',  icon: <Settings  className="w-4 h-4" />, content: tabContent('Settings')  },
+  { label: 'Overview', icon: <Activity className="w-4 h-4" />, content: tabContent('Overview') },
+  {
+    label: 'Run Logs',
+    icon: <FileText className="w-4 h-4" />,
+    badge: 142,
+    content: tabContent('Run Logs'),
+  },
+  { label: 'Steps', icon: <GitBranch className="w-4 h-4" />, content: tabContent('Steps') },
+  { label: 'Settings', icon: <Settings className="w-4 h-4" />, content: tabContent('Settings') },
 ];
 
 const meta = {
@@ -21,15 +26,22 @@ const meta = {
   component: Tabs,
   tags: ['autodocs'],
   args: {
-    variant:      'underline' as const,
+    variant: 'underline' as const,
     defaultIndex: 0,
   },
   argTypes: {
-    variant:      { control: 'select', options: ['underline', 'pills', 'pill', 'bar'], description: 'Visual style of the tab strip' },
-    defaultIndex: { control: 'number', description: 'Index of the initially active tab (uncontrolled)' },
-    onChange:     { control: false,    description: 'Called with the new tab index on change' },
-    tabs:         { control: false,    description: 'Array of { label, content, icon?, badge?, disabled? }' },
-    className:    { control: 'text',   description: 'Extra CSS class on the root element' },
+    variant: {
+      control: 'select',
+      options: ['underline', 'pills', 'pill', 'bar'],
+      description: 'Visual style of the tab strip',
+    },
+    defaultIndex: {
+      control: 'number',
+      description: 'Index of the initially active tab (uncontrolled)',
+    },
+    onChange: { control: false, description: 'Called with the new tab index on change' },
+    tabs: { control: false, description: 'Array of { label, content, icon?, badge?, disabled? }' },
+    className: { control: 'text', description: 'Extra CSS class on the root element' },
   },
 } satisfies Meta<typeof Tabs>;
 
@@ -96,13 +108,13 @@ export const AllVariants: Story = {
   args: { tabs: [] },
   render: () => {
     const simple = [
-      { label: 'Active',   content: tabContent('Active')   },
+      { label: 'Active', content: tabContent('Active') },
       { label: 'Archived', content: tabContent('Archived') },
-      { label: 'Draft',    content: tabContent('Draft')    },
+      { label: 'Draft', content: tabContent('Draft') },
     ];
     return (
       <div className="space-y-10 max-w-lg">
-        {(['underline', 'pills', 'pill', 'bar'] as const).map(v => (
+        {(['underline', 'pills', 'pill', 'bar'] as const).map((v) => (
           <div key={v} className="space-y-1">
             <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v}</p>
             <Tabs tabs={simple} variant={v} />
@@ -123,10 +135,10 @@ export const PillsTextOnly: Story = {
       <Tabs
         {...args}
         tabs={[
-          { label: 'All',       content: tabContent('All')       },
-          { label: 'Active',    content: tabContent('Active')    },
-          { label: 'Draft',     content: tabContent('Draft')     },
-          { label: 'Archived',  content: tabContent('Archived')  },
+          { label: 'All', content: tabContent('All') },
+          { label: 'Active', content: tabContent('Active') },
+          { label: 'Draft', content: tabContent('Draft') },
+          { label: 'Archived', content: tabContent('Archived') },
         ]}
       />
     </div>
@@ -143,9 +155,9 @@ export const PillsWithBadges: Story = {
       <Tabs
         {...args}
         tabs={[
-          { label: 'Active',  badge: 24, content: tabContent('Active')  },
-          { label: 'Running', badge: 3,  content: tabContent('Running') },
-          { label: 'Failed',  badge: 1,  content: tabContent('Failed')  },
+          { label: 'Active', badge: 24, content: tabContent('Active') },
+          { label: 'Running', badge: 3, content: tabContent('Running') },
+          { label: 'Failed', badge: 1, content: tabContent('Failed') },
         ]}
       />
     </div>
@@ -162,9 +174,9 @@ export const WithBadges: Story = {
       <Tabs
         {...args}
         tabs={[
-          { label: 'Active',  badge: 24, content: tabContent('Active')  },
-          { label: 'Running', badge: 3,  content: tabContent('Running') },
-          { label: 'Failed',  badge: 1,  content: tabContent('Failed')  },
+          { label: 'Active', badge: 24, content: tabContent('Active') },
+          { label: 'Running', badge: 3, content: tabContent('Running') },
+          { label: 'Failed', badge: 1, content: tabContent('Failed') },
         ]}
       />
     </div>
@@ -181,9 +193,16 @@ export const WithDisabledTab: Story = {
       <Tabs
         {...args}
         tabs={[
-          { label: 'Workflows',     content: <div className="pt-4 text-sm text-ink-600 dark:text-ink-300 font-body">Workflows list</div> },
-          { label: 'Analytics',     content: <div className="pt-4" />, disabled: true },
-          { label: 'Integrations',  content: <div className="pt-4" />, disabled: true },
+          {
+            label: 'Workflows',
+            content: (
+              <div className="pt-4 text-sm text-ink-600 dark:text-ink-300 font-body">
+                Workflows list
+              </div>
+            ),
+          },
+          { label: 'Analytics', content: <div className="pt-4" />, disabled: true },
+          { label: 'Integrations', content: <div className="pt-4" />, disabled: true },
         ]}
       />
     </div>

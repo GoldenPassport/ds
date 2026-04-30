@@ -52,27 +52,37 @@ function ClearBtn({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
 // element — no interactive descendants, no aria-allowed-attr violations.
 
 interface PickerTriggerProps {
-  label?:       string;
-  hint?:        string;
-  error?:       string;
-  disabled?:    boolean;
-  placeholder:  string;
+  label?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  placeholder: string;
   displayValue: string;
-  icon:         React.ReactNode;
-  hasClear:     boolean;
-  onClear:      (e: React.MouseEvent) => void;
-  labelId?:     string;
-  className?:   string;
+  icon: React.ReactNode;
+  hasClear: boolean;
+  onClear: (e: React.MouseEvent) => void;
+  labelId?: string;
+  className?: string;
   wrapClassName?: string;
-  children?:    React.ReactNode; // panel + hidden input passed through
+  children?: React.ReactNode; // panel + hidden input passed through
 }
 
 function PickerTrigger({
-  label, hint, error, disabled, placeholder, displayValue,
-  icon, hasClear, onClear, labelId, className = '', wrapClassName = '',
+  label,
+  hint,
+  error,
+  disabled,
+  placeholder,
+  displayValue,
+  icon,
+  hasClear,
+  onClear,
+  labelId,
+  className = '',
+  wrapClassName = '',
   children,
 }: PickerTriggerProps) {
-  const borderErr    = 'border-red-500 dark:border-red-400';
+  const borderErr = 'border-red-500 dark:border-red-400';
   const borderNormal = 'border-ink-200 dark:border-ink-600';
 
   return (
@@ -96,13 +106,12 @@ function PickerTrigger({
           className={[
             // mimic Input's inner <input> styles exactly
             'relative w-full flex items-center py-2.5 text-sm font-body text-left',
-            'pl-9', hasClear ? 'pr-10' : 'pr-3',
+            'pl-9',
+            hasClear ? 'pr-10' : 'pr-3',
             'bg-white dark:bg-ink-700',
             'border rounded-xl',
             error ? borderErr : borderNormal,
-            error
-              ? 'focus:border-red-500'
-              : 'focus:border-primary-500',
+            error ? 'focus:border-red-500' : 'focus:border-primary-500',
             'outline-none transition-all duration-150',
             'disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
             className,
@@ -117,10 +126,11 @@ function PickerTrigger({
           </span>
 
           {/* Value / placeholder text */}
-          <span className={displayValue
-            ? 'text-ink-900 dark:text-ink-50'
-            : 'text-ink-500 dark:text-ink-300'
-          }>
+          <span
+            className={
+              displayValue ? 'text-ink-900 dark:text-ink-50' : 'text-ink-500 dark:text-ink-300'
+            }
+          >
             {displayValue || placeholder}
           </span>
         </PopoverButton>
@@ -142,9 +152,7 @@ function PickerTrigger({
         role={error ? 'alert' : undefined}
         className={[
           'min-h-4 text-xs font-body leading-none',
-          error
-            ? 'text-red-700 dark:text-red-400'
-            : 'text-ink-500 dark:text-ink-300',
+          error ? 'text-red-700 dark:text-red-400' : 'text-ink-500 dark:text-ink-300',
         ].join(' ')}
       >
         {error || hint || ''}
@@ -160,7 +168,7 @@ function ScrollColumn({
   selected,
   onSelect,
 }: {
-  values:   number[];
+  values: number[];
   selected: number;
   onSelect: (v: number) => void;
 }) {
@@ -173,10 +181,13 @@ function ScrollColumn({
   }, [selected]);
 
   return (
-    <div ref={ref} className="h-40 overflow-y-auto scrollbar-none flex flex-col gap-0.5 snap-y snap-mandatory pr-1">
+    <div
+      ref={ref}
+      className="h-40 overflow-y-auto scrollbar-none flex flex-col gap-0.5 snap-y snap-mandatory pr-1"
+    >
       {/* top spacer so first items can scroll to centre */}
       <div className="shrink-0 h-16" aria-hidden="true" />
-      {values.map(v => (
+      {values.map((v) => (
         <button
           key={v}
           type="button"
@@ -198,22 +209,22 @@ function ScrollColumn({
   );
 }
 
-const HOURS   = Array.from({ length: 24 }, (_, i) => i);
+const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const MINUTES = Array.from({ length: 60 }, (_, i) => i);
 
 // ── DatePicker ─────────────────────────────────────────────
 
 export interface DatePickerProps {
-  value?:         Date | null;
-  onChange?:      (d: Date | null) => void;
-  label?:         string;
-  placeholder?:   string;
-  hint?:          string;
-  error?:         string;
-  disabled?:      boolean;
-  name?:          string;
+  value?: Date | null;
+  onChange?: (d: Date | null) => void;
+  label?: string;
+  placeholder?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  name?: string;
   wrapClassName?: string;
-  className?:     string;
+  className?: string;
 }
 
 export function DatePicker({
@@ -226,13 +237,13 @@ export function DatePicker({
   disabled,
   name,
   wrapClassName = '',
-  className     = '',
+  className = '',
 }: DatePickerProps) {
-  const uid        = React.useId();
-  const labelId    = label ? `${uid}-label` : undefined;
+  const uid = React.useId();
+  const labelId = label ? `${uid}-label` : undefined;
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState<Date | null>(null);
-  const selected   = isControlled ? value : internal;
+  const selected = isControlled ? value : internal;
 
   function pick(d: Date, close: () => void) {
     if (!isControlled) setInternal(d);
@@ -265,17 +276,39 @@ export function DatePicker({
           className={className}
           wrapClassName={wrapClassName}
         >
-          {name && <input type="hidden" name={name} value={selected ? selected.toISOString().split('T')[0] : ''} />}
+          {name && (
+            <input
+              type="hidden"
+              name={name}
+              value={selected ? selected.toISOString().split('T')[0] : ''}
+            />
+          )}
 
           <PopoverPanel transition className={PANEL_CLS}>
-            <Calendar
-              variant="mini"
-              selected={selected ?? null}
-              onSelect={(d) => pick(d, close)}
-            />
+            <Calendar variant="mini" selected={selected ?? null} onSelect={(d) => pick(d, close)} />
             <div className="mt-2 flex justify-between px-1">
-              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); if (!isControlled) setInternal(null); onChange?.(null); close(); }}>Clear</Hyperlink>
-              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); pick(new Date(), close); }}>Today</Hyperlink>
+              <Hyperlink
+                href="#"
+                className="text-xs font-semibold"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (!isControlled) setInternal(null);
+                  onChange?.(null);
+                  close();
+                }}
+              >
+                Clear
+              </Hyperlink>
+              <Hyperlink
+                href="#"
+                className="text-xs font-semibold"
+                onClick={(e) => {
+                  e.preventDefault();
+                  pick(new Date(), close);
+                }}
+              >
+                Today
+              </Hyperlink>
             </div>
           </PopoverPanel>
         </PickerTrigger>
@@ -288,31 +321,31 @@ export function DatePicker({
 
 export interface DateRange {
   start: Date | null;
-  end:   Date | null;
+  end: Date | null;
 }
 
 export interface DateRangePickerProps {
-  value?:              DateRange | null;
-  onChange?:           (range: DateRange) => void;
-  label?:              string;
-  startLabel?:         string;
-  endLabel?:           string;
-  startPlaceholder?:   string;
-  endPlaceholder?:     string;
-  hint?:               string;
-  error?:              string;
-  disabled?:           boolean;
-  wrapClassName?:      string;
+  value?: DateRange | null;
+  onChange?: (range: DateRange) => void;
+  label?: string;
+  startLabel?: string;
+  endLabel?: string;
+  startPlaceholder?: string;
+  endPlaceholder?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  wrapClassName?: string;
 }
 
 export function DateRangePicker({
   value,
   onChange,
   label,
-  startLabel        = 'From',
-  endLabel          = 'To',
-  startPlaceholder  = 'Start date',
-  endPlaceholder    = 'End date',
+  startLabel = 'From',
+  endLabel = 'To',
+  startPlaceholder = 'Start date',
+  endPlaceholder = 'End date',
   hint,
   error,
   disabled,
@@ -321,16 +354,19 @@ export function DateRangePicker({
   const isControlled = value !== undefined;
 
   const [internalStart, setInternalStart] = useState<Date | null>(null);
-  const [internalEnd,   setInternalEnd]   = useState<Date | null>(null);
+  const [internalEnd, setInternalEnd] = useState<Date | null>(null);
   // 'start' = waiting for user to pick start, 'end' = waiting for end
   const [phase, setPhase] = useState<'start' | 'end'>('start');
   const [hoverDate, setHoverDate] = useState<Date | null>(null);
 
   const start = isControlled ? (value?.start ?? null) : internalStart;
-  const end   = isControlled ? (value?.end   ?? null) : internalEnd;
+  const end = isControlled ? (value?.end ?? null) : internalEnd;
 
   function commit(s: Date | null, e: Date | null) {
-    if (!isControlled) { setInternalStart(s); setInternalEnd(e); }
+    if (!isControlled) {
+      setInternalStart(s);
+      setInternalEnd(e);
+    }
     onChange?.({ start: s, end: e });
   }
 
@@ -363,7 +399,7 @@ export function DateRangePicker({
     : 'border-ink-200 dark:border-ink-600';
 
   const startDisplay = start ? formatDate(start) : '';
-  const endDisplay   = end   ? formatDate(end)   : '';
+  const endDisplay = end ? formatDate(end) : '';
 
   // The provisional end for range preview (hover) — only when awaiting end
   const effectiveRangeEnd = phase === 'end' ? end : end;
@@ -388,16 +424,27 @@ export function DateRangePicker({
               open ? 'border-primary-500' : '',
               'outline-none disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
               'transition-all duration-150',
-            ].filter(Boolean).join(' ')}
+            ]
+              .filter(Boolean)
+              .join(' ')}
           >
             {/* Start field */}
             <span className="flex items-center gap-2 px-3 py-2.5 min-w-0 flex-1">
-              <CalendarDays className="w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300" aria-hidden="true" />
+              <CalendarDays
+                className="w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300"
+                aria-hidden="true"
+              />
               <span className="flex flex-col items-start min-w-0">
                 <span className="text-[10px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider leading-none mb-0.5">
                   {startLabel}
                 </span>
-                <span className={startDisplay ? 'text-ink-900 dark:text-ink-50' : 'text-ink-500 dark:text-ink-400'}>
+                <span
+                  className={
+                    startDisplay
+                      ? 'text-ink-900 dark:text-ink-50'
+                      : 'text-ink-500 dark:text-ink-400'
+                  }
+                >
                   {startDisplay || startPlaceholder}
                 </span>
               </span>
@@ -408,12 +455,19 @@ export function DateRangePicker({
 
             {/* End field */}
             <span className="flex items-center gap-2 px-3 py-2.5 min-w-0 flex-1">
-              <CalendarDays className="w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300" aria-hidden="true" />
+              <CalendarDays
+                className="w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300"
+                aria-hidden="true"
+              />
               <span className="flex flex-col items-start min-w-0">
                 <span className="text-[10px] font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider leading-none mb-0.5">
                   {endLabel}
                 </span>
-                <span className={endDisplay ? 'text-ink-900 dark:text-ink-50' : 'text-ink-500 dark:text-ink-400'}>
+                <span
+                  className={
+                    endDisplay ? 'text-ink-900 dark:text-ink-50' : 'text-ink-500 dark:text-ink-400'
+                  }
+                >
                   {endDisplay || endPlaceholder}
                 </span>
               </span>
@@ -421,10 +475,7 @@ export function DateRangePicker({
 
             {/* Clear button */}
             {(start || end) && !disabled && (
-              <span
-                className="flex items-center pr-2 pl-1 z-10"
-                onClick={clearAll}
-              >
+              <span className="flex items-center pr-2 pl-1 z-10" onClick={clearAll}>
                 <span className="p-1 rounded-xl text-ink-500 hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
                   <X className="w-3.5 h-3.5" />
                 </span>
@@ -444,10 +495,7 @@ export function DateRangePicker({
           </p>
 
           {/* Calendar panel */}
-          <PopoverPanel
-            transition
-            className={`${PANEL_CLS} w-[280px]`}
-          >
+          <PopoverPanel transition className={`${PANEL_CLS} w-[280px]`}>
             {/* Instruction */}
             <p className="mb-2 text-xs font-body text-ink-500 dark:text-ink-300 text-center">
               {phase === 'start' ? 'Select start date' : 'Select end date'}
@@ -463,9 +511,28 @@ export function DateRangePicker({
             />
 
             <div className="mt-2 flex justify-between px-1">
-              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); clearAll(e); close(); }}>Clear</Hyperlink>
+              <Hyperlink
+                href="#"
+                className="text-xs font-semibold"
+                onClick={(e) => {
+                  e.preventDefault();
+                  clearAll(e);
+                  close();
+                }}
+              >
+                Clear
+              </Hyperlink>
               {start && end && (
-                <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); close(); }}>Done</Hyperlink>
+                <Hyperlink
+                  href="#"
+                  className="text-xs font-semibold"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    close();
+                  }}
+                >
+                  Done
+                </Hyperlink>
               )}
             </div>
           </PopoverPanel>
@@ -478,16 +545,16 @@ export function DateRangePicker({
 // ── TimePicker ─────────────────────────────────────────────
 
 export interface TimePickerProps {
-  value?:         string;  // HH:mm
-  onChange?:      (v: string | null) => void;
-  label?:         string;
-  placeholder?:   string;
-  hint?:          string;
-  error?:         string;
-  disabled?:      boolean;
-  name?:          string;
+  value?: string; // HH:mm
+  onChange?: (v: string | null) => void;
+  label?: string;
+  placeholder?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  name?: string;
   wrapClassName?: string;
-  className?:     string;
+  className?: string;
 }
 
 export function TimePicker({
@@ -500,7 +567,7 @@ export function TimePicker({
   disabled,
   name,
   wrapClassName = '',
-  className     = '',
+  className = '',
 }: TimePickerProps) {
   const uid = React.useId();
   const labelId = label ? `${uid}-label` : undefined;
@@ -516,18 +583,26 @@ export function TimePicker({
   const [internalM, setInternalM] = useState(0);
   const [internalSet, setInternalSet] = useState(false);
 
-  const { h, m, set: hasValue } = isControlled
-    ? parseTime(value)
-    : { h: internalH, m: internalM, set: internalSet };
+  const {
+    h,
+    m,
+    set: hasValue,
+  } = isControlled ? parseTime(value) : { h: internalH, m: internalM, set: internalSet };
 
   function commit(newH: number, newM: number) {
-    if (!isControlled) { setInternalH(newH); setInternalM(newM); setInternalSet(true); }
+    if (!isControlled) {
+      setInternalH(newH);
+      setInternalM(newM);
+      setInternalSet(true);
+    }
     onChange?.(formatTime(newH, newM));
   }
 
   function clear(e: React.MouseEvent) {
     e.stopPropagation();
-    if (!isControlled) { setInternalSet(false); }
+    if (!isControlled) {
+      setInternalSet(false);
+    }
     onChange?.(null);
   }
 
@@ -555,17 +630,32 @@ export function TimePicker({
           <PopoverPanel transition className={`${PANEL_CLS} w-36 min-w-36`}>
             <div className="flex items-start gap-2 justify-center">
               <div className="flex flex-col items-center gap-1">
-                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">HH</span>
-                <ScrollColumn values={HOURS}   selected={h} onSelect={(v) => commit(v, m)} />
+                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">
+                  HH
+                </span>
+                <ScrollColumn values={HOURS} selected={h} onSelect={(v) => commit(v, m)} />
               </div>
-              <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-300">:</span>
+              <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-300">
+                :
+              </span>
               <div className="flex flex-col items-center gap-1">
-                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">MM</span>
+                <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">
+                  MM
+                </span>
                 <ScrollColumn values={MINUTES} selected={m} onSelect={(v) => commit(h, v)} />
               </div>
             </div>
             <div className="mt-2 flex justify-center">
-              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); clear(e); }}>Clear</Hyperlink>
+              <Hyperlink
+                href="#"
+                className="text-xs font-semibold"
+                onClick={(e) => {
+                  e.preventDefault();
+                  clear(e);
+                }}
+              >
+                Clear
+              </Hyperlink>
             </div>
           </PopoverPanel>
         </PickerTrigger>
@@ -577,16 +667,16 @@ export function TimePicker({
 // ── DateTimePicker ─────────────────────────────────────────
 
 export interface DateTimePickerProps {
-  value?:         { date: Date; hour: number; minute: number } | null;
-  onChange?:      (v: { date: Date; hour: number; minute: number } | null) => void;
-  label?:         string;
-  placeholder?:   string;
-  hint?:          string;
-  error?:         string;
-  disabled?:      boolean;
-  name?:          string;
+  value?: { date: Date; hour: number; minute: number } | null;
+  onChange?: (v: { date: Date; hour: number; minute: number } | null) => void;
+  label?: string;
+  placeholder?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  name?: string;
   wrapClassName?: string;
-  className?:     string;
+  className?: string;
 }
 
 export function DateTimePicker({
@@ -599,12 +689,14 @@ export function DateTimePicker({
   disabled,
   name,
   wrapClassName = '',
-  className     = '',
+  className = '',
 }: DateTimePickerProps) {
-  const uid      = React.useId();
-  const labelId  = label ? `${uid}-label` : undefined;
+  const uid = React.useId();
+  const labelId = label ? `${uid}-label` : undefined;
   const isControlled = value !== undefined;
-  const [internal, setInternal] = useState<{ date: Date; hour: number; minute: number } | null>(null);
+  const [internal, setInternal] = useState<{ date: Date; hour: number; minute: number } | null>(
+    null,
+  );
   const [tab, setTab] = useState<'date' | 'time'>('date');
 
   const current = isControlled ? value : internal;
@@ -623,9 +715,7 @@ export function DateTimePicker({
     onChange?.(null);
   }
 
-  const displayValue = current
-    ? formatDateTime(current.date, current.hour, current.minute)
-    : '';
+  const displayValue = current ? formatDateTime(current.date, current.hour, current.minute) : '';
 
   const isoValue = current
     ? `${current.date.toISOString().split('T')[0]}T${formatTime(current.hour, current.minute)}`
@@ -664,7 +754,7 @@ export function DateTimePicker({
               onChange={(v) => setTab(v as 'date' | 'time')}
               items={[
                 { label: 'Date', value: 'date', icon: <CalendarDays className="w-3.5 h-3.5" /> },
-                { label: 'Time', value: 'time', icon: <Clock        className="w-3.5 h-3.5" /> },
+                { label: 'Time', value: 'time', icon: <Clock className="w-3.5 h-3.5" /> },
               ]}
             />
 
@@ -678,7 +768,10 @@ export function DateTimePicker({
                 <Calendar
                   variant="mini"
                   selected={current?.date ?? null}
-                  onSelect={(d) => { update({ date: d }); setTab('time'); }}
+                  onSelect={(d) => {
+                    update({ date: d });
+                    setTab('time');
+                  }}
                 />
               )}
 
@@ -687,16 +780,22 @@ export function DateTimePicker({
                 <div className="flex-1 flex items-center justify-center">
                   <div className="flex items-start gap-2">
                     <div className="flex flex-col items-center gap-1">
-                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">HH</span>
+                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">
+                        HH
+                      </span>
                       <ScrollColumn
                         values={HOURS}
                         selected={current?.hour ?? 12}
                         onSelect={(v) => update({ hour: v })}
                       />
                     </div>
-                    <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-300">:</span>
+                    <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-300">
+                      :
+                    </span>
                     <div className="flex flex-col items-center gap-1">
-                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">MM</span>
+                      <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">
+                        MM
+                      </span>
                       <ScrollColumn
                         values={MINUTES}
                         selected={current?.minute ?? 0}
@@ -710,8 +809,29 @@ export function DateTimePicker({
 
             {/* Footer actions */}
             <div className="mt-3 flex justify-between px-1">
-              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); if (!isControlled) setInternal(null); onChange?.(null); close(); }}>Clear</Hyperlink>
-              <Hyperlink href="#" className="text-xs font-semibold" onClick={(e) => { e.preventDefault(); const now = new Date(); update({ date: now, hour: now.getHours(), minute: now.getMinutes() }); }}>Now</Hyperlink>
+              <Hyperlink
+                href="#"
+                className="text-xs font-semibold"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (!isControlled) setInternal(null);
+                  onChange?.(null);
+                  close();
+                }}
+              >
+                Clear
+              </Hyperlink>
+              <Hyperlink
+                href="#"
+                className="text-xs font-semibold"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const now = new Date();
+                  update({ date: now, hour: now.getHours(), minute: now.getMinutes() });
+                }}
+              >
+                Now
+              </Hyperlink>
             </div>
           </PopoverPanel>
         </PickerTrigger>

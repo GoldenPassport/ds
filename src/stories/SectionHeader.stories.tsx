@@ -10,11 +10,11 @@ const meta = {
   component: SectionHeader,
   tags: ['autodocs'],
   argTypes: {
-    title:         { control: 'text' },
-    subtitle:      { control: 'text' },
+    title: { control: 'text' },
+    subtitle: { control: 'text' },
     primaryAction: { control: false, description: '{ label, onClick, icon?, variant? }' },
-    menuItems:     { control: false, description: 'MenuItem[] — renders a ⋮ menu button' },
-    className:     { control: 'text' },
+    menuItems: { control: false, description: 'MenuItem[] — renders a ⋮ menu button' },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof SectionHeader>;
 
@@ -22,17 +22,18 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const MENU_ITEMS = [
-  { label: 'Export CSV',    onClick: () => {} },
-  { label: 'Import',        onClick: () => {} },
-  { label: 'Delete all',    onClick: () => {}, destructive: true, dividerAbove: true },
+  { label: 'Export CSV', onClick: () => {} },
+  { label: 'Import', onClick: () => {} },
+  { label: 'Delete all', onClick: () => {}, destructive: true, dividerAbove: true },
 ];
 
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
   args: {
-    title:    'Users',
-    subtitle: 'A list of all the users in your account including their name, title, email and role.',
+    title: 'Users',
+    subtitle:
+      'A list of all the users in your account including their name, title, email and role.',
     primaryAction: { label: 'Add user', onClick: () => {} },
   },
 };
@@ -47,16 +48,29 @@ export const SingleAction: Story = {
       <SectionHeader
         title="Users"
         subtitle="A list of all the users in your account including their name, title, email and role."
-        primaryAction={{ label: 'Add user', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'Add user',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
       />
       <SectionHeader
         title="Workflows"
         subtitle="All automation workflows in your workspace."
-        primaryAction={{ label: 'New workflow', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'New workflow',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
       />
       <SectionHeader
         title="Reports"
-        primaryAction={{ label: 'Download', onClick: () => {}, icon: <Download className="w-3.5 h-3.5" />, variant: 'secondary' }}
+        primaryAction={{
+          label: 'Download',
+          onClick: () => {},
+          icon: <Download className="w-3.5 h-3.5" />,
+          variant: 'secondary',
+        }}
       />
     </div>
   ),
@@ -78,8 +92,8 @@ export const MenuOnly: Story = {
         title="API keys"
         subtitle="Manage the API keys used to access your account."
         menuItems={[
-          { label: 'Refresh',     onClick: () => {} },
-          { label: 'Revoke all',  onClick: () => {}, destructive: true, dividerAbove: true },
+          { label: 'Refresh', onClick: () => {} },
+          { label: 'Revoke all', onClick: () => {}, destructive: true, dividerAbove: true },
         ]}
       />
     </div>
@@ -96,14 +110,22 @@ export const PrimaryAndMenu: Story = {
       <SectionHeader
         title="Users"
         subtitle="A list of all the users in your account including their name, title, email and role."
-        primaryAction={{ label: 'Add user', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'Add user',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
         menuItems={MENU_ITEMS}
       />
       <SectionHeader
         title="Workflows"
-        primaryAction={{ label: 'New workflow', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'New workflow',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
         menuItems={[
-          { label: 'Import',   onClick: () => {} },
+          { label: 'Import', onClick: () => {} },
           { label: 'Settings', onClick: () => {}, icon: <Settings className="w-4 h-4" /> },
         ]}
       />
@@ -131,17 +153,45 @@ export const InContext: Story = {
   args: { title: '' },
   render: () => {
     const items = [
-      { id: 1, title: 'Leslie Alexander',  subtitle: 'leslie.alexander@example.com',  leading: <Avatar name="Leslie Alexander" size={36} />,  trailing: <Badge label="Active"  variant="active"  /> },
-      { id: 2, title: 'Michael Foster',    subtitle: 'michael.foster@example.com',    leading: <Avatar name="Michael Foster" size={36} />,    trailing: <Badge label="Active"  variant="active"  /> },
-      { id: 3, title: 'Dries Vincent',     subtitle: 'dries.vincent@example.com',     leading: <Avatar name="Dries Vincent" size={36} />,     trailing: <Badge label="Pending" variant="pending" /> },
-      { id: 4, title: 'Lindsay Walton',    subtitle: 'lindsay.walton@example.com',    leading: <Avatar name="Lindsay Walton" size={36} />,    trailing: <Badge label="Active"  variant="active"  /> },
+      {
+        id: 1,
+        title: 'Leslie Alexander',
+        subtitle: 'leslie.alexander@example.com',
+        leading: <Avatar name="Leslie Alexander" size={36} />,
+        trailing: <Badge label="Active" variant="active" />,
+      },
+      {
+        id: 2,
+        title: 'Michael Foster',
+        subtitle: 'michael.foster@example.com',
+        leading: <Avatar name="Michael Foster" size={36} />,
+        trailing: <Badge label="Active" variant="active" />,
+      },
+      {
+        id: 3,
+        title: 'Dries Vincent',
+        subtitle: 'dries.vincent@example.com',
+        leading: <Avatar name="Dries Vincent" size={36} />,
+        trailing: <Badge label="Pending" variant="pending" />,
+      },
+      {
+        id: 4,
+        title: 'Lindsay Walton',
+        subtitle: 'lindsay.walton@example.com',
+        leading: <Avatar name="Lindsay Walton" size={36} />,
+        trailing: <Badge label="Active" variant="active" />,
+      },
     ];
     return (
       <div className="max-w-2xl flex flex-col gap-4">
         <SectionHeader
           title="Team members"
           subtitle="Manage who has access to this workspace."
-          primaryAction={{ label: 'Invite member', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+          primaryAction={{
+            label: 'Invite member',
+            onClick: () => {},
+            icon: <Plus className="w-3.5 h-3.5" />,
+          }}
           menuItems={MENU_ITEMS}
         />
         <StackedList items={items} bordered />

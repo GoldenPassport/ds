@@ -8,9 +8,9 @@
 import { Switch } from '@headlessui/react';
 
 export interface ToggleProps {
-  checked:   boolean;
-  onChange:  (checked: boolean) => void;
-  label?:    string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label?: string;
   description?: string;
   disabled?: boolean;
   className?: string;
@@ -51,9 +51,7 @@ export function Toggle({
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/60 focus-visible:ring-offset-2',
           'dark:focus-visible:ring-offset-ink-900',
           'disabled:opacity-40 disabled:cursor-not-allowed',
-          checked
-            ? 'bg-primary-500'
-            : 'bg-ink-200 dark:bg-ink-600',
+          checked ? 'bg-primary-500' : 'bg-ink-200 dark:bg-ink-600',
         ].join(' ')}
       >
         <span className="sr-only">{label ?? 'Toggle'}</span>

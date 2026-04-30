@@ -10,11 +10,11 @@ const meta = {
   component: StackedList,
   tags: ['autodocs'],
   argTypes: {
-    divided:     { control: 'boolean', description: 'Horizontal divider lines between rows' },
-    bordered:    { control: 'boolean', description: 'Wraps the list in a bordered card' },
+    divided: { control: 'boolean', description: 'Horizontal divider lines between rows' },
+    bordered: { control: 'boolean', description: 'Wraps the list in a bordered card' },
     showLeading: { control: 'boolean', description: 'Show or hide the leading avatar/icon slot' },
-    renderItem:  { control: false },
-    className:   { control: 'text' },
+    renderItem: { control: false },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof StackedList>;
 
@@ -37,7 +37,9 @@ const PEOPLE: StackedListItem[] = [
     ),
     trailing: 'Co-Founder / CEO',
     trailingMeta: (
-      <span>Last seen <time dateTime="2023-01-23T13:23Z">3h ago</time></span>
+      <span>
+        Last seen <time dateTime="2023-01-23T13:23Z">3h ago</time>
+      </span>
     ),
   },
   {
@@ -53,7 +55,9 @@ const PEOPLE: StackedListItem[] = [
     ),
     trailing: 'Co-Founder / CTO',
     trailingMeta: (
-      <span>Last seen <time dateTime="2023-01-23T13:23Z">3h ago</time></span>
+      <span>
+        Last seen <time dateTime="2023-01-23T13:23Z">3h ago</time>
+      </span>
     ),
   },
   {
@@ -88,7 +92,9 @@ const PEOPLE: StackedListItem[] = [
     ),
     trailing: 'Front-end Developer',
     trailingMeta: (
-      <span>Last seen <time dateTime="2023-01-23T13:23Z">3h ago</time></span>
+      <span>
+        Last seen <time dateTime="2023-01-23T13:23Z">3h ago</time>
+      </span>
     ),
   },
   {
@@ -116,9 +122,9 @@ const PEOPLE: StackedListItem[] = [
 
 export const Playground: Story = {
   args: {
-    items:       PEOPLE,
-    divided:     true,
-    bordered:    false,
+    items: PEOPLE,
+    divided: true,
+    bordered: false,
     showLeading: true,
   },
 };
@@ -154,13 +160,52 @@ export const InitialsAvatars: Story = {
   args: { items: [] },
   render: () => {
     const items: StackedListItem[] = [
-      { id: 1, title: 'Leslie Alexander',  subtitle: 'leslie.alexander@example.com',  leading: <Avatar name="Leslie Alexander" size={40} />,  trailing: 'Co-Founder / CEO',     trailingMeta: 'Last seen 3h ago' },
-      { id: 2, title: 'Michael Foster',    subtitle: 'michael.foster@example.com',    leading: <Avatar name="Michael Foster" size={40} />,    trailing: 'Co-Founder / CTO',     trailingMeta: 'Last seen 3h ago' },
-      { id: 3, title: 'Dries Vincent',     subtitle: 'dries.vincent@example.com',     leading: <Avatar name="Dries Vincent" size={40} />,     trailing: 'Business Relations',   trailingMeta: 'Last seen 1d ago' },
-      { id: 4, title: 'Lindsay Walton',    subtitle: 'lindsay.walton@example.com',    leading: <Avatar name="Lindsay Walton" size={40} />,    trailing: 'Front-end Developer',  trailingMeta: 'Last seen 2h ago' },
-      { id: 5, title: 'Tom Cook',          subtitle: 'tom.cook@example.com',          leading: <Avatar name="Tom Cook" size={40} />,          trailing: 'Director of Product',  trailingMeta: 'Last seen 5h ago' },
+      {
+        id: 1,
+        title: 'Leslie Alexander',
+        subtitle: 'leslie.alexander@example.com',
+        leading: <Avatar name="Leslie Alexander" size={40} />,
+        trailing: 'Co-Founder / CEO',
+        trailingMeta: 'Last seen 3h ago',
+      },
+      {
+        id: 2,
+        title: 'Michael Foster',
+        subtitle: 'michael.foster@example.com',
+        leading: <Avatar name="Michael Foster" size={40} />,
+        trailing: 'Co-Founder / CTO',
+        trailingMeta: 'Last seen 3h ago',
+      },
+      {
+        id: 3,
+        title: 'Dries Vincent',
+        subtitle: 'dries.vincent@example.com',
+        leading: <Avatar name="Dries Vincent" size={40} />,
+        trailing: 'Business Relations',
+        trailingMeta: 'Last seen 1d ago',
+      },
+      {
+        id: 4,
+        title: 'Lindsay Walton',
+        subtitle: 'lindsay.walton@example.com',
+        leading: <Avatar name="Lindsay Walton" size={40} />,
+        trailing: 'Front-end Developer',
+        trailingMeta: 'Last seen 2h ago',
+      },
+      {
+        id: 5,
+        title: 'Tom Cook',
+        subtitle: 'tom.cook@example.com',
+        leading: <Avatar name="Tom Cook" size={40} />,
+        trailing: 'Director of Product',
+        trailingMeta: 'Last seen 5h ago',
+      },
     ];
-    return <div className="max-w-2xl"><StackedList items={items} bordered /></div>;
+    return (
+      <div className="max-w-2xl">
+        <StackedList items={items} bordered />
+      </div>
+    );
   },
 };
 
@@ -171,13 +216,52 @@ export const WithBadges: Story = {
   args: { items: [] },
   render: () => {
     const items: StackedListItem[] = [
-      { id: 1, title: 'Onboarding flow',        subtitle: 'Updated 2 hours ago',     leading: <Avatar name="Leslie Alexander" size={36} />, trailing: <Badge label="Active"  variant="active"  />, trailingMeta: '3,421 runs' },
-      { id: 2, title: 'Weekly digest email',     subtitle: 'Updated yesterday',       leading: <Avatar name="Michael Foster" size={36} />,   trailing: <Badge label="Running" variant="running" />, trailingMeta: '1,204 runs' },
-      { id: 3, title: 'Churn prediction model',  subtitle: 'Updated 3 days ago',      leading: <Avatar name="Dries Vincent" size={36} />,    trailing: <Badge label="Draft"   variant="draft"   />, trailingMeta: '0 runs'     },
-      { id: 4, title: 'Payment retry logic',     subtitle: 'Updated last week',       leading: <Avatar name="Lindsay Walton" size={36} />,   trailing: <Badge label="Failed"  variant="failed"  />, trailingMeta: '892 runs'   },
-      { id: 5, title: 'Renewal reminder series', subtitle: 'Updated 2 weeks ago',     leading: <Avatar name="Tom Cook" size={36} />,         trailing: <Badge label="Pending" variant="pending" />, trailingMeta: '45 runs'    },
+      {
+        id: 1,
+        title: 'Onboarding flow',
+        subtitle: 'Updated 2 hours ago',
+        leading: <Avatar name="Leslie Alexander" size={36} />,
+        trailing: <Badge label="Active" variant="active" />,
+        trailingMeta: '3,421 runs',
+      },
+      {
+        id: 2,
+        title: 'Weekly digest email',
+        subtitle: 'Updated yesterday',
+        leading: <Avatar name="Michael Foster" size={36} />,
+        trailing: <Badge label="Running" variant="running" />,
+        trailingMeta: '1,204 runs',
+      },
+      {
+        id: 3,
+        title: 'Churn prediction model',
+        subtitle: 'Updated 3 days ago',
+        leading: <Avatar name="Dries Vincent" size={36} />,
+        trailing: <Badge label="Draft" variant="draft" />,
+        trailingMeta: '0 runs',
+      },
+      {
+        id: 4,
+        title: 'Payment retry logic',
+        subtitle: 'Updated last week',
+        leading: <Avatar name="Lindsay Walton" size={36} />,
+        trailing: <Badge label="Failed" variant="failed" />,
+        trailingMeta: '892 runs',
+      },
+      {
+        id: 5,
+        title: 'Renewal reminder series',
+        subtitle: 'Updated 2 weeks ago',
+        leading: <Avatar name="Tom Cook" size={36} />,
+        trailing: <Badge label="Pending" variant="pending" />,
+        trailingMeta: '45 runs',
+      },
     ];
-    return <div className="max-w-2xl"><StackedList items={items} bordered /></div>;
+    return (
+      <div className="max-w-2xl">
+        <StackedList items={items} bordered />
+      </div>
+    );
   },
 };
 
@@ -187,7 +271,7 @@ export const Clickable: Story = {
   name: 'Clickable rows',
   args: { items: [] },
   render: () => {
-    const items: StackedListItem[] = PEOPLE.map(p => ({
+    const items: StackedListItem[] = PEOPLE.map((p) => ({
       ...p,
       onClick: () => alert(`Clicked: ${p.title}`),
     }));
@@ -206,10 +290,38 @@ export const WithChevronLinks: Story = {
   args: { items: [] },
   render: () => {
     const items: StackedListItem[] = [
-      { id: 1, title: 'Profile settings',        subtitle: 'Update your name, photo, and personal details',     leading: <Avatar name="Profile Settings" size={36} />,      href: '#', trailingMeta: <ChevronRight className="w-4 h-4 text-ink-300 dark:text-ink-600" /> },
-      { id: 2, title: 'Notifications',            subtitle: 'Choose what you are notified about',                leading: <Avatar name="Notifications" size={36} />,          href: '#', trailingMeta: <ChevronRight className="w-4 h-4 text-ink-300 dark:text-ink-600" /> },
-      { id: 3, title: 'Security',                 subtitle: 'Manage your password and two-factor authentication', leading: <Avatar name="Security Settings" size={36} />,      href: '#', trailingMeta: <ChevronRight className="w-4 h-4 text-ink-300 dark:text-ink-600" /> },
-      { id: 4, title: 'Billing',                  subtitle: 'Manage your plan and payment methods',               leading: <Avatar name="Billing Settings" size={36} />,       href: '#', trailingMeta: <ChevronRight className="w-4 h-4 text-ink-300 dark:text-ink-600" /> },
+      {
+        id: 1,
+        title: 'Profile settings',
+        subtitle: 'Update your name, photo, and personal details',
+        leading: <Avatar name="Profile Settings" size={36} />,
+        href: '#',
+        trailingMeta: <ChevronRight className="w-4 h-4 text-ink-300 dark:text-ink-600" />,
+      },
+      {
+        id: 2,
+        title: 'Notifications',
+        subtitle: 'Choose what you are notified about',
+        leading: <Avatar name="Notifications" size={36} />,
+        href: '#',
+        trailingMeta: <ChevronRight className="w-4 h-4 text-ink-300 dark:text-ink-600" />,
+      },
+      {
+        id: 3,
+        title: 'Security',
+        subtitle: 'Manage your password and two-factor authentication',
+        leading: <Avatar name="Security Settings" size={36} />,
+        href: '#',
+        trailingMeta: <ChevronRight className="w-4 h-4 text-ink-300 dark:text-ink-600" />,
+      },
+      {
+        id: 4,
+        title: 'Billing',
+        subtitle: 'Manage your plan and payment methods',
+        leading: <Avatar name="Billing Settings" size={36} />,
+        href: '#',
+        trailingMeta: <ChevronRight className="w-4 h-4 text-ink-300 dark:text-ink-600" />,
+      },
     ];
     return (
       <div className="max-w-2xl">
@@ -234,22 +346,36 @@ export const CustomRenderItem: Story = {
             <div className="flex items-center gap-4 min-w-0">
               {item.leading}
               <div className="min-w-0">
-                <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{item.title}</p>
-                <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300 truncate">{item.subtitle}</p>
+                <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+                  {item.title}
+                </p>
+                <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300 truncate">
+                  {item.subtitle}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3 shrink-0">
-              <span className="hidden sm:block text-sm font-body text-ink-500 dark:text-ink-300">{item.trailing}</span>
+              <span className="hidden sm:block text-sm font-body text-ink-500 dark:text-ink-300">
+                {item.trailing}
+              </span>
               <Menu
                 trigger={
-                  <button aria-label={`More options for ${item.title}`} className="p-1 rounded text-ink-400 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors">
+                  <button
+                    aria-label={`More options for ${item.title}`}
+                    className="p-1 rounded text-ink-400 dark:text-ink-300 hover:text-ink-600 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors"
+                  >
                     <MoreVertical className="w-4 h-4" aria-hidden="true" />
                   </button>
                 }
                 items={[
-                  { label: 'View profile',   onClick: () => {} },
-                  { label: 'Send message',   onClick: () => {} },
-                  { label: 'Remove member',  onClick: () => {}, destructive: true, dividerAbove: true },
+                  { label: 'View profile', onClick: () => {} },
+                  { label: 'Send message', onClick: () => {} },
+                  {
+                    label: 'Remove member',
+                    onClick: () => {},
+                    destructive: true,
+                    dividerAbove: true,
+                  },
                 ]}
               />
             </div>
@@ -267,11 +393,36 @@ export const Simple: Story = {
   args: { items: [] },
   render: () => {
     const items: StackedListItem[] = [
-      { id: 1, title: 'GraphQL API',           subtitle: 'Last deployed 2 hours ago',   trailing: <Badge label="Active"  variant="active"  /> },
-      { id: 2, title: 'REST API v2',            subtitle: 'Last deployed yesterday',     trailing: <Badge label="Active"  variant="active"  /> },
-      { id: 3, title: 'Webhook receiver',       subtitle: 'Last deployed 3 days ago',   trailing: <Badge label="Running" variant="running" /> },
-      { id: 4, title: 'Background job worker',  subtitle: 'Last deployed last week',    trailing: <Badge label="Failed"  variant="failed"  /> },
-      { id: 5, title: 'Scheduled report mailer',subtitle: 'Never deployed',             trailing: <Badge label="Draft"   variant="draft"   /> },
+      {
+        id: 1,
+        title: 'GraphQL API',
+        subtitle: 'Last deployed 2 hours ago',
+        trailing: <Badge label="Active" variant="active" />,
+      },
+      {
+        id: 2,
+        title: 'REST API v2',
+        subtitle: 'Last deployed yesterday',
+        trailing: <Badge label="Active" variant="active" />,
+      },
+      {
+        id: 3,
+        title: 'Webhook receiver',
+        subtitle: 'Last deployed 3 days ago',
+        trailing: <Badge label="Running" variant="running" />,
+      },
+      {
+        id: 4,
+        title: 'Background job worker',
+        subtitle: 'Last deployed last week',
+        trailing: <Badge label="Failed" variant="failed" />,
+      },
+      {
+        id: 5,
+        title: 'Scheduled report mailer',
+        subtitle: 'Never deployed',
+        trailing: <Badge label="Draft" variant="draft" />,
+      },
     ];
     return (
       <div className="max-w-2xl">

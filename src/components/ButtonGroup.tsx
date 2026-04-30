@@ -3,36 +3,36 @@ import React from 'react';
 // ── Types ─────────────────────────────────────────────────
 
 export interface ButtonGroupItem<T extends string | number = string> {
-  label:      string;
+  label: string;
   /** Required when using controlled value/onChange on the group */
-  value?:     T;
-  icon?:      React.ReactNode;
-  onClick?:   () => void;
-  disabled?:  boolean;
+  value?: T;
+  icon?: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
   /** Manual active highlight — ignored when value/onChange are provided */
-  active?:    boolean;
+  active?: boolean;
   /** Accessible label when only an icon is shown */
   ariaLabel?: string;
 }
 
 export interface ButtonGroupProps<T extends string | number = string> {
-  items?:     ButtonGroupItem<T>[];
+  items?: ButtonGroupItem<T>[];
   /** Controlled selected value */
-  value?:     T | T[];
+  value?: T | T[];
   /** Called with the new value or values array */
-  onChange?:  (value: T | T[]) => void;
+  onChange?: (value: T | T[]) => void;
   /** Allow selecting multiple items (requires value/onChange) */
-  multiple?:  boolean;
-  size?:      'sm' | 'md' | 'lg';
-  variant?:   'default' | 'ghost';
+  multiple?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'ghost';
   /** Render button labels — set false for icon-only groups */
   showLabel?: boolean;
   /** 'never' = shrink-wrap (default), 'always' = fill container, 'mobile' = full-width on small screens only */
   fullWidth?: 'never' | 'always' | 'mobile';
   /** Label rendered above the group */
-  label?:     string;
+  label?: string;
   /** Helper text rendered below the group */
-  hint?:      string;
+  hint?: string;
   className?: string;
 }
 
@@ -50,9 +50,9 @@ export function ButtonGroup<T extends string | number = string>({
   items = [],
   value,
   onChange,
-  multiple  = false,
-  size      = 'md',
-  variant   = 'default',
+  multiple = false,
+  size = 'md',
+  variant = 'default',
   showLabel = true,
   fullWidth = 'never',
   label,
@@ -80,8 +80,8 @@ export function ButtonGroup<T extends string | number = string>({
         const current = value as T[];
         onChange(
           current.includes(item.value)
-            ? current.filter(x => x !== item.value)
-            : [...current, item.value]
+            ? current.filter((x) => x !== item.value)
+            : [...current, item.value],
         );
       } else {
         onChange(item.value);
@@ -94,27 +94,30 @@ export function ButtonGroup<T extends string | number = string>({
 
   // Width classes — base is always inline (shrink-wrap); mobile overrides below sm.
   // items-start prevents label/hint text from stretching the group to their width.
-  const outerClass = fullWidth === 'always'
-    ? 'flex flex-col gap-1.5 w-full'
-    : fullWidth === 'mobile'
-      ? 'inline-flex flex-col gap-1.5 items-start max-sm:flex max-sm:w-full max-sm:items-stretch'
-      : 'inline-flex flex-col gap-1.5 items-start';
+  const outerClass =
+    fullWidth === 'always'
+      ? 'flex flex-col gap-1.5 w-full'
+      : fullWidth === 'mobile'
+        ? 'inline-flex flex-col gap-1.5 items-start max-sm:flex max-sm:w-full max-sm:items-stretch'
+        : 'inline-flex flex-col gap-1.5 items-start';
 
-  const groupWidthClass = fullWidth === 'always'
-    ? 'flex w-full'
-    : fullWidth === 'mobile'
-      ? 'inline-flex max-sm:flex max-sm:w-full'
-      : 'inline-flex';
+  const groupWidthClass =
+    fullWidth === 'always'
+      ? 'flex w-full'
+      : fullWidth === 'mobile'
+        ? 'inline-flex max-sm:flex max-sm:w-full'
+        : 'inline-flex';
 
-  const btnFlexClass = fullWidth === 'always'
-    ? 'flex-1 justify-center'
-    : fullWidth === 'mobile'
-      ? 'max-sm:flex-1 max-sm:justify-center'
-      : '';
+  const btnFlexClass =
+    fullWidth === 'always'
+      ? 'flex-1 justify-center'
+      : fullWidth === 'mobile'
+        ? 'max-sm:flex-1 max-sm:justify-center'
+        : '';
 
   // ARIA roles
   const groupRole = isControlled && !multiple ? 'radiogroup' : 'group';
-  const btnRole   = isControlled ? (multiple ? 'checkbox' : 'radio') : undefined;
+  const btnRole = isControlled ? (multiple ? 'checkbox' : 'radio') : undefined;
 
   return (
     <div className={`${outerClass} ${className}`}>
@@ -136,10 +139,10 @@ export function ButtonGroup<T extends string | number = string>({
         ].join(' ')}
       >
         {items.map((item, i) => {
-          const active     = isActive(item);
+          const active = isActive(item);
           const prevActive = i > 0 && isActive(items[i - 1]);
-          const isFirst    = i === 0;
-          const isLast     = i === count - 1;
+          const isFirst = i === 0;
+          const isLast = i === count - 1;
 
           // Border between buttons:
           // active|active   → darker amber divider so adjacent selections are distinguishable
@@ -173,7 +176,7 @@ export function ButtonGroup<T extends string | number = string>({
                 sizes[size],
                 dividerClass,
                 isFirst ? 'rounded-l-lg' : '',
-                isLast  ? 'rounded-r-lg' : '',
+                isLast ? 'rounded-r-lg' : '',
                 active
                   ? 'bg-primary-500 text-ink-900 dark:bg-primary-500'
                   : variant === 'default'
@@ -188,9 +191,7 @@ export function ButtonGroup<T extends string | number = string>({
         })}
       </div>
 
-      {hint && (
-        <p className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>
-      )}
+      {hint && <p className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>}
     </div>
   );
 }

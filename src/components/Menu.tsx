@@ -12,19 +12,19 @@ import React from 'react';
 import { Menu as HLMenu, MenuButton, MenuItems, MenuItem as HLMenuItem } from '@headlessui/react';
 
 export interface MenuItem {
-  label:        string;
-  onClick?:     () => void;
-  href?:        string;
-  icon?:        React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  href?: string;
+  icon?: React.ReactNode;
   destructive?: boolean;
-  disabled?:    boolean;
+  disabled?: boolean;
   dividerAbove?: boolean;
 }
 
 export interface MenuProps {
-  trigger:    React.ReactNode;
-  items:      MenuItem[];
-  align?:     'left' | 'right';
+  trigger: React.ReactNode;
+  items: MenuItem[];
+  align?: 'left' | 'right';
   ariaLabel?: string;
   className?: string;
 }
@@ -34,7 +34,10 @@ export function Menu({ trigger, items, align = 'right', ariaLabel, className = '
     <HLMenu as="div" className={`relative inline-block text-left ${className}`}>
       <MenuButton as={React.Fragment}>
         {React.isValidElement(trigger)
-          ? React.cloneElement(trigger as React.ReactElement<Record<string, unknown>>, ariaLabel ? { 'aria-label': ariaLabel } : {})
+          ? React.cloneElement(
+              trigger as React.ReactElement<Record<string, unknown>>,
+              ariaLabel ? { 'aria-label': ariaLabel } : {},
+            )
           : trigger}
       </MenuButton>
 
@@ -63,19 +66,29 @@ export function Menu({ trigger, items, align = 'right', ariaLabel, className = '
                 const cls = [
                   'flex items-center gap-2.5 w-full px-3.5 py-2 text-sm font-body text-left transition-colors duration-75',
                   focus && !item.destructive ? 'bg-ink-50 dark:bg-ink-700' : '',
-                  focus && item.destructive   ? 'bg-red-50 dark:bg-red-900/20' : '',
-                  item.destructive ? 'text-red-600 dark:text-red-400' : 'text-ink-900 dark:text-ink-50',
+                  focus && item.destructive ? 'bg-red-50 dark:bg-red-900/20' : '',
+                  item.destructive
+                    ? 'text-red-600 dark:text-red-400'
+                    : 'text-ink-900 dark:text-ink-50',
                   dis ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
                 ].join(' ');
 
                 return item.href ? (
                   <a href={item.href} className={cls}>
-                    {item.icon && <span className="shrink-0 text-current opacity-70" aria-hidden="true">{item.icon}</span>}
+                    {item.icon && (
+                      <span className="shrink-0 text-current opacity-70" aria-hidden="true">
+                        {item.icon}
+                      </span>
+                    )}
                     {item.label}
                   </a>
                 ) : (
                   <button onClick={item.onClick} className={cls}>
-                    {item.icon && <span className="shrink-0 text-current opacity-70" aria-hidden="true">{item.icon}</span>}
+                    {item.icon && (
+                      <span className="shrink-0 text-current opacity-70" aria-hidden="true">
+                        {item.icon}
+                      </span>
+                    )}
                     {item.label}
                   </button>
                 );

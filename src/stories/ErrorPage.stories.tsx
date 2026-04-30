@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  WifiOff, ShieldOff, ServerCrash, Wrench, AlertTriangle, Lock,
-} from 'lucide-react';
+import { WifiOff, ShieldOff, ServerCrash, Wrench, AlertTriangle, Lock } from 'lucide-react';
 import { ErrorPage } from '../components/ErrorPage';
 
 const meta = {
@@ -10,13 +8,17 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
-    variant:     { control: 'select', options: [undefined, '404', '500', '403', '503'], description: 'Pre-fills code, title and description for common HTTP errors' },
-    code:        { control: 'text',    description: 'Overrides the variant code (or standalone)' },
-    title:       { control: 'text' },
+    variant: {
+      control: 'select',
+      options: [undefined, '404', '500', '403', '503'],
+      description: 'Pre-fills code, title and description for common HTTP errors',
+    },
+    code: { control: 'text', description: 'Overrides the variant code (or standalone)' },
+    title: { control: 'text' },
     description: { control: 'text' },
-    fullScreen:  { control: 'boolean', description: 'Expand to min-h-screen' },
-    icon:        { control: false },
-    primaryAction:   { control: false },
+    fullScreen: { control: 'boolean', description: 'Expand to min-h-screen' },
+    icon: { control: false },
+    primaryAction: { control: false },
     secondaryAction: { control: false },
   },
 } satisfies Meta<typeof ErrorPage>;
@@ -26,39 +28,27 @@ type Story = StoryObj<typeof meta>;
 
 // ── Shared actions ────────────────────────────────────────
 
-const homeAction   = { label: 'Go back home', href: '#' };
-const backAction   = { label: 'Go back',       onClick: () => history.back() };
+const homeAction = { label: 'Go back home', href: '#' };
+const backAction = { label: 'Go back', onClick: () => history.back() };
 const supportAction = { label: 'Contact support', href: '#' };
-const retryAction  = { label: 'Try again',     onClick: () => location.reload() };
-const statusAction = { label: 'Check status',  href: '#' };
+const retryAction = { label: 'Try again', onClick: () => location.reload() };
+const statusAction = { label: 'Check status', href: '#' };
 
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
   args: {
-    variant:    '404',
+    variant: '404',
     fullScreen: false,
   },
-  render: (args) => (
-    <ErrorPage
-      {...args}
-      primaryAction={homeAction}
-      secondaryAction={backAction}
-    />
-  ),
+  render: (args) => <ErrorPage {...args} primaryAction={homeAction} secondaryAction={backAction} />,
 };
 
 // ── 404 Not Found ─────────────────────────────────────────
 
 export const NotFound: Story = {
   name: '404 — Not found',
-  render: () => (
-    <ErrorPage
-      variant="404"
-      primaryAction={homeAction}
-      secondaryAction={backAction}
-    />
-  ),
+  render: () => <ErrorPage variant="404" primaryAction={homeAction} secondaryAction={backAction} />,
 };
 
 // ── 500 Server Error ──────────────────────────────────────
@@ -66,11 +56,7 @@ export const NotFound: Story = {
 export const ServerError: Story = {
   name: '500 — Server error',
   render: () => (
-    <ErrorPage
-      variant="500"
-      primaryAction={retryAction}
-      secondaryAction={supportAction}
-    />
+    <ErrorPage variant="500" primaryAction={retryAction} secondaryAction={supportAction} />
   ),
 };
 
@@ -79,11 +65,7 @@ export const ServerError: Story = {
 export const Forbidden: Story = {
   name: '403 — Forbidden',
   render: () => (
-    <ErrorPage
-      variant="403"
-      primaryAction={homeAction}
-      secondaryAction={supportAction}
-    />
+    <ErrorPage variant="403" primaryAction={homeAction} secondaryAction={supportAction} />
   ),
 };
 
@@ -92,11 +74,7 @@ export const Forbidden: Story = {
 export const Maintenance: Story = {
   name: '503 — Maintenance',
   render: () => (
-    <ErrorPage
-      variant="503"
-      primaryAction={retryAction}
-      secondaryAction={statusAction}
-    />
+    <ErrorPage variant="503" primaryAction={retryAction} secondaryAction={statusAction} />
   ),
 };
 
@@ -174,11 +152,7 @@ export const SessionExpired: Story = {
 
 export const Minimal: Story = {
   name: 'Minimal — no actions',
-  render: () => (
-    <ErrorPage
-      variant="500"
-    />
-  ),
+  render: () => <ErrorPage variant="500" />,
 };
 
 // ── All variants ──────────────────────────────────────────
@@ -188,16 +162,12 @@ export const AllVariants: Story = {
   parameters: { layout: 'padded' },
   render: () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {(['404', '500', '403', '503'] as const).map(v => (
+      {(['404', '500', '403', '503'] as const).map((v) => (
         <div
           key={v}
           className="rounded-2xl border border-ink-100 dark:border-ink-700 overflow-hidden"
         >
-          <ErrorPage
-            variant={v}
-            primaryAction={homeAction}
-            secondaryAction={backAction}
-          />
+          <ErrorPage variant={v} primaryAction={homeAction} secondaryAction={backAction} />
         </div>
       ))}
     </div>

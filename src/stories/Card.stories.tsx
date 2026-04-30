@@ -11,14 +11,14 @@ const meta = {
   component: Card,
   tags: ['autodocs'],
   argTypes: {
-    header:      { control: false },
-    footer:      { control: false },
-    padding:     { control: { type: 'select', options: ['none', 'sm', 'md', 'lg'] } },
+    header: { control: false },
+    footer: { control: false },
+    padding: { control: { type: 'select', options: ['none', 'sm', 'md', 'lg'] } },
     headerMuted: { control: 'boolean' },
-    bodyMuted:   { control: 'boolean' },
+    bodyMuted: { control: 'boolean' },
     footerMuted: { control: 'boolean' },
-    children:    { control: false },
-    className:   { control: 'text' },
+    children: { control: false },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof Card>;
 
@@ -29,19 +29,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   args: {
-    padding:     'md',
+    padding: 'md',
     headerMuted: false,
-    bodyMuted:   false,
+    bodyMuted: false,
     footerMuted: false,
     header: (
-      <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
-        Card header
-      </h3>
+      <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">Card header</h3>
     ),
     footer: (
       <div className="flex justify-end gap-3">
-        <Button variant="secondary" size="sm">Cancel</Button>
-        <Button variant="primary"   size="sm">Save</Button>
+        <Button variant="secondary" size="sm">
+          Cancel
+        </Button>
+        <Button variant="primary" size="sm">
+          Save
+        </Button>
       </div>
     ),
     children: (
@@ -135,8 +137,12 @@ export const WithFooter: Story = {
       <Card
         footer={
           <div className="flex justify-end gap-3">
-            <Button variant="secondary" size="sm">Cancel</Button>
-            <Button variant="primary"   size="sm">Save changes</Button>
+            <Button variant="secondary" size="sm">
+              Cancel
+            </Button>
+            <Button variant="primary" size="sm">
+              Save changes
+            </Button>
           </div>
         }
       >
@@ -181,8 +187,12 @@ export const WithHeaderAndFooter: Story = {
         }
         footer={
           <div className="flex justify-end gap-3">
-            <Button variant="secondary" size="sm">Cancel</Button>
-            <Button variant="primary"   size="sm">Update billing</Button>
+            <Button variant="secondary" size="sm">
+              Cancel
+            </Button>
+            <Button variant="primary" size="sm">
+              Update billing
+            </Button>
           </div>
         }
       >
@@ -227,31 +237,47 @@ export const MutedSections: Story = {
     );
     const footer = (
       <div className="flex justify-end gap-3">
-        <Button variant="secondary" size="sm">Cancel</Button>
-        <Button variant="primary"   size="sm">Confirm</Button>
+        <Button variant="secondary" size="sm">
+          Cancel
+        </Button>
+        <Button variant="primary" size="sm">
+          Confirm
+        </Button>
       </div>
     );
     return (
       <div className="max-w-lg flex flex-col gap-6">
         <div>
           <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">headerMuted</p>
-          <Card header={header} footer={footer} headerMuted>{body}</Card>
+          <Card header={header} footer={footer} headerMuted>
+            {body}
+          </Card>
         </div>
         <div>
           <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">bodyMuted</p>
-          <Card header={header} footer={footer} bodyMuted>{body}</Card>
+          <Card header={header} footer={footer} bodyMuted>
+            {body}
+          </Card>
         </div>
         <div>
           <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">footerMuted</p>
-          <Card header={header} footer={footer} footerMuted>{body}</Card>
+          <Card header={header} footer={footer} footerMuted>
+            {body}
+          </Card>
         </div>
         <div>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">headerMuted + footerMuted</p>
-          <Card header={header} footer={footer} headerMuted footerMuted>{body}</Card>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">
+            headerMuted + footerMuted
+          </p>
+          <Card header={header} footer={footer} headerMuted footerMuted>
+            {body}
+          </Card>
         </div>
         <div>
           <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">all muted</p>
-          <Card header={header} footer={footer} headerMuted bodyMuted footerMuted>{body}</Card>
+          <Card header={header} footer={footer} headerMuted bodyMuted footerMuted>
+            {body}
+          </Card>
         </div>
       </div>
     );
@@ -298,9 +324,18 @@ export const BodyMuted: Story = {
         bodyMuted
       >
         <div className="flex flex-col gap-2 text-xs font-mono text-ink-600 dark:text-ink-300">
-          <div className="flex gap-4"><span className="text-ink-400 dark:text-ink-300 select-none">01</span> DATABASE_URL=postgres://...</div>
-          <div className="flex gap-4"><span className="text-ink-400 dark:text-ink-300 select-none">02</span> REDIS_URL=redis://...</div>
-          <div className="flex gap-4"><span className="text-ink-400 dark:text-ink-300 select-none">03</span> SECRET_KEY=••••••••••••</div>
+          <div className="flex gap-4">
+            <span className="text-ink-400 dark:text-ink-300 select-none">01</span>{' '}
+            DATABASE_URL=postgres://...
+          </div>
+          <div className="flex gap-4">
+            <span className="text-ink-400 dark:text-ink-300 select-none">02</span>{' '}
+            REDIS_URL=redis://...
+          </div>
+          <div className="flex gap-4">
+            <span className="text-ink-400 dark:text-ink-300 select-none">03</span>{' '}
+            SECRET_KEY=••••••••••••
+          </div>
         </div>
       </Card>
     </div>
@@ -324,18 +359,22 @@ export const WithDividers: Story = {
         padding="none"
       >
         {[
-          { name: 'Leslie Alexander',  role: 'Co-Founder / CEO',      status: 'active'  as const },
-          { name: 'Michael Foster',    role: 'Co-Founder / CTO',      status: 'active'  as const },
-          { name: 'Dries Vincent',     role: 'Business Relations',    status: 'pending' as const },
-          { name: 'Lindsay Walton',    role: 'Front-end Developer',   status: 'active'  as const },
+          { name: 'Leslie Alexander', role: 'Co-Founder / CEO', status: 'active' as const },
+          { name: 'Michael Foster', role: 'Co-Founder / CTO', status: 'active' as const },
+          { name: 'Dries Vincent', role: 'Business Relations', status: 'pending' as const },
+          { name: 'Lindsay Walton', role: 'Front-end Developer', status: 'active' as const },
         ].map((person, i, arr) => (
           <div key={i}>
             <div className="flex items-center justify-between gap-4 px-6 py-4">
               <div className="flex items-center gap-3 min-w-0">
                 <Avatar name={person.name} size={36} />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{person.name}</p>
-                  <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{person.role}</p>
+                  <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+                    {person.name}
+                  </p>
+                  <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">
+                    {person.role}
+                  </p>
                 </div>
               </div>
               <Badge
@@ -358,10 +397,11 @@ export const PaddingSizes: Story = {
   args: { children: null },
   render: () => (
     <div className="max-w-lg flex flex-col gap-4">
-      {(['sm', 'md', 'lg'] as const).map(size => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <Card key={size} padding={size}>
           <p className="text-sm font-body text-ink-500 dark:text-ink-300">
-            <span className="font-semibold text-ink-900 dark:text-ink-50">padding="{size}"</span> — body content with this padding applied.
+            <span className="font-semibold text-ink-900 dark:text-ink-50">padding="{size}"</span> —
+            body content with this padding applied.
           </p>
         </Card>
       ))}

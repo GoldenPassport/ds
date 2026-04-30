@@ -30,15 +30,15 @@ export interface ComboboxOption<T = string> {
 }
 
 export interface ComboboxProps<T = string> {
-  value:        T | null;
-  onChange:     (value: T | null) => void;
-  options:      ComboboxOption<T>[];
-  label?:       string;
-  hint?:        string;
-  error?:       string;
+  value: T | null;
+  onChange: (value: T | null) => void;
+  options: ComboboxOption<T>[];
+  label?: string;
+  hint?: string;
+  error?: string;
   placeholder?: string;
-  disabled?:    boolean;
-  className?:   string;
+  disabled?: boolean;
+  className?: string;
 }
 
 export function Combobox<T extends string | number>({
@@ -52,16 +52,15 @@ export function Combobox<T extends string | number>({
   disabled = false,
   className = '',
 }: ComboboxProps<T>) {
-  const id    = React.useId();
+  const id = React.useId();
   const [query, setQuery] = React.useState('');
 
-  const filtered = query === ''
-    ? options
-    : options.filter(o =>
-        o.label.toLowerCase().includes(query.toLowerCase())
-      );
+  const filtered =
+    query === ''
+      ? options
+      : options.filter((o) => o.label.toLowerCase().includes(query.toLowerCase()));
 
-  const selected = options.find(o => o.value === value) ?? null;
+  const selected = options.find((o) => o.value === value) ?? null;
 
   return (
     <HLCombobox value={value} onChange={onChange} disabled={disabled}>
@@ -90,7 +89,7 @@ export function Combobox<T extends string | number>({
               'transition-all duration-150',
             ].join(' ')}
             displayValue={() => selected?.label ?? ''}
-            onChange={e => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder={placeholder}
           />
           <ComboboxButton className="absolute inset-y-0 right-3 flex items-center text-ink-400 bg-transparent border-0 cursor-pointer">
@@ -107,28 +106,34 @@ export function Combobox<T extends string | number>({
             enterTo="opacity-100 translate-y-0"
             afterLeave={() => setQuery('')}
           >
-            <ComboboxOptions className={[
-              'absolute top-full left-0 z-50 mt-1 w-full overflow-auto rounded-xl py-1',
-              'bg-white dark:bg-ink-800 shadow-lg dark:shadow-dark-md',
-              'border border-ink-200 dark:border-ink-700',
-              'focus:outline-none text-sm font-body max-h-60',
-            ].join(' ')}>
+            <ComboboxOptions
+              className={[
+                'absolute top-full left-0 z-50 mt-1 w-full overflow-auto rounded-xl py-1',
+                'bg-white dark:bg-ink-800 shadow-lg dark:shadow-dark-md',
+                'border border-ink-200 dark:border-ink-700',
+                'focus:outline-none text-sm font-body max-h-60',
+              ].join(' ')}
+            >
               {filtered.length === 0 ? (
                 <div className="px-3.5 py-3 text-ink-500 dark:text-ink-300 text-sm font-body">
                   No results for &ldquo;{query}&rdquo;
                 </div>
               ) : (
-                filtered.map(option => (
+                filtered.map((option) => (
                   <ComboboxOption
                     key={String(option.value)}
                     value={option.value}
                     disabled={option.disabled}
-                    className={({ active, selected: sel }) => [
-                      'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
-                      active   ? 'bg-ink-50 dark:bg-ink-700' : '',
-                      sel      ? 'text-primary-800 dark:text-primary-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
-                      option.disabled ? 'opacity-40 cursor-not-allowed' : '',
-                    ].join(' ')}
+                    className={({ active, selected: sel }) =>
+                      [
+                        'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
+                        active ? 'bg-ink-50 dark:bg-ink-700' : '',
+                        sel
+                          ? 'text-primary-800 dark:text-primary-400 font-semibold'
+                          : 'text-ink-900 dark:text-ink-50',
+                        option.disabled ? 'opacity-40 cursor-not-allowed' : '',
+                      ].join(' ')
+                    }
                   >
                     {({ selected: sel }) => (
                       <span className="flex items-center justify-between">
@@ -144,10 +149,18 @@ export function Combobox<T extends string | number>({
         </div>
 
         {hint && !error && (
-          <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>
+          <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">
+            {hint}
+          </p>
         )}
         {error && (
-          <p id={`${id}-error`} role="alert" className="text-xs text-red-500 dark:text-red-400 font-body">{error}</p>
+          <p
+            id={`${id}-error`}
+            role="alert"
+            className="text-xs text-red-500 dark:text-red-400 font-body"
+          >
+            {error}
+          </p>
         )}
       </div>
     </HLCombobox>

@@ -4,23 +4,23 @@ import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Combobox } from '../components/Combobox';
 
 const USERS = [
-  { value: 'alex',  label: 'Alex Morgan'             },
-  { value: 'sarah', label: 'Sarah Kim'               },
-  { value: 'tom',   label: 'Tom Richards'            },
-  { value: 'maya',  label: 'Maya Patel'              },
-  { value: 'james', label: 'James Okafor'            },
-  { value: 'priya', label: 'Priya Nair'              },
-  { value: 'bot',   label: 'System (Bot)', disabled: true },
+  { value: 'alex', label: 'Alex Morgan' },
+  { value: 'sarah', label: 'Sarah Kim' },
+  { value: 'tom', label: 'Tom Richards' },
+  { value: 'maya', label: 'Maya Patel' },
+  { value: 'james', label: 'James Okafor' },
+  { value: 'priya', label: 'Priya Nair' },
+  { value: 'bot', label: 'System (Bot)', disabled: true },
 ];
 
 const INTEGRATIONS = [
-  { value: 'slack',      label: 'Slack'      },
-  { value: 'jira',       label: 'Jira'       },
+  { value: 'slack', label: 'Slack' },
+  { value: 'jira', label: 'Jira' },
   { value: 'salesforce', label: 'Salesforce' },
-  { value: 'zendesk',    label: 'Zendesk'    },
-  { value: 'notion',     label: 'Notion'     },
-  { value: 'github',     label: 'GitHub'     },
-  { value: 'hubspot',    label: 'HubSpot'    },
+  { value: 'zendesk', label: 'Zendesk' },
+  { value: 'notion', label: 'Notion' },
+  { value: 'github', label: 'GitHub' },
+  { value: 'hubspot', label: 'HubSpot' },
 ];
 
 const meta = {
@@ -28,14 +28,14 @@ const meta = {
   component: Combobox,
   tags: ['autodocs'],
   argTypes: {
-    label:       { control: 'text',    description: 'Label shown above the input' },
-    hint:        { control: 'text',    description: 'Helper text shown below the input' },
-    placeholder: { control: 'text',   description: 'Input placeholder text' },
-    disabled:    { control: 'boolean', description: 'Disables the combobox' },
-    options:     { control: false,     description: 'Array of { value, label, disabled? } options' },
-    value:       { control: false,     description: 'Currently selected value (controlled)' },
-    onChange:    { control: false,     description: 'Called when the selected value changes' },
-    className:   { control: 'text',   description: 'Extra CSS class on the wrapper' },
+    label: { control: 'text', description: 'Label shown above the input' },
+    hint: { control: 'text', description: 'Helper text shown below the input' },
+    placeholder: { control: 'text', description: 'Input placeholder text' },
+    disabled: { control: 'boolean', description: 'Disables the combobox' },
+    options: { control: false, description: 'Array of { value, label, disabled? } options' },
+    value: { control: false, description: 'Currently selected value (controlled)' },
+    onChange: { control: false, description: 'Called when the selected value changes' },
+    className: { control: 'text', description: 'Extra CSS class on the wrapper' },
   },
 } satisfies Meta<typeof Combobox>;
 
@@ -44,13 +44,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   args: {
-    label:       'Assign approver',
+    label: 'Assign approver',
     placeholder: 'Search team members…',
-    hint:        'This person will be notified when the step runs',
-    disabled:    false,
-    value:       null,
-    onChange:    () => {},
-    options:     [],
+    hint: 'This person will be notified when the step runs',
+    disabled: false,
+    value: null,
+    onChange: () => {},
+    options: [],
   },
   render: (args) => {
     const [val, setVal] = React.useState<string | null>(null);
@@ -139,7 +139,7 @@ export const Interactions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click chevron button — options list opens', async () => {
       // ComboboxInput click alone does not open in HUI v2 — use the ComboboxButton

@@ -10,12 +10,21 @@ const meta = {
   component: ActionPanel,
   tags: ['autodocs'],
   argTypes: {
-    variant:     { control: 'select', options: ['default', 'danger'], description: '"danger" applies red border + red title' },
-    layout:      { control: 'select', options: ['stacked', 'inline'], description: '"stacked" places children below the description; "inline" places them to the right' },
-    title:       { control: 'text' },
+    variant: {
+      control: 'select',
+      options: ['default', 'danger'],
+      description: '"danger" applies red border + red title',
+    },
+    layout: {
+      control: 'select',
+      options: ['stacked', 'inline'],
+      description:
+        '"stacked" places children below the description; "inline" places them to the right',
+    },
+    title: { control: 'text' },
     description: { control: 'text' },
-    children:    { control: false },
-    className:   { control: 'text' },
+    children: { control: false },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof ActionPanel>;
 
@@ -26,10 +35,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   args: {
-    variant:     'default',
-    layout:      'stacked',
-    title:       'Need more bandwidth?',
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus praesentium tenetur pariatur.',
+    variant: 'default',
+    layout: 'stacked',
+    title: 'Need more bandwidth?',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus praesentium tenetur pariatur.',
   },
   render: (args) => (
     <div className="max-w-2xl">
@@ -58,7 +68,9 @@ export const WithButton: Story = {
         title="Export account data"
         description="Download a copy of all the data associated with your account including workflows, runs, and audit logs."
       >
-        <Button variant="secondary" size="sm">Request export</Button>
+        <Button variant="secondary" size="sm">
+          Request export
+        </Button>
       </ActionPanel>
     </div>
   ),
@@ -82,7 +94,7 @@ export const WithInput: Story = {
               type="email"
               placeholder="you@example.com"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               className="max-w-xs"
             />
             <Button variant="primary">Save</Button>
@@ -126,7 +138,9 @@ export const WithButtonInline: Story = {
         title="Enable two-factor authentication"
         description="Add an extra layer of security by requiring a verification code alongside your password."
       >
-        <Button variant="primary" size="sm">Enable 2FA</Button>
+        <Button variant="primary" size="sm">
+          Enable 2FA
+        </Button>
       </ActionPanel>
 
       <ActionPanel
@@ -134,7 +148,9 @@ export const WithButtonInline: Story = {
         title="Manage team members"
         description="Invite colleagues and control what they can access in your workspace."
       >
-        <Button variant="secondary" size="sm">Manage team</Button>
+        <Button variant="secondary" size="sm">
+          Manage team
+        </Button>
       </ActionPanel>
     </div>
   ),
@@ -152,7 +168,9 @@ export const Danger: Story = {
         title="Delete this workflow"
         description="Once you delete this workflow all run history will be permanently removed. There is no going back."
       >
-        <Button variant="danger" size="sm">Delete workflow</Button>
+        <Button variant="danger" size="sm">
+          Delete workflow
+        </Button>
       </ActionPanel>
 
       <ActionPanel
@@ -161,7 +179,9 @@ export const Danger: Story = {
         title="Revoke API key"
         description="Any integrations using this key will immediately stop working."
       >
-        <Button variant="danger" size="sm">Revoke key</Button>
+        <Button variant="danger" size="sm">
+          Revoke key
+        </Button>
       </ActionPanel>
     </div>
   ),
@@ -177,7 +197,6 @@ export const AllLayouts: Story = {
     const [notifications, setNotifications] = React.useState(false);
     return (
       <div className="max-w-2xl flex flex-col gap-5">
-
         <ActionPanel
           title="Need more bandwidth?"
           description="Talk to our sales team about custom limits and enterprise pricing."
@@ -216,9 +235,10 @@ export const AllLayouts: Story = {
           title="Delete account"
           description="Once you delete your account all your data will be permanently removed. There is no going back."
         >
-          <Button variant="danger" size="sm">Delete my account</Button>
+          <Button variant="danger" size="sm">
+            Delete my account
+          </Button>
         </ActionPanel>
-
       </div>
     );
   },

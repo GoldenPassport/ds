@@ -5,26 +5,26 @@ import type { ButtonVariant } from './Button';
 // ── Types ─────────────────────────────────────────────────
 
 export interface EmptyStateAction {
-  label:    string;
+  label: string;
   onClick?: () => void;
-  href?:    string;
-  icon?:    React.ReactNode;
+  href?: string;
+  icon?: React.ReactNode;
   variant?: ButtonVariant;
 }
 
 export interface EmptyStateProps {
   /** Large icon rendered above the title */
-  icon?:             React.ReactNode;
-  title:             string;
-  description?:      string;
-  primaryAction?:    EmptyStateAction;
-  secondaryAction?:  EmptyStateAction;
+  icon?: React.ReactNode;
+  title: string;
+  description?: string;
+  primaryAction?: EmptyStateAction;
+  secondaryAction?: EmptyStateAction;
   /**
    * Wraps the content in a dashed rounded border.
    * Use when the empty state replaces a list or table in-place.
    */
-  bordered?:         boolean;
-  className?:        string;
+  bordered?: boolean;
+  className?: string;
 }
 
 // ── Action helper ─────────────────────────────────────────
@@ -56,7 +56,7 @@ export function EmptyState({
   description,
   primaryAction,
   secondaryAction,
-  bordered  = false,
+  bordered = false,
   className = '',
 }: EmptyStateProps) {
   const inner = (
@@ -67,9 +67,7 @@ export function EmptyState({
         </div>
       )}
 
-      <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
-        {title}
-      </h3>
+      <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{title}</h3>
 
       {description && (
         <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300 max-w-sm leading-relaxed">
@@ -79,8 +77,10 @@ export function EmptyState({
 
       {(primaryAction || secondaryAction) && (
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          {primaryAction  && <ActionButton action={primaryAction}  />}
-          {secondaryAction && <ActionButton action={{ variant: 'secondary', ...secondaryAction }} />}
+          {primaryAction && <ActionButton action={primaryAction} />}
+          {secondaryAction && (
+            <ActionButton action={{ variant: 'secondary', ...secondaryAction }} />
+          )}
         </div>
       )}
     </div>
@@ -88,18 +88,16 @@ export function EmptyState({
 
   if (bordered) {
     return (
-      <div className={[
-        'rounded-2xl border-2 border-dashed border-ink-200 dark:border-ink-700',
-        className,
-      ].join(' ')}>
+      <div
+        className={[
+          'rounded-2xl border-2 border-dashed border-ink-200 dark:border-ink-700',
+          className,
+        ].join(' ')}
+      >
         {inner}
       </div>
     );
   }
 
-  return (
-    <div className={className}>
-      {inner}
-    </div>
-  );
+  return <div className={className}>{inner}</div>;
 }

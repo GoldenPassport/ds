@@ -23,25 +23,25 @@ export type OtpInputSize = 'sm' | 'md' | 'lg';
 
 export interface OtpInputProps {
   /** Controlled value string (length ≤ `length`). */
-  value:        string;
-  onChange:     (value: string) => void;
+  value: string;
+  onChange: (value: string) => void;
   /** Called once when all cells are filled. */
-  onComplete?:  (value: string) => void;
+  onComplete?: (value: string) => void;
   /** Total number of cells. Default: 6 */
-  length?:      number;
+  length?: number;
   /** Restrict input to digits 0-9. Default: true */
-  numeric?:     boolean;
+  numeric?: boolean;
   /** Mask values like a password field. */
-  mask?:        boolean;
+  mask?: boolean;
   /** Size of each cell. Default: `'md'` */
-  size?:        OtpInputSize;
-  label?:       string;
-  hint?:        string;
-  error?:       string;
-  disabled?:    boolean;
+  size?: OtpInputSize;
+  label?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
   /** Auto-focus the first cell on mount. */
-  autoFocus?:   boolean;
-  className?:   string;
+  autoFocus?: boolean;
+  className?: string;
 }
 
 // ── Style maps ────────────────────────────────────────────
@@ -71,18 +71,18 @@ export function OtpInput({
   value,
   onChange,
   onComplete,
-  length    = 6,
-  numeric   = true,
-  mask      = false,
-  size      = 'md',
+  length = 6,
+  numeric = true,
+  mask = false,
+  size = 'md',
   label,
   hint,
   error,
-  disabled  = false,
+  disabled = false,
   autoFocus = false,
   className = '',
 }: OtpInputProps) {
-  const inputId   = React.useId();
+  const inputId = React.useId();
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   // Keep an internal array in sync with the controlled value string
@@ -91,8 +91,8 @@ export function OtpInput({
   // ── Sequential enable range ────────────────────────────
   // All filled cells + the very next empty cell are enabled.
   // Every cell beyond the first gap stays disabled until the user reaches it.
-  const firstEmptyIdx = cells.findIndex(c => !c);
-  const enabledUpTo   = firstEmptyIdx === -1 ? length - 1 : firstEmptyIdx;
+  const firstEmptyIdx = cells.findIndex((c) => !c);
+  const enabledUpTo = firstEmptyIdx === -1 ? length - 1 : firstEmptyIdx;
 
   // Focus helper — never focuses a cell that is currently disabled
   function focusCell(index: number) {
@@ -103,7 +103,6 @@ export function OtpInput({
   // Auto-focus on mount
   useEffect(() => {
     if (autoFocus) inputRefs.current[0]?.focus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoFocus]);
 
   // When the parent resets value to '' (e.g. after a failed OTP attempt),
@@ -128,8 +127,16 @@ export function OtpInput({
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>, index: number) {
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); focusCell(index - 1); return; }
-    if (e.key === 'ArrowRight') { e.preventDefault(); focusCell(index + 1); return; }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      focusCell(index - 1);
+      return;
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      focusCell(index + 1);
+      return;
+    }
 
     if (e.key === 'Backspace' || e.key === 'Delete') {
       e.preventDefault();
@@ -170,7 +177,7 @@ export function OtpInput({
     const char = raw.slice(-1);
     if (!char) return;
 
-    if (numeric && !/^\d$/.test(char)) return;  // reject non-digits in numeric mode
+    if (numeric && !/^\d$/.test(char)) return; // reject non-digits in numeric mode
 
     // flushSync forces React to commit the state update (which increments
     // enabledUpTo, enabling the next cell in the DOM) before we call focus.
@@ -183,8 +190,10 @@ export function OtpInput({
     let pasted = e.clipboardData.getData('text').replace(/\s/g, '');
     if (numeric) pasted = pasted.replace(/\D/g, '');
     const chars = pasted.slice(0, length).split('');
-    const next  = cells.slice();
-    chars.forEach((c, i) => { next[i] = c; });
+    const next = cells.slice();
+    chars.forEach((c, i) => {
+      next[i] = c;
+    });
     const str = next.join('');
     flushSync(() => onChange(str));
     if (str.replace(/\s/g, '').length === length) onComplete?.(str);
@@ -237,7 +246,9 @@ export function OtpInput({
             // Wrapper div needed for the mask-bullet overlay
             <div key={i} className="relative">
               <input
-                ref={el => { inputRefs.current[i] = el; }}
+                ref={(el) => {
+                  inputRefs.current[i] = el;
+                }}
                 type="text"
                 inputMode={numeric ? 'numeric' : 'text'}
                 autoComplete={!mask && i === 0 ? 'one-time-code' : 'off'}
@@ -247,12 +258,11 @@ export function OtpInput({
                 value={mask ? '' : cell}
                 disabled={isCellDisabled}
                 aria-label={`Digit ${i + 1} of ${length}`}
-                className={[
-                  cellBase,
-                  isCellDisabled ? 'opacity-40 cursor-not-allowed' : '',
-                ].join(' ')}
-                onChange={e => handleInput(e, i)}
-                onKeyDown={e => handleKeyDown(e, i)}
+                className={[cellBase, isCellDisabled ? 'opacity-40 cursor-not-allowed' : ''].join(
+                  ' ',
+                )}
+                onChange={(e) => handleInput(e, i)}
+                onKeyDown={(e) => handleKeyDown(e, i)}
                 onPaste={handlePaste}
                 onFocus={handleFocus}
               />
@@ -279,7 +289,11 @@ export function OtpInput({
       </div>
 
       {error && (
-        <p id={`${inputId}-error`} role="alert" className="text-xs font-body text-red-700 dark:text-red-400">
+        <p
+          id={`${inputId}-error`}
+          role="alert"
+          className="text-xs font-body text-red-700 dark:text-red-400"
+        >
           {error}
         </p>
       )}

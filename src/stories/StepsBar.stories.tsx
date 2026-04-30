@@ -6,26 +6,49 @@ const meta = {
   component: StepsBar,
   tags: ['autodocs'],
   args: {
-    steps:      [{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }],
-    current:    1,
-    variant:    'bar',
-    fullWidth:  'mobile',
+    steps: [{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }],
+    current: 1,
+    variant: 'bar',
+    fullWidth: 'mobile',
     responsive: true,
   },
   argTypes: {
     variant: {
       control: 'select',
       options: ['bar', 'panels', 'circles', 'vertical'],
-      description: 'bar = top-bar indicator · panels = chevron breadcrumb · circles = horizontal dots · vertical = stacked list',
+      description:
+        'bar = top-bar indicator · panels = chevron breadcrumb · circles = horizontal dots · vertical = stacked list',
     },
-    current:     { control: { type: 'range', min: 0, max: 4, step: 1 }, description: '0-indexed active step' },
-    steps:       { control: false, description: 'Array of { label, description? }' },
-    onStepClick:      { control: false, description: 'Optional click handler — enables hover states and makes steps navigable' },
-    panelAppearance:  { control: 'select', options: ['default', 'ghost'], description: 'panels variant only — default = solid white · ghost = transparent' },
-    fullWidth:        { control: 'select', options: ['none', 'always', 'mobile'], description: 'none = shrink to content · always = fill container · mobile = fill on small screens only' },
-    minStepWidth:     { control: { type: 'number', min: 0, step: 8 }, description: 'Minimum width (px) per step column' },
-    responsive:       { control: 'boolean', description: 'Collapse horizontal variants to a left-border vertical list below the sm breakpoint (640 px) — on by default' },
-    className:        { control: 'text' },
+    current: {
+      control: { type: 'range', min: 0, max: 4, step: 1 },
+      description: '0-indexed active step',
+    },
+    steps: { control: false, description: 'Array of { label, description? }' },
+    onStepClick: {
+      control: false,
+      description: 'Optional click handler — enables hover states and makes steps navigable',
+    },
+    panelAppearance: {
+      control: 'select',
+      options: ['default', 'ghost'],
+      description: 'panels variant only — default = solid white · ghost = transparent',
+    },
+    fullWidth: {
+      control: 'select',
+      options: ['none', 'always', 'mobile'],
+      description:
+        'none = shrink to content · always = fill container · mobile = fill on small screens only',
+    },
+    minStepWidth: {
+      control: { type: 'number', min: 0, step: 8 },
+      description: 'Minimum width (px) per step column',
+    },
+    responsive: {
+      control: 'boolean',
+      description:
+        'Collapse horizontal variants to a left-border vertical list below the sm breakpoint (640 px) — on by default',
+    },
+    className: { control: 'text' },
   },
   parameters: {
     layout: 'padded',
@@ -49,80 +72,69 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const STEPS_SIMPLE = [
-  { label: 'Job details'  },
-  { label: 'Application' },
-  { label: 'Preview'     },
-];
+const STEPS_SIMPLE = [{ label: 'Job details' }, { label: 'Application' }, { label: 'Preview' }];
 
 const STEPS_DESC = [
-  { label: 'Details',    description: 'Name & type'      },
-  { label: 'Configure',  description: 'Settings'         },
-  { label: 'Review',     description: 'Check everything' },
-  { label: 'Deploy',     description: 'Go live'          },
+  { label: 'Details', description: 'Name & type' },
+  { label: 'Configure', description: 'Settings' },
+  { label: 'Review', description: 'Check everything' },
+  { label: 'Deploy', description: 'Go live' },
 ];
 
 const STEPS_LONG = [
-  { label: 'Create account'       },
-  { label: 'Profile information'  },
-  { label: 'Theme'                },
-  { label: 'Preview'              },
+  { label: 'Create account' },
+  { label: 'Profile information' },
+  { label: 'Theme' },
+  { label: 'Preview' },
 ];
 
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
-  render: (args) => (
-    <StepsBar {...args} steps={STEPS_SIMPLE} />
-  ),
+  render: (args) => <StepsBar {...args} steps={STEPS_SIMPLE} />,
 };
 
 // ── Bar ───────────────────────────────────────────────────
 
 export const BarVariant: Story = {
   name: 'Bar — top-bar indicator',
-  render: (args) => (
-    <StepsBar {...args} steps={STEPS_SIMPLE} current={1} variant="bar" />
-  ),
+  render: (args) => <StepsBar {...args} steps={STEPS_SIMPLE} current={1} variant="bar" />,
 };
 
 export const BarWithDescriptions: Story = {
   name: 'Bar — with descriptions',
-  render: (args) => (
-    <StepsBar {...args} steps={STEPS_DESC} current={1} variant="bar" />
-  ),
+  render: (args) => <StepsBar {...args} steps={STEPS_DESC} current={1} variant="bar" />,
 };
 
 // ── Panels ────────────────────────────────────────────────
 
 export const PanelsVariant: Story = {
   name: 'Panels — chevron breadcrumb',
-  render: (args) => (
-    <StepsBar {...args} steps={STEPS_SIMPLE} current={1} variant="panels" />
-  ),
+  render: (args) => <StepsBar {...args} steps={STEPS_SIMPLE} current={1} variant="panels" />,
 };
 
 export const PanelsWithDescriptions: Story = {
   name: 'Panels — with descriptions',
-  render: (args) => (
-    <StepsBar {...args} steps={STEPS_DESC} current={1} variant="panels" />
-  ),
+  render: (args) => <StepsBar {...args} steps={STEPS_DESC} current={1} variant="panels" />,
 };
 
 // ── Circles ───────────────────────────────────────────────
 
 export const CirclesVariant: Story = {
   name: 'Circles — horizontal dots',
-  render: (args) => (
-    <StepsBar {...args} steps={STEPS_LONG} current={2} variant="circles" />
-  ),
+  render: (args) => <StepsBar {...args} steps={STEPS_LONG} current={2} variant="circles" />,
 };
 
 export const CirclesNoLabels: Story = {
   name: 'Circles — no labels (icon only)',
   render: (args) => (
     <div className="max-w-xs">
-      <StepsBar {...args} steps={STEPS_LONG.map(s => ({ label: s.label }))} current={2} variant="circles" />
+      <StepsBar
+        {...args}
+        steps={STEPS_LONG.map((s) => ({ label: s.label }))}
+        current={2}
+        variant="circles"
+      />
     </div>
   ),
 };
@@ -131,16 +143,12 @@ export const CirclesNoLabels: Story = {
 
 export const VerticalVariant: Story = {
   name: 'Vertical — stacked list',
-  render: (args) => (
-    <StepsBar {...args} steps={STEPS_LONG} current={1} variant="vertical" />
-  ),
+  render: (args) => <StepsBar {...args} steps={STEPS_LONG} current={1} variant="vertical" />,
 };
 
 export const VerticalWithDescriptions: Story = {
   name: 'Vertical — with descriptions',
-  render: (args) => (
-    <StepsBar {...args} steps={STEPS_DESC} current={1} variant="vertical" />
-  ),
+  render: (args) => <StepsBar {...args} steps={STEPS_DESC} current={1} variant="vertical" />,
 };
 
 // ── Clickable (hover effects) ─────────────────────────────
@@ -165,11 +173,25 @@ export const PanelsAppearances: Story = {
     <div className="space-y-8">
       <div className="space-y-2">
         <p className="text-xs font-mono text-ink-500 dark:text-ink-300">default</p>
-        <StepsBar steps={STEPS_SIMPLE} current={1} variant="panels" panelAppearance="default" onStepClick={() => {}} aria-label="Progress (default)" />
+        <StepsBar
+          steps={STEPS_SIMPLE}
+          current={1}
+          variant="panels"
+          panelAppearance="default"
+          onStepClick={() => {}}
+          aria-label="Progress (default)"
+        />
       </div>
       <div className="space-y-2">
         <p className="text-xs font-mono text-ink-500 dark:text-ink-300">ghost</p>
-        <StepsBar steps={STEPS_SIMPLE} current={1} variant="panels" panelAppearance="ghost" onStepClick={() => {}} aria-label="Progress (ghost)" />
+        <StepsBar
+          steps={STEPS_SIMPLE}
+          current={1}
+          variant="panels"
+          panelAppearance="ghost"
+          onStepClick={() => {}}
+          aria-label="Progress (ghost)"
+        />
       </div>
     </div>
   ),
@@ -195,7 +217,7 @@ export const AllVariants: Story = {
   name: 'All variants — current=1',
   render: () => (
     <div className="space-y-10 max-w-2xl">
-      {(['bar', 'panels', 'circles'] as const).map(v => (
+      {(['bar', 'panels', 'circles'] as const).map((v) => (
         <div key={v} className="space-y-2">
           <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v}</p>
           <StepsBar steps={STEPS_SIMPLE} current={1} variant={v} aria-label={`Progress (${v})`} />
@@ -203,7 +225,12 @@ export const AllVariants: Story = {
       ))}
       <div className="space-y-2">
         <p className="text-xs font-mono text-ink-500 dark:text-ink-300">vertical</p>
-        <StepsBar steps={STEPS_SIMPLE} current={1} variant="vertical" aria-label="Progress (vertical)" />
+        <StepsBar
+          steps={STEPS_SIMPLE}
+          current={1}
+          variant="vertical"
+          aria-label="Progress (vertical)"
+        />
       </div>
     </div>
   ),
@@ -215,10 +242,15 @@ export const AllComplete: Story = {
   name: 'All steps complete',
   render: () => (
     <div className="space-y-8 max-w-2xl">
-      {(['bar', 'panels', 'circles'] as const).map(v => (
+      {(['bar', 'panels', 'circles'] as const).map((v) => (
         <div key={v} className="space-y-1">
           <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v}</p>
-          <StepsBar steps={STEPS_SIMPLE} current={STEPS_SIMPLE.length} variant={v} aria-label={`Progress (${v})`} />
+          <StepsBar
+            steps={STEPS_SIMPLE}
+            current={STEPS_SIMPLE.length}
+            variant={v}
+            aria-label={`Progress (${v})`}
+          />
         </div>
       ))}
     </div>
@@ -232,9 +264,11 @@ export const Responsive: Story = {
   parameters: { layout: 'padded' },
   render: (args) => (
     <div className="space-y-8">
-      {(['bar', 'panels', 'circles'] as const).map(v => (
+      {(['bar', 'panels', 'circles'] as const).map((v) => (
         <div key={v} className="space-y-2">
-          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v} (resize window below 640 px)</p>
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">
+            {v} (resize window below 640 px)
+          </p>
           <StepsBar
             {...args}
             steps={STEPS_DESC}

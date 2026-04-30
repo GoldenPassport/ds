@@ -8,22 +8,40 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   args: {
-    value:   60,
-    max:     100,
-    size:    'md',
+    value: 60,
+    max: 100,
+    size: 'md',
     variant: 'default',
   },
   argTypes: {
-    value:         { control: { type: 'range', min: 0, max: 100, step: 1 }, description: 'Current progress (0–max)' },
-    max:           { control: 'number',                                       description: 'Maximum value. Default 100.' },
-    shape:         { control: 'select', options: ['linear', 'circular'],     description: 'Visual shape of the progress indicator' },
-    size:          { control: 'select', options: ['xs', 'sm', 'md', 'lg'],   description: 'Track height (linear) or diameter (circular)' },
-    variant:       { control: 'select', options: ['default', 'success', 'warning', 'error'], description: 'Fill colour' },
-    label:         { control: 'text',                                         description: 'Label shown above-left (linear) or below (circular)' },
-    showValue:     { control: 'boolean',                                      description: 'Show percentage' },
-    animated:      { control: 'boolean',                                      description: 'Pulse animation on the fill' },
-    indeterminate: { control: 'boolean',                                      description: 'Unknown progress — shows an animated full bar' },
-    className:     { control: 'text' },
+    value: {
+      control: { type: 'range', min: 0, max: 100, step: 1 },
+      description: 'Current progress (0–max)',
+    },
+    max: { control: 'number', description: 'Maximum value. Default 100.' },
+    shape: {
+      control: 'select',
+      options: ['linear', 'circular'],
+      description: 'Visual shape of the progress indicator',
+    },
+    size: {
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg'],
+      description: 'Track height (linear) or diameter (circular)',
+    },
+    variant: {
+      control: 'select',
+      options: ['default', 'success', 'warning', 'error'],
+      description: 'Fill colour',
+    },
+    label: { control: 'text', description: 'Label shown above-left (linear) or below (circular)' },
+    showValue: { control: 'boolean', description: 'Show percentage' },
+    animated: { control: 'boolean', description: 'Pulse animation on the fill' },
+    indeterminate: {
+      control: 'boolean',
+      description: 'Unknown progress — shows an animated full bar',
+    },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof ProgressBar>;
 
@@ -54,10 +72,10 @@ export const Sizes: Story = {
 export const Variants: Story = {
   render: () => (
     <div className="flex flex-col gap-5 max-w-md">
-      <ProgressBar value={60} variant="default" label="Default"  showValue />
-      <ProgressBar value={80} variant="success" label="Success"  showValue />
-      <ProgressBar value={45} variant="warning" label="Warning"  showValue />
-      <ProgressBar value={20} variant="error"   label="Error"    showValue />
+      <ProgressBar value={60} variant="default" label="Default" showValue />
+      <ProgressBar value={80} variant="success" label="Success" showValue />
+      <ProgressBar value={45} variant="warning" label="Warning" showValue />
+      <ProgressBar value={20} variant="error" label="Error" showValue />
     </div>
   ),
 };
@@ -69,7 +87,7 @@ export const WithLabel: Story = {
   render: () => (
     <div className="flex flex-col gap-5 max-w-md">
       <ProgressBar value={35} label="Uploading files…" />
-      <ProgressBar value={75} label="Processing"       showValue />
+      <ProgressBar value={75} label="Processing" showValue />
       <ProgressBar value={100} variant="success" label="Complete" showValue />
     </div>
   ),
@@ -106,7 +124,7 @@ export const Animated: Story = {
 
     React.useEffect(() => {
       if (done) return;
-      const t = setInterval(() => setValue(v => Math.min(v + 3, 100)), 150);
+      const t = setInterval(() => setValue((v) => Math.min(v + 3, 100)), 150);
       return () => clearInterval(t);
     }, [done]);
 
@@ -151,9 +169,9 @@ export const Dashboard: Story = {
       <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
         Resource usage
       </h3>
-      <ProgressBar value={82} label="CPU"     showValue variant="warning" size="sm" />
-      <ProgressBar value={47} label="Memory"  showValue variant="default" size="sm" />
-      <ProgressBar value={91} label="Storage" showValue variant="error"   size="sm" />
+      <ProgressBar value={82} label="CPU" showValue variant="warning" size="sm" />
+      <ProgressBar value={47} label="Memory" showValue variant="default" size="sm" />
+      <ProgressBar value={91} label="Storage" showValue variant="error" size="sm" />
       <ProgressBar value={12} label="Network" showValue variant="success" size="sm" />
     </div>
   ),
@@ -185,7 +203,7 @@ export const CircularVariants: Story = {
       <ProgressBar shape="circular" value={60} variant="default" showValue label="Default" />
       <ProgressBar shape="circular" value={80} variant="success" showValue label="Success" />
       <ProgressBar shape="circular" value={45} variant="warning" showValue label="Warning" />
-      <ProgressBar shape="circular" value={20} variant="error"   showValue label="Error"   />
+      <ProgressBar shape="circular" value={20} variant="error" showValue label="Error" />
     </div>
   ),
 };
@@ -195,9 +213,30 @@ export const CircularDashboard: Story = {
   render: () => (
     <div className="inline-grid grid-cols-4 gap-6 p-6 rounded-xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800">
       <ProgressBar shape="circular" size="lg" value={82} variant="warning" showValue label="CPU" />
-      <ProgressBar shape="circular" size="lg" value={47} variant="default" showValue label="Memory" />
-      <ProgressBar shape="circular" size="lg" value={91} variant="error"   showValue label="Storage" />
-      <ProgressBar shape="circular" size="lg" value={12} variant="success" showValue label="Network" />
+      <ProgressBar
+        shape="circular"
+        size="lg"
+        value={47}
+        variant="default"
+        showValue
+        label="Memory"
+      />
+      <ProgressBar
+        shape="circular"
+        size="lg"
+        value={91}
+        variant="error"
+        showValue
+        label="Storage"
+      />
+      <ProgressBar
+        shape="circular"
+        size="lg"
+        value={12}
+        variant="success"
+        showValue
+        label="Network"
+      />
     </div>
   ),
 };
@@ -210,7 +249,7 @@ export const CircularAnimated: Story = {
 
     React.useEffect(() => {
       if (done) return;
-      const t = setInterval(() => setValue(v => Math.min(v + 2, 100)), 100);
+      const t = setInterval(() => setValue((v) => Math.min(v + 2, 100)), 100);
       return () => clearInterval(t);
     }, [done]);
 

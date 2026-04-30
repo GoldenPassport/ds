@@ -16,10 +16,10 @@ const meta = {
   component: ContainerList,
   tags: ['autodocs'],
   argTypes: {
-    variant:  { control: { type: 'select', options: ['divided', 'bordered', 'cards', 'flush'] } },
+    variant: { control: { type: 'select', options: ['divided', 'bordered', 'cards', 'flush'] } },
     dividers: { control: 'boolean' },
-    className:{ control: 'text' },
-    items:    { control: false },
+    className: { control: 'text' },
+    items: { control: false },
   },
 } satisfies Meta<typeof ContainerList>;
 
@@ -29,20 +29,47 @@ type Story = StoryObj<typeof meta>;
 // ── Shared item fixtures ──────────────────────────────────
 
 const PEOPLE = [
-  { name: 'Leslie Alexander',  email: 'leslie.alexander@example.com',  role: 'Co-Founder / CEO',      status: 'active'  as const },
-  { name: 'Michael Foster',    email: 'michael.foster@example.com',    role: 'Co-Founder / CTO',      status: 'active'  as const },
-  { name: 'Dries Vincent',     email: 'dries.vincent@example.com',     role: 'Business Relations',    status: 'pending' as const },
-  { name: 'Lindsay Walton',    email: 'lindsay.walton@example.com',    role: 'Front-end Developer',   status: 'active'  as const },
-  { name: 'Tom Cook',          email: 'tom.cook@example.com',          role: 'Director of Product',   status: 'draft'   as const },
+  {
+    name: 'Leslie Alexander',
+    email: 'leslie.alexander@example.com',
+    role: 'Co-Founder / CEO',
+    status: 'active' as const,
+  },
+  {
+    name: 'Michael Foster',
+    email: 'michael.foster@example.com',
+    role: 'Co-Founder / CTO',
+    status: 'active' as const,
+  },
+  {
+    name: 'Dries Vincent',
+    email: 'dries.vincent@example.com',
+    role: 'Business Relations',
+    status: 'pending' as const,
+  },
+  {
+    name: 'Lindsay Walton',
+    email: 'lindsay.walton@example.com',
+    role: 'Front-end Developer',
+    status: 'active' as const,
+  },
+  {
+    name: 'Tom Cook',
+    email: 'tom.cook@example.com',
+    role: 'Director of Product',
+    status: 'draft' as const,
+  },
 ];
 
-function PersonRow({ name, email, role, status }: typeof PEOPLE[0]) {
+function PersonRow({ name, email, role, status }: (typeof PEOPLE)[0]) {
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex items-center gap-4 min-w-0">
         <Avatar name={name} size={40} />
         <div className="min-w-0">
-          <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{name}</p>
+          <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+            {name}
+          </p>
           <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{email}</p>
         </div>
       </div>
@@ -54,13 +81,29 @@ function PersonRow({ name, email, role, status }: typeof PEOPLE[0]) {
   );
 }
 
-const PERSON_ITEMS = PEOPLE.map(p => <PersonRow key={p.email} {...p} />);
+const PERSON_ITEMS = PEOPLE.map((p) => <PersonRow key={p.email} {...p} />);
 
 const SETTING_ITEMS = [
-  { label: 'Email notifications',    description: 'Receive email digests for activity in your workspace.',   defaultOn: true  },
-  { label: 'Two-factor auth',         description: 'Require a second factor when signing in.',               defaultOn: false },
-  { label: 'Public profile',          description: 'Allow others in the workspace to see your profile.',      defaultOn: true  },
-  { label: 'Marketing emails',        description: 'Receive product updates, tips, and announcements.',       defaultOn: false },
+  {
+    label: 'Email notifications',
+    description: 'Receive email digests for activity in your workspace.',
+    defaultOn: true,
+  },
+  {
+    label: 'Two-factor auth',
+    description: 'Require a second factor when signing in.',
+    defaultOn: false,
+  },
+  {
+    label: 'Public profile',
+    description: 'Allow others in the workspace to see your profile.',
+    defaultOn: true,
+  },
+  {
+    label: 'Marketing emails',
+    description: 'Receive product updates, tips, and announcements.',
+    defaultOn: false,
+  },
 ].map(({ label, description, defaultOn }) => (
   <div key={label} className="flex items-center justify-between gap-6">
     <div className="min-w-0">
@@ -72,9 +115,22 @@ const SETTING_ITEMS = [
 ));
 
 const ACTION_ITEMS = [
-  { title: 'Export data',    description: 'Download a CSV export of all your workspace data.',    action: 'Export'   },
-  { title: 'Transfer ownership', description: 'Transfer ownership of this workspace to another member.', action: 'Transfer' },
-  { title: 'Delete workspace',   description: 'Permanently delete this workspace and all its data.',     action: 'Delete', danger: true },
+  {
+    title: 'Export data',
+    description: 'Download a CSV export of all your workspace data.',
+    action: 'Export',
+  },
+  {
+    title: 'Transfer ownership',
+    description: 'Transfer ownership of this workspace to another member.',
+    action: 'Transfer',
+  },
+  {
+    title: 'Delete workspace',
+    description: 'Permanently delete this workspace and all its data.',
+    action: 'Delete',
+    danger: true,
+  },
 ].map(({ title, description, action, danger }) => (
   <div key={title} className="flex items-center justify-between gap-6">
     <div className="min-w-0">
@@ -91,9 +147,9 @@ const ACTION_ITEMS = [
 
 export const Playground: Story = {
   args: {
-    variant:  'divided',
+    variant: 'divided',
     dividers: true,
-    items:    PERSON_ITEMS,
+    items: PERSON_ITEMS,
   },
 };
 
@@ -142,18 +198,25 @@ export const Flush: Story = {
     <div className="max-w-2xl">
       <ContainerList
         variant="flush"
-        items={PEOPLE.map(p => (
+        items={PEOPLE.map((p) => (
           <div key={p.email} className="flex items-center justify-between gap-3 px-4">
             <div className="flex items-center gap-3 min-w-0">
               <Avatar name={p.name} size={32} />
               <div className="min-w-0">
-                <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{p.name}</p>
-                <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{p.email}</p>
+                <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+                  {p.name}
+                </p>
+                <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">
+                  {p.email}
+                </p>
               </div>
             </div>
             <div className="hidden sm:flex items-center gap-3 shrink-0">
               <span className="text-sm font-body text-ink-500 dark:text-ink-300">{p.role}</span>
-              <Badge label={p.status.charAt(0).toUpperCase() + p.status.slice(1)} variant={p.status} />
+              <Badge
+                label={p.status.charAt(0).toUpperCase() + p.status.slice(1)}
+                variant={p.status}
+              />
             </div>
           </div>
         ))}
@@ -169,22 +232,29 @@ export const AllVariants: Story = {
   args: { items: [] },
   render: () => (
     <div className="max-w-2xl flex flex-col gap-10">
-      {(['divided', 'bordered', 'cards', 'flush'] as const).map(variant => (
+      {(['divided', 'bordered', 'cards', 'flush'] as const).map((variant) => (
         <div key={variant}>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">variant="{variant}"</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">
+            variant="{variant}"
+          </p>
           <ContainerList
             variant={variant}
-            items={variant === 'flush'
-              ? PEOPLE.slice(0, 3).map(p => (
-                  <div key={p.email} className="flex items-center gap-3 px-4">
-                    <Avatar name={p.name} size={32} />
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">{p.name}</p>
-                      <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">{p.role}</p>
+            items={
+              variant === 'flush'
+                ? PEOPLE.slice(0, 3).map((p) => (
+                    <div key={p.email} className="flex items-center gap-3 px-4">
+                      <Avatar name={p.name} size={32} />
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+                          {p.name}
+                        </p>
+                        <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">
+                          {p.role}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))
-              : PEOPLE.slice(0, 3).map(p => <PersonRow key={p.email} {...p} />)
+                  ))
+                : PEOPLE.slice(0, 3).map((p) => <PersonRow key={p.email} {...p} />)
             }
           />
         </div>
@@ -200,9 +270,11 @@ export const NoDividers: Story = {
   args: { items: [] },
   render: () => (
     <div className="max-w-2xl flex flex-col gap-8">
-      {(['divided', 'bordered', 'flush'] as const).map(variant => (
+      {(['divided', 'bordered', 'flush'] as const).map((variant) => (
         <div key={variant}>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">variant="{variant}" dividers=false</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">
+            variant="{variant}" dividers=false
+          </p>
           <ContainerList variant={variant} dividers={false} items={PERSON_ITEMS.slice(0, 3)} />
         </div>
       ))}

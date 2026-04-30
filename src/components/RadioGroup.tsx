@@ -6,39 +6,47 @@ import { Check } from 'lucide-react';
 export type RadioGroupVariant = 'list' | 'cards' | 'grid' | 'minicards' | 'stacked';
 
 export interface RadioGroupOption<T extends string | number = string> {
-  value:        T;
-  label:        string;
+  value: T;
+  label: string;
   description?: string;
   /** Inline right-aligned content (e.g. price). Used by `cards` variant. */
-  trailing?:    React.ReactNode;
+  trailing?: React.ReactNode;
   /** Bottom content inside each tile (e.g. user count). Used by `grid` variant. */
-  footer?:      React.ReactNode;
-  disabled?:    boolean;
+  footer?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export interface RadioGroupProps<T extends string | number = string> {
-  options:    RadioGroupOption<T>[];
-  value:      T | null;
-  onChange:   (value: T) => void;
+  options: RadioGroupOption<T>[];
+  value: T | null;
+  onChange: (value: T) => void;
   /** list      — vertical list with radio circles
    *  cards     — full-width stacked rows with optional trailing content
    *  grid      — horizontal grid of tiles with checkmark badge + optional footer
    *  minicards — compact labelled buttons, filled when selected
    *  stacked   — full-width rows with checkmark badge on the right */
-  variant?:          RadioGroupVariant;
+  variant?: RadioGroupVariant;
   /** Which side the radio/check indicator sits on. Defaults: list → left, stacked → right */
   indicatorPosition?: 'left' | 'right';
   /** Show a horizontal divider line between items (list and cards variants) */
-  dividers?:  boolean;
-  label?:     string;
-  hint?:      string;
-  disabled?:  boolean;
+  dividers?: boolean;
+  label?: string;
+  hint?: string;
+  disabled?: boolean;
   className?: string;
 }
 
 // ── Radio dot indicator ───────────────────────────────────
 
-function RadioDot({ selected, disabled, size = 'sm' }: { selected: boolean; disabled: boolean; size?: 'sm' | 'lg' }) {
+function RadioDot({
+  selected,
+  disabled,
+  size = 'sm',
+}: {
+  selected: boolean;
+  disabled: boolean;
+  size?: 'sm' | 'lg';
+}) {
   return (
     <span
       aria-hidden="true"
@@ -54,7 +62,13 @@ function RadioDot({ selected, disabled, size = 'sm' }: { selected: boolean; disa
       ].join(' ')}
     >
       {selected && (
-        <span className={size === 'lg' ? 'w-2 h-2 rounded-full bg-ink-900' : 'w-1.5 h-1.5 rounded-full bg-ink-900 dark:bg-ink-900'} />
+        <span
+          className={
+            size === 'lg'
+              ? 'w-2 h-2 rounded-full bg-ink-900'
+              : 'w-1.5 h-1.5 rounded-full bg-ink-900 dark:bg-ink-900'
+          }
+        />
       )}
     </span>
   );
@@ -69,9 +83,7 @@ function CheckBadge({ selected }: { selected: boolean }) {
       className={[
         'shrink-0 w-5 h-5 rounded-full flex items-center justify-center',
         'transition-all duration-150',
-        selected
-          ? 'bg-primary-500'
-          : 'border-2 border-ink-200 dark:border-ink-600',
+        selected ? 'bg-primary-500' : 'border-2 border-ink-200 dark:border-ink-600',
       ].join(' ')}
     >
       {selected && <Check className="w-3 h-3 text-ink-900" strokeWidth={3} />}
@@ -85,32 +97,39 @@ export function RadioGroup<T extends string | number = string>({
   options,
   value,
   onChange,
-  variant           = 'list',
+  variant = 'list',
   indicatorPosition,
-  dividers          = false,
+  dividers = false,
   label,
   hint,
-  disabled  = false,
+  disabled = false,
   className = '',
 }: RadioGroupProps<T>) {
   const groupId = React.useId();
-  const hintId  = `${groupId}-hint`;
+  const hintId = `${groupId}-hint`;
 
   const isListVariant = variant === 'list';
 
   const labelEl = label && (
-    <legend className={[
-      'font-semibold font-body text-ink-900 dark:text-ink-50',
-      isListVariant ? 'text-base mb-4' : 'text-[13px] mb-2.5',
-    ].join(' ')}>
+    <legend
+      className={[
+        'font-semibold font-body text-ink-900 dark:text-ink-50',
+        isListVariant ? 'text-base mb-4' : 'text-[13px] mb-2.5',
+      ].join(' ')}
+    >
       {label}
     </legend>
   );
   const hintEl = hint && (
-    <p id={hintId} className={[
-      'mt-3 font-body text-ink-500 dark:text-ink-300',
-      isListVariant ? 'text-sm' : 'mt-2 text-xs',
-    ].join(' ')}>{hint}</p>
+    <p
+      id={hintId}
+      className={[
+        'mt-3 font-body text-ink-500 dark:text-ink-300',
+        isListVariant ? 'text-sm' : 'mt-2 text-xs',
+      ].join(' ')}
+    >
+      {hint}
+    </p>
   );
 
   // ── List ──────────────────────────────────────────────
@@ -118,11 +137,19 @@ export function RadioGroup<T extends string | number = string>({
   if (variant === 'list') {
     const dotRight = (indicatorPosition ?? 'left') === 'right';
     return (
-      <fieldset aria-describedby={hint ? hintId : undefined} className={`border-0 m-0 p-0 min-w-0 ${className}`}>
+      <fieldset
+        aria-describedby={hint ? hintId : undefined}
+        className={`border-0 m-0 p-0 min-w-0 ${className}`}
+      >
         {labelEl}
-        <div className={['flex flex-col', dividers ? 'divide-y divide-ink-200 dark:divide-ink-700' : 'gap-5'].join(' ')}>
-          {options.map(opt => {
-            const id         = `${groupId}-${opt.value}`;
+        <div
+          className={[
+            'flex flex-col',
+            dividers ? 'divide-y divide-ink-200 dark:divide-ink-700' : 'gap-5',
+          ].join(' ')}
+        >
+          {options.map((opt) => {
+            const id = `${groupId}-${opt.value}`;
             const isSelected = opt.value === value;
             const isDisabled = disabled || !!opt.disabled;
             const dot = <RadioDot selected={isSelected} disabled={isDisabled} size="lg" />;
@@ -146,7 +173,9 @@ export function RadioGroup<T extends string | number = string>({
                   'group inline-flex items-start gap-4',
                   dividers ? 'py-5' : '',
                   isDisabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer',
-                ].filter(Boolean).join(' ')}
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
               >
                 <input
                   type="radio"
@@ -158,7 +187,17 @@ export function RadioGroup<T extends string | number = string>({
                   onChange={() => onChange(opt.value)}
                   className="sr-only"
                 />
-                {dotRight ? <>{text}{dot}</> : <>{dot}{text}</>}
+                {dotRight ? (
+                  <>
+                    {text}
+                    {dot}
+                  </>
+                ) : (
+                  <>
+                    {dot}
+                    {text}
+                  </>
+                )}
               </label>
             );
           })}
@@ -172,11 +211,19 @@ export function RadioGroup<T extends string | number = string>({
 
   if (variant === 'cards') {
     return (
-      <fieldset aria-describedby={hint ? hintId : undefined} className={`border-0 m-0 p-0 min-w-0 ${className}`}>
+      <fieldset
+        aria-describedby={hint ? hintId : undefined}
+        className={`border-0 m-0 p-0 min-w-0 ${className}`}
+      >
         {labelEl}
-        <div className={['flex flex-col', dividers ? 'divide-y divide-ink-200 dark:divide-ink-700' : 'gap-3'].join(' ')}>
-          {options.map(opt => {
-            const id         = `${groupId}-${opt.value}`;
+        <div
+          className={[
+            'flex flex-col',
+            dividers ? 'divide-y divide-ink-200 dark:divide-ink-700' : 'gap-3',
+          ].join(' ')}
+        >
+          {options.map((opt) => {
+            const id = `${groupId}-${opt.value}`;
             const isSelected = opt.value === value;
             const isDisabled = disabled || !!opt.disabled;
             return (
@@ -190,7 +237,9 @@ export function RadioGroup<T extends string | number = string>({
                     ? ''
                     : 'rounded-xl border-2 [&:has(:focus-visible)]:ring-2 [&:has(:focus-visible)]:ring-primary-500/30',
                   dividers
-                    ? isSelected ? 'bg-primary-50 dark:bg-primary-900/10' : 'bg-white dark:bg-ink-800'
+                    ? isSelected
+                      ? 'bg-primary-50 dark:bg-primary-900/10'
+                      : 'bg-white dark:bg-ink-800'
                     : isSelected
                       ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
                       : 'border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800',
@@ -199,7 +248,9 @@ export function RadioGroup<T extends string | number = string>({
                     : isSelected
                       ? 'cursor-pointer hover:bg-primary-100 dark:hover:bg-primary-900/20'
                       : 'cursor-pointer hover:bg-ink-50 dark:hover:bg-ink-700/30',
-                ].filter(Boolean).join(' ')}
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
               >
                 <input
                   type="radio"
@@ -212,12 +263,14 @@ export function RadioGroup<T extends string | number = string>({
                   className="sr-only"
                 />
                 <span className="flex flex-col gap-0.5 min-w-0">
-                  <span className={[
-                    'text-sm font-semibold font-body leading-tight',
-                    isSelected
-                      ? 'text-ink-900 dark:text-ink-50'
-                      : 'text-ink-700 dark:text-ink-200',
-                  ].join(' ')}>
+                  <span
+                    className={[
+                      'text-sm font-semibold font-body leading-tight',
+                      isSelected
+                        ? 'text-ink-900 dark:text-ink-50'
+                        : 'text-ink-700 dark:text-ink-200',
+                    ].join(' ')}
+                  >
                     {opt.label}
                   </span>
                   {opt.description && (
@@ -226,9 +279,7 @@ export function RadioGroup<T extends string | number = string>({
                     </span>
                   )}
                 </span>
-                {opt.trailing && (
-                  <span className="shrink-0 text-right">{opt.trailing}</span>
-                )}
+                {opt.trailing && <span className="shrink-0 text-right">{opt.trailing}</span>}
               </label>
             );
           })}
@@ -242,11 +293,14 @@ export function RadioGroup<T extends string | number = string>({
 
   if (variant === 'grid') {
     return (
-      <fieldset aria-describedby={hint ? hintId : undefined} className={`border-0 m-0 p-0 min-w-0 ${className}`}>
+      <fieldset
+        aria-describedby={hint ? hintId : undefined}
+        className={`border-0 m-0 p-0 min-w-0 ${className}`}
+      >
         {labelEl}
         <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4">
-          {options.map(opt => {
-            const id         = `${groupId}-${opt.value}`;
+          {options.map((opt) => {
+            const id = `${groupId}-${opt.value}`;
             const isSelected = opt.value === value;
             const isDisabled = disabled || !!opt.disabled;
             return (
@@ -278,12 +332,14 @@ export function RadioGroup<T extends string | number = string>({
                   className="sr-only"
                 />
                 <div className="flex items-start justify-between gap-2">
-                  <span className={[
-                    'text-sm font-semibold font-body leading-tight',
-                    isSelected
-                      ? 'text-ink-900 dark:text-ink-50'
-                      : 'text-ink-700 dark:text-ink-200',
-                  ].join(' ')}>
+                  <span
+                    className={[
+                      'text-sm font-semibold font-body leading-tight',
+                      isSelected
+                        ? 'text-ink-900 dark:text-ink-50'
+                        : 'text-ink-700 dark:text-ink-200',
+                    ].join(' ')}
+                  >
                     {opt.label}
                   </span>
                   <CheckBadge selected={isSelected} />
@@ -311,11 +367,14 @@ export function RadioGroup<T extends string | number = string>({
 
   if (variant === 'minicards') {
     return (
-      <fieldset aria-describedby={hint ? hintId : undefined} className={`border-0 m-0 p-0 min-w-0 ${className}`}>
+      <fieldset
+        aria-describedby={hint ? hintId : undefined}
+        className={`border-0 m-0 p-0 min-w-0 ${className}`}
+      >
         {labelEl}
         <div className="grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-2">
-          {options.map(opt => {
-            const id         = `${groupId}-${opt.value}`;
+          {options.map((opt) => {
+            const id = `${groupId}-${opt.value}`;
             const isSelected = opt.value === value;
             const isDisabled = disabled || !!opt.disabled;
             return (
@@ -362,24 +421,27 @@ export function RadioGroup<T extends string | number = string>({
   const badgeLeft = (indicatorPosition ?? 'right') === 'left';
 
   return (
-    <fieldset aria-describedby={hint ? hintId : undefined} className={`border-0 m-0 p-0 min-w-0 ${className}`}>
+    <fieldset
+      aria-describedby={hint ? hintId : undefined}
+      className={`border-0 m-0 p-0 min-w-0 ${className}`}
+    >
       {labelEl}
       <div className="flex flex-col">
         {options.map((opt, index) => {
-          const id         = `${groupId}-${opt.value}`;
+          const id = `${groupId}-${opt.value}`;
           const isSelected = opt.value === value;
           const isDisabled = disabled || !!opt.disabled;
-          const isFirst    = index === 0;
-          const isLast     = index === options.length - 1;
+          const isFirst = index === 0;
+          const isLast = index === options.length - 1;
           const badge = <CheckBadge selected={isSelected} />;
           const text = (
             <span className="flex flex-col gap-0.5 min-w-0 flex-1">
-              <span className={[
-                'text-sm font-semibold font-body leading-tight',
-                isSelected
-                  ? 'text-ink-900 dark:text-ink-50'
-                  : 'text-ink-700 dark:text-ink-200',
-              ].join(' ')}>
+              <span
+                className={[
+                  'text-sm font-semibold font-body leading-tight',
+                  isSelected ? 'text-ink-900 dark:text-ink-50' : 'text-ink-700 dark:text-ink-200',
+                ].join(' ')}
+              >
                 {opt.label}
               </span>
               {opt.description && (
@@ -397,8 +459,8 @@ export function RadioGroup<T extends string | number = string>({
                 'flex items-center gap-4 px-5 py-4',
                 'border-2 transition-colors duration-150',
                 !isFirst && '-mt-0.5',
-                isFirst  && 'rounded-t-xl',
-                isLast   && 'rounded-b-xl',
+                isFirst && 'rounded-t-xl',
+                isLast && 'rounded-b-xl',
                 isSelected
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10 relative z-10'
                   : 'border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800',
@@ -407,7 +469,9 @@ export function RadioGroup<T extends string | number = string>({
                   : isSelected
                     ? 'cursor-pointer hover:bg-primary-100 dark:hover:bg-primary-900/20'
                     : 'cursor-pointer hover:bg-ink-50 dark:hover:bg-ink-700/40',
-              ].filter(Boolean).join(' ')}
+              ]
+                .filter(Boolean)
+                .join(' ')}
             >
               <input
                 type="radio"
@@ -419,7 +483,17 @@ export function RadioGroup<T extends string | number = string>({
                 onChange={() => onChange(opt.value)}
                 className="sr-only"
               />
-              {badgeLeft ? <>{badge}{text}</> : <>{text}{badge}</>}
+              {badgeLeft ? (
+                <>
+                  {badge}
+                  {text}
+                </>
+              ) : (
+                <>
+                  {text}
+                  {badge}
+                </>
+              )}
             </label>
           );
         })}

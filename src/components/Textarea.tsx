@@ -1,10 +1,10 @@
 import React from 'react';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?:         string;
-  hint?:          string;
-  error?:         string;
-  resize?:        'none' | 'vertical' | 'horizontal' | 'both';
+  label?: string;
+  hint?: string;
+  error?: string;
+  resize?: 'none' | 'vertical' | 'horizontal' | 'both';
   wrapClassName?: string;
 }
 
@@ -12,20 +12,20 @@ export function Textarea({
   label,
   hint,
   error,
-  resize        = 'vertical',
-  rows          = 4,
+  resize = 'vertical',
+  rows = 4,
   wrapClassName = '',
-  className     = '',
+  className = '',
   id,
   ...props
 }: TextareaProps) {
   const textareaId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
 
   const resizeClass = {
-    none:       'resize-none',
-    vertical:   'resize-y',
+    none: 'resize-none',
+    vertical: 'resize-y',
     horizontal: 'resize-x',
-    both:       'resize',
+    both: 'resize',
   }[resize];
 
   return (
@@ -43,13 +43,15 @@ export function Textarea({
         The textarea hides its native resizer; we paint our own grip
         SVG in the corner so it sits cleanly inside the radius.
       */}
-      <div className={[
-        'relative rounded-xl overflow-hidden',
-        error
-          ? 'border border-red-400 focus-within:border-red-500'
-          : 'border border-ink-200 dark:border-ink-600 focus-within:border-primary-500',
-        'transition-all duration-150',
-      ].join(' ')}>
+      <div
+        className={[
+          'relative rounded-xl overflow-hidden',
+          error
+            ? 'border border-red-400 focus-within:border-red-500'
+            : 'border border-ink-200 dark:border-ink-600 focus-within:border-primary-500',
+          'transition-all duration-150',
+        ].join(' ')}
+      >
         <textarea
           id={textareaId}
           rows={rows}
@@ -77,14 +79,18 @@ export function Textarea({
           >
             <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
               <circle cx="8.5" cy="8.5" r="1" />
-              <circle cx="5"   cy="8.5" r="1" />
-              <circle cx="8.5" cy="5"   r="1" />
+              <circle cx="5" cy="8.5" r="1" />
+              <circle cx="8.5" cy="5" r="1" />
             </svg>
           </span>
         )}
       </div>
       {error && (
-        <p id={`${textareaId}-error`} role="alert" className="text-xs text-red-700 dark:text-red-400 font-body">
+        <p
+          id={`${textareaId}-error`}
+          role="alert"
+          className="text-xs text-red-700 dark:text-red-400 font-body"
+        >
           {error}
         </p>
       )}

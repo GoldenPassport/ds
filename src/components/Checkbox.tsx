@@ -2,16 +2,16 @@ import React from 'react';
 import { Check, Minus } from 'lucide-react';
 
 export interface CheckboxProps {
-  checked:        boolean;
-  onChange:       (checked: boolean) => void;
-  label?:         string;
-  description?:   string;
-  disabled?:      boolean;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label?: string;
+  description?: string;
+  disabled?: boolean;
   indeterminate?: boolean;
-  className?:     string;
-  id?:            string;
+  className?: string;
+  id?: string;
   /** Accessible label when no visible `label` prop is provided */
-  'aria-label'?:  string;
+  'aria-label'?: string;
 }
 
 export function Checkbox({
@@ -19,9 +19,9 @@ export function Checkbox({
   onChange,
   label,
   description,
-  disabled      = false,
+  disabled = false,
   indeterminate = false,
-  className     = '',
+  className = '',
   id,
   'aria-label': ariaLabel,
 }: CheckboxProps) {
@@ -49,7 +49,9 @@ export function Checkbox({
         checked={checked}
         onChange={handleChange}
         disabled={disabled}
-        ref={el => { if (el) el.indeterminate = indeterminate; }}
+        ref={(el) => {
+          if (el) el.indeterminate = indeterminate;
+        }}
         className="sr-only"
         aria-checked={indeterminate ? 'mixed' : checked}
         aria-label={ariaLabel}
@@ -68,11 +70,11 @@ export function Checkbox({
             : 'bg-white dark:bg-ink-700 border-ink-300 dark:border-ink-600 group-hover:border-primary-400',
         ].join(' ')}
       >
-        {indeterminate
-          ? <Minus  className="w-2.5 h-2.5 text-ink-900 stroke-3" />
-          : checked
-            ? <Check className="w-2.5 h-2.5 text-ink-900 stroke-3" />
-            : null}
+        {indeterminate ? (
+          <Minus className="w-2.5 h-2.5 text-ink-900 stroke-3" />
+        ) : checked ? (
+          <Check className="w-2.5 h-2.5 text-ink-900 stroke-3" />
+        ) : null}
       </span>
 
       {/* Label + description */}

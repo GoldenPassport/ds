@@ -2,8 +2,18 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
 import {
-  Plus, Pencil, Share2, Trash2, Download, Upload,
-  Camera, Image, FileText, Link, Mail, Phone,
+  Plus,
+  Pencil,
+  Share2,
+  Trash2,
+  Download,
+  Upload,
+  Camera,
+  Image,
+  FileText,
+  Link,
+  Mail,
+  Phone,
 } from 'lucide-react';
 import { FabMenu } from '../components/FabMenu';
 
@@ -13,11 +23,11 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
-    variant:  { control: 'select', options: ['small', 'regular', 'large'] },
-    color:    { control: 'select', options: ['primary', 'secondary', 'surface'] },
+    variant: { control: 'select', options: ['small', 'regular', 'large'] },
+    color: { control: 'select', options: ['primary', 'secondary', 'surface'] },
     position: { control: 'select', options: ['bottom-right', 'bottom-left', 'bottom-center'] },
-    fixed:    { control: 'boolean' },
-    label:    { control: 'text' },
+    fixed: { control: 'boolean' },
+    label: { control: 'text' },
   },
 } satisfies Meta<typeof FabMenu>;
 
@@ -41,28 +51,28 @@ function Demo({ children }: { children: React.ReactNode }) {
 }
 
 const EDIT_ITEMS = [
-  { label: 'Share',    icon: <Share2   className="w-4 h-4" />, onClick: () => {} },
-  { label: 'Edit',     icon: <Pencil   className="w-4 h-4" />, onClick: () => {} },
-  { label: 'Delete',   icon: <Trash2   className="w-4 h-4" />, onClick: () => {} },
+  { label: 'Share', icon: <Share2 className="w-4 h-4" />, onClick: () => {} },
+  { label: 'Edit', icon: <Pencil className="w-4 h-4" />, onClick: () => {} },
+  { label: 'Delete', icon: <Trash2 className="w-4 h-4" />, onClick: () => {} },
 ];
 
 const CREATE_ITEMS = [
-  { label: 'Upload file', icon: <Upload   className="w-4 h-4" />, onClick: () => {} },
-  { label: 'Take photo',  icon: <Camera   className="w-4 h-4" />, onClick: () => {} },
-  { label: 'Add image',   icon: <Image    className="w-4 h-4" />, onClick: () => {} },
-  { label: 'New document',icon: <FileText className="w-4 h-4" />, onClick: () => {} },
+  { label: 'Upload file', icon: <Upload className="w-4 h-4" />, onClick: () => {} },
+  { label: 'Take photo', icon: <Camera className="w-4 h-4" />, onClick: () => {} },
+  { label: 'Add image', icon: <Image className="w-4 h-4" />, onClick: () => {} },
+  { label: 'New document', icon: <FileText className="w-4 h-4" />, onClick: () => {} },
 ];
 
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
   args: {
-    icon:     <Plus className="w-5 h-5" />,
-    items:    EDIT_ITEMS,
-    variant:  'regular',
-    color:    'primary',
+    icon: <Plus className="w-5 h-5" />,
+    items: EDIT_ITEMS,
+    variant: 'regular',
+    color: 'primary',
     position: 'bottom-right',
-    fixed:    false,
+    fixed: false,
   },
   render: (args) => (
     <Demo>
@@ -145,8 +155,11 @@ export const Colors: Story = {
   args: STUB_ARGS,
   render: () => (
     <div className="grid grid-cols-3 gap-4">
-      {(['primary', 'secondary', 'surface'] as const).map(color => (
-        <div key={color} className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden p-3">
+      {(['primary', 'secondary', 'surface'] as const).map((color) => (
+        <div
+          key={color}
+          className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden p-3"
+        >
           <p className="text-xs font-body text-ink-500 dark:text-ink-300 capitalize">{color}</p>
           <FabMenu
             icon={<Plus className="w-5 h-5" />}
@@ -168,8 +181,11 @@ export const Positions: Story = {
   args: STUB_ARGS,
   render: () => (
     <div className="grid grid-cols-3 gap-4">
-      {(['bottom-left', 'bottom-center', 'bottom-right'] as const).map(position => (
-        <div key={position} className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden p-3">
+      {(['bottom-left', 'bottom-center', 'bottom-right'] as const).map((position) => (
+        <div
+          key={position}
+          className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden p-3"
+        >
           <p className="text-xs font-body text-ink-500 dark:text-ink-300">{position}</p>
           <FabMenu
             icon={<Plus className="w-5 h-5" />}
@@ -193,12 +209,12 @@ export const ManyItems: Story = {
       <FabMenu
         icon={<Plus className="w-5 h-5" />}
         items={[
-          { label: 'Upload',   icon: <Upload   className="w-4 h-4" />, onClick: () => {} },
+          { label: 'Upload', icon: <Upload className="w-4 h-4" />, onClick: () => {} },
           { label: 'Download', icon: <Download className="w-4 h-4" />, onClick: () => {} },
-          { label: 'Share',    icon: <Share2   className="w-4 h-4" />, onClick: () => {} },
-          { label: 'Link',     icon: <Link     className="w-4 h-4" />, onClick: () => {} },
-          { label: 'Mail',     icon: <Mail     className="w-4 h-4" />, onClick: () => {} },
-          { label: 'Call',     icon: <Phone    className="w-4 h-4" />, onClick: () => {} },
+          { label: 'Share', icon: <Share2 className="w-4 h-4" />, onClick: () => {} },
+          { label: 'Link', icon: <Link className="w-4 h-4" />, onClick: () => {} },
+          { label: 'Mail', icon: <Mail className="w-4 h-4" />, onClick: () => {} },
+          { label: 'Call', icon: <Phone className="w-4 h-4" />, onClick: () => {} },
         ]}
         position="bottom-right"
         fixed={false}
@@ -238,15 +254,30 @@ export const Interactions: Story = {
         <FabMenu
           icon={<Plus className="w-5 h-5" />}
           items={[
-            { label: 'Share',  icon: <Share2 className="w-4 h-4" />, onClick: () => setLastClicked('Share')  },
-            { label: 'Edit',   icon: <Pencil className="w-4 h-4" />, onClick: () => setLastClicked('Edit')   },
-            { label: 'Delete', icon: <Trash2 className="w-4 h-4" />, onClick: () => setLastClicked('Delete') },
+            {
+              label: 'Share',
+              icon: <Share2 className="w-4 h-4" />,
+              onClick: () => setLastClicked('Share'),
+            },
+            {
+              label: 'Edit',
+              icon: <Pencil className="w-4 h-4" />,
+              onClick: () => setLastClicked('Edit'),
+            },
+            {
+              label: 'Delete',
+              icon: <Trash2 className="w-4 h-4" />,
+              onClick: () => setLastClicked('Delete'),
+            },
           ]}
           position="bottom-right"
           fixed={false}
         />
         {lastClicked && (
-          <p className="absolute top-4 left-4 text-sm font-body text-ink-700 dark:text-ink-300" data-testid="fab-clicked">
+          <p
+            className="absolute top-4 left-4 text-sm font-body text-ink-700 dark:text-ink-300"
+            data-testid="fab-clicked"
+          >
             Clicked: {lastClicked}
           </p>
         )}
@@ -255,7 +286,7 @@ export const Interactions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     // findByRole retries until the element appears — handles the race between
     // the runner firing play() and the first React render committing.

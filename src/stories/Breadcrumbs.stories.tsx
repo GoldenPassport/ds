@@ -7,7 +7,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     separator: { control: { type: 'select', options: ['slash', 'chevron'] } },
-    homeIcon:  { control: 'boolean' },
+    homeIcon: { control: 'boolean' },
     contained: { control: 'boolean' },
     className: { control: 'text' },
   },
@@ -19,15 +19,15 @@ type Story = StoryObj<typeof meta>;
 // ── Shared fixtures ────────────────────────────────────────
 
 const ITEMS = [
-  { label: 'Home',     href: '#' },
+  { label: 'Home', href: '#' },
   { label: 'Projects', href: '#' },
   { label: 'GraphQL API' },
 ];
 
 const DEEP = [
-  { label: 'Home',         href: '#' },
-  { label: 'Settings',     href: '#' },
-  { label: 'Workspace',    href: '#' },
+  { label: 'Home', href: '#' },
+  { label: 'Settings', href: '#' },
+  { label: 'Workspace', href: '#' },
   { label: 'Integrations', href: '#' },
   { label: 'GitHub' },
 ];
@@ -36,9 +36,9 @@ const DEEP = [
 
 export const Playground: Story = {
   args: {
-    items:     ITEMS,
+    items: ITEMS,
     separator: 'chevron',
-    homeIcon:  false,
+    homeIcon: false,
     contained: false,
   },
 };
@@ -51,7 +51,7 @@ export const ChevronSeparator: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
       <Breadcrumbs items={ITEMS} separator="chevron" ariaLabel="Breadcrumb" />
-      <Breadcrumbs items={DEEP}  separator="chevron" ariaLabel="Deep breadcrumb" />
+      <Breadcrumbs items={DEEP} separator="chevron" ariaLabel="Deep breadcrumb" />
     </div>
   ),
 };
@@ -64,7 +64,7 @@ export const SlashSeparator: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
       <Breadcrumbs items={ITEMS} separator="slash" ariaLabel="Breadcrumb" />
-      <Breadcrumbs items={DEEP}  separator="slash" ariaLabel="Deep breadcrumb" />
+      <Breadcrumbs items={DEEP} separator="slash" ariaLabel="Deep breadcrumb" />
     </div>
   ),
 };
@@ -78,7 +78,7 @@ export const WithHomeIcon: Story = {
     <div className="flex flex-col gap-6">
       <Breadcrumbs items={ITEMS} homeIcon ariaLabel="Breadcrumb" />
       <Breadcrumbs items={ITEMS} homeIcon separator="slash" ariaLabel="Breadcrumb with slash" />
-      <Breadcrumbs items={DEEP}  homeIcon ariaLabel="Deep breadcrumb" />
+      <Breadcrumbs items={DEEP} homeIcon ariaLabel="Deep breadcrumb" />
     </div>
   ),
 };
@@ -91,7 +91,7 @@ export const ContainedBar: Story = {
   render: () => (
     <div className="flex flex-col gap-6 -mx-4">
       <Breadcrumbs items={ITEMS} contained homeIcon ariaLabel="Breadcrumb" />
-      <Breadcrumbs items={DEEP}  contained separator="slash" ariaLabel="Deep breadcrumb" />
+      <Breadcrumbs items={DEEP} contained separator="slash" ariaLabel="Deep breadcrumb" />
     </div>
   ),
 };
@@ -105,7 +105,7 @@ export const InContext: Story = {
     <div className="max-w-2xl flex flex-col gap-1">
       <Breadcrumbs
         items={[
-          { label: 'Projects',    href: '#' },
+          { label: 'Projects', href: '#' },
           { label: 'GraphQL API', href: '#' },
           { label: 'Settings' },
         ]}

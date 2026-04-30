@@ -2,9 +2,22 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
 import {
-  BarChart2, Cpu, Globe, Shield, Zap, Users, BookOpen,
-  LifeBuoy, Settings, Layers, Bell, Lock,
-  FileText, Headphones, Play, Star,
+  BarChart2,
+  Cpu,
+  Globe,
+  Shield,
+  Zap,
+  Users,
+  BookOpen,
+  LifeBuoy,
+  Settings,
+  Layers,
+  Bell,
+  Lock,
+  FileText,
+  Headphones,
+  Play,
+  Star,
 } from 'lucide-react';
 
 import { FlyoutMenu, FlyoutTrigger } from '../components/FlyoutMenu';
@@ -23,39 +36,75 @@ type Story = StoryObj<typeof meta>;
 // ── Shared fixtures ───────────────────────────────────────
 
 const SIMPLE_ITEMS: FlyoutMenuItem[] = [
-  { label: 'Blog',          href: '#' },
-  { label: 'Case studies',  href: '#' },
-  { label: 'Changelog',     href: '#', badge: 'New' },
+  { label: 'Blog', href: '#' },
+  { label: 'Case studies', href: '#' },
+  { label: 'Changelog', href: '#', badge: 'New' },
   { label: 'Documentation', href: '#' },
-  { label: 'Status',        href: '#' },
+  { label: 'Status', href: '#' },
 ];
 
 const DESC_ITEMS: FlyoutMenuItem[] = [
-  { label: 'Analytics',    href: '#', description: 'Get a better understanding of your traffic' },
+  { label: 'Analytics', href: '#', description: 'Get a better understanding of your traffic' },
   { label: 'Integrations', href: '#', description: 'Connect with third-party tools and services' },
-  { label: 'Automations',  href: '#', description: 'Build workflows that run without you', badge: 'Beta' },
-  { label: 'Reports',      href: '#', description: 'Keep track of metrics and KPIs' },
+  {
+    label: 'Automations',
+    href: '#',
+    description: 'Build workflows that run without you',
+    badge: 'Beta',
+  },
+  { label: 'Reports', href: '#', description: 'Keep track of metrics and KPIs' },
 ];
 
 const ICON_ITEMS: FlyoutMenuItem[] = [
-  { label: 'Analytics',    href: '#', description: 'Real-time dashboards and custom reports',         icon: <BarChart2 className="w-5 h-5" /> },
-  { label: 'Automations',  href: '#', description: 'Trigger workflows based on any event',            icon: <Zap       className="w-5 h-5" />, badge: 'New' },
-  { label: 'Integrations', href: '#', description: 'Connect 200+ tools in a single click',            icon: <Layers    className="w-5 h-5" /> },
-  { label: 'Security',     href: '#', description: 'SSO, audit logs and role-based access',           icon: <Shield    className="w-5 h-5" /> },
-  { label: 'Deployments',  href: '#', description: 'Zero-downtime deploys across every environment',  icon: <Cpu       className="w-5 h-5" /> },
-  { label: 'Team',         href: '#', description: 'Collaborate, comment and assign across projects', icon: <Users     className="w-5 h-5" /> },
+  {
+    label: 'Analytics',
+    href: '#',
+    description: 'Real-time dashboards and custom reports',
+    icon: <BarChart2 className="w-5 h-5" />,
+  },
+  {
+    label: 'Automations',
+    href: '#',
+    description: 'Trigger workflows based on any event',
+    icon: <Zap className="w-5 h-5" />,
+    badge: 'New',
+  },
+  {
+    label: 'Integrations',
+    href: '#',
+    description: 'Connect 200+ tools in a single click',
+    icon: <Layers className="w-5 h-5" />,
+  },
+  {
+    label: 'Security',
+    href: '#',
+    description: 'SSO, audit logs and role-based access',
+    icon: <Shield className="w-5 h-5" />,
+  },
+  {
+    label: 'Deployments',
+    href: '#',
+    description: 'Zero-downtime deploys across every environment',
+    icon: <Cpu className="w-5 h-5" />,
+  },
+  {
+    label: 'Team',
+    href: '#',
+    description: 'Collaborate, comment and assign across projects',
+    icon: <Users className="w-5 h-5" />,
+  },
 ];
 
 const FOOTER_ACTIONS: FlyoutMenuAction[] = [
   { label: 'View all features', href: '#' },
-  { label: 'Start free trial',  href: '#' },
+  { label: 'Start free trial', href: '#' },
 ];
 
 const FOOTER_LINKS: FlyoutMenuAction[] = [
-  { label: 'Documentation', href: '#', icon: <BookOpen   className="w-3.5 h-3.5" /> },
-  { label: 'Help centre',   href: '#', icon: <LifeBuoy   className="w-3.5 h-3.5" /> },
-  { label: 'Status',        href: '#', icon: <Globe      className="w-3.5 h-3.5" /> },
-  { label: 'Changelog',     href: '#', icon: <FileText   className="w-3.5 h-3.5" /> },
+  { label: 'Documentation', href: '#', icon: <BookOpen className="w-3.5 h-3.5" /> },
+  { label: 'Help centre', href: '#', icon: <LifeBuoy className="w-3.5 h-3.5" /> },
+  { label: 'Status', href: '#', icon: <Globe className="w-3.5 h-3.5" /> },
+  { label: 'Changelog', href: '#', icon: <FileText className="w-3.5 h-3.5" /> },
 ];
 
 // ── 1. Simple ─────────────────────────────────────────────
@@ -178,15 +227,36 @@ export const RightAligned: Story = {
         variant="icons"
         align="right"
         items={[
-          { label: 'Documentation', href: '#', description: 'Guides, API reference and tutorials',    icon: <BookOpen    className="w-5 h-5" /> },
-          { label: 'Support',       href: '#', description: 'Open a ticket or chat with the team',   icon: <Headphones  className="w-5 h-5" /> },
-          { label: 'Status',        href: '#', description: 'Live uptime and incident history',       icon: <Globe       className="w-5 h-5" /> },
-          { label: 'Changelog',     href: '#', description: "What's new in each release",            icon: <Star        className="w-5 h-5" />, badge: 'New' },
+          {
+            label: 'Documentation',
+            href: '#',
+            description: 'Guides, API reference and tutorials',
+            icon: <BookOpen className="w-5 h-5" />,
+          },
+          {
+            label: 'Support',
+            href: '#',
+            description: 'Open a ticket or chat with the team',
+            icon: <Headphones className="w-5 h-5" />,
+          },
+          {
+            label: 'Status',
+            href: '#',
+            description: 'Live uptime and incident history',
+            icon: <Globe className="w-5 h-5" />,
+          },
+          {
+            label: 'Changelog',
+            href: '#',
+            description: "What's new in each release",
+            icon: <Star className="w-5 h-5" />,
+            badge: 'New',
+          },
         ]}
         footerLinks={[
-          { label: 'Community forum', href: '#', icon: <Users    className="w-3.5 h-3.5" /> },
-          { label: 'Video tutorials', href: '#', icon: <Play     className="w-3.5 h-3.5" /> },
-          { label: 'Settings',        href: '#', icon: <Settings className="w-3.5 h-3.5" /> },
+          { label: 'Community forum', href: '#', icon: <Users className="w-3.5 h-3.5" /> },
+          { label: 'Video tutorials', href: '#', icon: <Play className="w-3.5 h-3.5" /> },
+          { label: 'Settings', href: '#', icon: <Settings className="w-3.5 h-3.5" /> },
         ]}
       />
     </div>
@@ -230,7 +300,9 @@ export const Interactions: Story = {
       const trigger = canvas.getByRole('button', { name: /resources/i });
       await user.click(trigger);
       await waitFor(() => {
-        expect(within(document.body).queryByRole('link', { name: /blog/i })).not.toBeInTheDocument();
+        expect(
+          within(document.body).queryByRole('link', { name: /blog/i }),
+        ).not.toBeInTheDocument();
       });
     });
   },
@@ -282,14 +354,35 @@ export const NavbarExample: Story = {
         trigger={<FlyoutTrigger label="Product" />}
         variant="icons"
         items={[
-          { label: 'Analytics',   href: '#', description: 'Real-time dashboards',             icon: <BarChart2 className="w-5 h-5" /> },
-          { label: 'Automations', href: '#', description: 'No-code workflow builder',          icon: <Zap       className="w-5 h-5" />, badge: 'New' },
-          { label: 'Security',    href: '#', description: 'SSO, RBAC and audit trails',       icon: <Lock      className="w-5 h-5" /> },
-          { label: 'Notifications', href: '#', description: 'Webhooks, emails and Slack alerts', icon: <Bell  className="w-5 h-5" /> },
+          {
+            label: 'Analytics',
+            href: '#',
+            description: 'Real-time dashboards',
+            icon: <BarChart2 className="w-5 h-5" />,
+          },
+          {
+            label: 'Automations',
+            href: '#',
+            description: 'No-code workflow builder',
+            icon: <Zap className="w-5 h-5" />,
+            badge: 'New',
+          },
+          {
+            label: 'Security',
+            href: '#',
+            description: 'SSO, RBAC and audit trails',
+            icon: <Lock className="w-5 h-5" />,
+          },
+          {
+            label: 'Notifications',
+            href: '#',
+            description: 'Webhooks, emails and Slack alerts',
+            icon: <Bell className="w-5 h-5" />,
+          },
         ]}
         footerActions={[
           { label: 'See all features', href: '#' },
-          { label: 'Get started',      href: '#' },
+          { label: 'Get started', href: '#' },
         ]}
       />
 
@@ -306,7 +399,9 @@ export const NavbarExample: Story = {
         items={SIMPLE_ITEMS}
       />
 
-      <Hyperlink href="#" variant="muted" className="ml-auto text-sm font-semibold">Sign in</Hyperlink>
+      <Hyperlink href="#" variant="muted" className="ml-auto text-sm font-semibold">
+        Sign in
+      </Hyperlink>
     </nav>
   ),
 };
@@ -323,16 +418,17 @@ export const OnClickInteraction: Story = {
           trigger={<FlyoutTrigger label="Actions" />}
           variant="simple"
           items={[
-            { label: 'Edit',     onClick: () => setLastClicked('Edit')   },
-            { label: 'Duplicate',onClick: () => setLastClicked('Duplicate') },
-            { label: 'Archive',  onClick: () => setLastClicked('Archive') },
+            { label: 'Edit', onClick: () => setLastClicked('Edit') },
+            { label: 'Duplicate', onClick: () => setLastClicked('Duplicate') },
+            { label: 'Archive', onClick: () => setLastClicked('Archive') },
           ]}
-          footerActions={[
-            { label: 'Delete', onClick: () => setLastClicked('Delete') },
-          ]}
+          footerActions={[{ label: 'Delete', onClick: () => setLastClicked('Delete') }]}
         />
         {lastClicked && (
-          <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="flyout-clicked">
+          <p
+            className="text-xs font-body text-ink-500 dark:text-ink-300"
+            data-testid="flyout-clicked"
+          >
             Clicked: {lastClicked}
           </p>
         )}
@@ -341,7 +437,7 @@ export const OnClickInteraction: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     const trigger = await canvas.findByRole('button', { name: /actions/i });
 
@@ -362,7 +458,9 @@ export const OnClickInteraction: Story = {
     await step('press Escape — panel closes', async () => {
       await user.keyboard('{Escape}');
       await waitFor(() => {
-        expect(within(document.body).queryByRole('button', { name: /duplicate/i })).not.toBeInTheDocument();
+        expect(
+          within(document.body).queryByRole('button', { name: /duplicate/i }),
+        ).not.toBeInTheDocument();
       });
     });
 
@@ -396,7 +494,7 @@ export const TwoColumnInteraction: Story = {
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click trigger → two-column flyout opens', async () => {
       await user.click(canvas.getByRole('button', { name: /platform/i }));
@@ -420,7 +518,9 @@ export const TwoColumnInteraction: Story = {
     await step('press Escape → flyout closes', async () => {
       await user.keyboard('{Escape}');
       await waitFor(() => {
-        expect(within(document.body).queryByRole('link', { name: /analytics/i })).not.toBeInTheDocument();
+        expect(
+          within(document.body).queryByRole('link', { name: /analytics/i }),
+        ).not.toBeInTheDocument();
       });
     });
   },

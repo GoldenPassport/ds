@@ -3,44 +3,44 @@ import React from 'react';
 // ── Types ─────────────────────────────────────────────────
 
 export interface BottomNavItem {
-  label:   string;
-  icon:    React.ReactNode;
-  value:   string;
-  badge?:  number | string;
+  label: string;
+  icon: React.ReactNode;
+  value: string;
+  badge?: number | string;
 }
 
 export type BottomNavAppearance = 'light' | 'dark';
 
 export interface BottomNavProps {
-  items:         BottomNavItem[];
-  activeValue:   string;
-  onChange:      (value: string) => void;
-  appearance?:   BottomNavAppearance;
+  items: BottomNavItem[];
+  activeValue: string;
+  onChange: (value: string) => void;
+  appearance?: BottomNavAppearance;
   /** Show text labels below icons (default: true) */
-  showLabels?:   boolean;
+  showLabels?: boolean;
   /** Fix to the bottom of the viewport (default: true) */
-  fixed?:        boolean;
-  className?:    string;
+  fixed?: boolean;
+  className?: string;
 }
 
 // ── Tokens ────────────────────────────────────────────────
 
 const tokens = {
   light: {
-    bar:             'bg-white dark:bg-ink-900 border-t border-ink-200 dark:border-ink-700',
-    itemInactive:    'text-ink-500 dark:text-ink-300',
-    iconActive:      'text-primary-500 dark:text-primary-400',
-    labelActive:     'text-ink-900 dark:text-primary-400',
-    indicatorHover:  'hover:bg-ink-100 dark:hover:bg-ink-800',
-    badge:           'bg-primary-500 text-ink-900',
+    bar: 'bg-white dark:bg-ink-900 border-t border-ink-200 dark:border-ink-700',
+    itemInactive: 'text-ink-500 dark:text-ink-300',
+    iconActive: 'text-primary-500 dark:text-primary-400',
+    labelActive: 'text-ink-900 dark:text-primary-400',
+    indicatorHover: 'hover:bg-ink-100 dark:hover:bg-ink-800',
+    badge: 'bg-primary-500 text-ink-900',
   },
   dark: {
-    bar:             'bg-ink-900 border-t border-ink-700',
-    itemInactive:    'text-ink-300',
-    iconActive:      'text-primary-400',
-    labelActive:     'text-primary-400',
-    indicatorHover:  'hover:bg-ink-800',
-    badge:           'bg-primary-500 text-ink-900',
+    bar: 'bg-ink-900 border-t border-ink-700',
+    itemInactive: 'text-ink-300',
+    iconActive: 'text-primary-400',
+    labelActive: 'text-primary-400',
+    indicatorHover: 'hover:bg-ink-800',
+    badge: 'bg-primary-500 text-ink-900',
   },
 };
 
@@ -50,10 +50,10 @@ export function BottomNav({
   items,
   activeValue,
   onChange,
-  appearance  = 'light',
-  showLabels  = true,
-  fixed       = true,
-  className   = '',
+  appearance = 'light',
+  showLabels = true,
+  fixed = true,
+  className = '',
 }: BottomNavProps) {
   const t = tokens[appearance];
 
@@ -63,12 +63,14 @@ export function BottomNav({
       className={[
         fixed ? 'fixed bottom-0 left-0 right-0 z-50' : 'relative',
         t.bar,
-        'pb-safe',                  // respects iOS home-indicator safe area
+        'pb-safe', // respects iOS home-indicator safe area
         className,
-      ].filter(Boolean).join(' ')}
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       <div className="flex items-stretch">
-        {items.map(item => {
+        {items.map((item) => {
           const isActive = item.value === activeValue;
           return (
             <button
@@ -87,21 +89,27 @@ export function BottomNav({
                 className={[
                   'relative flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-200',
                   !isActive && t.indicatorHover,
-                ].filter(Boolean).join(' ')}
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
               >
                 {/* Icon */}
-                <span className={[
-                  'relative w-6 h-6 flex items-center justify-center shrink-0',
-                  isActive ? t.iconActive : t.itemInactive,
-                ].join(' ')}>
+                <span
+                  className={[
+                    'relative w-6 h-6 flex items-center justify-center shrink-0',
+                    isActive ? t.iconActive : t.itemInactive,
+                  ].join(' ')}
+                >
                   {item.icon}
                   {/* Badge */}
                   {item.badge != null && (
-                    <span className={[
-                      'absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full',
-                      'text-[10px] font-bold font-body flex items-center justify-center',
-                      t.badge,
-                    ].join(' ')}>
+                    <span
+                      className={[
+                        'absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full',
+                        'text-[10px] font-bold font-body flex items-center justify-center',
+                        t.badge,
+                      ].join(' ')}
+                    >
                       {item.badge}
                     </span>
                   )}
@@ -109,10 +117,12 @@ export function BottomNav({
 
                 {/* Label */}
                 {showLabels && (
-                  <span className={[
-                    'text-[11px] font-body leading-none transition-all duration-150',
-                    isActive ? `font-semibold ${t.labelActive}` : `font-medium ${t.itemInactive}`,
-                  ].join(' ')}>
+                  <span
+                    className={[
+                      'text-[11px] font-body leading-none transition-all duration-150',
+                      isActive ? `font-semibold ${t.labelActive}` : `font-medium ${t.itemInactive}`,
+                    ].join(' ')}
+                  >
                     {item.label}
                   </span>
                 )}

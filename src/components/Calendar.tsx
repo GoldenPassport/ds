@@ -4,54 +4,68 @@ import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 // ── Types ─────────────────────────────────────────────────
 
 export type CalendarEventColor = 'primary' | 'slate' | 'green' | 'red' | 'amber';
-export type CalendarVariant    = 'month' | 'mini';
+export type CalendarVariant = 'month' | 'mini';
 
 export interface CalendarEvent {
-  id:       string | number;
+  id: string | number;
   /** ISO date string: 'YYYY-MM-DD' */
-  date:     string;
-  title:    string;
-  color?:   CalendarEventColor;
-  href?:    string;
+  date: string;
+  title: string;
+  color?: CalendarEventColor;
+  href?: string;
   onClick?: () => void;
 }
 
 export interface CalendarProps {
   /** Uncontrolled initial month (defaults to current month) */
-  defaultMonth?:   Date;
+  defaultMonth?: Date;
   /** Controlled selected date (single-select mode) */
-  selected?:       Date | null;
-  onSelect?:       (date: Date) => void;
-  events?:         CalendarEvent[];
+  selected?: Date | null;
+  onSelect?: (date: Date) => void;
+  events?: CalendarEvent[];
   /** 'month' = full grid with events, 'mini' = compact picker */
-  variant?:        CalendarVariant;
+  variant?: CalendarVariant;
   /** Mini only: draw borders between every cell. Default: false */
-  bordered?:       boolean;
+  bordered?: boolean;
   /** Shade Saturday and Sunday columns slightly darker. Default: false */
-  shadeWeekends?:  boolean;
+  shadeWeekends?: boolean;
   // ── Range props (mini only) ──────────────────────────────
-  rangeStart?:    Date | null;
-  rangeEnd?:      Date | null;
+  rangeStart?: Date | null;
+  rangeEnd?: Date | null;
   /** Date the cursor is currently hovering — drives the live preview strip */
-  rangeHover?:    Date | null;
-  onRangeHover?:  (date: Date | null) => void;
-  className?:     string;
+  rangeHover?: Date | null;
+  onRangeHover?: (date: Date | null) => void;
+  className?: string;
 }
 
 // ── Utilities ─────────────────────────────────────────────
 
-const DAYS   = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'];
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 
 function toISO(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 function isSameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear()
-    && a.getMonth()    === b.getMonth()
-    && a.getDate()     === b.getDate();
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
 }
 
 function stripTime(d: Date): Date {
@@ -60,9 +74,9 @@ function stripTime(d: Date): Date {
 
 /** Returns the 42-cell grid (6 weeks × 7 days) for a given month */
 function buildGrid(year: number, month: number): { date: Date; current: boolean }[] {
-  const first   = new Date(year, month, 1).getDay(); // 0=Sun
+  const first = new Date(year, month, 1).getDay(); // 0=Sun
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const daysInPrev  = new Date(year, month, 0).getDate();
+  const daysInPrev = new Date(year, month, 0).getDate();
   const cells: { date: Date; current: boolean }[] = [];
 
   for (let i = first - 1; i >= 0; i--)
@@ -78,16 +92,44 @@ function buildGrid(year: number, month: number): { date: Date; current: boolean 
 // ── Event colour map ──────────────────────────────────────
 
 const eventColours: Record<CalendarEventColor, { bg: string; text: string; dot: string }> = {
-  primary: { bg: 'bg-primary-100 dark:bg-primary-900/40', text: 'text-primary-800 dark:text-primary-200', dot: 'bg-primary-500' },
-  slate:   { bg: 'bg-slate-100   dark:bg-slate-900/40',   text: 'text-slate-800   dark:text-slate-200',   dot: 'bg-slate-500'   },
-  green:   { bg: 'bg-green-100   dark:bg-green-900/40',   text: 'text-green-800   dark:text-green-200',   dot: 'bg-green-500'   },
-  red:     { bg: 'bg-red-100     dark:bg-red-900/40',     text: 'text-red-800     dark:text-red-200',     dot: 'bg-red-500'     },
-  amber:   { bg: 'bg-amber-100   dark:bg-amber-900/40',   text: 'text-amber-800   dark:text-amber-200',   dot: 'bg-amber-500'   },
+  primary: {
+    bg: 'bg-primary-100 dark:bg-primary-900/40',
+    text: 'text-primary-800 dark:text-primary-200',
+    dot: 'bg-primary-500',
+  },
+  slate: {
+    bg: 'bg-slate-100   dark:bg-slate-900/40',
+    text: 'text-slate-800   dark:text-slate-200',
+    dot: 'bg-slate-500',
+  },
+  green: {
+    bg: 'bg-green-100   dark:bg-green-900/40',
+    text: 'text-green-800   dark:text-green-200',
+    dot: 'bg-green-500',
+  },
+  red: {
+    bg: 'bg-red-100     dark:bg-red-900/40',
+    text: 'text-red-800     dark:text-red-200',
+    dot: 'bg-red-500',
+  },
+  amber: {
+    bg: 'bg-amber-100   dark:bg-amber-900/40',
+    text: 'text-amber-800   dark:text-amber-200',
+    dot: 'bg-amber-500',
+  },
 };
 
 // ── Sub-components ────────────────────────────────────────
 
-function NavButton({ onClick, label, children }: { onClick: () => void; label: string; children: React.ReactNode }) {
+function NavButton({
+  onClick,
+  label,
+  children,
+}: {
+  onClick: () => void;
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <button
       type="button"
@@ -103,33 +145,46 @@ function NavButton({ onClick, label, children }: { onClick: () => void; label: s
 // ── Month variant ─────────────────────────────────────────
 
 function MonthCell({
-  date, current, today, selected, events, shadeWeekends, onSelect,
+  date,
+  current,
+  today,
+  selected,
+  events,
+  shadeWeekends,
+  onSelect,
 }: {
-  date:          Date;
-  current:       boolean;
-  today:         boolean;
-  selected:      boolean;
-  events:        CalendarEvent[];
+  date: Date;
+  current: boolean;
+  today: boolean;
+  selected: boolean;
+  events: CalendarEvent[];
   shadeWeekends: boolean;
-  onSelect:      (d: Date) => void;
+  onSelect: (d: Date) => void;
 }) {
   const isWeekend = date.getDay() === 0 || date.getDay() === 6;
   const MAX_VISIBLE = 3;
-  const overflow    = events.length - MAX_VISIBLE;
+  const overflow = events.length - MAX_VISIBLE;
 
   return (
     <div
       className={[
         'relative flex flex-col min-h-28 p-2 border-b border-r border-ink-100 dark:border-ink-700',
-        !current                        ? 'bg-ink-50/50 dark:bg-ink-900/30'
-        : shadeWeekends && isWeekend    ? 'bg-ink-100/60 dark:bg-ink-900/40'
-        : '',
+        !current
+          ? 'bg-ink-50/50 dark:bg-ink-900/30'
+          : shadeWeekends && isWeekend
+            ? 'bg-ink-100/60 dark:bg-ink-900/40'
+            : '',
       ].join(' ')}
     >
       <button
         type="button"
         onClick={() => onSelect(date)}
-        aria-label={date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        aria-label={date.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
         aria-pressed={selected}
         className={[
           'self-start mb-1 w-7 h-7 flex items-center justify-center rounded-full text-sm font-medium font-body transition-colors',
@@ -146,17 +201,27 @@ function MonthCell({
       </button>
 
       <div className="flex flex-col gap-0.5">
-        {events.slice(0, MAX_VISIBLE).map(ev => {
+        {events.slice(0, MAX_VISIBLE).map((ev) => {
           const c = eventColours[ev.color ?? 'slate'];
           const inner = (
-            <span className={`block truncate text-xs font-medium font-body px-1.5 py-0.5 rounded ${c.bg} ${c.text}`}>
+            <span
+              className={`block truncate text-xs font-medium font-body px-1.5 py-0.5 rounded ${c.bg} ${c.text}`}
+            >
               {ev.title}
             </span>
           );
           return ev.href ? (
-            <a key={ev.id} href={ev.href}>{inner}</a>
+            <a key={ev.id} href={ev.href}>
+              {inner}
+            </a>
           ) : (
-            <button key={ev.id} type="button" aria-label={ev.title} onClick={ev.onClick} className="text-left w-full">
+            <button
+              key={ev.id}
+              type="button"
+              aria-label={ev.title}
+              onClick={ev.onClick}
+              className="text-left w-full"
+            >
               {inner}
             </button>
           );
@@ -174,20 +239,30 @@ function MonthCell({
 // ── Mini variant ──────────────────────────────────────────
 
 function MiniCell({
-  date, current, today, selected, hasEvents, bordered, shadeWeekends, onSelect,
-  isRangeStart, isRangeEnd, inRange, onMouseEnter,
+  date,
+  current,
+  today,
+  selected,
+  hasEvents,
+  bordered,
+  shadeWeekends,
+  onSelect,
+  isRangeStart,
+  isRangeEnd,
+  inRange,
+  onMouseEnter,
 }: {
-  date:          Date;
-  current:       boolean;
-  today:         boolean;
-  selected:      boolean;
-  hasEvents:     boolean;
-  bordered:      boolean;
+  date: Date;
+  current: boolean;
+  today: boolean;
+  selected: boolean;
+  hasEvents: boolean;
+  bordered: boolean;
   shadeWeekends: boolean;
-  onSelect:      (d: Date) => void;
+  onSelect: (d: Date) => void;
   isRangeStart?: boolean;
-  isRangeEnd?:   boolean;
-  inRange?:      boolean;
+  isRangeEnd?: boolean;
+  inRange?: boolean;
   onMouseEnter?: () => void;
 }) {
   const isWeekend = date.getDay() === 0 || date.getDay() === 6;
@@ -196,10 +271,10 @@ function MiniCell({
   // Strip background behind the circle (connects start → end)
   const stripCls = (() => {
     const bg = 'bg-primary-100 dark:bg-primary-900/40';
-    if (isRangeStart && isRangeEnd) return '';           // single-day range — no strip
-    if (isRangeStart)               return `${bg} rounded-l-full ml-1`;
-    if (isRangeEnd)                 return `${bg} rounded-r-full mr-1`;
-    if (inRange)                    return bg;
+    if (isRangeStart && isRangeEnd) return ''; // single-day range — no strip
+    if (isRangeStart) return `${bg} rounded-l-full ml-1`;
+    if (isRangeEnd) return `${bg} rounded-r-full mr-1`;
+    if (inRange) return bg;
     return '';
   })();
 
@@ -208,7 +283,9 @@ function MiniCell({
       className={[
         'relative flex flex-col items-center gap-0.5',
         bordered ? 'border-r border-b border-ink-100 dark:border-ink-700 py-1' : '',
-        shadeWeekends && isWeekend && !inRange && !isEndpoint ? 'bg-ink-100/60 dark:bg-ink-900/40 rounded' : '',
+        shadeWeekends && isWeekend && !inRange && !isEndpoint
+          ? 'bg-ink-100/60 dark:bg-ink-900/40 rounded'
+          : '',
       ].join(' ')}
       onMouseEnter={onMouseEnter}
     >
@@ -220,7 +297,12 @@ function MiniCell({
       <button
         type="button"
         onClick={() => onSelect(date)}
-        aria-label={date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        aria-label={date.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
         aria-pressed={selected || isEndpoint}
         className={[
           'relative w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium font-body transition-colors z-10',
@@ -251,25 +333,25 @@ export function Calendar({
   defaultMonth,
   selected,
   onSelect,
-  events       = [],
-  variant      = 'month',
-  bordered     = false,
+  events = [],
+  variant = 'month',
+  bordered = false,
   shadeWeekends = false,
   rangeStart,
   rangeEnd,
   rangeHover,
   onRangeHover,
-  className    = '',
+  className = '',
 }: CalendarProps) {
   const today = new Date();
 
   const [viewDate, setViewDate] = useState<Date>(() => {
     // Default to the month of rangeStart or selected if provided
-    const anchor = rangeStart ?? (selected ?? defaultMonth ?? new Date());
+    const anchor = rangeStart ?? selected ?? defaultMonth ?? new Date();
     return new Date(anchor.getFullYear(), anchor.getMonth(), 1);
   });
 
-  const year  = viewDate.getFullYear();
+  const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
   const cells = buildGrid(year, month);
 
@@ -284,15 +366,13 @@ export function Calendar({
 
   const prevMonth = () => setViewDate(new Date(year, month - 1, 1));
   const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
-  const goToday   = () => setViewDate(new Date(today.getFullYear(), today.getMonth(), 1));
+  const goToday = () => setViewDate(new Date(today.getFullYear(), today.getMonth(), 1));
 
   // ── Range helpers ──────────────────────────────────────────
   // Compute effective lo/hi — use hover date as provisional end when end not set
   const rangeInfo = React.useMemo(() => {
     const start = rangeStart ? stripTime(rangeStart) : null;
-    const end   = rangeEnd   ? stripTime(rangeEnd)
-                : rangeHover ? stripTime(rangeHover)
-                : null;
+    const end = rangeEnd ? stripTime(rangeEnd) : rangeHover ? stripTime(rangeHover) : null;
     if (!start || !end) return { lo: start, hi: null };
     return start <= end ? { lo: start, hi: end } : { lo: end, hi: start };
   }, [rangeStart, rangeEnd, rangeHover]);
@@ -319,12 +399,18 @@ export function Calendar({
     const isRangeMode = rangeStart !== undefined || rangeEnd !== undefined;
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [view, setView]             = useState<'days' | 'monthYear'>('days');
+    const [view, setView] = useState<'days' | 'monthYear'>('days');
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [pickerYear, setPickerYear] = useState(year);
 
-    const openMonthYear = () => { setPickerYear(year); setView('monthYear'); };
-    const pickMonth     = (m: number) => { setViewDate(new Date(pickerYear, m, 1)); setView('days'); };
+    const openMonthYear = () => {
+      setPickerYear(year);
+      setView('monthYear');
+    };
+    const pickMonth = (m: number) => {
+      setViewDate(new Date(pickerYear, m, 1));
+      setView('days');
+    };
 
     return (
       <div
@@ -336,7 +422,7 @@ export function Calendar({
           <>
             {/* Year navigation header */}
             <div className="flex items-center justify-between mb-3">
-              <NavButton onClick={() => setPickerYear(y => y - 1)} label="Previous year">
+              <NavButton onClick={() => setPickerYear((y) => y - 1)} label="Previous year">
                 <ChevronLeft className="w-4 h-4" />
               </NavButton>
               <button
@@ -347,7 +433,7 @@ export function Calendar({
                 {pickerYear}
                 <ChevronDown className="w-3 h-3 rotate-180" aria-hidden="true" />
               </button>
-              <NavButton onClick={() => setPickerYear(y => y + 1)} label="Next year">
+              <NavButton onClick={() => setPickerYear((y) => y + 1)} label="Next year">
                 <ChevronRight className="w-4 h-4" />
               </NavButton>
             </div>
@@ -381,7 +467,9 @@ export function Calendar({
           <>
             {/* ── Day calendar header ── */}
             <div className="flex items-center justify-between mb-3">
-              <NavButton onClick={prevMonth} label="Previous month"><ChevronLeft className="w-4 h-4" /></NavButton>
+              <NavButton onClick={prevMonth} label="Previous month">
+                <ChevronLeft className="w-4 h-4" />
+              </NavButton>
               <button
                 type="button"
                 onClick={openMonthYear}
@@ -389,17 +477,24 @@ export function Calendar({
                 aria-label={`${MONTHS[month]} ${year} — click to change month or year`}
               >
                 {MONTHS[month]} {year}
-                <ChevronDown className="w-3 h-3 text-ink-400 dark:text-ink-300" aria-hidden="true" />
+                <ChevronDown
+                  className="w-3 h-3 text-ink-400 dark:text-ink-300"
+                  aria-hidden="true"
+                />
               </button>
-              <NavButton onClick={nextMonth} label="Next month"><ChevronRight className="w-4 h-4" /></NavButton>
+              <NavButton onClick={nextMonth} label="Next month">
+                <ChevronRight className="w-4 h-4" />
+              </NavButton>
             </div>
 
             {/* Day headers */}
-            <div className={[
-              'grid grid-cols-7',
-              bordered ? 'border-t border-l border-ink-100 dark:border-ink-700' : 'gap-y-1 mb-1',
-            ].join(' ')}>
-              {DAYS.map(d => (
+            <div
+              className={[
+                'grid grid-cols-7',
+                bordered ? 'border-t border-l border-ink-100 dark:border-ink-700' : 'gap-y-1 mb-1',
+              ].join(' ')}
+            >
+              {DAYS.map((d) => (
                 <div
                   key={d}
                   className={[
@@ -415,10 +510,12 @@ export function Calendar({
             </div>
 
             {/* Day grid */}
-            <div className={[
-              'grid grid-cols-7',
-              bordered ? 'border-l border-ink-100 dark:border-ink-700' : 'gap-y-1',
-            ].join(' ')}>
+            <div
+              className={[
+                'grid grid-cols-7',
+                bordered ? 'border-l border-ink-100 dark:border-ink-700' : 'gap-y-1',
+              ].join(' ')}
+            >
               {cells.map(({ date, current }, i) => (
                 <MiniCell
                   key={i}
@@ -426,7 +523,7 @@ export function Calendar({
                   current={current}
                   today={isSameDay(date, today)}
                   selected={!!selected && isSameDay(date, selected)}
-                  hasEvents={!!(eventMap[toISO(date)]?.length)}
+                  hasEvents={!!eventMap[toISO(date)]?.length}
                   bordered={bordered}
                   shadeWeekends={shadeWeekends}
                   onSelect={handleSelect}
@@ -451,7 +548,9 @@ export function Calendar({
           {MONTHS[month]} {year}
         </h2>
         <div className="flex items-center gap-1">
-          <NavButton onClick={prevMonth} label="Previous month"><ChevronLeft className="w-4 h-4" /></NavButton>
+          <NavButton onClick={prevMonth} label="Previous month">
+            <ChevronLeft className="w-4 h-4" />
+          </NavButton>
           <button
             type="button"
             onClick={goToday}
@@ -459,13 +558,18 @@ export function Calendar({
           >
             Today
           </button>
-          <NavButton onClick={nextMonth} label="Next month"><ChevronRight className="w-4 h-4" /></NavButton>
+          <NavButton onClick={nextMonth} label="Next month">
+            <ChevronRight className="w-4 h-4" />
+          </NavButton>
         </div>
       </div>
 
       <div className="grid grid-cols-7 border-t border-l border-ink-100 dark:border-ink-700">
-        {DAYS.map(d => (
-          <div key={d} className="border-b border-r border-ink-100 dark:border-ink-700 py-2 text-center">
+        {DAYS.map((d) => (
+          <div
+            key={d}
+            className="border-b border-r border-ink-100 dark:border-ink-700 py-2 text-center"
+          >
             <span className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wide">
               {d}
             </span>

@@ -16,11 +16,11 @@ import { Dialog as HLDialog, Transition } from '@headlessui/react';
 import { X } from 'lucide-react';
 
 export interface DialogProps {
-  open:       boolean;
-  onClose:    (open: boolean) => void;
-  title?:     string;
-  children:   React.ReactNode;
-  size?:      'sm' | 'md' | 'lg';
+  open: boolean;
+  onClose: (open: boolean) => void;
+  title?: string;
+  children: React.ReactNode;
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
@@ -37,12 +37,15 @@ export function Dialog({
   return (
     <Transition appear show={open} as={React.Fragment}>
       <HLDialog as="div" className="relative z-50" onClose={onClose}>
-
         {/* Backdrop */}
         <Transition.Child
           as={React.Fragment}
-          enter="ease-out duration-200" enterFrom="opacity-0" enterTo="opacity-100"
-          leave="ease-in duration-150"  leaveFrom="opacity-100" leaveTo="opacity-0"
+          enter="ease-out duration-200"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-ink-900/60 dark:bg-ink-900/80 backdrop-blur-sm" />
         </Transition.Child>
@@ -59,14 +62,15 @@ export function Dialog({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <HLDialog.Panel className={[
-                'w-full rounded-2xl shadow-xl overflow-hidden',
-                'bg-white dark:bg-ink-800',
-                'border border-ink-200 dark:border-ink-700',
-                sizeMap[size],
-                className,
-              ].join(' ')}>
-
+              <HLDialog.Panel
+                className={[
+                  'w-full rounded-2xl shadow-xl overflow-hidden',
+                  'bg-white dark:bg-ink-800',
+                  'border border-ink-200 dark:border-ink-700',
+                  sizeMap[size],
+                  className,
+                ].join(' ')}
+              >
                 {/* Header */}
                 {title && (
                   <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-ink-100 dark:border-ink-700">

@@ -5,8 +5,8 @@ import type { BadgeVariant } from './Badge';
 
 // ── Types ─────────────────────────────────────────────────
 
-export type ChatMessageSide      = 'sent' | 'received';
-export type ChatMessageStatus    = 'sending' | 'sent' | 'delivered' | 'read';
+export type ChatMessageSide = 'sent' | 'received';
+export type ChatMessageStatus = 'sending' | 'sent' | 'delivered' | 'read';
 export type ChatMessageSentiment =
   | 'happy'
   | 'satisfied'
@@ -19,7 +19,7 @@ export type ChatMessageSentiment =
 
 export interface ChatSender {
   /** Display name shown above the first message in a group */
-  name:    string;
+  name: string;
   /** Optional avatar image URL; falls back to initials */
   avatar?: string;
   /**
@@ -27,29 +27,29 @@ export interface ChatSender {
    * Useful for support queues, AI assistants, or multi-agent threads —
    * e.g. `'AI Assistant'`, `'Support Agent'`, `'Bot'`.
    */
-  role?:   string;
+  role?: string;
 }
 
 export interface ChatMessage {
-  id:         string;
+  id: string;
   /**
    * For `type = 'text'` (default): the message body.
    * For `type = 'image'`: the image URL to display.
    */
-  content:    string;
+  content: string;
   /** @default 'text' */
-  type?:      'text' | 'image';
-  side:       ChatMessageSide;
+  type?: 'text' | 'image';
+  side: ChatMessageSide;
   /**
    * Sender details shown on received messages.
    * `name` is used for grouping — consecutive messages with the same
    * `name` on the same side are collapsed into a single visual group.
    */
-  sender?:    ChatSender;
+  sender?: ChatSender;
   /** ISO string or Date object — used for timestamp dividers and labels */
   timestamp?: string | Date;
   /** Delivery state shown beneath the last sent message in a group */
-  status?:    ChatMessageStatus;
+  status?: ChatMessageStatus;
   /**
    * Optional detected or manually assigned sentiment for this message.
    * Renders as a small colour-coded pill beneath the bubble — useful for
@@ -59,32 +59,32 @@ export interface ChatMessage {
 }
 
 export interface ChatProps {
-  messages:      ChatMessage[];
+  messages: ChatMessage[];
   /** Called when the user submits a new message via Enter or the send button */
-  onSend?:       (text: string) => void;
+  onSend?: (text: string) => void;
   /** Input placeholder text. @default 'Message' */
-  placeholder?:  string;
+  placeholder?: string;
   /** Show the typing indicator at the bottom of the thread */
-  typing?:       boolean;
+  typing?: boolean;
   /** Label shown next to the typing dots, e.g. "Alex is typing…" */
-  typingLabel?:  string;
+  typingLabel?: string;
   /**
    * Optional header rendered above the message list — useful on desktop
    * where a persistent contact name, avatar, and status bar is expected.
    * Receives no wrapper styling so you have full control over layout.
    */
-  header?:       React.ReactNode;
+  header?: React.ReactNode;
   /**
    * Show avatars next to received messages. When `false` the avatar column is
    * removed entirely and the sender name / role badge still appears above the
    * first bubble in each group.
    * @default true
    */
-  showAvatars?:  boolean;
+  showAvatars?: boolean;
   /** Controlled input value */
-  value?:        string;
-  onChange?:     (val: string) => void;
-  className?:    string;
+  value?: string;
+  onChange?: (val: string) => void;
+  className?: string;
 }
 
 // ── Helpers ───────────────────────────────────────────────
@@ -99,7 +99,7 @@ function formatTime(ts?: string | Date): string {
 function formatDivider(ts: string | Date): string {
   const d = typeof ts === 'string' ? new Date(ts) : ts;
   if (isNaN(d.getTime())) return '';
-  const now  = new Date();
+  const now = new Date();
   const diff = now.getTime() - d.getTime();
   const oneDay = 86_400_000;
   const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -107,8 +107,7 @@ function formatDivider(ts: string | Date): string {
   if (diff < oneDay && now.getDate() === d.getDate()) return `Today ${time}`;
   if (diff < 2 * oneDay) return `Yesterday ${time}`;
   return (
-    d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }) +
-    ` ${time}`
+    d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }) + ` ${time}`
   );
 }
 
@@ -116,7 +115,7 @@ function getInitials(name: string): string {
   return name
     .trim()
     .split(/\s+/)
-    .map(w => w[0] ?? '')
+    .map((w) => w[0] ?? '')
     .join('')
     .slice(0, 2)
     .toUpperCase();
@@ -148,14 +147,14 @@ function getGroupPos(messages: ChatMessage[], index: number): GroupPos {
   const curr = messages[index];
   const prev = messages[index - 1];
   const next = messages[index + 1];
-  const key  = senderKey(curr);
+  const key = senderKey(curr);
 
   const continuesPrev = !!(prev && senderKey(prev) === key);
   const continuesNext = !!(next && senderKey(next) === key);
 
   if (!continuesPrev && !continuesNext) return 'single';
-  if (!continuesPrev &&  continuesNext) return 'first';
-  if ( continuesPrev &&  continuesNext) return 'middle';
+  if (!continuesPrev && continuesNext) return 'first';
+  if (continuesPrev && continuesNext) return 'middle';
   return 'last';
 }
 
@@ -167,23 +166,23 @@ function getGroupPos(messages: ChatMessage[], index: number): GroupPos {
 const radiusCls: Record<ChatMessageSide, Record<GroupPos, string>> = {
   sent: {
     single: 'rounded-2xl',
-    first:  'rounded-2xl rounded-br-sm',
+    first: 'rounded-2xl rounded-br-sm',
     middle: 'rounded-2xl rounded-r-sm',
-    last:   'rounded-2xl rounded-tr-sm',
+    last: 'rounded-2xl rounded-tr-sm',
   },
   received: {
     single: 'rounded-2xl',
-    first:  'rounded-2xl rounded-bl-sm',
+    first: 'rounded-2xl rounded-bl-sm',
     middle: 'rounded-2xl rounded-l-sm',
-    last:   'rounded-2xl rounded-tl-sm',
+    last: 'rounded-2xl rounded-tl-sm',
   },
 };
 
 const statusLabel: Record<ChatMessageStatus, string> = {
-  sending:   'Sending…',
-  sent:      'Sent',
+  sending: 'Sending…',
+  sent: 'Sent',
   delivered: 'Delivered',
-  read:      'Read',
+  read: 'Read',
 };
 
 // ── Sentiment config ──────────────────────────────────────
@@ -192,14 +191,14 @@ const sentimentConfig: Record<
   ChatMessageSentiment,
   { emoji: string; label: string; variant: BadgeVariant }
 > = {
-  happy:      { emoji: '😊', label: 'Happy',      variant: 'happy'      },
-  satisfied:  { emoji: '👍', label: 'Satisfied',  variant: 'satisfied'  },
-  neutral:    { emoji: '😐', label: 'Neutral',    variant: 'neutral'    },
-  confused:   { emoji: '🤔', label: 'Confused',   variant: 'confused'   },
+  happy: { emoji: '😊', label: 'Happy', variant: 'happy' },
+  satisfied: { emoji: '👍', label: 'Satisfied', variant: 'satisfied' },
+  neutral: { emoji: '😐', label: 'Neutral', variant: 'neutral' },
+  confused: { emoji: '🤔', label: 'Confused', variant: 'confused' },
   frustrated: { emoji: '😤', label: 'Frustrated', variant: 'frustrated' },
-  angry:      { emoji: '😠', label: 'Angry',      variant: 'angry'      },
-  sad:        { emoji: '😔', label: 'Sad',        variant: 'sad'        },
-  urgent:     { emoji: '🚨', label: 'Urgent',     variant: 'urgent'     },
+  angry: { emoji: '😠', label: 'Angry', variant: 'angry' },
+  sad: { emoji: '😔', label: 'Sad', variant: 'sad' },
+  urgent: { emoji: '🚨', label: 'Urgent', variant: 'urgent' },
 };
 
 // ── Emoji reactions ───────────────────────────────────────
@@ -252,9 +251,7 @@ function TypingIndicator({ label, showAvatars }: { label: string; showAvatars: b
           />
         </div>
         {label && (
-          <span className="text-[11px] font-body text-ink-500 dark:text-ink-300 px-1">
-            {label}
-          </span>
+          <span className="text-[11px] font-body text-ink-500 dark:text-ink-300 px-1">{label}</span>
         )}
       </div>
     </div>
@@ -266,36 +263,39 @@ function TypingIndicator({ label, showAvatars }: { label: string; showAvatars: b
 export function Chat({
   messages,
   onSend,
-  placeholder   = 'Message',
-  typing        = false,
-  typingLabel   = '',
+  placeholder = 'Message',
+  typing = false,
+  typingLabel = '',
   header,
-  showAvatars   = true,
-  value:        controlledValue,
-  onChange:     controlledOnChange,
-  className     = '',
+  showAvatars = true,
+  value: controlledValue,
+  onChange: controlledOnChange,
+  className = '',
 }: ChatProps) {
   const isControlled = controlledValue !== undefined;
 
   const [internalValue, setInternalValue] = useState('');
   const inputValue = isControlled ? (controlledValue ?? '') : internalValue;
 
-  const [viewingImage,      setViewingImage]      = useState<string | null>(null);
+  const [viewingImage, setViewingImage] = useState<string | null>(null);
   const [activePickerMsgId, setActivePickerMsgId] = useState<string | null>(null);
-  const [reactions,         setReactions]         = useState<Record<string, string[]>>({});
+  const [reactions, setReactions] = useState<Record<string, string[]>>({});
 
-  const scrollRef         = useRef<HTMLDivElement>(null);
-  const inputRef          = useRef<HTMLTextAreaElement>(null);
-  const pickerRef         = useRef<HTMLDivElement>(null);
-  const longPressTimer    = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const suppressClick     = useRef(false);
-  const pressStartPos     = useRef<{ x: number; y: number } | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const suppressClick = useRef(false);
+  const pressStartPos = useRef<{ x: number; y: number } | null>(null);
 
   // Close lightbox or emoji picker on Escape
   useEffect(() => {
     if (!viewingImage && !activePickerMsgId) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') { setViewingImage(null); setActivePickerMsgId(null); }
+      if (e.key === 'Escape') {
+        setViewingImage(null);
+        setActivePickerMsgId(null);
+      }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -318,18 +318,21 @@ export function Chat({
 
   // ── Long-press handlers ───────────────────────────────
   function startLongPress(msgId: string, e: React.PointerEvent) {
-    suppressClick.current  = false;
-    pressStartPos.current  = { x: e.clientX, y: e.clientY };
+    suppressClick.current = false;
+    pressStartPos.current = { x: e.clientX, y: e.clientY };
     longPressTimer.current = setTimeout(() => {
       suppressClick.current = true;
       pressStartPos.current = null;
-      setActivePickerMsgId(prev => (prev === msgId ? null : msgId));
+      setActivePickerMsgId((prev) => (prev === msgId ? null : msgId));
       if (typeof navigator.vibrate === 'function') navigator.vibrate(8);
     }, 500);
   }
 
   function cancelLongPress() {
-    if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null; }
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
     pressStartPos.current = null;
   }
 
@@ -341,9 +344,9 @@ export function Chat({
   }
 
   function toggleReaction(msgId: string, emoji: string) {
-    setReactions(prev => {
-      const cur  = prev[msgId] ?? [];
-      const next = cur.includes(emoji) ? cur.filter(e => e !== emoji) : [...cur, emoji];
+    setReactions((prev) => {
+      const cur = prev[msgId] ?? [];
+      const next = cur.includes(emoji) ? cur.filter((e) => e !== emoji) : [...cur, emoji];
       return { ...prev, [msgId]: next };
     });
     setActivePickerMsgId(null);
@@ -388,16 +391,13 @@ export function Chat({
 
   return (
     <div
-      className={[
-        'flex flex-col bg-white dark:bg-ink-900 overflow-hidden',
-        className,
-      ].filter(Boolean).join(' ')}
+      className={['flex flex-col bg-white dark:bg-ink-900 overflow-hidden', className]
+        .filter(Boolean)
+        .join(' ')}
     >
       {/* ── Optional header ────────────────────────────────── */}
       {header && (
-        <div className="shrink-0 border-b border-ink-100 dark:border-ink-800">
-          {header}
-        </div>
+        <div className="shrink-0 border-b border-ink-100 dark:border-ink-800">{header}</div>
       )}
 
       {/* ── Message list ──────────────────────────────────── */}
@@ -410,13 +410,11 @@ export function Chat({
         aria-live="polite"
       >
         {messages.map((msg, i) => {
-          const pos        = getGroupPos(messages, i);
-          const isFirst    = pos === 'first'  || pos === 'single';
-          const isLast     = pos === 'last'   || pos === 'single';
-          const prevMsg    = messages[i - 1];
-          const showDivider =
-            (i === 0 && !!msg.timestamp) ||
-            hasTimestampGap(prevMsg, msg);
+          const pos = getGroupPos(messages, i);
+          const isFirst = pos === 'first' || pos === 'single';
+          const isLast = pos === 'last' || pos === 'single';
+          const prevMsg = messages[i - 1];
+          const showDivider = (i === 0 && !!msg.timestamp) || hasTimestampGap(prevMsg, msg);
 
           return (
             <React.Fragment key={msg.id}>
@@ -440,9 +438,7 @@ export function Chat({
                 {/* Avatar slot — reserves space so bubbles stay aligned */}
                 {msg.side === 'received' && showAvatars && (
                   <div className="w-7 shrink-0 self-end mb-0.5" aria-hidden="true">
-                    {isLast && msg.sender && (
-                      <SenderAvatar sender={msg.sender} />
-                    )}
+                    {isLast && msg.sender && <SenderAvatar sender={msg.sender} />}
                   </div>
                 )}
 
@@ -489,7 +485,7 @@ export function Chat({
                       ].join(' ')}
                       onPointerDown={(e) => e.stopPropagation()}
                     >
-                      {QUICK_EMOJIS.map(emoji => (
+                      {QUICK_EMOJIS.map((emoji) => (
                         <button
                           key={emoji}
                           type="button"
@@ -515,7 +511,10 @@ export function Chat({
                     <button
                       type="button"
                       onClick={() => {
-                        if (suppressClick.current) { suppressClick.current = false; return; }
+                        if (suppressClick.current) {
+                          suppressClick.current = false;
+                          return;
+                        }
                         setViewingImage(msg.content);
                       }}
                       aria-label="View full image"
@@ -551,11 +550,13 @@ export function Chat({
 
                   {/* Emoji reactions — displayed below the bubble */}
                   {(reactions[msg.id]?.length ?? 0) > 0 && (
-                    <div className={[
-                      'flex flex-wrap gap-1 mt-1',
-                      msg.side === 'sent' ? 'justify-end' : 'justify-start',
-                    ].join(' ')}>
-                      {reactions[msg.id].map(emoji => (
+                    <div
+                      className={[
+                        'flex flex-wrap gap-1 mt-1',
+                        msg.side === 'sent' ? 'justify-end' : 'justify-start',
+                      ].join(' ')}
+                    >
+                      {reactions[msg.id].map((emoji) => (
                         <button
                           key={emoji}
                           type="button"
@@ -668,10 +669,7 @@ export function Chat({
           aria-label="Image viewer"
         >
           {/* Inner container — stops click from bubbling to backdrop */}
-          <div
-            className="relative max-w-[92vw] max-h-[92vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative max-w-[92vw] max-h-[92vh]" onClick={(e) => e.stopPropagation()}>
             <img
               src={viewingImage}
               alt="Full-size image"

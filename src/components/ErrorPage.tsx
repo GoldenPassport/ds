@@ -23,8 +23,8 @@ import { Button } from './Button';
 export type ErrorPageVariant = '404' | '500' | '403' | '503';
 
 export interface ErrorPageAction {
-  label:    string;
-  href?:    string;
+  label: string;
+  href?: string;
   onClick?: () => void;
 }
 
@@ -34,65 +34,63 @@ export interface ErrorPageProps {
    * `description` with sensible defaults for that HTTP status — all of
    * which can still be overridden by explicit props.
    */
-  variant?:         ErrorPageVariant;
+  variant?: ErrorPageVariant;
   /**
    * Status code displayed as a large in-flow number above the title.
    * Accepts any string so you can use custom codes like `"E_NETWORK"`.
    */
-  code?:            string | number;
-  title?:           string;
-  description?:     string;
+  code?: string | number;
+  title?: string;
+  description?: string;
   /**
    * Optional icon rendered above the title. When provided, the large code
    * number is hidden and the icon is shown instead. Pass a Lucide icon or
    * any ReactNode sized at ~32 px.
    */
-  icon?:            React.ReactNode;
-  primaryAction?:   ErrorPageAction;
+  icon?: React.ReactNode;
+  primaryAction?: ErrorPageAction;
   secondaryAction?: ErrorPageAction;
   /**
    * When `true` the component fills the full viewport height (`min-h-screen`).
    * When `false` (default) it uses a comfortable fixed minimum height so it
    * can be embedded inside a layout or Storybook canvas.
    */
-  fullScreen?:      boolean;
-  className?:       string;
+  fullScreen?: boolean;
+  className?: string;
 }
 
 // ── Presets ────────────────────────────────────────────────
 
 const PRESETS: Record<ErrorPageVariant, { code: string; title: string; description: string }> = {
   '404': {
-    code:        '404',
-    title:       'Page not found',
-    description: "Sorry, we couldn't find the page you're looking for. It may have been moved, deleted, or never existed.",
+    code: '404',
+    title: 'Page not found',
+    description:
+      "Sorry, we couldn't find the page you're looking for. It may have been moved, deleted, or never existed.",
   },
   '500': {
-    code:        '500',
-    title:       'Something went wrong',
-    description: 'We hit an unexpected error on our end. Our team has been notified and is working on a fix.',
+    code: '500',
+    title: 'Something went wrong',
+    description:
+      'We hit an unexpected error on our end. Our team has been notified and is working on a fix.',
   },
   '403': {
-    code:        '403',
-    title:       'Access denied',
-    description: "You don't have permission to view this page. Contact your administrator if you think this is a mistake.",
+    code: '403',
+    title: 'Access denied',
+    description:
+      "You don't have permission to view this page. Contact your administrator if you think this is a mistake.",
   },
   '503': {
-    code:        '503',
-    title:       'Under maintenance',
-    description: "We're performing scheduled maintenance to improve the platform. We'll be back online shortly.",
+    code: '503',
+    title: 'Under maintenance',
+    description:
+      "We're performing scheduled maintenance to improve the platform. We'll be back online shortly.",
   },
 };
 
 // ── Action helper ──────────────────────────────────────────
 
-function ActionBtn({
-  action,
-  variant,
-}: {
-  action:  ErrorPageAction;
-  variant: 'primary' | 'ghost';
-}) {
+function ActionBtn({ action, variant }: { action: ErrorPageAction; variant: 'primary' | 'ghost' }) {
   const el = (
     <Button variant={variant} size="lg" onClick={action.onClick}>
       {action.label}
@@ -105,19 +103,19 @@ function ActionBtn({
 
 export function ErrorPage({
   variant,
-  code:         codeProp,
-  title:        titleProp,
-  description:  descProp,
+  code: codeProp,
+  title: titleProp,
+  description: descProp,
   icon,
   primaryAction,
   secondaryAction,
-  fullScreen  = false,
-  className   = '',
+  fullScreen = false,
+  className = '',
 }: ErrorPageProps) {
   const preset = variant ? PRESETS[variant] : undefined;
-  const code        = codeProp        ?? preset?.code;
-  const title       = titleProp       ?? preset?.title       ?? 'An error occurred';
-  const description = descProp        ?? preset?.description;
+  const code = codeProp ?? preset?.code;
+  const title = titleProp ?? preset?.title ?? 'An error occurred';
+  const description = descProp ?? preset?.description;
 
   return (
     <div
@@ -130,7 +128,6 @@ export function ErrorPage({
       ].join(' ')}
     >
       <div className="flex flex-col items-center max-w-md w-full">
-
         {/* Icon */}
         {icon && (
           <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink-100 dark:bg-ink-800 text-ink-600 dark:text-ink-200">
@@ -170,8 +167,8 @@ export function ErrorPage({
         {/* Actions */}
         {(primaryAction || secondaryAction) && (
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            {primaryAction   && <ActionBtn action={primaryAction}   variant="primary" />}
-            {secondaryAction && <ActionBtn action={secondaryAction} variant="ghost"   />}
+            {primaryAction && <ActionBtn action={primaryAction} variant="primary" />}
+            {secondaryAction && <ActionBtn action={secondaryAction} variant="ghost" />}
           </div>
         )}
       </div>

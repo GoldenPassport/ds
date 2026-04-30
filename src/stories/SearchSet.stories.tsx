@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { SearchSet } from '../components/SearchSet';
-import type { SearchSetTag, SearchSetFilterDef, SearchSetFilterValues } from '../components/SearchSet';
+import type {
+  SearchSetTag,
+  SearchSetFilterDef,
+  SearchSetFilterValues,
+} from '../components/SearchSet';
 import { Card } from '../components/Card';
 import { Pagination } from '../components/Pagination';
 import { Badge } from '../components/Badge';
@@ -15,11 +19,11 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
-    value:       { control: 'text' },
-    debounce:    { control: 'number' },
-    loading:     { control: 'boolean' },
+    value: { control: 'text' },
+    debounce: { control: 'number' },
+    loading: { control: 'boolean' },
     placeholder: { control: 'text' },
-    label:       { control: 'text' },
+    label: { control: 'text' },
   },
 } satisfies Meta<typeof SearchSet>;
 
@@ -30,46 +34,48 @@ type Story = StoryObj<typeof meta>;
 
 const PLAYGROUND_FILTER_DEFS: SearchSetFilterDef[] = [
   {
-    key:   'status',
+    key: 'status',
     label: 'Status',
-    type:  'select',
+    type: 'select',
     options: [
-      { value: 'active',  label: 'Active'  },
+      { value: 'active', label: 'Active' },
       { value: 'pending', label: 'Pending' },
-      { value: 'failed',  label: 'Failed'  },
+      { value: 'failed', label: 'Failed' },
     ],
   },
   {
-    key:   'role',
+    key: 'role',
     label: 'Role',
-    type:  'multi',
+    type: 'multi',
     options: [
-      { value: 'admin',  label: 'Admin'  },
+      { value: 'admin', label: 'Admin' },
       { value: 'editor', label: 'Editor' },
       { value: 'viewer', label: 'Viewer' },
     ],
   },
   {
-    key:   'verified',
+    key: 'verified',
     label: 'Verified only',
-    type:  'toggle',
+    type: 'toggle',
   },
 ];
 
 export const Playground: Story = {
   args: {
-    value:       '',
-    onChange:    () => {},
-    loading:     false,
+    value: '',
+    onChange: () => {},
+    loading: false,
     placeholder: 'Search…',
-    label:       '',
+    label: '',
   },
   render: (args) => {
-    const [query,   setQuery]   = useState(args.value);
-    const [page,    setPage]    = useState(1);
-    const [size,    setSize]    = useState(25);
+    const [query, setQuery] = useState(args.value);
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(25);
     const [filters, setFilters] = useState<SearchSetFilterValues>({
-      status: '', role: [], verified: false,
+      status: '',
+      role: [],
+      verified: false,
     });
     const total = 142;
     return (
@@ -80,19 +86,26 @@ export const Playground: Story = {
           onChange={setQuery}
           filterDefs={PLAYGROUND_FILTER_DEFS}
           filterValues={filters}
-          onFilterChange={(f) => { setFilters(f); setPage(1); }}
+          onFilterChange={(f) => {
+            setFilters(f);
+            setPage(1);
+          }}
           filterTitle="Filters"
         />
         <Pagination
           page={page}
           pageSize={size}
           total={total}
-          onChange={(p, s) => { setPage(p); setSize(s); }}
+          onChange={(p, s) => {
+            setPage(p);
+            setSize(s);
+          }}
           showSummary
         />
         {query && (
           <p className="text-xs font-body text-ink-500 dark:text-ink-300">
-            Server would receive: <code className="text-ink-700 dark:text-ink-200">query="{query}"</code>
+            Server would receive:{' '}
+            <code className="text-ink-700 dark:text-ink-200">query="{query}"</code>
           </p>
         )}
       </div>
@@ -138,7 +151,7 @@ export const WithResults: Story = {
   name: 'With results',
   args: { value: '', onChange: () => {} },
   render: () => {
-    const [q,    setQ]   = useState('');
+    const [q, setQ] = useState('');
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(25);
     return (
@@ -148,7 +161,10 @@ export const WithResults: Story = {
           page={page}
           pageSize={size}
           total={284}
-          onChange={(p, s) => { setPage(p); setSize(s); }}
+          onChange={(p, s) => {
+            setPage(p);
+            setSize(s);
+          }}
           showSummary
         />
       </div>
@@ -194,9 +210,9 @@ export const WithFilters: Story = {
   name: 'With filter chips',
   args: { value: '', onChange: () => {} },
   render: () => {
-    const [q,      setQ]      = useState('');
-    const [page,   setPage]   = useState(1);
-    const [size,   setSize]   = useState(25);
+    const [q, setQ] = useState('');
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(25);
     const [status, setStatus] = useState<string | null>('active');
 
     const statusOptions = ['active', 'pending', 'failed'] as const;
@@ -209,12 +225,8 @@ export const WithFilters: Story = {
           placeholder="Search workflows…"
           filters={
             <>
-              {statusOptions.map(s => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setStatus(s === status ? null : s)}
-                >
+              {statusOptions.map((s) => (
+                <button key={s} type="button" onClick={() => setStatus(s === status ? null : s)}>
                   <Badge
                     label={s.charAt(0).toUpperCase() + s.slice(1)}
                     variant={s as 'active' | 'pending' | 'failed'}
@@ -231,7 +243,10 @@ export const WithFilters: Story = {
           page={page}
           pageSize={size}
           total={58}
-          onChange={(p, s) => { setPage(p); setSize(s); }}
+          onChange={(p, s) => {
+            setPage(p);
+            setSize(s);
+          }}
           showSummary
         />
       </div>
@@ -243,36 +258,36 @@ export const WithFilters: Story = {
 
 const FILTER_DEFS: SearchSetFilterDef[] = [
   {
-    key:   'status',
+    key: 'status',
     label: 'Status',
-    type:  'select',
+    type: 'select',
     options: [
-      { value: 'active',  label: 'Active'  },
+      { value: 'active', label: 'Active' },
       { value: 'pending', label: 'Pending' },
-      { value: 'failed',  label: 'Failed'  },
-      { value: 'draft',   label: 'Draft'   },
+      { value: 'failed', label: 'Failed' },
+      { value: 'draft', label: 'Draft' },
     ],
   },
   {
-    key:   'role',
+    key: 'role',
     label: 'Role',
-    type:  'multi',
+    type: 'multi',
     options: [
-      { value: 'admin',  label: 'Admin'  },
+      { value: 'admin', label: 'Admin' },
       { value: 'editor', label: 'Editor' },
       { value: 'viewer', label: 'Viewer' },
     ],
   },
   {
-    key:   'verified',
+    key: 'verified',
     label: 'Verified only',
-    type:  'toggle',
+    type: 'toggle',
   },
 ];
 
 const EMPTY_FILTERS: SearchSetFilterValues = {
-  status:   '',
-  role:     [],
+  status: '',
+  role: [],
   verified: false,
 };
 
@@ -280,14 +295,14 @@ export const WithFilterDialog: Story = {
   name: 'With filter dialog',
   args: { value: '', onChange: () => {} },
   render: () => {
-    const [query,   setQuery]   = useState('');
-    const [page,    setPage]    = useState(1);
-    const [size,    setSize]    = useState(25);
+    const [query, setQuery] = useState('');
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(25);
     const [filters, setFilters] = useState<SearchSetFilterValues>(EMPTY_FILTERS);
 
     const activeChips = [
       ...(filters.status ? [{ key: 'status', label: String(filters.status) }] : []),
-      ...(filters.role as string[]).map(r => ({ key: `role:${r}`, label: r })),
+      ...(filters.role as string[]).map((r) => ({ key: `role:${r}`, label: r })),
       ...(filters.verified ? [{ key: 'verified', label: 'Verified' }] : []),
     ];
 
@@ -299,12 +314,15 @@ export const WithFilterDialog: Story = {
           placeholder="Search workflows…"
           filterDefs={FILTER_DEFS}
           filterValues={filters}
-          onFilterChange={(f) => { setFilters(f); setPage(1); }}
+          onFilterChange={(f) => {
+            setFilters(f);
+            setPage(1);
+          }}
           filterTitle="Filter workflows"
           filters={
             activeChips.length > 0 ? (
               <>
-                {activeChips.map(c => (
+                {activeChips.map((c) => (
                   <Badge
                     key={c.key}
                     label={c.label}
@@ -313,9 +331,13 @@ export const WithFilterDialog: Story = {
                     dot={false}
                     outlined
                     onRemove={() => {
-                      if (c.key === 'status')        setFilters(f => ({ ...f, status: '' }));
-                      else if (c.key === 'verified') setFilters(f => ({ ...f, verified: false }));
-                      else setFilters(f => ({ ...f, role: (f.role as string[]).filter(r => `role:${r}` !== c.key) }));
+                      if (c.key === 'status') setFilters((f) => ({ ...f, status: '' }));
+                      else if (c.key === 'verified') setFilters((f) => ({ ...f, verified: false }));
+                      else
+                        setFilters((f) => ({
+                          ...f,
+                          role: (f.role as string[]).filter((r) => `role:${r}` !== c.key),
+                        }));
                     }}
                   />
                 ))}
@@ -327,7 +349,10 @@ export const WithFilterDialog: Story = {
           page={page}
           pageSize={size}
           total={142}
-          onChange={(p, s) => { setPage(p); setSize(s); }}
+          onChange={(p, s) => {
+            setPage(p);
+            setSize(s);
+          }}
           showSummary
         />
       </div>
@@ -407,7 +432,7 @@ export const FilterDialogInteraction: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click filter button → filter dialog opens', async () => {
       // Use the exact aria-label to avoid matching chip-dismiss buttons
@@ -419,13 +444,10 @@ export const FilterDialogInteraction: Story = {
     });
 
     await step('select a status option and apply', async () => {
-      const dialog   = within(document.body).getByRole('dialog');
+      const dialog = within(document.body).getByRole('dialog');
       const dialogEl = within(dialog);
 
-      await user.selectOptions(
-        dialogEl.getByRole('combobox', { name: /status/i }),
-        'active',
-      );
+      await user.selectOptions(dialogEl.getByRole('combobox', { name: /status/i }), 'active');
 
       await user.click(dialogEl.getByRole('button', { name: /^apply$/i }));
 
@@ -447,7 +469,7 @@ export const TagInteraction: Story = {
   args: { value: '', onChange: () => {} },
   render: () => {
     const [query, setQuery] = useState('');
-    const [tags,  setTags]  = useState<SearchSetTag[]>([]);
+    const [tags, setTags] = useState<SearchSetTag[]>([]);
     return (
       <div className="max-w-lg flex flex-col gap-3">
         <SearchSet
@@ -460,7 +482,7 @@ export const TagInteraction: Story = {
         <p data-testid="tag-count" className="text-xs font-body text-ink-500">
           Tags: {tags.length}
         </p>
-        {tags.map(t => (
+        {tags.map((t) => (
           <p key={t.term} data-testid={`tag-${t.term}`} className="text-xs font-body text-ink-500">
             {t.term} ({t.op})
           </p>
@@ -470,7 +492,7 @@ export const TagInteraction: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('type "alpha" and press Enter → AND tag is added', async () => {
       const input = canvas.getByRole('searchbox');
@@ -516,7 +538,7 @@ export const WithLabel: Story = {
   name: 'With label',
   args: { value: '', onChange: () => {} },
   render: () => {
-    const [q,    setQ]    = useState('');
+    const [q, setQ] = useState('');
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(10);
     return (
@@ -531,7 +553,10 @@ export const WithLabel: Story = {
           page={page}
           pageSize={size}
           total={47}
-          onChange={(p, s) => { setPage(p); setSize(s); }}
+          onChange={(p, s) => {
+            setPage(p);
+            setSize(s);
+          }}
           pageSizeOptions={[10, 20, 50]}
           showSummary
         />
@@ -543,18 +568,18 @@ export const WithLabel: Story = {
 // ── Paired with StackedList ───────────────────────────────
 
 const ALL_USERS = [
-  { id: 1,  name: 'Alice Chen',    email: 'alice@example.com',   role: 'Admin'  },
-  { id: 2,  name: 'Bob Torres',    email: 'bob@example.com',     role: 'Editor' },
-  { id: 3,  name: 'Carol Bains',   email: 'carol@example.com',   role: 'Viewer' },
-  { id: 4,  name: 'David Park',    email: 'david@example.com',   role: 'Editor' },
-  { id: 5,  name: 'Eva Müller',    email: 'eva@example.com',     role: 'Admin'  },
-  { id: 6,  name: 'Frank Li',      email: 'frank@example.com',   role: 'Viewer' },
-  { id: 7,  name: 'Grace Osei',    email: 'grace@example.com',   role: 'Editor' },
-  { id: 8,  name: 'Hiro Tanaka',   email: 'hiro@example.com',    role: 'Viewer' },
-  { id: 9,  name: 'Isla Kovacs',   email: 'isla@example.com',    role: 'Admin'  },
-  { id: 10, name: 'James Wilson',  email: 'james@example.com',   role: 'Editor' },
-  { id: 11, name: 'Karen Ndiaye',  email: 'karen@example.com',   role: 'Viewer' },
-  { id: 12, name: 'Leo Rossi',     email: 'leo@example.com',     role: 'Admin'  },
+  { id: 1, name: 'Alice Chen', email: 'alice@example.com', role: 'Admin' },
+  { id: 2, name: 'Bob Torres', email: 'bob@example.com', role: 'Editor' },
+  { id: 3, name: 'Carol Bains', email: 'carol@example.com', role: 'Viewer' },
+  { id: 4, name: 'David Park', email: 'david@example.com', role: 'Editor' },
+  { id: 5, name: 'Eva Müller', email: 'eva@example.com', role: 'Admin' },
+  { id: 6, name: 'Frank Li', email: 'frank@example.com', role: 'Viewer' },
+  { id: 7, name: 'Grace Osei', email: 'grace@example.com', role: 'Editor' },
+  { id: 8, name: 'Hiro Tanaka', email: 'hiro@example.com', role: 'Viewer' },
+  { id: 9, name: 'Isla Kovacs', email: 'isla@example.com', role: 'Admin' },
+  { id: 10, name: 'James Wilson', email: 'james@example.com', role: 'Editor' },
+  { id: 11, name: 'Karen Ndiaye', email: 'karen@example.com', role: 'Viewer' },
+  { id: 12, name: 'Leo Rossi', email: 'leo@example.com', role: 'Admin' },
 ];
 
 export const WithStackedList: Story = {
@@ -562,35 +587,35 @@ export const WithStackedList: Story = {
   args: { value: '', onChange: () => {} },
   render: () => {
     const [query, setQuery] = useState('');
-    const [page,  setPage]  = useState(1);
-    const [size,  setSize]  = useState(5);
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(5);
 
-    const filtered = ALL_USERS.filter(u =>
-      !query || u.name.toLowerCase().includes(query.toLowerCase()) ||
-      u.email.toLowerCase().includes(query.toLowerCase())
+    const filtered = ALL_USERS.filter(
+      (u) =>
+        !query ||
+        u.name.toLowerCase().includes(query.toLowerCase()) ||
+        u.email.toLowerCase().includes(query.toLowerCase()),
     );
-    const total    = filtered.length;
+    const total = filtered.length;
     const pageRows = filtered.slice((page - 1) * size, page * size);
 
     React.useEffect(() => setPage(1), [query]);
 
     return (
       <div className="max-w-lg flex flex-col gap-3">
-        <SearchSet
-          value={query}
-          onChange={setQuery}
-          placeholder="Search by name or email…"
-        />
+        <SearchSet value={query} onChange={setQuery} placeholder="Search by name or email…" />
         <StackedList
           bordered
-          items={pageRows.map(u => ({
-            id:       u.id,
-            title:    u.name,
+          items={pageRows.map((u) => ({
+            id: u.id,
+            title: u.name,
             subtitle: u.email,
             trailing: (
               <Badge
                 label={u.role}
-                variant={u.role === 'Admin' ? 'active' : u.role === 'Editor' ? 'running' : 'neutral'}
+                variant={
+                  u.role === 'Admin' ? 'active' : u.role === 'Editor' ? 'running' : 'neutral'
+                }
                 size="sm"
                 dot={false}
               />
@@ -601,7 +626,10 @@ export const WithStackedList: Story = {
           page={page}
           pageSize={size}
           total={total}
-          onChange={(p, s) => { setPage(p); setSize(s); }}
+          onChange={(p, s) => {
+            setPage(p);
+            setSize(s);
+          }}
           pageSizeOptions={[5, 10, 20]}
           showSummary
         />
@@ -612,29 +640,29 @@ export const WithStackedList: Story = {
 
 // ── Paired with DataTable ─────────────────────────────────
 
-const TABLE_DATA = ALL_USERS.map(u => ({
+const TABLE_DATA = ALL_USERS.map((u) => ({
   ...u,
   status: u.id % 3 === 0 ? 'Inactive' : 'Active',
 }));
 
 const TABLE_FILTER_DEFS: SearchSetFilterDef[] = [
   {
-    key:   'status',
+    key: 'status',
     label: 'Status',
-    type:  'select',
+    type: 'select',
     options: [
-      { value: 'Active',   label: 'Active'   },
+      { value: 'Active', label: 'Active' },
       { value: 'Inactive', label: 'Inactive' },
     ],
   },
   {
-    key:   'role',
+    key: 'role',
     label: 'Role',
-    type:  'multi',
+    type: 'multi',
     options: [
-      { value: 'Admin',   label: 'Admin'   },
-      { value: 'Editor',  label: 'Editor'  },
-      { value: 'Viewer',  label: 'Viewer'  },
+      { value: 'Admin', label: 'Admin' },
+      { value: 'Editor', label: 'Editor' },
+      { value: 'Viewer', label: 'Viewer' },
       { value: 'Billing', label: 'Billing' },
     ],
   },
@@ -646,15 +674,15 @@ export const WithDataTable: Story = {
   name: 'Paired with DataTable',
   args: { value: '', onChange: () => {} },
   render: () => {
-    const [query,   setQuery]   = useState('');
-    const [tags,    setTags]    = useState<SearchSetTag[]>([]);
+    const [query, setQuery] = useState('');
+    const [tags, setTags] = useState<SearchSetTag[]>([]);
     const [filters, setFilters] = useState<SearchSetFilterValues>(TABLE_EMPTY_FILTERS);
-    const [page,    setPage]    = useState(1);
-    const [size,    setSize]    = useState(5);
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(5);
 
     // Boolean filter: AND tags narrow the set, OR tags widen it.
     // Live query is always AND-ed on top of committed tags.
-    function matchesTags(u: typeof TABLE_DATA[0]): boolean {
+    function matchesTags(u: (typeof TABLE_DATA)[0]): boolean {
       const hit = (term: string) =>
         u.name.toLowerCase().includes(term.toLowerCase()) ||
         u.email.toLowerCase().includes(term.toLowerCase()) ||
@@ -664,32 +692,35 @@ export const WithDataTable: Story = {
       let result = true;
       for (let i = 0; i < tags.length; i++) {
         const { term, op } = tags[i];
-        if (i === 0) { result = hit(term); }
-        else if (op === 'and') { result = result && hit(term); }
-        else                   { result = result || hit(term); }
+        if (i === 0) {
+          result = hit(term);
+        } else if (op === 'and') {
+          result = result && hit(term);
+        } else {
+          result = result || hit(term);
+        }
       }
       // Apply live query as a final AND
       if (query) result = result && hit(query);
       return result;
     }
 
-    function matchesFilters(u: typeof TABLE_DATA[0]): boolean {
+    function matchesFilters(u: (typeof TABLE_DATA)[0]): boolean {
       const status = filters.status as string;
-      const roles  = filters.role  as string[];
+      const roles = filters.role as string[];
       if (status && u.status !== status) return false;
       if (roles.length > 0 && !roles.includes(u.role)) return false;
       return true;
     }
 
-    const filtered = TABLE_DATA.filter(u => matchesTags(u) && matchesFilters(u));
-    const total    = filtered.length;
+    const filtered = TABLE_DATA.filter((u) => matchesTags(u) && matchesFilters(u));
+    const total = filtered.length;
     const pageRows = filtered.slice((page - 1) * size, page * size);
 
     React.useEffect(() => setPage(1), [query, tags, filters]);
 
-    const summaryText = total === TABLE_DATA.length
-      ? `${total} members`
-      : `${total} of ${TABLE_DATA.length} members`;
+    const summaryText =
+      total === TABLE_DATA.length ? `${total} members` : `${total} of ${TABLE_DATA.length} members`;
 
     return (
       <div className="flex flex-col gap-3">
@@ -700,7 +731,10 @@ export const WithDataTable: Story = {
           onTagsChange={setTags}
           filterDefs={TABLE_FILTER_DEFS}
           filterValues={filters}
-          onFilterChange={(f) => { setFilters(f); setPage(1); }}
+          onFilterChange={(f) => {
+            setFilters(f);
+            setPage(1);
+          }}
           filterTitle="Filter members"
           placeholder="Search team…"
           summary={summaryText}
@@ -708,17 +742,21 @@ export const WithDataTable: Story = {
         />
         <DataTable
           columns={[
-            { key: 'name',   header: 'Name',   sortable: true },
-            { key: 'email',  header: 'Email',  sortable: true },
-            { key: 'role',   header: 'Role'                   },
-            { key: 'status', header: 'Status', render: (row) => (
-              <Badge
-                label={row.status}
-                variant={row.status === 'Active' ? 'active' : 'draft'}
-                size="sm"
-                dot={false}
-              />
-            )},
+            { key: 'name', header: 'Name', sortable: true },
+            { key: 'email', header: 'Email', sortable: true },
+            { key: 'role', header: 'Role' },
+            {
+              key: 'status',
+              header: 'Status',
+              render: (row) => (
+                <Badge
+                  label={row.status}
+                  variant={row.status === 'Active' ? 'active' : 'draft'}
+                  size="sm"
+                  dot={false}
+                />
+              ),
+            },
           ]}
           data={pageRows}
           pagination={{
@@ -726,7 +764,10 @@ export const WithDataTable: Story = {
             pageSize: size,
             total,
             pageSizeOptions: [5, 10, 20],
-            onPageChange: (p, s) => { setPage(p); setSize(s); },
+            onPageChange: (p, s) => {
+              setPage(p);
+              setSize(s);
+            },
           }}
         />
       </div>
@@ -740,7 +781,7 @@ export const ClearAllInteraction: Story = {
   name: 'Interactions — filter dialog clear all',
   args: { value: '', onChange: () => {} },
   render: () => {
-    const [query,   setQuery]   = useState('');
+    const [query, setQuery] = useState('');
     const [filters, setFilters] = useState<SearchSetFilterValues>(EMPTY_FILTERS);
     return (
       <div className="max-w-lg flex flex-col gap-3">
@@ -761,13 +802,13 @@ export const ClearAllInteraction: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('open filter dialog and set a role filter', async () => {
       await user.click(canvas.getByRole('button', { name: /^open filters$/i }));
       await within(document.body).findByRole('dialog');
 
-      const dialog   = within(document.body).getByRole('dialog');
+      const dialog = within(document.body).getByRole('dialog');
       const dialogEl = within(dialog);
 
       // Check a role checkbox

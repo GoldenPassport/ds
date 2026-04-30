@@ -1,21 +1,34 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import gpLogo from '../../assets/gp-logo.png';
 import {
-  Briefcase, MapPin, DollarSign, CalendarDays, Paperclip,
-  CheckCircle, XCircle, PenSquare, MessageCircle,
-  LayoutDashboard, Users, FolderOpen, BarChart2, FileText,
-  Settings, HelpCircle, ShieldCheck,
+  Briefcase,
+  MapPin,
+  DollarSign,
+  CalendarDays,
+  Paperclip,
+  CheckCircle,
+  XCircle,
+  PenSquare,
+  MessageCircle,
+  LayoutDashboard,
+  Users,
+  FolderOpen,
+  BarChart2,
+  FileText,
+  Settings,
+  HelpCircle,
+  ShieldCheck,
 } from 'lucide-react';
 
-import { Navbar }          from '../components/Navbar';
-import { SidebarNav }      from '../components/SidebarNav';
-import { PageHeading }     from '../components/PageHeading';
+import { Navbar } from '../components/Navbar';
+import { SidebarNav } from '../components/SidebarNav';
+import { PageHeading } from '../components/PageHeading';
 import { DescriptionList } from '../components/DescriptionList';
-import { Badge }           from '../components/Badge';
-import { Button }          from '../components/Button';
-import { Avatar }          from '../components/Avatar';
-import { Divider }         from '../components/Divider';
-import { Hyperlink }       from '../components/Hyperlink';
+import { Badge } from '../components/Badge';
+import { Button } from '../components/Button';
+import { Avatar } from '../components/Avatar';
+import { Divider } from '../components/Divider';
+import { Hyperlink } from '../components/Hyperlink';
 
 const meta = {
   title: 'Example Pages/DetailScreen',
@@ -29,40 +42,40 @@ type Story = StoryObj<typeof meta>;
 // ── Shared fixtures ───────────────────────────────────────
 
 const NAVBAR_USER = {
-  name:  'Alex Johnson',
+  name: 'Alex Johnson',
   email: 'alex@acme.com',
   menuItems: [
     { label: 'Your profile', href: '#' },
-    { label: 'Settings',     href: '#' },
-    { label: 'Sign out',     onClick: () => {}, dividerAbove: true },
+    { label: 'Settings', href: '#' },
+    { label: 'Sign out', onClick: () => {}, dividerAbove: true },
   ],
 };
 
 const NAV_ITEMS = [
-  { label: 'Jobs',         href: '#', active: true  },
-  { label: 'Applications', href: '#'                },
-  { label: 'Candidates',   href: '#'                },
-  { label: 'Reports',      href: '#'                },
+  { label: 'Jobs', href: '#', active: true },
+  { label: 'Applications', href: '#' },
+  { label: 'Candidates', href: '#' },
+  { label: 'Reports', href: '#' },
 ];
 
 const SIDEBAR_GROUPS = [
   {
     label: 'Recruiting',
     items: [
-      { label: 'Dashboard',    href: '#', icon: <LayoutDashboard className="w-5 h-5" /> },
-      { label: 'Jobs',         href: '#', icon: <Briefcase       className="w-5 h-5" />, active: true },
-      { label: 'Applications', href: '#', icon: <FileText        className="w-5 h-5" />, badge: 12 },
-      { label: 'Candidates',   href: '#', icon: <Users           className="w-5 h-5" /> },
+      { label: 'Dashboard', href: '#', icon: <LayoutDashboard className="w-5 h-5" /> },
+      { label: 'Jobs', href: '#', icon: <Briefcase className="w-5 h-5" />, active: true },
+      { label: 'Applications', href: '#', icon: <FileText className="w-5 h-5" />, badge: 12 },
+      { label: 'Candidates', href: '#', icon: <Users className="w-5 h-5" /> },
     ],
   },
   {
     label: 'Company',
     items: [
-      { label: 'Reports',     href: '#', icon: <BarChart2   className="w-5 h-5" /> },
-      { label: 'Projects',    href: '#', icon: <FolderOpen  className="w-5 h-5" /> },
+      { label: 'Reports', href: '#', icon: <BarChart2 className="w-5 h-5" /> },
+      { label: 'Projects', href: '#', icon: <FolderOpen className="w-5 h-5" /> },
       { label: 'Permissions', href: '#', icon: <ShieldCheck className="w-5 h-5" /> },
-      { label: 'Settings',    href: '#', icon: <Settings    className="w-5 h-5" /> },
-      { label: 'Help',        href: '#', icon: <HelpCircle  className="w-5 h-5" /> },
+      { label: 'Settings', href: '#', icon: <Settings className="w-5 h-5" /> },
+      { label: 'Help', href: '#', icon: <HelpCircle className="w-5 h-5" /> },
     ],
   },
 ];
@@ -106,29 +119,30 @@ const DESCRIPTION_ITEMS = [
   },
   {
     label: 'About',
-    value: "We're looking for an experienced front-end engineer to join our product team. You'll work closely with design and back-end to ship fast, polished interfaces used by thousands of customers.",
+    value:
+      "We're looking for an experienced front-end engineer to join our product team. You'll work closely with design and back-end to ship fast, polished interfaces used by thousands of customers.",
   },
 ];
 
 const ATTACHMENTS = [
-  { name: 'job_description_final.pdf',  size: '84 KB'  },
+  { name: 'job_description_final.pdf', size: '84 KB' },
   { name: 'compensation_bands_2026.pdf', size: '210 KB' },
 ];
 
 const ACTIVITY = [
   {
-    author:  'Priya Mehta',
-    time:    '3 days ago',
+    author: 'Priya Mehta',
+    time: '3 days ago',
     comment: 'Opening approved by HR. Posting goes live today.',
   },
   {
-    author:  'Tom Clarke',
-    time:    'yesterday',
+    author: 'Tom Clarke',
+    time: 'yesterday',
     comment: 'Two strong candidates identified from inbound referrals — added to pipeline.',
   },
   {
-    author:  'Alex Johnson',
-    time:    '2 hours ago',
+    author: 'Alex Johnson',
+    time: '2 hours ago',
     comment: 'Updated salary band to reflect 2026 compensation review.',
   },
 ];
@@ -138,16 +152,27 @@ const ACTIVITY = [
 function Attachments() {
   return (
     <div>
-      <h2 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-100 mb-3">Attachments</h2>
+      <h2 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-100 mb-3">
+        Attachments
+      </h2>
       <ul className="divide-y divide-ink-100 dark:divide-ink-800 rounded-lg border border-ink-200 dark:border-ink-700 overflow-hidden">
-        {ATTACHMENTS.map(a => (
-          <li key={a.name} className="flex items-center justify-between gap-3 px-4 py-3 bg-white dark:bg-ink-900">
+        {ATTACHMENTS.map((a) => (
+          <li
+            key={a.name}
+            className="flex items-center justify-between gap-3 px-4 py-3 bg-white dark:bg-ink-900"
+          >
             <span className="flex items-center gap-2.5 min-w-0">
               <Paperclip className="w-4 h-4 shrink-0 text-ink-500 dark:text-ink-300" />
-              <span className="text-sm font-body text-ink-700 dark:text-ink-300 truncate">{a.name}</span>
-              <span className="text-xs font-body text-ink-500 dark:text-ink-300 shrink-0">{a.size}</span>
+              <span className="text-sm font-body text-ink-700 dark:text-ink-300 truncate">
+                {a.name}
+              </span>
+              <span className="text-xs font-body text-ink-500 dark:text-ink-300 shrink-0">
+                {a.size}
+              </span>
             </span>
-            <Hyperlink href="#" className="text-xs font-semibold shrink-0">Download</Hyperlink>
+            <Hyperlink href="#" className="text-xs font-semibold shrink-0">
+              Download
+            </Hyperlink>
           </li>
         ))}
       </ul>
@@ -158,7 +183,9 @@ function Attachments() {
 function ActivityFeed() {
   return (
     <div>
-      <h2 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-100 mb-4">Activity</h2>
+      <h2 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-100 mb-4">
+        Activity
+      </h2>
       <ul className="flex flex-col gap-6">
         {ACTIVITY.map((a, i) => (
           <li key={i} className="flex gap-3">
@@ -221,7 +248,14 @@ export const Stacked: Story = {
   render: () => (
     <div className="min-h-screen bg-ink-50 dark:bg-ink-800 flex flex-col">
       <Navbar
-        logo={<div className="flex items-center gap-2"><img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" /><span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-white tracking-tight leading-none">Golden Passport</span></div>}
+        logo={
+          <div className="flex items-center gap-2">
+            <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
+            <span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-white tracking-tight leading-none">
+              Golden Passport
+            </span>
+          </div>
+        }
         items={NAV_ITEMS}
         user={NAVBAR_USER}
         bordered
@@ -242,12 +276,7 @@ export const Stacked: Story = {
           actions={<DetailActions />}
         />
 
-        <DescriptionList
-          layout="side-by-side"
-          bordered
-          striped
-          items={DESCRIPTION_ITEMS}
-        />
+        <DescriptionList layout="side-by-side" bordered striped items={DESCRIPTION_ITEMS} />
 
         <Attachments />
 
@@ -267,7 +296,14 @@ export const WithSidebar: Story = {
     <div className="flex h-screen bg-ink-50 dark:bg-ink-900">
       <div className="w-64 shrink-0 h-full">
         <SidebarNav
-          logo={<div className="flex items-center gap-2"><img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" /><span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-white tracking-tight leading-none">Golden Passport</span></div>}
+          logo={
+            <div className="flex items-center gap-2">
+              <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
+              <span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-white tracking-tight leading-none">
+                Golden Passport
+              </span>
+            </div>
+          }
           groups={SIDEBAR_GROUPS}
           user={NAVBAR_USER}
         />
@@ -289,12 +325,7 @@ export const WithSidebar: Story = {
             actions={<DetailActions />}
           />
 
-          <DescriptionList
-            layout="side-by-side"
-            bordered
-            striped
-            items={DESCRIPTION_ITEMS}
-          />
+          <DescriptionList layout="side-by-side" bordered striped items={DESCRIPTION_ITEMS} />
 
           <Attachments />
 
@@ -306,4 +337,3 @@ export const WithSidebar: Story = {
     </div>
   ),
 };
-

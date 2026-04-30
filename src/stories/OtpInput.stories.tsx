@@ -2,8 +2,8 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { OtpInput } from '../components/OtpInput';
-import { Button }   from '../components/Button';
-import { Badge }    from '../components/Badge';
+import { Button } from '../components/Button';
+import { Badge } from '../components/Badge';
 
 const meta = {
   title: 'Forms/OtpInput',
@@ -11,17 +11,17 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
-    length:    { control: { type: 'number', min: 3, max: 8 } },
-    size:      { control: 'radio', options: ['sm', 'md', 'lg'] },
-    numeric:   { control: 'boolean' },
-    mask:      { control: 'boolean' },
-    disabled:  { control: 'boolean' },
+    length: { control: { type: 'number', min: 3, max: 8 } },
+    size: { control: 'radio', options: ['sm', 'md', 'lg'] },
+    numeric: { control: 'boolean' },
+    mask: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     autoFocus: { control: 'boolean' },
-    label:     { control: 'text' },
-    hint:      { control: 'text' },
-    error:     { control: 'text' },
-    value:     { control: false },
-    onChange:  { control: false },
+    label: { control: 'text' },
+    hint: { control: 'text' },
+    error: { control: 'text' },
+    value: { control: false },
+    onChange: { control: false },
   },
 } satisfies Meta<typeof OtpInput>;
 
@@ -35,13 +35,13 @@ const STUB = { value: '', onChange: () => {} };
 export const Playground: Story = {
   args: {
     ...STUB,
-    length:   6,
-    size:     'md',
-    numeric:  true,
-    mask:     false,
+    length: 6,
+    size: 'md',
+    numeric: true,
+    mask: false,
     disabled: false,
-    label:    'Verification code',
-    hint:     'Enter the 6-digit code sent to your phone',
+    label: 'Verification code',
+    hint: 'Enter the 6-digit code sent to your phone',
   },
   render: (args) => {
     const [val, setVal] = useState('');
@@ -83,9 +83,9 @@ export const SixDigitCode: Story = {
   name: '6-digit verification',
   args: STUB,
   render: () => {
-    const [val,      setVal]      = useState('');
+    const [val, setVal] = useState('');
     const [verified, setVerified] = useState(false);
-    const [error,    setError]    = useState('');
+    const [error, setError] = useState('');
 
     function handleComplete(code: string) {
       if (code === '123456') {
@@ -101,7 +101,9 @@ export const SixDigitCode: Story = {
       return (
         <div className="flex items-center gap-2">
           <Badge label="Verified" variant="active" />
-          <span className="text-sm font-body text-ink-500 dark:text-ink-300">Phone number confirmed</span>
+          <span className="text-sm font-body text-ink-500 dark:text-ink-300">
+            Phone number confirmed
+          </span>
         </div>
       );
     }
@@ -113,7 +115,10 @@ export const SixDigitCode: Story = {
         hint="Sent to +61 4•• ••• ••• (try 123456)"
         error={error}
         value={val}
-        onChange={v => { setVal(v); setError(''); }}
+        onChange={(v) => {
+          setVal(v);
+          setError('');
+        }}
         onComplete={handleComplete}
       />
     );
@@ -131,9 +136,9 @@ export const Sizes: Story = {
     const [lg, setLg] = useState('');
     return (
       <div className="flex flex-col gap-8">
-        <OtpInput size="sm" length={6} label="Small"  value={sm} onChange={setSm} />
+        <OtpInput size="sm" length={6} label="Small" value={sm} onChange={setSm} />
         <OtpInput size="md" length={6} label="Medium" value={md} onChange={setMd} />
-        <OtpInput size="lg" length={6} label="Large"  value={lg} onChange={setLg} />
+        <OtpInput size="lg" length={6} label="Large" value={lg} onChange={setLg} />
       </div>
     );
   },
@@ -145,7 +150,7 @@ export const Masked: Story = {
   name: 'Masked — PIN entry',
   args: STUB,
   render: () => {
-    const [val,  setVal]  = useState('');
+    const [val, setVal] = useState('');
     const [show, setShow] = useState(false);
     return (
       <div className="flex flex-col gap-3">
@@ -159,7 +164,7 @@ export const Masked: Story = {
         />
         <button
           type="button"
-          onClick={() => setShow(v => !v)}
+          onClick={() => setShow((v) => !v)}
           className="self-start text-xs font-body text-ink-700 dark:text-ink-300 hover:underline"
         >
           {show ? 'Hide' : 'Show'} digits
@@ -183,7 +188,7 @@ export const Alphanumeric: Story = {
         label="Licence key"
         hint="8-character activation code (letters and numbers)"
         value={val}
-        onChange={v => setVal(v.toUpperCase())}
+        onChange={(v) => setVal(v.toUpperCase())}
       />
     );
   },
@@ -243,7 +248,10 @@ export const Interactions: Story = {
           onChange={setVal}
         />
         {val && (
-          <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="entered-value">
+          <p
+            className="text-xs font-body text-ink-500 dark:text-ink-300"
+            data-testid="entered-value"
+          >
             Entered: <code>{val}</code>
           </p>
         )}
@@ -300,13 +308,7 @@ export const PasteInteraction: Story = {
     const [val, setVal] = useState('');
     return (
       <div className="flex flex-col gap-3">
-        <OtpInput
-          length={6}
-          numeric
-          label="Paste code"
-          value={val}
-          onChange={setVal}
-        />
+        <OtpInput length={6} numeric label="Paste code" value={val} onChange={setVal} />
         {val.length === 6 && (
           <p data-testid="paste-result" className="text-xs font-body text-ink-500">
             Code: {val}
@@ -342,7 +344,10 @@ export const ErrorReset: Story = {
         label="Verification code"
         error={error}
         value={val}
-        onChange={(v) => { setVal(v); if (v === '') setError(''); }}
+        onChange={(v) => {
+          setVal(v);
+          if (v === '') setError('');
+        }}
       />
     );
   },
@@ -373,7 +378,7 @@ export const AuthFlow: Story = {
   name: 'Full auth flow',
   args: STUB,
   render: () => {
-    const [val,    setVal]    = useState('');
+    const [val, setVal] = useState('');
     const [status, setStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
 
     function handleComplete(code: string) {
@@ -392,8 +397,12 @@ export const AuthFlow: Story = {
     if (status === 'success') {
       return (
         <div className="max-w-sm text-center flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-2xl">✓</div>
-          <p className="font-semibold font-display text-ink-900 dark:text-ink-50">Identity verified</p>
+          <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-2xl">
+            ✓
+          </div>
+          <p className="font-semibold font-display text-ink-900 dark:text-ink-50">
+            Identity verified
+          </p>
           <p className="text-sm font-body text-ink-500 dark:text-ink-300">You're now signed in.</p>
         </div>
       );
@@ -402,7 +411,9 @@ export const AuthFlow: Story = {
     return (
       <div className="max-w-sm flex flex-col gap-5">
         <div>
-          <p className="text-base font-bold font-display text-ink-900 dark:text-ink-50">Two-step verification</p>
+          <p className="text-base font-bold font-display text-ink-900 dark:text-ink-50">
+            Two-step verification
+          </p>
           <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
             Enter the 6-digit code sent to{' '}
             <span className="font-medium text-ink-700 dark:text-ink-200">+61 4•• ••• •••</span>
@@ -413,7 +424,10 @@ export const AuthFlow: Story = {
           length={6}
           autoFocus
           value={val}
-          onChange={v => { setVal(v); if (status === 'error') setStatus('idle'); }}
+          onChange={(v) => {
+            setVal(v);
+            if (status === 'error') setStatus('idle');
+          }}
           onComplete={handleComplete}
           error={status === 'error' ? 'Incorrect code. Try 123456 for this demo.' : ''}
         />

@@ -3,26 +3,26 @@ import { Check } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────
 
-export type StepsBarVariant        = 'bar' | 'panels' | 'circles' | 'vertical';
+export type StepsBarVariant = 'bar' | 'panels' | 'circles' | 'vertical';
 export type StepsBarPanelAppearance = 'default' | 'ghost';
-export type StepsBarFullWidth       = 'none' | 'always' | 'mobile';
+export type StepsBarFullWidth = 'none' | 'always' | 'mobile';
 
 export interface StepsBarStep {
-  label:        string;
+  label: string;
   description?: string;
 }
 
 export interface StepsBarProps {
-  steps:      StepsBarStep[];
+  steps: StepsBarStep[];
   /** 0-indexed active step. All steps before it are considered complete. */
-  current:    number;
+  current: number;
   /**
    * bar      — full-width colour bar above each step label (default)
    * panels   — chevron-separated horizontal panels
    * circles  — circles connected by a horizontal line
    * vertical — vertically stacked circles with a connecting line
    */
-  variant?:   StepsBarVariant;
+  variant?: StepsBarVariant;
   /** Called with the 0-indexed step when a step is clicked. */
   onStepClick?: (index: number) => void;
   /**
@@ -59,7 +59,7 @@ function stepState(i: number, current: number) {
 function fullWidthClass(fw: StepsBarFullWidth): string {
   if (fw === 'always') return 'w-full';
   if (fw === 'mobile') return 'w-full sm:w-fit'; // full on mobile, shrink on sm+
-  return 'w-fit';                                 // none — always shrink to content
+  return 'w-fit'; // none — always shrink to content
 }
 
 // ─────────────────────────────────────────────────────────
@@ -90,7 +90,10 @@ function BarVariant({
             <li
               key={i}
               style={minStepWidth ? { minWidth: minStepWidth } : undefined}
-              className={['group flex-1 flex flex-col min-w-0', onStepClick ? 'cursor-pointer' : ''].join(' ')}
+              className={[
+                'group flex-1 flex flex-col min-w-0',
+                onStepClick ? 'cursor-pointer' : '',
+              ].join(' ')}
             >
               {onStepClick ? (
                 <button
@@ -101,15 +104,23 @@ function BarVariant({
                   className="group flex flex-col min-w-0 w-full flex-1 text-left rounded-sm select-none cursor-pointer"
                 >
                   <StepBarInner
-                    step={step} i={i} active={active}
-                    isComplete={isComplete} isCurrent={isCurrent} isUpcoming={isUpcoming}
+                    step={step}
+                    i={i}
+                    active={active}
+                    isComplete={isComplete}
+                    isCurrent={isCurrent}
+                    isUpcoming={isUpcoming}
                   />
                 </button>
               ) : (
                 <div className="group flex flex-col min-w-0 w-full flex-1">
                   <StepBarInner
-                    step={step} i={i} active={active}
-                    isComplete={isComplete} isCurrent={isCurrent} isUpcoming={isUpcoming}
+                    step={step}
+                    i={i}
+                    active={active}
+                    isComplete={isComplete}
+                    isCurrent={isCurrent}
+                    isUpcoming={isUpcoming}
                     ariaCurrent={isCurrent ? 'step' : undefined}
                   />
                 </div>
@@ -123,10 +134,20 @@ function BarVariant({
 }
 
 function StepBarInner({
-  step, i, active, isComplete, isCurrent, isUpcoming, ariaCurrent,
+  step,
+  i,
+  active,
+  isComplete,
+  isCurrent,
+  isUpcoming,
+  ariaCurrent,
 }: {
-  step: StepsBarStep; i: number; active: boolean;
-  isComplete: boolean; isCurrent: boolean; isUpcoming: boolean;
+  step: StepsBarStep;
+  i: number;
+  active: boolean;
+  isComplete: boolean;
+  isCurrent: boolean;
+  isUpcoming: boolean;
   ariaCurrent?: 'step';
 }) {
   return (
@@ -204,9 +225,7 @@ function PanelsVariant({
           const isLast = i === steps.length - 1;
 
           const bgClass =
-            panelAppearance === 'ghost'
-              ? 'bg-transparent'
-              : 'bg-white dark:bg-ink-800';
+            panelAppearance === 'ghost' ? 'bg-transparent' : 'bg-white dark:bg-ink-800';
 
           const content = (
             <>
@@ -222,9 +241,11 @@ function PanelsVariant({
                       : 'border-2 border-ink-300 dark:border-ink-600 text-ink-500 dark:text-ink-300 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
-                {isComplete
-                  ? <Check className="w-5 h-5 stroke-[2.5]" aria-hidden />
-                  : String(i + 1).padStart(2, '0')}
+                {isComplete ? (
+                  <Check className="w-5 h-5 stroke-[2.5]" aria-hidden />
+                ) : (
+                  String(i + 1).padStart(2, '0')
+                )}
               </span>
 
               {/* Label */}
@@ -273,10 +294,7 @@ function PanelsVariant({
               ) : (
                 <div
                   aria-current={isCurrent ? 'step' : undefined}
-                  className={[
-                    'flex items-center gap-3 px-5 py-4 w-full',
-                    bgClass,
-                  ].join(' ')}
+                  className={['flex items-center gap-3 px-5 py-4 w-full', bgClass].join(' ')}
                 >
                   {content}
                 </div>
@@ -356,8 +374,8 @@ function CirclesVariant({
         {steps.map((step, i) => {
           const { isComplete, isCurrent } = stepState(i, current);
           const isFirst = i === 0;
-          const isLast  = i === steps.length - 1;
-          const prevComplete = i > 0 && (i - 1) < current;
+          const isLast = i === steps.length - 1;
+          const prevComplete = i > 0 && i - 1 < current;
 
           const circleAndLabel = (
             <>
@@ -507,10 +525,7 @@ function VerticalVariant({
             <li
               key={i}
               style={minStepWidth ? { minWidth: minStepWidth } : undefined}
-              className={[
-                'group flex flex-col',
-                onStepClick ? 'cursor-pointer' : '',
-              ].join(' ')}
+              className={['group flex flex-col', onStepClick ? 'cursor-pointer' : ''].join(' ')}
             >
               {/* Clickable row: circle + label together */}
               {onStepClick ? (
@@ -556,9 +571,13 @@ function VerticalVariant({
 }
 
 function StepVerticalLabel({
-  step, isComplete, isCurrent,
+  step,
+  isComplete,
+  isCurrent,
 }: {
-  step: StepsBarStep; isComplete: boolean; isCurrent: boolean;
+  step: StepsBarStep;
+  isComplete: boolean;
+  isCurrent: boolean;
 }) {
   return (
     <div className="flex flex-col justify-center min-w-0">
@@ -606,13 +625,23 @@ function MobilePanelsList({
 
   return (
     <nav aria-label={navAriaLabel}>
-      <ol className={['rounded-lg border border-ink-200 dark:border-ink-700 overflow-hidden', bgClass].join(' ')}>
+      <ol
+        className={[
+          'rounded-lg border border-ink-200 dark:border-ink-700 overflow-hidden',
+          bgClass,
+        ].join(' ')}
+      >
         {steps.map((step, i) => {
           const { isComplete, isCurrent } = stepState(i, current);
           const isLast = i === steps.length - 1;
 
           const rowInner = (
-            <div className={['flex items-center gap-3 px-4 py-3 w-full', onStepClick ? 'cursor-pointer' : ''].join(' ')}>
+            <div
+              className={[
+                'flex items-center gap-3 px-4 py-3 w-full',
+                onStepClick ? 'cursor-pointer' : '',
+              ].join(' ')}
+            >
               <span
                 className={[
                   'shrink-0 flex items-center justify-center w-9 h-9 rounded-full',
@@ -624,9 +653,11 @@ function MobilePanelsList({
                       : 'border-2 border-ink-300 dark:border-ink-600 text-ink-500 dark:text-ink-300 group-hover:border-ink-400 dark:group-hover:border-ink-500 group-hover:text-ink-600 dark:group-hover:text-ink-300',
                 ].join(' ')}
               >
-                {isComplete
-                  ? <Check className="w-5 h-5 stroke-[2.5]" aria-hidden />
-                  : String(i + 1).padStart(2, '0')}
+                {isComplete ? (
+                  <Check className="w-5 h-5 stroke-[2.5]" aria-hidden />
+                ) : (
+                  String(i + 1).padStart(2, '0')
+                )}
               </span>
 
               <span
@@ -662,9 +693,7 @@ function MobilePanelsList({
                   {rowInner}
                 </button>
               ) : (
-                <div aria-current={isCurrent ? 'step' : undefined}>
-                  {rowInner}
-                </div>
+                <div aria-current={isCurrent ? 'step' : undefined}>{rowInner}</div>
               )}
 
               {/* Downward chevron divider */}
@@ -770,7 +799,9 @@ function MobileList({
                 >
                   {inner}
                 </button>
-              ) : inner}
+              ) : (
+                inner
+              )}
             </li>
           );
         })}
@@ -786,14 +817,14 @@ function MobileList({
 export function StepsBar({
   steps,
   current,
-  variant          = 'bar',
+  variant = 'bar',
   onStepClick,
-  panelAppearance  = 'default',
-  fullWidth        = 'mobile',
-  minStepWidth     = 50,
-  responsive       = true,
-  'aria-label':    navAriaLabel = 'Progress',
-  className        = '',
+  panelAppearance = 'default',
+  fullWidth = 'mobile',
+  minStepWidth = 50,
+  responsive = true,
+  'aria-label': navAriaLabel = 'Progress',
+  className = '',
 }: StepsBarProps) {
   const isHorizontal = variant !== 'vertical';
 
@@ -801,10 +832,15 @@ export function StepsBar({
   // it active (steps 0..i complete/current, steps i+1.. upcoming).
   // Syncs when the external `current` prop changes (e.g. parent controls progress).
   const [activeCurrent, setActiveCurrent] = useState(current);
-  useEffect(() => { setActiveCurrent(current); }, [current]);
+  useEffect(() => {
+    setActiveCurrent(current);
+  }, [current]);
 
   const handleStepClick = onStepClick
-    ? (i: number) => { setActiveCurrent(i); onStepClick(i); }
+    ? (i: number) => {
+        setActiveCurrent(i);
+        onStepClick(i);
+      }
     : undefined;
 
   return (
@@ -812,19 +848,64 @@ export function StepsBar({
       {/* Mobile collapse — only for horizontal variants when responsive=true */}
       {responsive && isHorizontal && (
         <div className="sm:hidden">
-          {variant === 'panels'
-            ? <MobilePanelsList steps={steps} current={activeCurrent} onStepClick={handleStepClick} panelAppearance={panelAppearance} navAriaLabel={navAriaLabel} />
-            : <MobileList steps={steps} current={activeCurrent} onStepClick={handleStepClick} navAriaLabel={navAriaLabel} />
-          }
+          {variant === 'panels' ? (
+            <MobilePanelsList
+              steps={steps}
+              current={activeCurrent}
+              onStepClick={handleStepClick}
+              panelAppearance={panelAppearance}
+              navAriaLabel={navAriaLabel}
+            />
+          ) : (
+            <MobileList
+              steps={steps}
+              current={activeCurrent}
+              onStepClick={handleStepClick}
+              navAriaLabel={navAriaLabel}
+            />
+          )}
         </div>
       )}
 
       {/* Normal variant — hidden on mobile when responsive=true + horizontal */}
       <div className={responsive && isHorizontal ? 'hidden sm:block' : undefined}>
-        {variant === 'bar'      && <BarVariant      steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} navAriaLabel={navAriaLabel} />}
-        {variant === 'panels'   && <PanelsVariant   steps={steps} current={activeCurrent} onStepClick={handleStepClick} panelAppearance={panelAppearance} minStepWidth={minStepWidth} navAriaLabel={navAriaLabel} />}
-        {variant === 'circles'  && <CirclesVariant  steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} navAriaLabel={navAriaLabel} />}
-        {variant === 'vertical' && <VerticalVariant steps={steps} current={activeCurrent} onStepClick={handleStepClick} minStepWidth={minStepWidth} navAriaLabel={navAriaLabel} />}
+        {variant === 'bar' && (
+          <BarVariant
+            steps={steps}
+            current={activeCurrent}
+            onStepClick={handleStepClick}
+            minStepWidth={minStepWidth}
+            navAriaLabel={navAriaLabel}
+          />
+        )}
+        {variant === 'panels' && (
+          <PanelsVariant
+            steps={steps}
+            current={activeCurrent}
+            onStepClick={handleStepClick}
+            panelAppearance={panelAppearance}
+            minStepWidth={minStepWidth}
+            navAriaLabel={navAriaLabel}
+          />
+        )}
+        {variant === 'circles' && (
+          <CirclesVariant
+            steps={steps}
+            current={activeCurrent}
+            onStepClick={handleStepClick}
+            minStepWidth={minStepWidth}
+            navAriaLabel={navAriaLabel}
+          />
+        )}
+        {variant === 'vertical' && (
+          <VerticalVariant
+            steps={steps}
+            current={activeCurrent}
+            onStepClick={handleStepClick}
+            minStepWidth={minStepWidth}
+            navAriaLabel={navAriaLabel}
+          />
+        )}
       </div>
     </div>
   );

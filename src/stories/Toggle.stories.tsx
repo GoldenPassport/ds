@@ -8,9 +8,9 @@ const meta = {
   component: Toggle,
   tags: ['autodocs'],
   argTypes: {
-    checked:     { control: 'boolean' },
-    disabled:    { control: 'boolean' },
-    label:       { control: 'text' },
+    checked: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    label: { control: 'text' },
     description: { control: 'text' },
   },
 } satisfies Meta<typeof Toggle>;
@@ -20,10 +20,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   args: {
-    checked:     true,
-    onChange:    () => {},
-    disabled:    false,
-    label:       'AI Suggestions',
+    checked: true,
+    onChange: () => {},
+    disabled: false,
+    label: 'AI Suggestions',
     description: 'Show prompt suggestions in the builder',
   },
   render: (args) => {
@@ -39,15 +39,31 @@ export const Playground: Story = {
 };
 
 export const On: Story = {
-  args: { checked: true, onChange: () => {}, label: 'AI Suggestions', description: 'Show prompt suggestions in the builder' },
+  args: {
+    checked: true,
+    onChange: () => {},
+    label: 'AI Suggestions',
+    description: 'Show prompt suggestions in the builder',
+  },
 };
 
 export const Off: Story = {
-  args: { checked: false, onChange: () => {}, label: 'Run completions', description: 'Notify on every successful run' },
+  args: {
+    checked: false,
+    onChange: () => {},
+    label: 'Run completions',
+    description: 'Notify on every successful run',
+  },
 };
 
 export const Disabled: Story = {
-  args: { checked: true, onChange: () => {}, label: 'Auto-deploy', description: 'Managed by your org admin', disabled: true },
+  args: {
+    checked: true,
+    onChange: () => {},
+    label: 'Auto-deploy',
+    description: 'Managed by your org admin',
+    disabled: true,
+  },
 };
 
 export const Standalone: Story = {
@@ -65,16 +81,18 @@ export const SettingsList: Story = {
     });
     return (
       <div className="w-96 bg-white dark:bg-ink-800 rounded-xl border border-ink-200 dark:border-ink-700 divide-y divide-ink-100 dark:divide-ink-700 overflow-hidden">
-        {([
-          ['suggestions', 'AI Suggestions',   'Show prompt suggestions in the builder'],
-          ['completions', 'Run completions',   'Notify on every successful run'],
-          ['digest',      'Weekly digest',     'Summary of activity every Monday'],
-          ['validate',    'Auto-validate steps','Validate each step against connected systems'],
-        ] as const).map(([key, label, desc]) => (
+        {(
+          [
+            ['suggestions', 'AI Suggestions', 'Show prompt suggestions in the builder'],
+            ['completions', 'Run completions', 'Notify on every successful run'],
+            ['digest', 'Weekly digest', 'Summary of activity every Monday'],
+            ['validate', 'Auto-validate steps', 'Validate each step against connected systems'],
+          ] as const
+        ).map(([key, label, desc]) => (
           <div key={key} className="px-5 py-4">
             <Toggle
               checked={vals[key]}
-              onChange={v => setVals(prev => ({ ...prev, [key]: v }))}
+              onChange={(v) => setVals((prev) => ({ ...prev, [key]: v }))}
               label={label}
               description={desc}
             />

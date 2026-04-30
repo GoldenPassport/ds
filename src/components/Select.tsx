@@ -17,24 +17,24 @@ import { ChevronDown, Check } from 'lucide-react';
 import { useFieldId } from './Fieldset';
 
 export interface SelectOption<T = string> {
-  value:     T;
-  label:     string;
+  value: T;
+  label: string;
   disabled?: boolean;
 }
 
 export interface SelectProps<T = string> {
-  value:      T;
-  onChange:   (value: T) => void;
-  options:    SelectOption<T>[];
+  value: T;
+  onChange: (value: T) => void;
+  options: SelectOption<T>[];
   /**
    * `"custom"` — fully styled Headless UI dropdown (default).
    * `"native"` — OS/browser native `<select>` picker; best on mobile.
    */
-  variant?:   'custom' | 'native';
-  label?:     string;
-  hint?:      string;
-  error?:     string;
-  disabled?:  boolean;
+  variant?: 'custom' | 'native';
+  label?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
   placeholder?: string;
   className?: string;
   'aria-label'?: string;
@@ -49,16 +49,25 @@ const triggerBase = [
   'disabled:opacity-40 disabled:cursor-not-allowed',
 ].join(' ');
 
-const triggerBorderNormal = 'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-primary-500';
-const triggerBorderError  = 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500';
+const triggerBorderNormal =
+  'border-ink-200 dark:border-ink-600 focus:outline-none focus:border-primary-500';
+const triggerBorderError =
+  'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500';
 
 // ── Custom variant (Headless UI Listbox) ──────────────────
 
 function SelectCustom<T extends string | number>({
-  value, onChange, options, label, hint, error, disabled = false, className = '',
+  value,
+  onChange,
+  options,
+  label,
+  hint,
+  error,
+  disabled = false,
+  className = '',
 }: SelectProps<T>) {
-  const id       = React.useId();
-  const selected = options.find(o => o.value === value) ?? options[0];
+  const id = React.useId();
+  const selected = options.find((o) => o.value === value) ?? options[0];
 
   return (
     <Listbox value={value} onChange={onChange} disabled={disabled}>
@@ -93,23 +102,29 @@ function SelectCustom<T extends string | number>({
             enterFrom="opacity-0 -translate-y-1"
             enterTo="opacity-100 translate-y-0"
           >
-            <Listbox.Options className={[
-              'absolute top-full left-0 z-50 mt-1 w-full overflow-auto rounded-xl py-1',
-              'bg-white dark:bg-ink-800 shadow-lg',
-              'border border-ink-200 dark:border-ink-700',
-              'focus:outline-none text-sm font-body max-h-60',
-            ].join(' ')}>
-              {options.map(option => (
+            <Listbox.Options
+              className={[
+                'absolute top-full left-0 z-50 mt-1 w-full overflow-auto rounded-xl py-1',
+                'bg-white dark:bg-ink-800 shadow-lg',
+                'border border-ink-200 dark:border-ink-700',
+                'focus:outline-none text-sm font-body max-h-60',
+              ].join(' ')}
+            >
+              {options.map((option) => (
                 <Listbox.Option
                   key={String(option.value)}
                   value={option.value}
                   disabled={option.disabled}
-                  className={({ active, selected: sel }) => [
-                    'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
-                    active  ? 'bg-ink-50 dark:bg-ink-700' : '',
-                    sel     ? 'text-primary-800 dark:text-primary-400 font-semibold' : 'text-ink-900 dark:text-ink-50',
-                    option.disabled ? 'opacity-40 cursor-not-allowed' : '',
-                  ].join(' ')}
+                  className={({ active, selected: sel }) =>
+                    [
+                      'relative cursor-pointer select-none px-3.5 py-2.5 transition-colors duration-75',
+                      active ? 'bg-ink-50 dark:bg-ink-700' : '',
+                      sel
+                        ? 'text-primary-800 dark:text-primary-400 font-semibold'
+                        : 'text-ink-900 dark:text-ink-50',
+                      option.disabled ? 'opacity-40 cursor-not-allowed' : '',
+                    ].join(' ')
+                  }
                 >
                   {({ selected: sel }) => (
                     <span className="flex items-center justify-between">
@@ -124,10 +139,18 @@ function SelectCustom<T extends string | number>({
         </div>
 
         {hint && !error && (
-          <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>
+          <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">
+            {hint}
+          </p>
         )}
         {error && (
-          <p id={`${id}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400 font-body">{error}</p>
+          <p
+            id={`${id}-error`}
+            role="alert"
+            className="text-xs text-red-600 dark:text-red-400 font-body"
+          >
+            {error}
+          </p>
         )}
       </div>
     </Listbox>
@@ -137,15 +160,24 @@ function SelectCustom<T extends string | number>({
 // ── Native variant (<select>) ─────────────────────────────
 
 function SelectNative<T extends string | number>({
-  value, onChange, options, label, hint, error, disabled = false, placeholder, className = '', 'aria-label': ariaLabel,
+  value,
+  onChange,
+  options,
+  label,
+  hint,
+  error,
+  disabled = false,
+  placeholder,
+  className = '',
+  'aria-label': ariaLabel,
 }: SelectProps<T>) {
-  const autoId  = React.useId();
+  const autoId = React.useId();
   const fieldId = useFieldId(); // '' when not inside a Field
   // When the component has its own visible label it uses autoId so the internal
   // <label htmlFor> wires up to the <select>.  When there is no visible label
   // (the consumer is using a Fieldset <Label> above), we fall back to the
   // Field's generated id so that Label ↔ <select> connection is maintained.
-  const id = label ? autoId : (fieldId || autoId);
+  const id = label ? autoId : fieldId || autoId;
 
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
@@ -164,7 +196,7 @@ function SelectNative<T extends string | number>({
           id={id}
           aria-label={!label ? ariaLabel : undefined}
           value={String(value)}
-          onChange={e => {
+          onChange={(e) => {
             const raw = e.target.value as T;
             onChange(raw);
           }}
@@ -184,7 +216,7 @@ function SelectNative<T extends string | number>({
               {placeholder}
             </option>
           )}
-          {options.map(o => (
+          {options.map((o) => (
             <option key={String(o.value)} value={String(o.value)} disabled={o.disabled}>
               {o.label}
             </option>
@@ -198,10 +230,18 @@ function SelectNative<T extends string | number>({
       </div>
 
       {hint && !error && (
-        <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">{hint}</p>
+        <p id={`${id}-hint`} className="text-xs text-ink-500 dark:text-ink-300 font-body">
+          {hint}
+        </p>
       )}
       {error && (
-        <p id={`${id}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400 font-body">{error}</p>
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="text-xs text-red-600 dark:text-red-400 font-body"
+        >
+          {error}
+        </p>
       )}
     </div>
   );
@@ -210,7 +250,5 @@ function SelectNative<T extends string | number>({
 // ── Public export ─────────────────────────────────────────
 
 export function Select<T extends string | number>(props: SelectProps<T>) {
-  return props.variant === 'native'
-    ? <SelectNative {...props} />
-    : <SelectCustom {...props} />;
+  return props.variant === 'native' ? <SelectNative {...props} /> : <SelectCustom {...props} />;
 }

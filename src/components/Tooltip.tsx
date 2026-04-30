@@ -20,23 +20,23 @@ export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 export type TooltipRadius = 'sm' | 'md' | 'lg' | 'full';
 
 export interface TooltipProps {
-  content:    React.ReactNode;
-  children:   React.ReactElement;
+  content: React.ReactNode;
+  children: React.ReactElement;
   placement?: TooltipPlacement;
   /** Open delay in ms (close is always 100 ms) */
-  delay?:     number;
+  delay?: number;
   /** Border radius of the tooltip bubble. sm=rounded, md=rounded-lg (default), lg=rounded-xl, full=pill */
-  radius?:    TooltipRadius;
+  radius?: TooltipRadius;
   className?: string;
 }
 
 const ARROW_HEIGHT = 7;
-const ARROW_GAP    = 2;
+const ARROW_GAP = 2;
 
 const RADIUS_CLASS: Record<TooltipRadius, string> = {
-  sm:   'rounded',
-  md:   'rounded-lg',
-  lg:   'rounded-xl',
+  sm: 'rounded',
+  md: 'rounded-lg',
+  lg: 'rounded-xl',
   full: 'rounded-full',
 };
 
@@ -44,13 +44,13 @@ export function Tooltip({
   content,
   children,
   placement = 'top',
-  delay     = 300,
-  radius    = 'md',
+  delay = 300,
+  radius = 'md',
   className = '',
 }: TooltipProps) {
   const [open, setOpen] = React.useState(false);
-  const id              = React.useId();
-  const arrowRef        = React.useRef<SVGSVGElement>(null);
+  const id = React.useId();
+  const arrowRef = React.useRef<SVGSVGElement>(null);
 
   const { refs, floatingStyles, context, isPositioned } = useFloating({
     open,
@@ -65,14 +65,12 @@ export function Tooltip({
     ],
   });
 
-  const hover   = useHover(context, { move: false, delay: { open: delay, close: 100 } });
-  const focus   = useFocus(context);
+  const hover = useHover(context, { move: false, delay: { open: delay, close: 100 } });
+  const focus = useFocus(context);
   const dismiss = useDismiss(context);
-  const role    = useRole(context, { role: 'tooltip' });
+  const role = useRole(context, { role: 'tooltip' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover, focus, dismiss, role,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
 
   return (
     <>
@@ -98,7 +96,9 @@ export function Tooltip({
               'bg-ink-900 dark:bg-ink-700 text-ink-50',
               'shadow-lg pointer-events-none',
               className,
-            ].filter(Boolean).join(' ')}
+            ]
+              .filter(Boolean)
+              .join(' ')}
           >
             {content}
             <FloatingArrow

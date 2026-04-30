@@ -17,15 +17,15 @@ export type PageContainerPadding = 'none' | 'sm' | 'md' | 'lg';
 export type PageContainerAlign = 'left' | 'center' | 'right';
 
 export interface PageContainerProps {
-  children:       React.ReactNode;
+  children: React.ReactNode;
   /** Maximum content width. Default: 'xl' */
-  maxWidth?:      PageContainerWidth;
+  maxWidth?: PageContainerWidth;
   /** Horizontal padding. Default: 'md' */
-  paddingX?:      PageContainerPadding;
+  paddingX?: PageContainerPadding;
   /** Vertical padding. Default: 'none' */
-  paddingY?:      PageContainerPadding;
+  paddingY?: PageContainerPadding;
   /** Alignment when maxWidth is not 'full'. Default: 'center' */
-  align?:         PageContainerAlign;
+  align?: PageContainerAlign;
   /** Include horizontal padding at mobile breakpoint. Default: true */
   mobilePadding?: boolean;
   /**
@@ -46,40 +46,40 @@ export interface PageContainerProps {
    *
    * Default: false
    */
-  fullHeight?:    boolean;
-  className?:     string;
+  fullHeight?: boolean;
+  className?: string;
 }
 
 // ── Maps ──────────────────────────────────────────────────
 
 const widthCls: Record<PageContainerWidth, string> = {
-  sm:   'max-w-[48rem]',
-  md:   'max-w-[64rem]',
-  lg:   'max-w-[72rem]',
-  xl:   'max-w-[80rem]',
-  '2xl':'max-w-[96rem]',
+  sm: 'max-w-[48rem]',
+  md: 'max-w-[64rem]',
+  lg: 'max-w-[72rem]',
+  xl: 'max-w-[80rem]',
+  '2xl': 'max-w-[96rem]',
   full: '',
 };
 
 const alignCls: Record<PageContainerAlign, string> = {
-  left:   'mr-auto',
+  left: 'mr-auto',
   center: 'mx-auto',
-  right:  'ml-auto',
+  right: 'ml-auto',
 };
 
 // paddingX with/without mobile
 const paddingXCls: Record<PageContainerPadding, { withMobile: string; noMobile: string }> = {
-  none: { withMobile: '',                          noMobile: '' },
-  sm:   { withMobile: 'px-3 sm:px-4 lg:px-6',     noMobile: 'sm:px-4 lg:px-6' },
-  md:   { withMobile: 'px-4 sm:px-6 lg:px-8',     noMobile: 'sm:px-6 lg:px-8' },
-  lg:   { withMobile: 'px-6 sm:px-8 lg:px-12',    noMobile: 'sm:px-8 lg:px-12' },
+  none: { withMobile: '', noMobile: '' },
+  sm: { withMobile: 'px-3 sm:px-4 lg:px-6', noMobile: 'sm:px-4 lg:px-6' },
+  md: { withMobile: 'px-4 sm:px-6 lg:px-8', noMobile: 'sm:px-6 lg:px-8' },
+  lg: { withMobile: 'px-6 sm:px-8 lg:px-12', noMobile: 'sm:px-8 lg:px-12' },
 };
 
 const paddingYCls: Record<PageContainerPadding, string> = {
   none: '',
-  sm:   'py-4 sm:py-6',
-  md:   'py-6 sm:py-8',
-  lg:   'py-8 sm:py-12',
+  sm: 'py-4 sm:py-6',
+  md: 'py-6 sm:py-8',
+  lg: 'py-8 sm:py-12',
 };
 
 // Split top/bottom for fullHeight mode. Both live on the inner column (not the
@@ -90,29 +90,29 @@ const paddingYCls: Record<PageContainerPadding, string> = {
 // and is not a concern for a 2024+ design system.
 const paddingTopCls: Record<PageContainerPadding, string> = {
   none: '',
-  sm:   'pt-4 sm:pt-6',
-  md:   'pt-6 sm:pt-8',
-  lg:   'pt-8 sm:pt-12',
+  sm: 'pt-4 sm:pt-6',
+  md: 'pt-6 sm:pt-8',
+  lg: 'pt-8 sm:pt-12',
 };
 
 const paddingBottomCls: Record<PageContainerPadding, string> = {
   none: '',
-  sm:   'pb-4 sm:pb-6',
-  md:   'pb-6 sm:pb-8',
-  lg:   'pb-8 sm:pb-12',
+  sm: 'pb-4 sm:pb-6',
+  md: 'pb-6 sm:pb-8',
+  lg: 'pb-8 sm:pb-12',
 };
 
 // ── PageContainer ─────────────────────────────────────────
 
 export function PageContainer({
   children,
-  maxWidth      = 'xl',
-  paddingX      = 'md',
-  paddingY      = 'none',
-  align         = 'center',
+  maxWidth = 'xl',
+  paddingX = 'md',
+  paddingY = 'none',
+  align = 'center',
   mobilePadding = true,
-  fullHeight    = false,
-  className     = '',
+  fullHeight = false,
+  className = '',
 }: PageContainerProps) {
   const px = paddingXCls[paddingX][mobilePadding ? 'withMobile' : 'noMobile'];
 
@@ -121,30 +121,38 @@ export function PageContainer({
     const pb = paddingBottomCls[paddingY];
 
     return (
-      <div className={[
-        // fixed inset-0: anchors directly to the viewport — immune to parent
-        // padding, body-height quirks, and iframe sizing differences.
-        // This is the only approach that reliably fills the visible area
-        // in all contexts (Storybook, embedded iframes, real apps).
-        // overscroll-contain stops scroll-chaining on mobile (bounce/bleed-through).
-        // No padding here — padding on the outer scroll shell adds to the
-        // scrollable height, which pushes the total content past the viewport
-        // and creates a phantom scroll on mobile.
-        'fixed inset-0 overflow-y-auto overscroll-contain',
-        className,
-      ].filter(Boolean).join(' ')}>
-        <div className={[
-          // min-h-full: fills the viewport when content is short.
-          // flex flex-col: lets direct children use flex-1 to fill remaining height.
-          // pt + pb both live here — padding on a child of overflow:auto is
-          // correctly rendered in all evergreen browsers.
-          'w-full min-h-full flex flex-col',
-          widthCls[maxWidth],
-          alignCls[align],
-          px,
-          pt,
-          pb,
-        ].filter(Boolean).join(' ')}>
+      <div
+        className={[
+          // fixed inset-0: anchors directly to the viewport — immune to parent
+          // padding, body-height quirks, and iframe sizing differences.
+          // This is the only approach that reliably fills the visible area
+          // in all contexts (Storybook, embedded iframes, real apps).
+          // overscroll-contain stops scroll-chaining on mobile (bounce/bleed-through).
+          // No padding here — padding on the outer scroll shell adds to the
+          // scrollable height, which pushes the total content past the viewport
+          // and creates a phantom scroll on mobile.
+          'fixed inset-0 overflow-y-auto overscroll-contain',
+          className,
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        <div
+          className={[
+            // min-h-full: fills the viewport when content is short.
+            // flex flex-col: lets direct children use flex-1 to fill remaining height.
+            // pt + pb both live here — padding on a child of overflow:auto is
+            // correctly rendered in all evergreen browsers.
+            'w-full min-h-full flex flex-col',
+            widthCls[maxWidth],
+            alignCls[align],
+            px,
+            pt,
+            pb,
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           {children}
         </div>
       </div>
@@ -155,14 +163,11 @@ export function PageContainer({
   const py = paddingYCls[paddingY];
 
   return (
-    <div className={[
-      'w-full',
-      widthCls[maxWidth],
-      alignCls[align],
-      px,
-      py,
-      className,
-    ].filter(Boolean).join(' ')}>
+    <div
+      className={['w-full', widthCls[maxWidth], alignCls[align], px, py, className]
+        .filter(Boolean)
+        .join(' ')}
+    >
       {children}
     </div>
   );

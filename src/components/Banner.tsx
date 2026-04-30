@@ -31,33 +31,33 @@ export interface BannerProps {
 // ── Variant token maps ─────────────────────────────────────
 
 const containerMap: Record<BannerVariant, string> = {
-  dark:    'bg-ink-900 border-b border-white/10',
+  dark: 'bg-ink-900 border-b border-white/10',
   primary: 'bg-primary-500 border-b border-ink-900/10',
-  light:   'bg-ink-50 dark:bg-ink-800 border-b border-ink-200 dark:border-ink-700',
+  light: 'bg-ink-50 dark:bg-ink-800 border-b border-ink-200 dark:border-ink-700',
 };
 
 const textMap: Record<BannerVariant, string> = {
-  dark:    'text-ink-100',
+  dark: 'text-ink-100',
   primary: 'text-ink-900',
-  light:   'text-ink-600 dark:text-ink-300',
+  light: 'text-ink-600 dark:text-ink-300',
 };
 
 const titleMap: Record<BannerVariant, string> = {
-  dark:    'text-white',
+  dark: 'text-white',
   primary: 'text-ink-900',
-  light:   'text-ink-900 dark:text-ink-50',
+  light: 'text-ink-900 dark:text-ink-50',
 };
 
 const actionMap: Record<BannerVariant, string> = {
-  dark:    'bg-white/10 text-white ring-1 ring-inset ring-white/20 hover:bg-white/20',
+  dark: 'bg-white/10 text-white ring-1 ring-inset ring-white/20 hover:bg-white/20',
   primary: 'bg-ink-900/10 text-ink-900 ring-1 ring-inset ring-ink-900/20 hover:bg-ink-900/20',
-  light:   'bg-primary-500 text-ink-900 hover:bg-primary-600',
+  light: 'bg-primary-500 text-ink-900 hover:bg-primary-600',
 };
 
 const dismissMap: Record<BannerVariant, string> = {
-  dark:    'text-ink-300 hover:text-white',
+  dark: 'text-ink-300 hover:text-white',
   primary: 'text-ink-700 hover:text-ink-900',
-  light:   'text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100',
+  light: 'text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100',
 };
 
 // Polygon clip-path shared by both decorative blobs
@@ -124,19 +124,13 @@ export function Banner({
             aria-hidden="true"
             className="absolute top-1/2 left-[max(-7rem,calc(50%-52rem))] -z-10 -translate-y-1/2 transform-gpu blur-2xl"
           >
-            <div
-              style={{ clipPath: BLOB_CLIP }}
-              className={`aspect-577/310 w-xl ${blobCls}`}
-            />
+            <div style={{ clipPath: BLOB_CLIP }} className={`aspect-577/310 w-xl ${blobCls}`} />
           </div>
           <div
             aria-hidden="true"
             className="absolute top-1/2 left-[max(45rem,calc(50%+8rem))] -z-10 -translate-y-1/2 transform-gpu blur-2xl"
           >
-            <div
-              style={{ clipPath: BLOB_CLIP }}
-              className={`aspect-577/310 w-xl ${blobCls}`}
-            />
+            <div style={{ clipPath: BLOB_CLIP }} className={`aspect-577/310 w-xl ${blobCls}`} />
           </div>
         </>
       )}
@@ -146,9 +140,7 @@ export function Banner({
         <p className={`text-sm/6 ${textMap[variant]}`}>
           {title && (
             <>
-              <strong className={`font-semibold font-display ${titleMap[variant]}`}>
-                {title}
-              </strong>
+              <strong className={`font-semibold font-display ${titleMap[variant]}`}>{title}</strong>
               {/* Separator dot */}
               <svg
                 viewBox="0 0 2 2"

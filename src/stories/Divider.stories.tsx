@@ -10,10 +10,18 @@ const meta = {
   component: Divider,
   tags: ['autodocs'],
   argTypes: {
-    label:       { control: false,   description: 'Text, icon, button, or any node embedded in the line' },
-    align:       { control: 'select', options: ['left', 'center', 'right'], description: 'Position of the label along the line' },
-    orientation: { control: 'select', options: ['horizontal', 'vertical'],  description: '"vertical" renders a border-l that fills its container height' },
-    className:   { control: 'text' },
+    label: { control: false, description: 'Text, icon, button, or any node embedded in the line' },
+    align: {
+      control: 'select',
+      options: ['left', 'center', 'right'],
+      description: 'Position of the label along the line',
+    },
+    orientation: {
+      control: 'select',
+      options: ['horizontal', 'vertical'],
+      description: '"vertical" renders a border-l that fills its container height',
+    },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof Divider>;
 
@@ -24,12 +32,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   args: {
-    align:       'center',
+    align: 'center',
     orientation: 'horizontal',
   },
   render: (args) => (
     <div className="max-w-xl py-4">
-      <Divider {...args} label={<span className="text-sm text-ink-500 dark:text-ink-300 font-body">Section heading</span>} />
+      <Divider
+        {...args}
+        label={
+          <span className="text-sm text-ink-500 dark:text-ink-300 font-body">Section heading</span>
+        }
+      />
     </div>
   ),
 };
@@ -57,9 +70,23 @@ export const WithLabel: Story = {
   args: {},
   render: () => (
     <div className="max-w-xl flex flex-col gap-6 py-4">
-      <Divider label={<span className="text-sm text-ink-500 dark:text-ink-300 font-body">Or continue with</span>} />
-      <Divider label={<span className="text-sm text-ink-500 dark:text-ink-300 font-body">Section title</span>} align="left" />
-      <Divider label={<span className="text-sm text-ink-500 dark:text-ink-300 font-body">End of results</span>} align="right" />
+      <Divider
+        label={
+          <span className="text-sm text-ink-500 dark:text-ink-300 font-body">Or continue with</span>
+        }
+      />
+      <Divider
+        label={
+          <span className="text-sm text-ink-500 dark:text-ink-300 font-body">Section title</span>
+        }
+        align="left"
+      />
+      <Divider
+        label={
+          <span className="text-sm text-ink-500 dark:text-ink-300 font-body">End of results</span>
+        }
+        align="right"
+      />
     </div>
   ),
 };
@@ -72,16 +99,43 @@ export const Alignments: Story = {
   render: () => (
     <div className="max-w-xl flex flex-col gap-6 py-4">
       <div>
-        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">Left</p>
-        <Divider align="left" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
+        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">
+          Left
+        </p>
+        <Divider
+          align="left"
+          label={
+            <span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">
+              January 2026
+            </span>
+          }
+        />
       </div>
       <div>
-        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">Center</p>
-        <Divider align="center" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
+        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">
+          Center
+        </p>
+        <Divider
+          align="center"
+          label={
+            <span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">
+              January 2026
+            </span>
+          }
+        />
       </div>
       <div>
-        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">Right</p>
-        <Divider align="right" label={<span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">January 2026</span>} />
+        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">
+          Right
+        </p>
+        <Divider
+          align="right"
+          label={
+            <span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">
+              January 2026
+            </span>
+          }
+        />
       </div>
     </div>
   ),
@@ -151,9 +205,15 @@ export const WithToolbar: Story = {
       <Divider
         label={
           <span className="flex items-center gap-2">
-            <Button variant="ghost" size="sm">Edit</Button>
-            <Button variant="ghost" size="sm">Duplicate</Button>
-            <Button variant="danger" size="sm">Delete</Button>
+            <Button variant="ghost" size="sm">
+              Edit
+            </Button>
+            <Button variant="ghost" size="sm">
+              Duplicate
+            </Button>
+            <Button variant="danger" size="sm">
+              Delete
+            </Button>
           </span>
         }
       />
@@ -161,10 +221,18 @@ export const WithToolbar: Story = {
         align="left"
         label={
           <span className="flex items-center gap-1.5">
-            <span className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 mr-1">Filters</span>
-            <Button variant="ghost" size="sm">Status</Button>
-            <Button variant="ghost" size="sm">Date</Button>
-            <Button variant="ghost" size="sm">Assignee</Button>
+            <span className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 mr-1">
+              Filters
+            </span>
+            <Button variant="ghost" size="sm">
+              Status
+            </Button>
+            <Button variant="ghost" size="sm">
+              Date
+            </Button>
+            <Button variant="ghost" size="sm">
+              Assignee
+            </Button>
           </span>
         }
       />
@@ -190,12 +258,20 @@ export const Vertical: Story = {
       </div>
 
       <div className="flex items-center gap-3 h-9">
-        <Button variant="ghost" size="sm">Copy</Button>
+        <Button variant="ghost" size="sm">
+          Copy
+        </Button>
         <Divider orientation="vertical" />
-        <Button variant="ghost" size="sm">Cut</Button>
-        <Button variant="ghost" size="sm">Paste</Button>
+        <Button variant="ghost" size="sm">
+          Cut
+        </Button>
+        <Button variant="ghost" size="sm">
+          Paste
+        </Button>
         <Divider orientation="vertical" />
-        <Button variant="ghost" size="sm">Delete</Button>
+        <Button variant="ghost" size="sm">
+          Delete
+        </Button>
       </div>
     </div>
   ),
@@ -209,14 +285,16 @@ export const InContext: Story = {
   render: () => (
     <div className="max-w-2xl flex flex-col gap-0 py-4">
       {[
-        { label: 'Profile',       desc: 'Update your name, photo, and personal details.' },
+        { label: 'Profile', desc: 'Update your name, photo, and personal details.' },
         { label: 'Notifications', desc: 'Choose what you want to be notified about.' },
-        { label: 'Security',      desc: 'Manage passwords and two-factor authentication.' },
-        { label: 'Billing',       desc: 'Manage your subscription and payment methods.' },
+        { label: 'Security', desc: 'Manage passwords and two-factor authentication.' },
+        { label: 'Billing', desc: 'Manage your subscription and payment methods.' },
       ].map((item, i, arr) => (
         <React.Fragment key={item.label}>
           <div className="py-5">
-            <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.label}</p>
+            <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
+              {item.label}
+            </p>
             <p className="text-sm font-body text-ink-500 dark:text-ink-300 mt-0.5">{item.desc}</p>
           </div>
           {i < arr.length - 1 && <Divider />}

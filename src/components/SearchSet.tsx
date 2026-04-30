@@ -15,14 +15,14 @@ export interface SearchSetFilterOption {
 }
 
 export interface SearchSetFilterDef {
-  key:      string;
-  label:    string;
+  key: string;
+  label: string;
   /**
    * - `select`  — single-value dropdown
    * - `multi`   — multi-select checkboxes
    * - `toggle`  — boolean on/off
    */
-  type:     'select' | 'multi' | 'toggle';
+  type: 'select' | 'multi' | 'toggle';
   /** Required for `select` and `multi` types */
   options?: SearchSetFilterOption[];
 }
@@ -34,57 +34,57 @@ export type SearchSetFilterValues = Record<string, string | string[] | boolean>;
 export interface SearchSetTag {
   term: string;
   /** How this tag joins with the previous tag. Default `'and'` (Enter). Shift+Enter adds `'or'`. */
-  op:   'and' | 'or';
+  op: 'and' | 'or';
 }
 
 // ── SearchSet props ───────────────────────────────────────
 
 export interface SearchSetProps {
   /** Controlled search query (the live, uncommitted text) */
-  value:             string;
+  value: string;
   /** Called with the (debounced) query string — fire your server request here */
-  onChange:          (query: string) => void;
+  onChange: (query: string) => void;
   /**
    * Committed search tags.
    * - Enter          → AND tag  (must match)
    * - Shift+Enter    → OR tag   (may match)
    */
-  tags?:             SearchSetTag[];
+  tags?: SearchSetTag[];
   /** Called when the tags array changes (tag added or removed) */
-  onTagsChange?:     (tags: SearchSetTag[]) => void;
+  onTagsChange?: (tags: SearchSetTag[]) => void;
   /** Debounce delay in ms before onChange fires. Default 350 */
-  debounce?:         number;
+  debounce?: number;
   /** Show a spinner inside the search icon while the server is fetching */
-  loading?:          boolean;
-  placeholder?:      string;
+  loading?: boolean;
+  placeholder?: string;
   /** Optional label rendered above the input */
-  label?:            string;
+  label?: string;
   /**
    * Short summary rendered below the input on the left
    * e.g. "12 results" or "Showing 4 of 12"
    */
-  summary?:          React.ReactNode;
+  summary?: React.ReactNode;
   /** Slot for active filter chips displayed below the search row */
-  filters?:          React.ReactNode;
+  filters?: React.ReactNode;
   /** Filter field definitions — renders a filter button that opens a dialog */
-  filterDefs?:       SearchSetFilterDef[];
+  filterDefs?: SearchSetFilterDef[];
   /** Controlled filter values */
-  filterValues?:     SearchSetFilterValues;
+  filterValues?: SearchSetFilterValues;
   /** Called when the user clicks Apply in the filter dialog */
-  onFilterChange?:   (values: SearchSetFilterValues) => void;
+  onFilterChange?: (values: SearchSetFilterValues) => void;
   /** Dialog title. Default "Filters" */
-  filterTitle?:      string;
-  className?:        string;
+  filterTitle?: string;
+  className?: string;
   /** Extra classes applied only to the search-input row (not the tags/summary row below) */
-  searchClassName?:  string;
+  searchClassName?: string;
 }
 
 // ── InfoPopover ───────────────────────────────────────────
 // Click-toggle popover that flips above/below and left/right
 // based on available viewport space — no floating-ui needed.
 
-const POPOVER_W  = 256; // w-64
-const POPOVER_H  = 140; // approximate rendered height (with padding)
+const POPOVER_W = 256; // w-64
+const POPOVER_H = 140; // approximate rendered height (with padding)
 
 function Kbd({ children }: { children: React.ReactNode }) {
   return (
@@ -95,21 +95,21 @@ function Kbd({ children }: { children: React.ReactNode }) {
 }
 
 function InfoPopover() {
-  const [open,        setOpen]        = useState(false);
-  const [above,       setAbove]       = useState(false);
-  const [panelStyle,  setPanelStyle]  = useState<React.CSSProperties>({ left: 0 });
-  const [arrowStyle,  setArrowStyle]  = useState<React.CSSProperties>({ left: '12px' });
+  const [open, setOpen] = useState(false);
+  const [above, setAbove] = useState(false);
+  const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({ left: 0 });
+  const [arrowStyle, setArrowStyle] = useState<React.CSSProperties>({ left: '12px' });
   const containerRef = useRef<HTMLDivElement>(null);
 
   function handleToggle() {
     if (!open && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const h    = window.innerHeight;
-      const w    = window.innerWidth;
+      const h = window.innerHeight;
+      const w = window.innerWidth;
 
       // Prefer opening below; only go above if no room below but room above
       const hasRoomBelow = h - rect.bottom >= POPOVER_H + 12;
-      const hasRoomAbove = rect.top        >= POPOVER_H + 12;
+      const hasRoomAbove = rect.top >= POPOVER_H + 12;
       setAbove(!hasRoomBelow && hasRoomAbove);
 
       // Ideal panel left edge (viewport-relative): prefer right-aligned under button,
@@ -123,12 +123,12 @@ function InfoPopover() {
       setPanelStyle({ left: `${panelOffsetLeft}px` });
 
       // Centre the caret over the middle of the info button
-      const ARROW_W       = 10; // w-2.5 = 10 px
-      const btnCentreX    = rect.left + rect.width / 2;
+      const ARROW_W = 10; // w-2.5 = 10 px
+      const btnCentreX = rect.left + rect.width / 2;
       const arrowFromLeft = Math.round(btnCentreX - clampedLeft - ARROW_W / 2);
       setArrowStyle({ left: `${arrowFromLeft}px` });
     }
-    setOpen(o => !o);
+    setOpen((o) => !o);
   }
 
   // Close on outside click
@@ -149,13 +149,15 @@ function InfoPopover() {
   const arrowCls = [
     'absolute w-2.5 h-2.5 rotate-45',
     'border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800',
-    above
-      ? '-bottom-[5px] border-r border-b'
-      : '-top-[5px] border-l border-t',
+    above ? '-bottom-[5px] border-r border-b' : '-top-[5px] border-l border-t',
   ].join(' ');
 
   return (
-    <div ref={containerRef} className="relative inline-flex items-center" style={{ isolation: 'isolate' }}>
+    <div
+      ref={containerRef}
+      className="relative inline-flex items-center"
+      style={{ isolation: 'isolate' }}
+    >
       <button
         type="button"
         aria-label="Search tag help"
@@ -213,7 +215,7 @@ function InfoPopover() {
 // ── Helpers ───────────────────────────────────────────────
 
 function countActiveFilters(values: SearchSetFilterValues): number {
-  return Object.values(values).filter(v => {
+  return Object.values(values).filter((v) => {
     if (Array.isArray(v)) return v.length > 0;
     if (typeof v === 'boolean') return v;
     return v !== '' && v !== null && v !== undefined;
@@ -227,39 +229,33 @@ function FilterDialogBody({
   draft,
   onChange,
 }: {
-  defs:     SearchSetFilterDef[];
-  draft:    SearchSetFilterValues;
+  defs: SearchSetFilterDef[];
+  draft: SearchSetFilterValues;
   onChange: (key: string, val: string | string[] | boolean) => void;
 }) {
   return (
     <div className="flex flex-col gap-5">
-      {defs.map(def => {
+      {defs.map((def) => {
         if (def.type === 'toggle') {
           return (
             <div key={def.key} className="flex items-center justify-between gap-4">
               <span className="text-sm font-medium font-body text-ink-700 dark:text-ink-200">
                 {def.label}
               </span>
-              <Toggle
-                checked={Boolean(draft[def.key])}
-                onChange={v => onChange(def.key, v)}
-              />
+              <Toggle checked={Boolean(draft[def.key])} onChange={(v) => onChange(def.key, v)} />
             </div>
           );
         }
 
         if (def.type === 'select') {
-          const selectOptions = [
-            { value: '', label: 'Any' },
-            ...(def.options ?? []),
-          ];
+          const selectOptions = [{ value: '', label: 'Any' }, ...(def.options ?? [])];
           return (
             <Select
               key={def.key}
               variant="native"
               label={def.label}
               value={String(draft[def.key] ?? '')}
-              onChange={v => onChange(def.key, v)}
+              onChange={(v) => onChange(def.key, v)}
               options={selectOptions}
             />
           );
@@ -273,15 +269,15 @@ function FilterDialogBody({
                 {def.label}
               </span>
               <div className="flex flex-col gap-2 pl-0.5">
-                {def.options?.map(o => (
+                {def.options?.map((o) => (
                   <Checkbox
                     key={o.value}
                     label={o.label}
                     checked={selected.includes(o.value)}
-                    onChange={checked => {
+                    onChange={(checked) => {
                       const next = checked
                         ? [...selected, o.value]
-                        : selected.filter(v => v !== o.value);
+                        : selected.filter((v) => v !== o.value);
                       onChange(def.key, next);
                     }}
                   />
@@ -309,26 +305,30 @@ export function SearchSet({
   onChange,
   tags,
   onTagsChange,
-  debounce         = 350,
-  loading          = false,
-  placeholder      = 'Search…',
+  debounce = 350,
+  loading = false,
+  placeholder = 'Search…',
   label,
   summary,
   filters,
   filterDefs,
-  filterValues     = EMPTY_FILTER_VALUES,
+  filterValues = EMPTY_FILTER_VALUES,
   onFilterChange,
-  filterTitle      = 'Filters',
-  className        = '',
-  searchClassName  = '',
+  filterTitle = 'Filters',
+  className = '',
+  searchClassName = '',
 }: SearchSetProps) {
-  const [draft,       setDraft]       = useState(value);
-  const [dialogOpen,  setDialogOpen]  = useState(false);
+  const [draft, setDraft] = useState(value);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [filterDraft, setFilterDraft] = useState<SearchSetFilterValues>(filterValues);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  useEffect(() => { setDraft(value); }, [value]);
-  useEffect(() => { setFilterDraft(filterValues); }, [filterValues]);
+  useEffect(() => {
+    setDraft(value);
+  }, [value]);
+  useEffect(() => {
+    setFilterDraft(filterValues);
+  }, [filterValues]);
   useEffect(() => () => clearTimeout(timer.current), []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -341,7 +341,7 @@ export function SearchSet({
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter' && onTagsChange) {
       const term = draft.trim();
-      if (term && !tags?.some(t => t.term === term)) {
+      if (term && !tags?.some((t) => t.term === term)) {
         const op: 'and' | 'or' = e.shiftKey ? 'or' : 'and';
         onTagsChange([...(tags ?? []), { term, op }]);
       }
@@ -359,7 +359,7 @@ export function SearchSet({
   }
 
   function removeTag(term: string) {
-    onTagsChange?.((tags ?? []).filter(t => t.term !== term));
+    onTagsChange?.((tags ?? []).filter((t) => t.term !== term));
   }
 
   function openFilters() {
@@ -374,40 +374,53 @@ export function SearchSet({
 
   function clearFilters() {
     const cleared: SearchSetFilterValues = {};
-    filterDefs?.forEach(d => {
+    filterDefs?.forEach((d) => {
       cleared[d.key] = d.type === 'multi' ? [] : d.type === 'toggle' ? false : '';
     });
     setFilterDraft(cleared);
   }
 
-  const activeCount  = filterDefs ? countActiveFilters(filterValues) : 0;
-  const showFilters  = !!filterDefs?.length && !!onFilterChange;
-  const hasTags      = onTagsChange !== undefined;
-  const activeTags   = tags ?? [];
-  const showTags     = hasTags && activeTags.length > 0;
+  const activeCount = filterDefs ? countActiveFilters(filterValues) : 0;
+  const showFilters = !!filterDefs?.length && !!onFilterChange;
+  const hasTags = onTagsChange !== undefined;
+  const activeTags = tags ?? [];
+  const showTags = hasTags && activeTags.length > 0;
 
   // Derive dismissible chips from active filterValues
   const filterChips: { id: string; label: string; remove: () => void }[] =
-    (filterDefs && filterValues && onFilterChange)
-      ? filterDefs.flatMap(def => {
+    filterDefs && filterValues && onFilterChange
+      ? filterDefs.flatMap((def) => {
           const val = filterValues[def.key];
           if (def.type === 'toggle') {
             if (!val) return [];
-            return [{ id: def.key, label: def.label, remove: () => onFilterChange({ ...filterValues, [def.key]: false }) }];
+            return [
+              {
+                id: def.key,
+                label: def.label,
+                remove: () => onFilterChange({ ...filterValues, [def.key]: false }),
+              },
+            ];
           }
           if (def.type === 'select') {
             if (!val) return [];
-            const opt = def.options?.find(o => o.value === val);
-            return [{ id: def.key, label: `${def.label}: ${opt?.label ?? val}`, remove: () => onFilterChange({ ...filterValues, [def.key]: '' }) }];
+            const opt = def.options?.find((o) => o.value === val);
+            return [
+              {
+                id: def.key,
+                label: `${def.label}: ${opt?.label ?? val}`,
+                remove: () => onFilterChange({ ...filterValues, [def.key]: '' }),
+              },
+            ];
           }
           if (def.type === 'multi') {
-            const arr = Array.isArray(val) ? val as string[] : [];
-            return arr.map(v => {
-              const opt = def.options?.find(o => o.value === v);
+            const arr = Array.isArray(val) ? (val as string[]) : [];
+            return arr.map((v) => {
+              const opt = def.options?.find((o) => o.value === v);
               return {
-                id:     `${def.key}:${v}`,
-                label:  `${def.label}: ${opt?.label ?? v}`,
-                remove: () => onFilterChange({ ...filterValues, [def.key]: arr.filter(x => x !== v) }),
+                id: `${def.key}:${v}`,
+                label: `${def.label}: ${opt?.label ?? v}`,
+                remove: () =>
+                  onFilterChange({ ...filterValues, [def.key]: arr.filter((x) => x !== v) }),
               };
             });
           }
@@ -415,7 +428,7 @@ export function SearchSet({
         })
       : [];
 
-  const showBottom   = !!summary || hasTags || !!filters || filterChips.length > 0;
+  const showBottom = !!summary || hasTags || !!filters || filterChips.length > 0;
 
   return (
     <>
@@ -432,9 +445,11 @@ export function SearchSet({
               placeholder={placeholder}
               label={label}
               icon={
-                loading
-                  ? <Loader2 className="w-4 h-4 animate-spin" />
-                  : <Search  className="w-4 h-4" />
+                loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Search className="w-4 h-4" />
+                )
               }
               rightAction={
                 draft ? (
@@ -492,45 +507,53 @@ export function SearchSet({
             {/* Right: AND/OR tags + external filter chips */}
             {(showTags || !!filters || filterChips.length > 0) && (
               <div className="flex flex-wrap items-center gap-1.5 min-w-0">
-                {showTags && activeTags.map((tag, i) => (
-                  <React.Fragment key={tag.term}>
-                    {i > 0 && (
-                      <span className={[
-                        'text-[10px] font-bold font-body uppercase tracking-wider select-none px-0.5',
-                        tag.op === 'or'
-                          ? 'text-primary-500 dark:text-primary-400'
-                          : 'text-ink-500 dark:text-ink-300',
-                      ].join(' ')}>
-                        {tag.op}
-                      </span>
-                    )}
-                    <span className={[
-                      'inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5',
-                      'rounded-full text-[11px] font-semibold font-body',
-                      'border transition-colors',
-                      tag.op === 'or'
-                        ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-200 dark:border-primary-700 text-primary-700 dark:text-primary-300'
-                        : 'bg-ink-100 dark:bg-ink-700 border-ink-200 dark:border-ink-600 text-ink-700 dark:text-ink-200',
-                    ].join(' ')}>
-                      <Search className="w-2.5 h-2.5 opacity-50 shrink-0" aria-hidden="true" />
-                      {tag.term}
-                      <button
-                        type="button"
-                        aria-label={`Remove "${tag.term}"`}
-                        onClick={() => removeTag(tag.term)}
-                        className="shrink-0 opacity-40 hover:opacity-80 transition-opacity ml-0.5 leading-none text-[1.2em] font-normal"
+                {showTags &&
+                  activeTags.map((tag, i) => (
+                    <React.Fragment key={tag.term}>
+                      {i > 0 && (
+                        <span
+                          className={[
+                            'text-[10px] font-bold font-body uppercase tracking-wider select-none px-0.5',
+                            tag.op === 'or'
+                              ? 'text-primary-500 dark:text-primary-400'
+                              : 'text-ink-500 dark:text-ink-300',
+                          ].join(' ')}
+                        >
+                          {tag.op}
+                        </span>
+                      )}
+                      <span
+                        className={[
+                          'inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5',
+                          'rounded-full text-[11px] font-semibold font-body',
+                          'border transition-colors',
+                          tag.op === 'or'
+                            ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-200 dark:border-primary-700 text-primary-700 dark:text-primary-300'
+                            : 'bg-ink-100 dark:bg-ink-700 border-ink-200 dark:border-ink-600 text-ink-700 dark:text-ink-200',
+                        ].join(' ')}
                       >
-                        ×
-                      </button>
-                    </span>
-                  </React.Fragment>
-                ))}
-                {filterChips.map(chip => (
+                        <Search className="w-2.5 h-2.5 opacity-50 shrink-0" aria-hidden="true" />
+                        {tag.term}
+                        <button
+                          type="button"
+                          aria-label={`Remove "${tag.term}"`}
+                          onClick={() => removeTag(tag.term)}
+                          className="shrink-0 opacity-40 hover:opacity-80 transition-opacity ml-0.5 leading-none text-[1.2em] font-normal"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    </React.Fragment>
+                  ))}
+                {filterChips.map((chip) => (
                   <span
                     key={chip.id}
                     className="inline-flex items-center gap-1 pl-2 pr-1.5 py-0.5 rounded-full text-[11px] font-semibold font-body border transition-colors bg-primary-50 dark:bg-primary-900/30 border-primary-200 dark:border-primary-700 text-primary-800 dark:text-primary-300"
                   >
-                    <SlidersHorizontal className="w-2.5 h-2.5 opacity-60 shrink-0" aria-hidden="true" />
+                    <SlidersHorizontal
+                      className="w-2.5 h-2.5 opacity-60 shrink-0"
+                      aria-hidden="true"
+                    />
                     {chip.label}
                     <button
                       type="button"
@@ -560,7 +583,7 @@ export function SearchSet({
           <FilterDialogBody
             defs={filterDefs!}
             draft={filterDraft}
-            onChange={(key, val) => setFilterDraft(prev => ({ ...prev, [key]: val }))}
+            onChange={(key, val) => setFilterDraft((prev) => ({ ...prev, [key]: val }))}
           />
 
           <div className="mt-6 flex items-center justify-between gap-3">

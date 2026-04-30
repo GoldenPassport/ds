@@ -34,7 +34,7 @@ export const Sizes: Story = {
   args: { name: '' },
   render: () => (
     <div className="flex items-end gap-4">
-      {[24, 32, 40, 56, 80].map(s => (
+      {[24, 32, 40, 56, 80].map((s) => (
         <Avatar key={s} name="Alex Morgan" size={s} />
       ))}
     </div>
@@ -45,7 +45,7 @@ export const MultipleUsers: Story = {
   args: { name: '' },
   render: () => (
     <div className="flex -space-x-2">
-      {['Alex Morgan', 'Sarah Kim', 'Tom Richards', 'Maya Patel'].map(n => (
+      {['Alex Morgan', 'Sarah Kim', 'Tom Richards', 'Maya Patel'].map((n) => (
         <div key={n} className="ring-2 ring-white dark:ring-ink-900 rounded-full">
           <Avatar name={n} size={36} />
         </div>

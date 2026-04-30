@@ -18,53 +18,54 @@ import { ChevronDown } from 'lucide-react';
 // ── Public types ──────────────────────────────────────────
 
 export interface FlyoutMenuItem {
-  label:        string;
+  label: string;
   description?: string;
   /** Icon element rendered in a tinted square (icons / two-column variants) */
-  icon?:        React.ReactNode;
-  href?:        string;
-  onClick?:     () => void;
-  badge?:       string;
+  icon?: React.ReactNode;
+  href?: string;
+  onClick?: () => void;
+  badge?: string;
 }
 
 export interface FlyoutMenuAction {
-  label:    string;
-  href?:    string;
+  label: string;
+  href?: string;
   onClick?: () => void;
-  icon?:    React.ReactNode;
+  icon?: React.ReactNode;
 }
 
 export type FlyoutMenuVariant = 'simple' | 'descriptions' | 'icons' | 'two-column';
 
 export interface FlyoutMenuProps {
   /** Trigger element — typically a `<button>` with a label + chevron */
-  trigger:        React.ReactNode;
+  trigger: React.ReactNode;
   /** Navigation items shown in the panel body */
-  items:          FlyoutMenuItem[];
+  items: FlyoutMenuItem[];
   /** Visual layout variant. Default: `'simple'` */
-  variant?:       FlyoutMenuVariant;
+  variant?: FlyoutMenuVariant;
   /** CTA action(s) in a divided grid footer (up to 4) */
   footerActions?: FlyoutMenuAction[];
   /** Lighter text link(s) on a tinted footer bar */
-  footerLinks?:   FlyoutMenuAction[];
+  footerLinks?: FlyoutMenuAction[];
   /** Horizontal alignment of the panel relative to trigger. Default: `'left'` */
-  align?:         'left' | 'right' | 'center';
-  className?:     string;
+  align?: 'left' | 'right' | 'center';
+  className?: string;
 }
 
 // ── Panel max-width per variant ───────────────────────────
 
 const panelMaxW: Record<FlyoutMenuVariant, string> = {
-  simple:       'max-w-xs',
+  simple: 'max-w-xs',
   descriptions: 'max-w-sm',
-  icons:        'max-w-md',
+  icons: 'max-w-md',
   'two-column': 'max-w-2xl',
 };
 
 // ── Item renderers ────────────────────────────────────────
 
 function SimpleItem({ item }: { item: FlyoutMenuItem }) {
-  const cls = 'group relative flex items-center justify-between gap-2 rounded-lg px-4 py-2.5 text-sm font-body font-semibold text-ink-700 dark:text-ink-200 hover:bg-ink-50 dark:hover:bg-ink-700 transition-colors duration-75 cursor-pointer';
+  const cls =
+    'group relative flex items-center justify-between gap-2 rounded-lg px-4 py-2.5 text-sm font-body font-semibold text-ink-700 dark:text-ink-200 hover:bg-ink-50 dark:hover:bg-ink-700 transition-colors duration-75 cursor-pointer';
   const inner = (
     <>
       {item.label}
@@ -75,17 +76,26 @@ function SimpleItem({ item }: { item: FlyoutMenuItem }) {
       )}
     </>
   );
-  return item.href
-    ? <a href={item.href} className={cls}>{inner}</a>
-    : <button type="button" className={`w-full text-left ${cls}`} onClick={item.onClick}>{inner}</button>;
+  return item.href ? (
+    <a href={item.href} className={cls}>
+      {inner}
+    </a>
+  ) : (
+    <button type="button" className={`w-full text-left ${cls}`} onClick={item.onClick}>
+      {inner}
+    </button>
+  );
 }
 
 function DescriptionItem({ item }: { item: FlyoutMenuItem }) {
-  const cls = 'group relative flex flex-col gap-0.5 rounded-lg px-4 py-3 hover:bg-ink-50 dark:hover:bg-ink-700 transition-colors duration-75 cursor-pointer';
+  const cls =
+    'group relative flex flex-col gap-0.5 rounded-lg px-4 py-3 hover:bg-ink-50 dark:hover:bg-ink-700 transition-colors duration-75 cursor-pointer';
   const inner = (
     <>
       <span className="flex items-center gap-2">
-        <span className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">{item.label}</span>
+        <span className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
+          {item.label}
+        </span>
         {item.badge && (
           <span className="text-[10px] font-semibold font-body px-1.5 py-0.5 rounded-full bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300">
             {item.badge}
@@ -93,17 +103,26 @@ function DescriptionItem({ item }: { item: FlyoutMenuItem }) {
         )}
       </span>
       {item.description && (
-        <span className="text-xs font-body text-ink-500 dark:text-ink-300 leading-relaxed">{item.description}</span>
+        <span className="text-xs font-body text-ink-500 dark:text-ink-300 leading-relaxed">
+          {item.description}
+        </span>
       )}
     </>
   );
-  return item.href
-    ? <a href={item.href} className={cls}>{inner}</a>
-    : <button type="button" className={`w-full text-left ${cls}`} onClick={item.onClick}>{inner}</button>;
+  return item.href ? (
+    <a href={item.href} className={cls}>
+      {inner}
+    </a>
+  ) : (
+    <button type="button" className={`w-full text-left ${cls}`} onClick={item.onClick}>
+      {inner}
+    </button>
+  );
 }
 
 function IconItem({ item }: { item: FlyoutMenuItem }) {
-  const cls = 'group relative flex gap-x-4 rounded-xl p-4 hover:bg-ink-50 dark:hover:bg-white/5 transition-colors duration-75 cursor-pointer';
+  const cls =
+    'group relative flex gap-x-4 rounded-xl p-4 hover:bg-ink-50 dark:hover:bg-white/5 transition-colors duration-75 cursor-pointer';
   const inner = (
     <>
       {item.icon && (
@@ -123,16 +142,24 @@ function IconItem({ item }: { item: FlyoutMenuItem }) {
           )}
         </span>
         {item.description && (
-          <p className="mt-1 text-xs font-body text-ink-500 dark:text-ink-300 leading-relaxed">{item.description}</p>
+          <p className="mt-1 text-xs font-body text-ink-500 dark:text-ink-300 leading-relaxed">
+            {item.description}
+          </p>
         )}
         {/* Full-card link overlay */}
         {item.href && <span className="absolute inset-0" />}
       </div>
     </>
   );
-  return item.href
-    ? <a href={item.href} className={cls}>{inner}</a>
-    : <button type="button" className={`w-full text-left ${cls}`} onClick={item.onClick}>{inner}</button>;
+  return item.href ? (
+    <a href={item.href} className={cls}>
+      {inner}
+    </a>
+  ) : (
+    <button type="button" className={`w-full text-left ${cls}`} onClick={item.onClick}>
+      {inner}
+    </button>
+  );
 }
 
 // ── Footer renderers ──────────────────────────────────────
@@ -148,7 +175,8 @@ function FooterActions({ actions }: { actions: FlyoutMenuAction[] }) {
       style={{ gridTemplateColumns: `repeat(${Math.min(actions.length, 4)}, minmax(0, 1fr))` }}
     >
       {actions.map((action, i) => {
-        const cls = 'flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold font-body text-ink-700 dark:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors duration-75 cursor-pointer';
+        const cls =
+          'flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold font-body text-ink-700 dark:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors duration-75 cursor-pointer';
         const inner = (
           <>
             {action.icon && (
@@ -159,9 +187,15 @@ function FooterActions({ actions }: { actions: FlyoutMenuAction[] }) {
             {action.label}
           </>
         );
-        return action.href
-          ? <a key={i} href={action.href} className={cls}>{inner}</a>
-          : <button key={i} type="button" className={cls} onClick={action.onClick}>{inner}</button>;
+        return action.href ? (
+          <a key={i} href={action.href} className={cls}>
+            {inner}
+          </a>
+        ) : (
+          <button key={i} type="button" className={cls} onClick={action.onClick}>
+            {inner}
+          </button>
+        );
       })}
     </div>
   );
@@ -171,16 +205,27 @@ function FooterLinks({ links }: { links: FlyoutMenuAction[] }) {
   return (
     <div className="flex flex-wrap gap-x-6 gap-y-1 px-4 py-3 border-t border-ink-100 dark:border-ink-700 bg-ink-50 dark:bg-ink-800/50">
       {links.map((link, i) => {
-        const cls = 'inline-flex items-center gap-1.5 text-xs font-semibold font-body text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 transition-colors duration-75';
+        const cls =
+          'inline-flex items-center gap-1.5 text-xs font-semibold font-body text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 transition-colors duration-75';
         const inner = (
           <>
-            {link.icon && <span className="size-3.5 shrink-0 flex items-center justify-center">{link.icon}</span>}
+            {link.icon && (
+              <span className="size-3.5 shrink-0 flex items-center justify-center">
+                {link.icon}
+              </span>
+            )}
             {link.label}
           </>
         );
-        return link.href
-          ? <a key={i} href={link.href} className={cls}>{inner}</a>
-          : <button key={i} type="button" className={cls} onClick={link.onClick}>{inner}</button>;
+        return link.href ? (
+          <a key={i} href={link.href} className={cls}>
+            {inner}
+          </a>
+        ) : (
+          <button key={i} type="button" className={cls} onClick={link.onClick}>
+            {inner}
+          </button>
+        );
       })}
     </div>
   );
@@ -191,17 +236,14 @@ function FooterLinks({ links }: { links: FlyoutMenuAction[] }) {
 export function FlyoutMenu({
   trigger,
   items,
-  variant       = 'simple',
+  variant = 'simple',
   footerActions,
   footerLinks,
-  align         = 'left',
-  className     = '',
+  align = 'left',
+  className = '',
 }: FlyoutMenuProps) {
-
   const alignCls =
-    align === 'right'  ? 'right-0'                         :
-    align === 'center' ? 'left-1/2 -translate-x-1/2'       :
-    'left-0';
+    align === 'right' ? 'right-0' : align === 'center' ? 'left-1/2 -translate-x-1/2' : 'left-0';
 
   const isTwoCol = variant === 'two-column';
 
@@ -211,7 +253,9 @@ export function FlyoutMenu({
         <>
           <PopoverButton as={React.Fragment}>
             {React.isValidElement(trigger)
-              ? React.cloneElement(trigger as React.ReactElement<{ 'data-open'?: boolean }>, { 'data-open': open })
+              ? React.cloneElement(trigger as React.ReactElement<{ 'data-open'?: boolean }>, {
+                  'data-open': open,
+                })
               : trigger}
           </PopoverButton>
 
@@ -234,24 +278,17 @@ export function FlyoutMenu({
             ].join(' ')}
           >
             {/* Items */}
-            <div className={[
-              'p-2',
-              isTwoCol ? 'grid grid-cols-2' : '',
-            ].join(' ')}>
+            <div className={['p-2', isTwoCol ? 'grid grid-cols-2' : ''].join(' ')}>
               {items.map((item, i) => {
-                if (variant === 'simple')       return <SimpleItem      key={i} item={item} />;
+                if (variant === 'simple') return <SimpleItem key={i} item={item} />;
                 if (variant === 'descriptions') return <DescriptionItem key={i} item={item} />;
-                return                                 <IconItem        key={i} item={item} />;
+                return <IconItem key={i} item={item} />;
               })}
             </div>
 
             {/* Footer */}
-            {footerActions && footerActions.length > 0 && (
-              <FooterActions actions={footerActions} />
-            )}
-            {footerLinks && footerLinks.length > 0 && (
-              <FooterLinks links={footerLinks} />
-            )}
+            {footerActions && footerActions.length > 0 && <FooterActions actions={footerActions} />}
+            {footerLinks && footerLinks.length > 0 && <FooterLinks links={footerLinks} />}
           </PopoverPanel>
         </>
       )}
@@ -262,20 +299,15 @@ export function FlyoutMenu({
 // ── FlyoutTrigger — convenience styled trigger button ─────
 
 export interface FlyoutTriggerProps {
-  label:      string;
-  chevron?:   boolean;
+  label: string;
+  chevron?: boolean;
   className?: string;
 }
 
 export const FlyoutTrigger = React.forwardRef<
   HTMLButtonElement,
   FlyoutTriggerProps & React.ButtonHTMLAttributes<HTMLButtonElement>
->(function FlyoutTrigger({
-  label,
-  chevron   = true,
-  className = '',
-  ...rest
-}, ref) {
+>(function FlyoutTrigger({ label, chevron = true, className = '', ...rest }, ref) {
   const isOpen = (rest as { 'data-open'?: boolean })['data-open'];
   return (
     <button

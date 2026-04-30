@@ -10,12 +10,16 @@ const meta = {
   component: Dialog,
   tags: ['autodocs'],
   argTypes: {
-    title:     { control: 'text',   description: 'Dialog heading' },
-    size:      { control: 'select', options: ['sm', 'md', 'lg'], description: 'Max-width of the dialog panel' },
-    open:      { control: false,    description: 'Controlled open state' },
-    onClose:   { control: false,    description: 'Called when the dialog requests to close' },
-    children:  { control: false,    description: 'Dialog body content' },
-    className: { control: 'text',   description: 'Extra CSS class on the panel' },
+    title: { control: 'text', description: 'Dialog heading' },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Max-width of the dialog panel',
+    },
+    open: { control: false, description: 'Controlled open state' },
+    onClose: { control: false, description: 'Called when the dialog requests to close' },
+    children: { control: false, description: 'Dialog body content' },
+    className: { control: 'text', description: 'Extra CSS class on the panel' },
   },
 } satisfies Meta<typeof Dialog>;
 
@@ -54,8 +58,12 @@ export const Playground: Story = {
             This is the dialog body. Use the controls panel to change the title and size.
           </p>
           <Dialog.Footer>
-            <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button variant="primary" onClick={() => setOpen(false)}>Confirm</Button>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={() => setOpen(false)}>
+              Confirm
+            </Button>
           </Dialog.Footer>
         </Dialog>
       </>
@@ -74,7 +82,9 @@ export const Confirmation: Story = {
       </p>
       <Dialog.Footer>
         <Button variant="ghost">Cancel</Button>
-        <Button variant="danger"><Trash2 className="w-4 h-4" /> Delete</Button>
+        <Button variant="danger">
+          <Trash2 className="w-4 h-4" /> Delete
+        </Button>
       </Dialog.Footer>
     </DialogDemo>
   ),
@@ -141,8 +151,12 @@ export const Interactions: Story = {
         <Dialog open={open} onClose={setOpen} title="Confirm Action" size="sm">
           <p className="text-ink-600 dark:text-ink-300">Are you sure you want to proceed?</p>
           <Dialog.Footer>
-            <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button variant="primary" onClick={() => setOpen(false)}>Confirm</Button>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={() => setOpen(false)}>
+              Confirm
+            </Button>
           </Dialog.Footer>
         </Dialog>
       </>
@@ -150,7 +164,7 @@ export const Interactions: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user   = userEvent.setup();
+    const user = userEvent.setup();
 
     await step('click trigger — dialog opens', async () => {
       await user.click(canvas.getByRole('button', { name: /open dialog/i }));
@@ -205,8 +219,10 @@ export const LargeDialog: Story = {
       <div className="space-y-4 text-ink-600 dark:text-ink-300 text-sm">
         <p>Configure advanced settings for this workflow. Changes take effect on the next run.</p>
         <div className="bg-ink-50 dark:bg-ink-700 rounded-lg p-4 font-mono text-xs text-ink-500 dark:text-ink-300">
-          trigger.on("form_submit")<br />
-          .filter(data =&gt; data.amount &gt; 1000)<br />
+          trigger.on("form_submit")
+          <br />
+          .filter(data =&gt; data.amount &gt; 1000)
+          <br />
           .route("approval_queue")
         </div>
       </div>

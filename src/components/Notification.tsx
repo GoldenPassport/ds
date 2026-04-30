@@ -7,69 +7,73 @@ import { CheckCircle2, Info, AlertTriangle, XCircle, X } from 'lucide-react';
 export type NotificationVariant = 'default' | 'info' | 'success' | 'warning' | 'error';
 
 export type NotificationPosition =
-  | 'top-left' | 'top-center' | 'top-right'
-  | 'bottom-left' | 'bottom-center' | 'bottom-right';
+  | 'top-left'
+  | 'top-center'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right';
 
 export interface NotificationAction {
-  label:   string;
+  label: string;
   onClick: () => void;
 }
 
 export interface NotificationItem {
-  id:        string;
-  title?:    string;
-  body?:     string;
-  variant?:  NotificationVariant;
+  id: string;
+  title?: string;
+  body?: string;
+  variant?: NotificationVariant;
   /** Override the default icon. Pass null to hide it entirely. */
-  icon?:     React.ReactNode | null;
+  icon?: React.ReactNode | null;
   /** Show a user avatar instead of a variant icon */
-  avatar?:   { src?: string; name: string };
-  actions?:  NotificationAction[];
+  avatar?: { src?: string; name: string };
+  actions?: NotificationAction[];
   /** Auto-dismiss after ms. Default 5000. Pass 0 for persistent. */
   duration?: number;
 }
 
 export interface NotificationStackProps {
   notifications: NotificationItem[];
-  onDismiss:     (id: string) => void;
-  position?:     NotificationPosition;
+  onDismiss: (id: string) => void;
+  position?: NotificationPosition;
   /** Render into a document.body portal. Default true — set false in tests / Storybook. */
-  portal?:       boolean;
+  portal?: boolean;
 }
 
 // ── Variant config ────────────────────────────────────────
 
 const variantIcon: Record<NotificationVariant, React.ElementType | null> = {
   default: null,
-  info:    Info,
+  info: Info,
   success: CheckCircle2,
   warning: AlertTriangle,
-  error:   XCircle,
+  error: XCircle,
 };
 
 const variantIconColor: Record<NotificationVariant, string> = {
   default: '',
-  info:    'text-slate-500 dark:text-slate-400',
+  info: 'text-slate-500 dark:text-slate-400',
   success: 'text-green-500 dark:text-green-400',
   warning: 'text-primary-800 dark:text-primary-400',
-  error:   'text-red-500 dark:text-red-400',
+  error: 'text-red-500 dark:text-red-400',
 };
 
 // ── Position config ───────────────────────────────────────
 
 const positionClass: Record<NotificationPosition, string> = {
-  'top-left':      'top-4 left-4 items-start',
-  'top-center':    'top-4 left-1/2 -translate-x-1/2 items-center',
-  'top-right':     'top-4 right-4 items-end',
-  'bottom-left':   'bottom-4 left-4 items-start',
+  'top-left': 'top-4 left-4 items-start',
+  'top-center': 'top-4 left-1/2 -translate-x-1/2 items-center',
+  'top-right': 'top-4 right-4 items-end',
+  'bottom-left': 'bottom-4 left-4 items-start',
   'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2 items-center',
-  'bottom-right':  'bottom-4 right-4 items-end',
+  'bottom-right': 'bottom-4 right-4 items-end',
 };
 
 // ── NotificationCard ──────────────────────────────────────
 
 export interface NotificationCardProps {
-  item:      NotificationItem;
+  item: NotificationItem;
   onDismiss: (id: string) => void;
 }
 
@@ -79,14 +83,15 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
   const IconEl = variantIcon[variant];
 
   const resolvedIcon =
-    icon === null      ? null :
-    icon !== undefined ? icon :
-    IconEl             ? <IconEl className={`w-5 h-5 shrink-0 ${variantIconColor[variant]}`} aria-hidden /> :
-                         null;
+    icon === null ? null : icon !== undefined ? (
+      icon
+    ) : IconEl ? (
+      <IconEl className={`w-5 h-5 shrink-0 ${variantIconColor[variant]}`} aria-hidden />
+    ) : null;
 
   const initials = avatar?.name
     .split(' ')
-    .map(n => n[0])
+    .map((n) => n[0])
     .slice(0, 2)
     .join('')
     .toUpperCase();
@@ -107,7 +112,6 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
       ].join(' ')}
     >
       <div className="flex gap-3">
-
         {/* Leading: avatar or variant icon */}
         {hasLeading && (
           <div className="shrink-0 mt-0.5">
@@ -123,7 +127,9 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
                   {initials}
                 </span>
               )
-            ) : resolvedIcon}
+            ) : (
+              resolvedIcon
+            )}
           </div>
         )}
 
@@ -135,10 +141,12 @@ export function NotificationCard({ item, onDismiss }: NotificationCardProps) {
             </p>
           )}
           {body && (
-            <p className={[
-              'text-sm font-body text-ink-500 dark:text-ink-300 leading-relaxed',
-              title ? 'mt-0.5' : '',
-            ].join(' ')}>
+            <p
+              className={[
+                'text-sm font-body text-ink-500 dark:text-ink-300 leading-relaxed',
+                title ? 'mt-0.5' : '',
+              ].join(' ')}
+            >
               {body}
             </p>
           )}
@@ -187,7 +195,7 @@ export function NotificationStack({
   notifications,
   onDismiss,
   position = 'top-right',
-  portal   = true,
+  portal = true,
 }: NotificationStackProps) {
   const content = (
     <div
@@ -198,7 +206,7 @@ export function NotificationStack({
         positionClass[position],
       ].join(' ')}
     >
-      {notifications.map(item => (
+      {notifications.map((item) => (
         <NotificationCard key={item.id} item={item} onDismiss={onDismiss} />
       ))}
     </div>
@@ -219,28 +227,42 @@ export function useNotifications() {
   const timers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
   const dismiss = useCallback((id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
     const t = timers.current.get(id);
-    if (t) { clearTimeout(t); timers.current.delete(id); }
+    if (t) {
+      clearTimeout(t);
+      timers.current.delete(id);
+    }
   }, []);
 
-  const add = useCallback((item: Omit<NotificationItem, 'id'>) => {
-    const id = `notif-${++_counter}`;
-    const duration = item.duration ?? 5000;
-    setNotifications(prev => [...prev, { ...item, id }]);
-    if (duration > 0) {
-      timers.current.set(id, setTimeout(() => dismiss(id), duration));
-    }
-    return id;
-  }, [dismiss]);
+  const add = useCallback(
+    (item: Omit<NotificationItem, 'id'>) => {
+      const id = `notif-${++_counter}`;
+      const duration = item.duration ?? 5000;
+      setNotifications((prev) => [...prev, { ...item, id }]);
+      if (duration > 0) {
+        timers.current.set(
+          id,
+          setTimeout(() => dismiss(id), duration),
+        );
+      }
+      return id;
+    },
+    [dismiss],
+  );
 
   const dismissAll = useCallback(() => {
-    timers.current.forEach(t => clearTimeout(t));
+    timers.current.forEach((t) => clearTimeout(t));
     timers.current.clear();
     setNotifications([]);
   }, []);
 
-  useEffect(() => () => { timers.current.forEach(t => clearTimeout(t)); }, []);
+  useEffect(
+    () => () => {
+      timers.current.forEach((t) => clearTimeout(t));
+    },
+    [],
+  );
 
   return { notifications, add, dismiss, dismissAll };
 }

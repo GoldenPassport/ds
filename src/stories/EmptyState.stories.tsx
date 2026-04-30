@@ -7,13 +7,13 @@ const meta = {
   component: EmptyState,
   tags: ['autodocs'],
   argTypes: {
-    icon:             { control: false },
-    primaryAction:    { control: false },
-    secondaryAction:  { control: false },
-    bordered:         { control: 'boolean' },
-    title:            { control: 'text' },
-    description:      { control: 'text' },
-    className:        { control: 'text' },
+    icon: { control: false },
+    primaryAction: { control: false },
+    secondaryAction: { control: false },
+    bordered: { control: 'boolean' },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof EmptyState>;
 
@@ -24,12 +24,16 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   args: {
-    icon:        <FolderOpen className="w-12 h-12" />,
-    title:       'No projects',
+    icon: <FolderOpen className="w-12 h-12" />,
+    title: 'No projects',
     description: 'Get started by creating your first project.',
-    primaryAction:   { label: 'New project', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> },
-    secondaryAction: { label: 'Learn more',  onClick: () => {} },
-    bordered:    false,
+    primaryAction: {
+      label: 'New project',
+      onClick: () => {},
+      icon: <Plus className="w-3.5 h-3.5" />,
+    },
+    secondaryAction: { label: 'Learn more', onClick: () => {} },
+    bordered: false,
   },
 };
 
@@ -42,11 +46,19 @@ export const Simple: Story = {
     <div className="flex flex-col gap-8 max-w-lg">
       <EmptyState
         title="No projects yet"
-        primaryAction={{ label: 'New project', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'New project',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
       />
       <EmptyState
         title="No team members"
-        primaryAction={{ label: 'Invite member', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'Invite member',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
       />
     </div>
   ),
@@ -63,21 +75,33 @@ export const WithIcon: Story = {
         icon={<FolderOpen className="w-12 h-12" />}
         title="No projects"
         description="Get started by creating your first project."
-        primaryAction={{ label: 'New project', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'New project',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
       />
       <EmptyState
         icon={<Users className="w-12 h-12" />}
         title="No team members"
         description="Invite colleagues to collaborate on this workspace."
-        primaryAction={{ label: 'Invite member', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'Invite member',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
         secondaryAction={{ label: 'Learn about roles', onClick: () => {} }}
       />
       <EmptyState
         icon={<FileText className="w-12 h-12" />}
         title="No documents"
         description="Create or upload a document to get started."
-        primaryAction={{   label: 'New document', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
-        secondaryAction={{ label: 'Upload file',  onClick: () => {} }}
+        primaryAction={{
+          label: 'New document',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
+        secondaryAction={{ label: 'Upload file', onClick: () => {} }}
       />
     </div>
   ),
@@ -94,7 +118,11 @@ export const Bordered: Story = {
         icon={<FolderOpen className="w-12 h-12" />}
         title="No projects"
         description="Get started by creating your first project."
-        primaryAction={{ label: 'New project', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'New project',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
         bordered
       />
       <EmptyState
@@ -117,8 +145,8 @@ export const NoIcon: Story = {
       <EmptyState
         title="No results found"
         description="Try adjusting your search or filters to find what you're looking for."
-        primaryAction={{   label: 'Clear filters', onClick: () => {} }}
-        secondaryAction={{ label: 'Browse all',    onClick: () => {} }}
+        primaryAction={{ label: 'Clear filters', onClick: () => {} }}
+        secondaryAction={{ label: 'Browse all', onClick: () => {} }}
         bordered
       />
     </div>
@@ -178,7 +206,11 @@ export const InContext: Story = {
         icon={<FolderOpen className="w-12 h-12" />}
         title="No projects yet"
         description="Create your first project to start collaborating with your team."
-        primaryAction={{ label: 'New project', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+        primaryAction={{
+          label: 'New project',
+          onClick: () => {},
+          icon: <Plus className="w-3.5 h-3.5" />,
+        }}
       />
     </div>
   ),

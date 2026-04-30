@@ -11,13 +11,17 @@ const meta = {
   component: ListCard,
   tags: ['autodocs'],
   argTypes: {
-    title:         { control: 'text' },
-    subtitle:      { control: 'text' },
+    title: { control: 'text' },
+    subtitle: { control: 'text' },
     primaryAction: { control: false },
-    menuItems:     { control: false },
-    list:          { control: false, description: 'ReactNode rendered on mobile (below sm)' },
-    table:         { control: false, description: 'ReactNode rendered on desktop (sm+). Pass <DataTable flat /> to skip its own card.' },
-    className:     { control: 'text' },
+    menuItems: { control: false },
+    list: { control: false, description: 'ReactNode rendered on mobile (below sm)' },
+    table: {
+      control: false,
+      description:
+        'ReactNode rendered on desktop (sm+). Pass <DataTable flat /> to skip its own card.',
+    },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof ListCard>;
 
@@ -26,15 +30,57 @@ type Story = StoryObj<typeof meta>;
 
 // ── Shared fixtures ────────────────────────────────────────
 
-type User = { id: number; name: string; email: string; role: string; status: 'active' | 'pending' | 'draft' };
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  status: 'active' | 'pending' | 'draft';
+};
 
 const USERS: User[] = [
-  { id: 1, name: 'Leslie Alexander',  email: 'leslie.alexander@example.com',  role: 'Co-Founder / CEO',       status: 'active'  },
-  { id: 2, name: 'Michael Foster',    email: 'michael.foster@example.com',    role: 'Co-Founder / CTO',       status: 'active'  },
-  { id: 3, name: 'Dries Vincent',     email: 'dries.vincent@example.com',     role: 'Business Relations',     status: 'pending' },
-  { id: 4, name: 'Lindsay Walton',    email: 'lindsay.walton@example.com',    role: 'Front-end Developer',    status: 'active'  },
-  { id: 5, name: 'Courtney Henry',    email: 'courtney.henry@example.com',    role: 'Designer',               status: 'active'  },
-  { id: 6, name: 'Tom Cook',          email: 'tom.cook@example.com',          role: 'Director of Product',    status: 'draft'   },
+  {
+    id: 1,
+    name: 'Leslie Alexander',
+    email: 'leslie.alexander@example.com',
+    role: 'Co-Founder / CEO',
+    status: 'active',
+  },
+  {
+    id: 2,
+    name: 'Michael Foster',
+    email: 'michael.foster@example.com',
+    role: 'Co-Founder / CTO',
+    status: 'active',
+  },
+  {
+    id: 3,
+    name: 'Dries Vincent',
+    email: 'dries.vincent@example.com',
+    role: 'Business Relations',
+    status: 'pending',
+  },
+  {
+    id: 4,
+    name: 'Lindsay Walton',
+    email: 'lindsay.walton@example.com',
+    role: 'Front-end Developer',
+    status: 'active',
+  },
+  {
+    id: 5,
+    name: 'Courtney Henry',
+    email: 'courtney.henry@example.com',
+    role: 'Designer',
+    status: 'active',
+  },
+  {
+    id: 6,
+    name: 'Tom Cook',
+    email: 'tom.cook@example.com',
+    role: 'Director of Product',
+    status: 'draft',
+  },
 ];
 
 const TABLE_COLUMNS = [
@@ -65,27 +111,33 @@ const TABLE_COLUMNS = [
   },
 ];
 
-const LIST_ITEMS: StackedListItem[] = USERS.map(u => ({
-  id:          u.id,
-  title:       u.name,
-  subtitle:    u.email,
-  leading:     <Avatar name={u.name} size={36} />,
-  trailing:    <Badge label={u.status.charAt(0).toUpperCase() + u.status.slice(1)} variant={u.status as 'active' | 'pending' | 'draft'} />,
+const LIST_ITEMS: StackedListItem[] = USERS.map((u) => ({
+  id: u.id,
+  title: u.name,
+  subtitle: u.email,
+  leading: <Avatar name={u.name} size={36} />,
+  trailing: (
+    <Badge
+      label={u.status.charAt(0).toUpperCase() + u.status.slice(1)}
+      variant={u.status as 'active' | 'pending' | 'draft'}
+    />
+  ),
   trailingMeta: u.role,
 }));
 
 const MENU_ITEMS = [
-  { label: 'Export CSV',   onClick: () => {} },
+  { label: 'Export CSV', onClick: () => {} },
   { label: 'Import users', onClick: () => {} },
-  { label: 'Delete all',   onClick: () => {}, destructive: true, dividerAbove: true },
+  { label: 'Delete all', onClick: () => {}, destructive: true, dividerAbove: true },
 ];
 
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
   args: {
-    title:         'Users',
-    subtitle:      'A list of all the users in your account including their name, title, email and role.',
+    title: 'Users',
+    subtitle:
+      'A list of all the users in your account including their name, title, email and role.',
     primaryAction: { label: 'Add user', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> },
   },
   render: (args) => (
@@ -106,7 +158,11 @@ export const Responsive: Story = {
     <ListCard
       title="Users"
       subtitle="A list of all the users in your account including their name, title, email and role."
-      primaryAction={{ label: 'Add user', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+      primaryAction={{
+        label: 'Add user',
+        onClick: () => {},
+        icon: <Plus className="w-3.5 h-3.5" />,
+      }}
       menuItems={MENU_ITEMS}
       table={<DataTable flat columns={TABLE_COLUMNS} data={USERS} />}
       list={<StackedList items={LIST_ITEMS} />}
@@ -152,9 +208,13 @@ export const TableOnly: Story = {
     <ListCard
       title="Workflows"
       subtitle="All automation workflows in your workspace."
-      primaryAction={{ label: 'New workflow', onClick: () => {}, icon: <Plus className="w-3.5 h-3.5" /> }}
+      primaryAction={{
+        label: 'New workflow',
+        onClick: () => {},
+        icon: <Plus className="w-3.5 h-3.5" />,
+      }}
       menuItems={[
-        { label: 'Export',   onClick: () => {}, icon: <Download className="w-4 h-4" /> },
+        { label: 'Export', onClick: () => {}, icon: <Download className="w-4 h-4" /> },
         { label: 'Settings', onClick: () => {}, icon: <Settings className="w-4 h-4" /> },
       ]}
       table={<DataTable flat columns={TABLE_COLUMNS} data={USERS} />}
@@ -172,14 +232,7 @@ export const WithPagination: Story = {
       title="Users"
       subtitle="A list of all the users in your account."
       primaryAction={{ label: 'Add user', onClick: () => {} }}
-      table={
-        <DataTable
-          flat
-          columns={TABLE_COLUMNS}
-          data={USERS}
-          pagination={{ pageSize: 4 }}
-        />
-      }
+      table={<DataTable flat columns={TABLE_COLUMNS} data={USERS} pagination={{ pageSize: 4 }} />}
       list={<StackedList items={LIST_ITEMS} />}
     />
   ),
