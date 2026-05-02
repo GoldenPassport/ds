@@ -64,7 +64,7 @@ function PageScaffold({
       </main>
 
       <aside aria-label="Notifications" className="hidden">Aside content</aside>
-      <footer role="contentinfo" className="px-6 py-3 border-t border-ink-200 dark:border-ink-700 text-xs text-ink-400 dark:text-ink-500">
+      <footer role="contentinfo" className="px-6 py-3 border-t border-ink-200 dark:border-ink-700 text-xs text-ink-500 dark:text-ink-400">
         © 2025 Golden Passport
       </footer>
     </div>
