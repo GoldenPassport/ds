@@ -229,5 +229,248 @@ export const NoLandmarks: Story = {
       await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
       expect(canvas.getByText(/no landmarks or headings found/i)).toBeInTheDocument();
     });
+
+    await step('ArrowDown in empty menu → no-op (covers previewPageElement out-of-bounds guard)', async () => {
+      // itemsRef is empty → idx arithmetic produces NaN → no crash, menu stays open
+      await user.keyboard('{ArrowDown}');
+      expect(canvas.getByRole('menu')).toBeInTheDocument();
+    });
   },
+};
+
+// ── Search activation ─────────────────────────────────────
+
+export const SearchActivation: Story = {
+  name: 'Search landmark → input focused immediately',
+  render: () => (
+    <PageScaffold skipTo={<SkipTo shortcut="" />} />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('open menu', async () => {
+      await user.tab();
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+    });
+
+    await step('ArrowDown × 3 → "Search: Site search" focused', async () => {
+      await user.keyboard('{ArrowDown}'); // Banner
+      await user.keyboard('{ArrowDown}'); // Navigation: Main Menu
+      await user.keyboard('{ArrowDown}'); // Search: Site search
+      await waitFor(() =>
+        expect(within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Search: Site search' })).toHaveFocus()
+      );
+    });
+
+    await step('Space → menu closes; search <input> receives focus (natively focusable path)', async () => {
+      await user.keyboard(' ');
+      await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+      await waitFor(() => {
+        const input = canvasElement.querySelector<HTMLElement>('input[type="search"]');
+        expect(document.activeElement).toBe(input);
+      });
+    });
+  },
+};
+
+// ── Heading activation ────────────────────────────────────
+
+export const HeadingActivation: Story = {
+  name: 'Heading → h1 focused (tabindex temp-inject path)',
+  render: () => (
+    <PageScaffold skipTo={<SkipTo shortcut="" />} />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('open menu', async () => {
+      await user.tab();
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+    });
+
+    await step('navigate to "Dashboard" heading (5 landmarks then h1)', async () => {
+      // Landmarks: Banner(0) Nav(1) Search(2) Main(3) Footer(4); then Dashboard h1(5)
+      for (let i = 0; i < 6; i++) await user.keyboard('{ArrowDown}');
+      await waitFor(() =>
+        expect(within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Dashboard' })).toHaveFocus()
+      );
+    });
+
+    await step('Enter → menu closes; h1 receives focus (tabindex=-1 injected)', async () => {
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+      await waitFor(() => {
+        const h1 = canvasElement.querySelector<HTMLElement>('h1');
+        expect(document.activeElement).toBe(h1);
+      });
+    });
+  },
+};
+
+// ── ArrowUp + Close button ────────────────────────────────
+
+export const ArrowUpAndCloseButton: Story = {
+  name: 'ArrowUp wraps to last item; Close button closes menu',
+  render: () => (
+    <PageScaffold skipTo={<SkipTo shortcut="" />} />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('open menu', async () => {
+      await user.tab();
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+    });
+
+    await step('ArrowUp from button → last menu item focused (wrap-around)', async () => {
+      await user.keyboard('{ArrowUp}');
+      const items = within(canvas.getByRole('menu')).getAllByRole('menuitem');
+      await waitFor(() => expect(items[items.length - 1]).toHaveFocus());
+    });
+
+    await step('click Close → menu closes, focus returns to trigger button', async () => {
+      await user.click(canvas.getByRole('button', { name: 'Close' }));
+      await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+    });
+  },
+};
+
+// ── Tab exits menu ────────────────────────────────────────
+
+export const TabExitsMenu: Story = {
+  name: 'Tab from menu item closes menu without stealing focus',
+  render: () => (
+    <PageScaffold skipTo={<SkipTo shortcut="" />} />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('open menu and focus first item', async () => {
+      await user.tab();
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+      await user.keyboard('{ArrowDown}');
+      const items = within(canvas.getByRole('menu')).getAllByRole('menuitem');
+      await waitFor(() => expect(items[0]).toHaveFocus());
+    });
+
+    await step('Tab → menu closes; focus moves to next page element (not back to button)', async () => {
+      await user.tab();
+      await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+      // Tab propagated — focus should NOT be on the SkipTo trigger button
+      expect(canvas.getByRole('button', { name: /skip to/i })).not.toHaveFocus();
+    });
+  },
+};
+
+// ── Mouse outside + button toggle ────────────────────────
+
+export const MouseAndButtonToggle: Story = {
+  name: 'Mousedown outside closes menu; button click toggles',
+  render: () => (
+    <PageScaffold skipTo={<SkipTo shortcut="" />} />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('open menu via Tab + Enter', async () => {
+      await user.tab();
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+    });
+
+    await step('click inside page (outside widget) → menu closes', async () => {
+      await user.click(canvasElement.querySelector('main')!);
+      await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+    });
+
+    await step('click button → menu opens', async () => {
+      await user.click(canvas.getByRole('button', { name: /skip to/i }));
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+    });
+
+    await step('click button again (toggle) → menu closes', async () => {
+      await user.click(canvas.getByRole('button', { name: /skip to/i }));
+      await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+    });
+  },
+};
+
+// ── Accessible name from aria-labelledby and title ────────
+
+export const LabelledByAndTitle: Story = {
+  name: 'Accessible name via aria-labelledby and title',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [root, setRoot] = useState<HTMLElement | null>(null);
+    useEffect(() => { setRoot(containerRef.current); }, []);
+
+    return (
+      <div ref={containerRef} className="p-8 bg-ink-50 dark:bg-ink-900 min-h-screen">
+        <SkipTo shortcut="" root={root} />
+        <main>
+          <h2 id="analytics-heading" className="text-lg font-semibold text-ink-900 dark:text-ink-50">
+            Analytics
+          </h2>
+          {/* aria-labelledby: name derived from referenced element's text content */}
+          <section
+            role="region"
+            aria-labelledby="analytics-heading"
+            className="mt-4 p-4 bg-white dark:bg-ink-800 rounded-xl"
+          >
+            <p className="text-sm text-ink-500 dark:text-ink-300">Chart data here.</p>
+          </section>
+
+          {/* title: fallback accessible name when no aria-label / labelledby */}
+          <nav title="Breadcrumb" className="mt-6">
+            <a href="#" className="text-sm text-ink-700 dark:text-ink-200 underline">Home</a>
+          </nav>
+        </main>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('open menu', async () => {
+      await user.tab();
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+    });
+
+    await step('aria-labelledby name appears in menu (covers labelledBy branch)', async () => {
+      expect(within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Region: Analytics' })).toBeInTheDocument();
+    });
+
+    await step('title attribute name appears in menu (covers title branch)', async () => {
+      expect(within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Navigation: Breadcrumb' })).toBeInTheDocument();
+    });
+  },
+};
+
+// ── Non-alt shortcut (covers formatButtonShortcut else branch) ──
+
+export const CtrlShortcut: Story = {
+  name: 'Non-Alt shortcut (Ctrl+K)',
+  render: () => (
+    <PageScaffold
+      skipTo={<SkipTo label="Jump to…" shortcut="ctrl+k" />}
+    />
+  ),
 };

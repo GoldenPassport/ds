@@ -425,12 +425,15 @@ export function SkipTo({
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      const next = (idx + 1) % items.length;
+      // idx === -1 means the trigger button is focused; wrap to first item.
+      const next = idx === -1 ? 0 : (idx + 1) % items.length;
       items[next]?.focus();
       previewPageElement(next);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      const prev = (idx - 1 + items.length) % items.length;
+      // idx === -1 means the trigger button is focused; wrap to last item.
+      // (The formula (idx-1+N)%N gives N-2 when idx=-1, which is wrong.)
+      const prev = idx === -1 ? items.length - 1 : (idx - 1 + items.length) % items.length;
       items[prev]?.focus();
       previewPageElement(prev);
     } else if (e.key === 'Escape') {
@@ -594,6 +597,7 @@ export function SkipTo({
                       ref={(el) => { if (el) itemsRef.current[refIdx] = el; }}
                       role="menuitem"
                       tabIndex={-1}
+                      data-level-hint={`${item.level})`}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') activate(e, item);
                       }}
@@ -604,14 +608,12 @@ export function SkipTo({
                         'hover:bg-primary-500/10 dark:hover:bg-primary-500/15',
                         'focus:bg-primary-500 focus:text-ink-900',
                         'outline-none transition-colors duration-75',
+                        'before:content-[attr(data-level-hint)]',
+                        'before:font-mono before:text-xs before:mr-1.5',
+                        'before:text-ink-500 dark:before:text-ink-300',
+                        'focus:before:text-ink-900',
                       ].join(' ')}
                     >
-                      <span
-                        aria-hidden="true"
-                        className="text-ink-500 dark:text-ink-300 mr-1.5 font-mono text-xs"
-                      >
-                        {item.level})
-                      </span>
                       {item.text}
                     </div>
                   );
