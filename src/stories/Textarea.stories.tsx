@@ -34,14 +34,6 @@ export const Playground: Story = {
   },
 };
 
-export const Default: Story = {
-  args: {
-    label: 'Workflow Description',
-    placeholder: 'Describe what this workflow does…',
-    hint: 'Used in reports and run logs.',
-  },
-};
-
 export const AIPrompt: Story = {
   args: {
     label: 'Prompt',
@@ -80,9 +72,3 @@ export const NoResize: Story = {
   },
 };
 
-export const NoLabel: Story = {
-  args: {
-    placeholder: 'Add a comment…',
-    rows: 3,
-  },
-};

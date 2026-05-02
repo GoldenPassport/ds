@@ -515,7 +515,7 @@ export function SearchSet({
                           className={[
                             'text-[10px] font-bold font-body uppercase tracking-wider select-none px-0.5',
                             tag.op === 'or'
-                              ? 'text-primary-500 dark:text-primary-400'
+                              ? 'text-primary-800 dark:text-primary-400'
                               : 'text-ink-500 dark:text-ink-300',
                           ].join(' ')}
                         >
@@ -528,7 +528,7 @@ export function SearchSet({
                           'rounded-full text-[11px] font-semibold font-body',
                           'border transition-colors',
                           tag.op === 'or'
-                            ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-200 dark:border-primary-700 text-primary-700 dark:text-primary-300'
+                            ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-200 dark:border-primary-700 text-primary-800 dark:text-primary-300'
                             : 'bg-ink-100 dark:bg-ink-700 border-ink-200 dark:border-ink-600 text-ink-700 dark:text-ink-200',
                         ].join(' ')}
                       >

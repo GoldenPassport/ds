@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import {
@@ -110,6 +111,26 @@ export const Playground: Story = {
     fixed: false,
   },
   render: (args) => <PlaygroundDemo {...args} />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('Home is initially active', async () => {
+      expect(canvas.getByRole('button', { name: /^home$/i })).toHaveAttribute('aria-current', 'page');
+    });
+    await step('click Entertainment → becomes active, Home deactivates', async () => {
+      await user.click(canvas.getByRole('button', { name: /entertainment/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /entertainment/i })).toHaveAttribute('aria-current', 'page');
+        expect(canvas.getByRole('button', { name: /^home$/i })).not.toHaveAttribute('aria-current');
+      });
+    });
+    await step('click Home → Home becomes active again', async () => {
+      await user.click(canvas.getByRole('button', { name: /^home$/i }));
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /^home$/i })).toHaveAttribute('aria-current', 'page'),
+      );
+    });
+  },
 };
 
 // ── Light ─────────────────────────────────────────────────

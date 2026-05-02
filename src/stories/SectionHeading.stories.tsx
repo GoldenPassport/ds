@@ -1,6 +1,7 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-import { Plus, Download, Settings } from 'lucide-react';
+import { Plus, Settings } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading';
 import { Button } from '../components/Button';
 import { ContainerList } from '../components/ContainerList';
@@ -86,22 +87,17 @@ export const Simple: Story = {
   name: 'Simple — title only',
   args: { title: '' },
   render: () => (
-    <div className="max-w-2xl flex flex-col gap-4">
-      <SectionHeading title="Team members" />
-      <ContainerList variant="divided" items={LIST_ITEMS} />
-    </div>
-  ),
-};
-
-// ── With description ──────────────────────────────────────
-
-export const WithDescription: Story = {
-  name: 'With description',
-  args: { title: '' },
-  render: () => (
-    <div className="max-w-2xl flex flex-col gap-4">
-      <SectionHeading title="Team members" description="Manage who has access to this workspace." />
-      <ContainerList variant="divided" items={LIST_ITEMS} />
+    <div className="max-w-2xl flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300">Plain heading</p>
+        <SectionHeading title="Team members" />
+        <ContainerList variant="divided" items={LIST_ITEMS} />
+      </div>
+      <div className="flex flex-col gap-4">
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300">With description</p>
+        <SectionHeading title="Team members" description="Manage who has access to this workspace." />
+        <ContainerList variant="divided" items={LIST_ITEMS} />
+      </div>
     </div>
   ),
 };
@@ -120,29 +116,6 @@ export const WithActions: Story = {
           <Button variant="primary" size="sm">
             <Plus className="w-3.5 h-3.5" aria-hidden="true" />
             Invite member
-          </Button>
-        }
-      />
-      <ContainerList variant="divided" items={LIST_ITEMS} />
-    </div>
-  ),
-};
-
-// ── With divider ──────────────────────────────────────────
-
-export const WithDivider: Story = {
-  name: 'With divider',
-  args: { title: '' },
-  render: () => (
-    <div className="max-w-2xl flex flex-col gap-4">
-      <SectionHeading
-        title="Team members"
-        description="Manage who has access to this workspace."
-        divider
-        actions={
-          <Button variant="secondary" size="sm">
-            <Download className="w-3.5 h-3.5" aria-hidden="true" />
-            Export
           </Button>
         }
       />
@@ -210,6 +183,26 @@ export const WithTabs: Story = {
   name: 'With tabs',
   args: { title: '' },
   render: () => <WithTabsDemo />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('"Members" tab is active initially — action says "Invite"', async () => {
+      expect(canvas.getByRole('button', { name: /^invite$/i })).toBeInTheDocument();
+    });
+    await step('click "Invitations" tab → action changes to "New invite"', async () => {
+      // Badge count is included in accessible name ("Invitations 3") so match by prefix
+      await user.click(canvas.getByRole('button', { name: /^invitations/i }));
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /^new invite$/i })).toBeInTheDocument(),
+      );
+    });
+    await step('click "Roles" tab → action changes to "New role"', async () => {
+      await user.click(canvas.getByRole('button', { name: /^roles$/i }));
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /^new role$/i })).toBeInTheDocument(),
+      );
+    });
+  },
 };
 
 // ── h3 level ──────────────────────────────────────────────

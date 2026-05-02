@@ -2,7 +2,9 @@ node_modules/
 dist/
 storybook-static/
 coverage/
+temp/
 test-timings.json
 *.tsbuildinfo
 .DS_Store
 debug-storybook.log
+.claude

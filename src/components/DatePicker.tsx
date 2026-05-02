@@ -183,7 +183,7 @@ function ScrollColumn({
   return (
     <div
       ref={ref}
-      className="h-40 overflow-y-auto scrollbar-none flex flex-col gap-0.5 snap-y snap-mandatory pr-1"
+      className="h-40 overflow-y-auto scrollbar-none flex flex-col gap-0.5 snap-y snap-mandatory px-1.5 pt-2"
     >
       {/* top spacer so first items can scroll to centre */}
       <div className="shrink-0 h-16" aria-hidden="true" />
@@ -194,10 +194,10 @@ function ScrollColumn({
           data-selected={v === selected}
           onClick={() => onSelect(v)}
           className={[
-            'shrink-0 w-10 h-8 rounded-xl text-sm font-body font-medium text-center snap-start transition-colors',
+            'shrink-0 w-14 h-8 rounded-xl text-sm font-body font-medium text-center snap-start transition-colors',
             v === selected
               ? 'bg-primary-500 text-ink-900 font-semibold'
-              : 'text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
+              : 'bg-white dark:bg-ink-800 text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700',
           ].join(' ')}
         >
           {String(v).padStart(2, '0')}
@@ -442,7 +442,7 @@ export function DateRangePicker({
                   className={
                     startDisplay
                       ? 'text-ink-900 dark:text-ink-50'
-                      : 'text-ink-500 dark:text-ink-400'
+                      : 'text-ink-500 dark:text-ink-300'
                   }
                 >
                   {startDisplay || startPlaceholder}
@@ -465,7 +465,7 @@ export function DateRangePicker({
                 </span>
                 <span
                   className={
-                    endDisplay ? 'text-ink-900 dark:text-ink-50' : 'text-ink-500 dark:text-ink-400'
+                    endDisplay ? 'text-ink-900 dark:text-ink-50' : 'text-ink-500 dark:text-ink-300'
                   }
                 >
                   {endDisplay || endPlaceholder}
@@ -627,9 +627,9 @@ export function TimePicker({
         >
           {name && <input type="hidden" name={name} value={displayValue} />}
 
-          <PopoverPanel transition className={`${PANEL_CLS} w-36 min-w-36`}>
+          <PopoverPanel transition className={`${PANEL_CLS} w-48 min-w-48`}>
             <div className="flex items-start gap-2 justify-center">
-              <div className="flex flex-col items-center gap-1">
+              <div className="flex flex-col items-center gap-2">
                 <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">
                   HH
                 </span>
@@ -638,7 +638,7 @@ export function TimePicker({
               <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-300">
                 :
               </span>
-              <div className="flex flex-col items-center gap-1">
+              <div className="flex flex-col items-center gap-2">
                 <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">
                   MM
                 </span>
@@ -779,7 +779,7 @@ export function DateTimePicker({
               {tab === 'time' && (
                 <div className="flex-1 flex items-center justify-center">
                   <div className="flex items-start gap-2">
-                    <div className="flex flex-col items-center gap-1">
+                    <div className="flex flex-col items-center gap-2">
                       <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">
                         HH
                       </span>
@@ -792,7 +792,7 @@ export function DateTimePicker({
                     <span className="mt-[30px] text-sm font-body font-semibold text-ink-500 dark:text-ink-300">
                       :
                     </span>
-                    <div className="flex flex-col items-center gap-1">
+                    <div className="flex flex-col items-center gap-2">
                       <span className="text-[10px] font-body font-semibold text-ink-500 dark:text-ink-300 uppercase tracking-wider">
                         MM
                       </span>

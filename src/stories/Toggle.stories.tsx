@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useArgs } from 'storybook/preview-api';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Toggle } from '../components/Toggle';
 
 const meta = {
@@ -38,22 +39,25 @@ export const Playground: Story = {
   },
 };
 
-export const On: Story = {
-  args: {
-    checked: true,
-    onChange: () => {},
-    label: 'AI Suggestions',
-    description: 'Show prompt suggestions in the builder',
-  },
-};
-
-export const Off: Story = {
-  args: {
-    checked: false,
-    onChange: () => {},
-    label: 'Run completions',
-    description: 'Notify on every successful run',
-  },
+export const States: Story = {
+  name: 'On / Off',
+  args: { checked: false, onChange: () => {} },
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <Toggle
+        checked={true}
+        onChange={() => {}}
+        label="AI Suggestions"
+        description="Show prompt suggestions in the builder"
+      />
+      <Toggle
+        checked={false}
+        onChange={() => {}}
+        label="Run completions"
+        description="Notify on every successful run"
+      />
+    </div>
+  ),
 };
 
 export const Disabled: Story = {
@@ -64,10 +68,6 @@ export const Disabled: Story = {
     description: 'Managed by your org admin',
     disabled: true,
   },
-};
-
-export const Standalone: Story = {
-  args: { checked: true, onChange: () => {} },
 };
 
 export const SettingsList: Story = {
@@ -100,5 +100,33 @@ export const SettingsList: Story = {
         ))}
       </div>
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('"Run completions" starts off — click turns it on', async () => {
+      const sw = canvas.getByRole('switch', { name: /run completions/i });
+      expect(sw).toHaveAttribute('aria-checked', 'false');
+      await user.click(sw);
+      await waitFor(() => {
+        expect(canvas.getByRole('switch', { name: /run completions/i })).toHaveAttribute(
+          'aria-checked',
+          'true',
+        );
+      });
+    });
+
+    await step('"AI Suggestions" starts on — click turns it off', async () => {
+      const sw = canvas.getByRole('switch', { name: /ai suggestions/i });
+      expect(sw).toHaveAttribute('aria-checked', 'true');
+      await user.click(sw);
+      await waitFor(() => {
+        expect(canvas.getByRole('switch', { name: /ai suggestions/i })).toHaveAttribute(
+          'aria-checked',
+          'false',
+        );
+      });
+    });
   },
 };

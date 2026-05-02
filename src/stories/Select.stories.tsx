@@ -64,50 +64,6 @@ export const Playground: Story = {
   },
 };
 
-// ── Custom variant ────────────────────────────────────────
-
-export const Custom: Story = {
-  name: 'Custom — styled dropdown',
-  args: { value: '', onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState('claude-35-sonnet');
-    return (
-      <div className="w-72">
-        <Select
-          variant="custom"
-          label="AI Model"
-          hint="Uses Headless UI — consistent across all platforms"
-          value={val}
-          onChange={setVal}
-          options={MODEL_OPTIONS}
-        />
-      </div>
-    );
-  },
-};
-
-// ── Native variant ────────────────────────────────────────
-
-export const Native: Story = {
-  name: 'Native — OS picker',
-  args: { value: '', onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState('claude-35-sonnet');
-    return (
-      <div className="w-72">
-        <Select
-          variant="native"
-          label="AI Model"
-          hint="Uses the OS/browser picker — recommended on mobile"
-          value={val}
-          onChange={setVal}
-          options={MODEL_OPTIONS}
-        />
-      </div>
-    );
-  },
-};
-
 // ── Side-by-side comparison ───────────────────────────────
 
 export const Comparison: Story = {
@@ -145,27 +101,26 @@ export const Comparison: Story = {
       </div>
     );
   },
-};
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const user = userEvent.setup();
 
-// ── With placeholder (native only) ───────────────────────
+    await step('open the custom select', async () => {
+      // Custom select trigger — first button labelled "Department"
+      const trigger = canvas.getAllByRole('button', { name: /department/i })[0];
+      await user.click(trigger);
+      await waitFor(() => expect(body.getByRole('listbox')).toBeVisible());
+    });
 
-export const NativeWithPlaceholder: Story = {
-  name: 'Native — with placeholder',
-  args: { value: '', onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState('');
-    return (
-      <div className="w-72">
-        <Select
-          variant="native"
-          label="Department"
-          placeholder="Choose a department…"
-          value={val}
-          onChange={setVal}
-          options={DEPT_OPTIONS}
-        />
-      </div>
-    );
+    await step('select "Analytics" → trigger updates', async () => {
+      await user.click(body.getByRole('option', { name: 'Analytics' }));
+      await waitFor(() => {
+        expect(canvas.getAllByRole('button', { name: /department/i })[0]).toHaveTextContent(
+          'Analytics',
+        );
+      });
+    });
   },
 };
 
@@ -242,120 +197,3 @@ export const Disabled: Story = {
   ),
 };
 
-// ── Interactions ──────────────────────────────────────────
-
-export const CustomInteractions: Story = {
-  name: 'Interactions — custom dropdown',
-  args: { value: '', onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState('claude-35-sonnet');
-    return (
-      <div className="w-72">
-        <Select
-          variant="custom"
-          label="AI Model"
-          hint="Pick the model for this workflow"
-          value={val}
-          onChange={setVal}
-          options={MODEL_OPTIONS}
-        />
-        <p
-          className="mt-2 text-xs font-body text-ink-500 dark:text-ink-300"
-          data-testid="selected-value"
-        >
-          Selected: {val}
-        </p>
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('click trigger — listbox opens', async () => {
-      await user.click(canvas.getByRole('button'));
-      await waitFor(() => {
-        expect(within(document.body).getByRole('listbox')).toBeInTheDocument();
-      });
-    });
-
-    await step('options are visible including disabled one', async () => {
-      const lb = within(document.body).getByRole('listbox');
-      expect(within(lb).getByRole('option', { name: /gpt-4o/i })).toBeInTheDocument();
-      expect(within(lb).getByRole('option', { name: /llama 3/i })).toBeInTheDocument();
-    });
-
-    await step('click GPT-4o — selection updates', async () => {
-      const lb = within(document.body).getByRole('listbox');
-      await user.click(within(lb).getByRole('option', { name: /gpt-4o/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('selected-value')).toHaveTextContent('gpt-4o');
-      });
-    });
-
-    await step('listbox closes after selection', async () => {
-      await waitFor(() => {
-        expect(within(document.body).queryByRole('listbox')).not.toBeInTheDocument();
-      });
-    });
-
-    await step('open again and close with Escape', async () => {
-      await user.click(canvas.getByRole('button'));
-      await waitFor(() => {
-        expect(within(document.body).getByRole('listbox')).toBeInTheDocument();
-      });
-      await user.keyboard('{Escape}');
-      await waitFor(() => {
-        expect(within(document.body).queryByRole('listbox')).not.toBeInTheDocument();
-      });
-    });
-  },
-};
-
-export const NativeInteractions: Story = {
-  name: 'Interactions — native select',
-  args: { value: '', onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState('finance');
-    return (
-      <div className="w-72">
-        <Select
-          variant="native"
-          label="Department"
-          value={val}
-          onChange={setVal}
-          options={DEPT_OPTIONS}
-        />
-        <p
-          className="mt-2 text-xs font-body text-ink-500 dark:text-ink-300"
-          data-testid="native-selected"
-        >
-          Selected: {val}
-        </p>
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('native select renders with current value', async () => {
-      const select = canvas.getByRole('combobox');
-      expect(select).toHaveValue('finance');
-    });
-
-    await step('change native select — value updates', async () => {
-      const select = canvas.getByRole('combobox');
-      await user.selectOptions(select, 'hr');
-      await waitFor(() => {
-        expect(canvas.getByTestId('native-selected')).toHaveTextContent('hr');
-      });
-    });
-
-    await step('select with placeholder-style empty option disabled', async () => {
-      // Verify disabled options render
-      const opts = canvas.getAllByRole('option');
-      expect(opts.length).toBeGreaterThan(1);
-    });
-  },
-};

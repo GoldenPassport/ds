@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Activity, Settings, FileText, GitBranch } from 'lucide-react';
@@ -57,72 +58,6 @@ export const Playground: Story = {
       <Tabs {...args} tabs={sampleTabs} />
     </div>
   ),
-};
-
-// ── Variants ──────────────────────────────────────────────
-
-export const Underline: Story = {
-  name: 'Variant — underline',
-  args: { variant: 'underline', tabs: [] },
-  render: (args) => (
-    <div className="w-full max-w-2xl">
-      <Tabs {...args} tabs={sampleTabs} />
-    </div>
-  ),
-};
-
-export const Pills: Story = {
-  name: 'Variant — pills',
-  args: { variant: 'pills', tabs: [] },
-  render: (args) => (
-    <div className="w-full max-w-2xl">
-      <Tabs {...args} tabs={sampleTabs} />
-    </div>
-  ),
-};
-
-export const Pill: Story = {
-  name: 'Variant — pill (segmented)',
-  args: { variant: 'pill', tabs: [] },
-  render: (args) => (
-    <div className="w-full max-w-2xl">
-      <Tabs {...args} tabs={sampleTabs} />
-    </div>
-  ),
-};
-
-export const Bar: Story = {
-  name: 'Variant — bar (full-width)',
-  args: { variant: 'bar', tabs: [] },
-  render: (args) => (
-    <div className="w-full max-w-2xl">
-      <Tabs {...args} tabs={sampleTabs} />
-    </div>
-  ),
-};
-
-// ── All variants side-by-side ─────────────────────────────
-
-export const AllVariants: Story = {
-  name: 'All variants',
-  args: { tabs: [] },
-  render: () => {
-    const simple = [
-      { label: 'Active', content: tabContent('Active') },
-      { label: 'Archived', content: tabContent('Archived') },
-      { label: 'Draft', content: tabContent('Draft') },
-    ];
-    return (
-      <div className="space-y-10 max-w-lg">
-        {(['underline', 'pills', 'pill', 'bar'] as const).map((v) => (
-          <div key={v} className="space-y-1">
-            <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v}</p>
-            <Tabs tabs={simple} variant={v} />
-          </div>
-        ))}
-      </div>
-    );
-  },
 };
 
 // ── Pills without icons ───────────────────────────────────
@@ -224,9 +159,54 @@ export const OnChangeCallback: Story = {
     return (
       <div className="w-full max-w-2xl space-y-4">
         <p className="text-xs text-ink-500 dark:text-ink-300 font-body">
-          Active index: <strong className="text-ink-700 dark:text-ink-300">{active}</strong>
+          Active index:{' '}
+          <strong data-testid="active-index" className="text-ink-700 dark:text-ink-300">
+            {active}
+          </strong>
         </p>
         <Tabs {...args} tabs={sampleTabs} onChange={setActive} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('Overview tab is initially selected (index 0)', async () => {
+      expect(canvas.getByRole('tab', { name: /overview/i })).toHaveAttribute('aria-selected', 'true');
+    });
+    await step('click Run Logs → active index becomes 1', async () => {
+      await user.click(canvas.getByRole('tab', { name: /run logs/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('active-index')).toHaveTextContent('1');
+        expect(canvas.getByRole('tab', { name: /run logs/i })).toHaveAttribute('aria-selected', 'true');
+      });
+    });
+    await step('click Steps → active index becomes 2', async () => {
+      await user.click(canvas.getByRole('tab', { name: /^steps$/i }));
+      await waitFor(() => expect(canvas.getByTestId('active-index')).toHaveTextContent('2'));
+    });
+  },
+};
+
+// ── All variants side-by-side ─────────────────────────────
+
+export const AllVariants: Story = {
+  name: 'All variants',
+  args: { tabs: [] },
+  render: () => {
+    const simple = [
+      { label: 'Active', content: tabContent('Active') },
+      { label: 'Archived', content: tabContent('Archived') },
+      { label: 'Draft', content: tabContent('Draft') },
+    ];
+    return (
+      <div className="space-y-10 max-w-lg">
+        {(['underline', 'pills', 'pill', 'bar'] as const).map((v) => (
+          <div key={v} className="space-y-1">
+            <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{v}</p>
+            <Tabs tabs={simple} variant={v} />
+          </div>
+        ))}
       </div>
     );
   },

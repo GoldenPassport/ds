@@ -1,3 +1,5 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ChevronRight, MoreVertical } from 'lucide-react';
 import { StackedList, type StackedListItem } from '../components/StackedList';
@@ -129,37 +131,13 @@ export const Playground: Story = {
   },
 };
 
-// ── Simple with avatars ───────────────────────────────────
+// ── With avatars (photo + initials) ──────────────────────
 
 export const WithAvatars: Story = {
   name: 'With avatars',
   args: { items: [] },
-  render: () => (
-    <div className="max-w-2xl">
-      <StackedList items={PEOPLE} />
-    </div>
-  ),
-};
-
-// ── Bordered card ─────────────────────────────────────────
-
-export const Bordered: Story = {
-  name: 'Bordered card',
-  args: { items: [] },
-  render: () => (
-    <div className="max-w-2xl">
-      <StackedList items={PEOPLE} bordered />
-    </div>
-  ),
-};
-
-// ── Initials avatars ──────────────────────────────────────
-
-export const InitialsAvatars: Story = {
-  name: 'Initials avatars',
-  args: { items: [] },
   render: () => {
-    const items: StackedListItem[] = [
+    const initialsItems: StackedListItem[] = [
       {
         id: 1,
         title: 'Leslie Alexander',
@@ -202,11 +180,30 @@ export const InitialsAvatars: Story = {
       },
     ];
     return (
-      <div className="max-w-2xl">
-        <StackedList items={items} bordered />
+      <div className="max-w-2xl flex flex-col gap-8">
+        <div>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">Photo avatars</p>
+          <StackedList items={PEOPLE} />
+        </div>
+        <div>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">Initials avatars</p>
+          <StackedList items={initialsItems} bordered />
+        </div>
       </div>
     );
   },
+};
+
+// ── Bordered card ─────────────────────────────────────────
+
+export const Bordered: Story = {
+  name: 'Bordered card',
+  args: { items: [] },
+  render: () => (
+    <div className="max-w-2xl">
+      <StackedList items={PEOPLE} bordered />
+    </div>
+  ),
 };
 
 // ── With badges ───────────────────────────────────────────
@@ -271,15 +268,38 @@ export const Clickable: Story = {
   name: 'Clickable rows',
   args: { items: [] },
   render: () => {
+    const [clicked, setClicked] = React.useState<string | number | null>(null);
     const items: StackedListItem[] = PEOPLE.map((p) => ({
       ...p,
-      onClick: () => alert(`Clicked: ${p.title}`),
+      onClick: () => setClicked(p.id),
     }));
     return (
-      <div className="max-w-2xl">
+      <div className="max-w-2xl flex flex-col gap-3">
         <StackedList items={items} bordered />
+        {clicked !== null && (
+          <p data-testid="clicked-row" className="text-xs font-body text-ink-500 dark:text-ink-300">
+            Clicked row: <strong>{clicked}</strong>
+          </p>
+        )}
       </div>
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('click first row → testid shows its title', async () => {
+      const rows = canvas.getAllByRole('button');
+      await user.click(rows[0]);
+      await waitFor(() => expect(canvas.getByTestId('clicked-row')).toBeInTheDocument());
+    });
+    await step('click second row → testid updates', async () => {
+      const rows = canvas.getAllByRole('button');
+      await user.click(rows[1]);
+      await waitFor(() => {
+        const text = canvas.getByTestId('clicked-row').textContent ?? '';
+        expect(text).not.toBe('');
+      });
+    });
   },
 };
 
@@ -432,14 +452,3 @@ export const Simple: Story = {
   },
 };
 
-// ── Undivided ─────────────────────────────────────────────
-
-export const Undivided: Story = {
-  name: 'Undivided',
-  args: { items: [] },
-  render: () => (
-    <div className="max-w-2xl">
-      <StackedList items={PEOPLE} divided={false} />
-    </div>
-  ),
-};

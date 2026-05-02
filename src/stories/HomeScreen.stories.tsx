@@ -444,8 +444,8 @@ function SidebarDemo({ dark }: { dark?: boolean }) {
   );
 }
 
-export const Sidebar: Story = {
-  name: 'Sidebar — deployments',
+export const Playground: Story = {
+  name: 'Sidebar layout',
   render: () => <SidebarDemo />,
 };
 

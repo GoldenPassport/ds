@@ -147,7 +147,7 @@ function SelectCustom<T extends string | number>({
           <p
             id={`${id}-error`}
             role="alert"
-            className="text-xs text-red-600 dark:text-red-400 font-body"
+            className="text-xs text-red-700 dark:text-red-400 font-body"
           >
             {error}
           </p>
@@ -238,7 +238,7 @@ function SelectNative<T extends string | number>({
         <p
           id={`${id}-error`}
           role="alert"
-          className="text-xs text-red-600 dark:text-red-400 font-body"
+          className="text-xs text-red-700 dark:text-red-400 font-body"
         >
           {error}
         </p>

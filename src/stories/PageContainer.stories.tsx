@@ -59,33 +59,62 @@ export const Playground: Story = {
   ),
 };
 
-// ── Width variants ────────────────────────────────────────
+// ── Layout (width variants + alignment) ───────────────────
 
-export const WidthVariants: Story = {
-  name: 'Width variants',
+export const Layout: Story = {
+  name: 'Layout',
   args: { children: null },
   render: () => (
-    <div className="flex flex-col gap-6 py-4">
-      {(['sm', 'md', 'lg', 'xl', '2xl', 'full'] as const).map((w) => (
-        <div key={w}>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">
-            maxWidth="{w}"
-          </p>
-          <PageContainer maxWidth={w}>
-            <div className="h-12 rounded-xl border-2 border-dashed border-primary-300 dark:border-primary-700 flex items-center justify-center">
-              <span className="text-xs font-body text-ink-500 dark:text-ink-300">{w}</span>
+    <div className="flex flex-col gap-10 py-4">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-4 px-2 font-semibold">
+          Width variants (maxWidth)
+        </p>
+        <div className="flex flex-col gap-4">
+          {(['sm', 'md', 'lg', 'xl', '2xl', 'full'] as const).map((w) => (
+            <div key={w}>
+              <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">
+                maxWidth="{w}"
+              </p>
+              <PageContainer maxWidth={w}>
+                <div className="h-12 rounded-xl border-2 border-dashed border-primary-300 dark:border-primary-700 flex items-center justify-center">
+                  <span className="text-xs font-body text-ink-500 dark:text-ink-300">{w}</span>
+                </div>
+              </PageContainer>
             </div>
-          </PageContainer>
+          ))}
         </div>
-      ))}
+      </div>
+
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-4 px-2 font-semibold">
+          Alignment (align)
+        </p>
+        <div className="flex flex-col gap-4">
+          {(['left', 'center', 'right'] as const).map((a) => (
+            <div key={a}>
+              <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">
+                align="{a}"
+              </p>
+              <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
+                <PageContainer maxWidth="sm" align={a}>
+                  <div className="h-12 rounded-xl border-2 border-dashed border-primary-300 dark:border-primary-700 flex items-center justify-center">
+                    <span className="text-xs font-body text-ink-500 dark:text-ink-300">{a}</span>
+                  </div>
+                </PageContainer>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   ),
 };
 
-// ── Padding variants ──────────────────────────────────────
+// ── Spacing (padding variants + mobile padding) ───────────
 
-export const PaddingVariants: Story = {
-  name: 'Padding variants',
+export const Spacing: Story = {
+  name: 'Spacing',
   args: { children: null },
   render: () => (
     <div className="flex flex-col gap-10">
@@ -128,58 +157,32 @@ export const PaddingVariants: Story = {
           ))}
         </div>
       </div>
-    </div>
-  ),
-};
 
-// ── Alignment ─────────────────────────────────────────────
-
-export const Alignment: Story = {
-  name: 'Alignment (left / center / right)',
-  args: { children: null },
-  render: () => (
-    <div className="flex flex-col gap-4">
-      {(['left', 'center', 'right'] as const).map((a) => (
-        <div key={a}>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">align="{a}"</p>
-          <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
-            <PageContainer maxWidth="sm" align={a}>
-              <div className="h-12 rounded-xl border-2 border-dashed border-primary-300 dark:border-primary-700 flex items-center justify-center">
-                <span className="text-xs font-body text-ink-500 dark:text-ink-300">{a}</span>
-              </div>
-            </PageContainer>
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-4 px-2 font-semibold">
+          Mobile padding toggle
+        </p>
+        <div className="flex flex-col gap-4">
+          <div>
+            <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">
+              mobilePadding=true (default)
+            </p>
+            <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
+              <PageContainer maxWidth="xl" mobilePadding={true}>
+                <Placeholder label="Has padding on all screen sizes" h="h-12" />
+              </PageContainer>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  ),
-};
-
-// ── Mobile padding ────────────────────────────────────────
-
-export const MobilePadding: Story = {
-  name: 'Mobile padding toggle',
-  args: { children: null },
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <div>
-        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">
-          mobilePadding=true (default)
-        </p>
-        <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
-          <PageContainer maxWidth="xl" mobilePadding={true}>
-            <Placeholder label="Has padding on all screen sizes" h="h-12" />
-          </PageContainer>
-        </div>
-      </div>
-      <div>
-        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">
-          mobilePadding=false
-        </p>
-        <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
-          <PageContainer maxWidth="xl" mobilePadding={false}>
-            <Placeholder label="No padding on mobile, padded on sm+" h="h-12" />
-          </PageContainer>
+          <div>
+            <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">
+              mobilePadding=false
+            </p>
+            <div className="bg-ink-100 dark:bg-ink-900 rounded-xl">
+              <PageContainer maxWidth="xl" mobilePadding={false}>
+                <Placeholder label="No padding on mobile, padded on sm+" h="h-12" />
+              </PageContainer>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -285,109 +288,97 @@ export const FullHeight: Story = {
   parameters: { layout: 'fullscreen' },
   args: { children: null },
   render: () => (
-    <PageContainer
-      maxWidth="xl"
-      paddingX="md"
-      paddingY="md"
-      fullHeight
-      className="bg-ink-50 dark:bg-ink-900"
-    >
-      <div className="flex flex-col gap-6 flex-1">
-        {/* Header row */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
-              Full-height container
-            </h1>
-            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
-              Height locked to the viewport — scroll here, the page never scrolls.
-            </p>
+    <div className="flex flex-col gap-16">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2 pt-2">
+          fullHeight — viewport-locked scroll
+        </p>
+        <PageContainer
+          maxWidth="xl"
+          paddingX="md"
+          paddingY="md"
+          fullHeight
+          className="bg-ink-50 dark:bg-ink-900"
+        >
+          <div className="flex flex-col gap-6 flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
+                  Full-height container
+                </h1>
+                <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
+                  Height locked to the viewport — scroll here, the page never scrolls.
+                </p>
+              </div>
+              <Button variant="primary" size="sm" className="self-start sm:self-auto">
+                <Plus className="w-3.5 h-3.5" />
+                New item
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Array.from({ length: 9 }).map((_, i) => (
+                <Card key={i}>
+                  <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
+                    Card {i + 1}
+                  </p>
+                  <p className="mt-1 text-xs font-body text-ink-500 dark:text-ink-300">
+                    Scroll to see all cards — content stays inside the container.
+                  </p>
+                </Card>
+              ))}
+            </div>
+            <Placeholder label="Remaining height (flex-1)" h="flex-1" />
           </div>
-          <Button variant="primary" size="sm" className="self-start sm:self-auto">
-            <Plus className="w-3.5 h-3.5" />
-            New item
-          </Button>
-        </div>
-
-        {/* Cards that overflow the viewport to prove scrolling works */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <Card key={i}>
-              <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
-                Card {i + 1}
-              </p>
-              <p className="mt-1 text-xs font-body text-ink-500 dark:text-ink-300">
-                Scroll to see all cards — content stays inside the container.
-              </p>
-            </Card>
-          ))}
-        </div>
-
-        {/* Filler stretches to fill remaining space when content is short */}
-        <Placeholder label="Remaining height (flex-1)" h="flex-1" />
+        </PageContainer>
       </div>
-    </PageContainer>
-  ),
-};
 
-// ── Full height — responsive ──────────────────────────────
-
-export const FullHeightResponsive: Story = {
-  name: 'Full height — responsive',
-  parameters: {
-    layout: 'fullscreen',
-    // Cycle through these viewports in Storybook's viewport toolbar
-    // to verify the container, padding, and gutter all adapt correctly.
-    viewport: { defaultViewport: 'mobile1' },
-  },
-  args: { children: null },
-  render: () => (
-    <PageContainer
-      maxWidth="xl"
-      paddingX="md"
-      paddingY="md"
-      fullHeight
-      className="bg-ink-50 dark:bg-ink-900"
-    >
-      <div className="flex flex-col gap-4 flex-1">
-        {/* Responsive header row — stacks on mobile, inline on sm+ */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
-              Responsive page
-            </h1>
-            <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
-              Padding, gutter, and layout all adapt across breakpoints.
-            </p>
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2 px-2">
+          fullHeight — responsive (resize to see breakpoints)
+        </p>
+        <PageContainer
+          maxWidth="xl"
+          paddingX="md"
+          paddingY="md"
+          fullHeight
+          className="bg-ink-50 dark:bg-ink-900"
+        >
+          <div className="flex flex-col gap-4 flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
+                  Responsive page
+                </h1>
+                <p className="mt-0.5 text-sm font-body text-ink-500 dark:text-ink-300">
+                  Padding, gutter, and layout all adapt across breakpoints.
+                </p>
+              </div>
+              <Button variant="primary" size="sm" className="self-start sm:self-auto">
+                <Plus className="w-3.5 h-3.5" />
+                New item
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                'px: none → md → lg',
+                'py: 24px → 32px',
+                'max-w: xl (80rem)',
+                'grid: 1 → 2 → 3 col',
+                'overscroll-contain',
+                'fixed inset-0',
+              ].map((label) => (
+                <Card key={label}>
+                  <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300">
+                    {label}
+                  </p>
+                </Card>
+              ))}
+            </div>
+            <Placeholder label="Remaining height (flex-1)" h="flex-1" />
           </div>
-          <Button variant="primary" size="sm" className="self-start sm:self-auto">
-            <Plus className="w-3.5 h-3.5" />
-            New item
-          </Button>
-        </div>
-
-        {/* Responsive grid — 1 col → 2 col → 3 col */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            'px: none → md → lg',
-            'py: 24px → 32px',
-            'max-w: xl (80rem)',
-            'grid: 1 → 2 → 3 col',
-            'overscroll-contain',
-            'fixed inset-0',
-          ].map((label) => (
-            <Card key={label}>
-              <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300">
-                {label}
-              </p>
-            </Card>
-          ))}
-        </div>
-
-        {/* Filler that stretches to fill remaining height */}
-        <Placeholder label="Remaining height (flex-1)" h="flex-1" />
+        </PageContainer>
       </div>
-    </PageContainer>
+    </div>
   ),
 };
 

@@ -35,7 +35,9 @@
     "check": "pnpm lint && pnpm format:check && pnpm typecheck",
     "clean": "rm -rf dist",
     "test-storybook": "vitest run",
+    "test-storybook:light": "vitest run",
     "test-storybook:dark": "vitest run --config vitest.config.dark.ts",
+    "test-storybook:all": "vitest run && vitest run --config vitest.config.dark.ts",
     "test-storybook:coverage": "vitest run --coverage"
   },
   "peerDependencies": {

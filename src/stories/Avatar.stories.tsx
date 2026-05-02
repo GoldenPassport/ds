@@ -18,18 +18,6 @@ export const Playground: Story = {
   args: { name: 'Alex Morgan', size: 40 },
 };
 
-export const Default: Story = {
-  args: { name: 'Alex Morgan', size: 40 },
-};
-
-export const Small: Story = {
-  args: { name: 'Sarah Kim', size: 28 },
-};
-
-export const Large: Story = {
-  args: { name: 'Tom Richards', size: 64 },
-};
-
 export const Sizes: Story = {
   args: { name: '' },
   render: () => (
@@ -42,6 +30,7 @@ export const Sizes: Story = {
 };
 
 export const MultipleUsers: Story = {
+  name: 'Multiple users',
   args: { name: '' },
   render: () => (
     <div className="flex -space-x-2">

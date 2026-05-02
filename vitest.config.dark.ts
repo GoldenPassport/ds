@@ -1,23 +1,35 @@
+// Dark-theme companion config.  Run alongside vitest.config.ts to cover a11y
+// violations that only appear in dark mode.  Not used by the Storybook GUI
+// (which auto-discovers vitest.config.ts only); run explicitly via the
+// test-storybook:dark or test-storybook:all package.json scripts.
+//
+// Vite's `define` replaces the literal expression
+//   import.meta.env.STORYBOOK_THEME
+// with "Dark" in every processed file — including .storybook/preview.tsx —
+// so the conditional spread there sets initialGlobals.theme = "Dark" for
+// every story without touching the light config or calling setProjectAnnotations.
+
 import path from 'node:path';
 
+import tailwindcss from '@tailwindcss/vite';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
-import TimingReporter from './vitest.reporter.timing';
 
-// Dark-theme variant — CLI only (pnpm test-storybook:dark).
-// Runs separately from vitest.config.ts to avoid the duplicate project-name
-// error that occurs when both configs share the same Storybook configDir.
+const configDir = path.join(import.meta.dirname, '.storybook');
+
+const hookTimeout = process.env.VITEST_STORYBOOK === 'true' ? 30_000 : 10_000;
+
 export default defineConfig({
-  plugins: [storybookTest({ configDir: path.join(import.meta.dirname, '.storybook') })],
+  plugins: [storybookTest({ configDir }), tailwindcss()],
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
+    include: ['react/jsx-dev-runtime'],
+  },
+  define: {
+    'import.meta.env.STORYBOOK_THEME': JSON.stringify('Dark'),
   },
   test: {
-    testTimeout: 30_000,
-    reporters: ['default', new TimingReporter()],
-    globalSetup: ['./vitest.globalSetup.ts'],
-    setupFiles: ['./vitest.setup.dark.ts'],
+    hookTimeout,
     browser: {
       enabled: true,
       headless: true,

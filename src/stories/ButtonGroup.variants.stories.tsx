@@ -1,6 +1,6 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, within, waitFor } from 'storybook/test';
 import {
   AlignLeft,
   AlignCenter,
@@ -76,6 +76,20 @@ export const ThemeToggle: Story = {
       />
     );
   },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('Light is initially selected', async () => {
+      expect(canvas.getByRole('radio', { name: /light/i })).toBeChecked();
+    });
+    await step('click Dark → Dark becomes selected, Light deselected', async () => {
+      await user.click(canvas.getByRole('radio', { name: /dark/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('radio', { name: /dark/i })).toBeChecked();
+        expect(canvas.getByRole('radio', { name: /light/i })).not.toBeChecked();
+      });
+    });
+  },
 };
 
 export const SingleSelectWithDisabled: Story = {
@@ -99,45 +113,56 @@ export const SingleSelectWithDisabled: Story = {
 
 // ── Multi-select (controlled) ─────────────────────────────
 
-export const MultiSelectText: Story = {
-  name: 'Multi-select — text',
+export const MultiSelect: Story = {
+  name: 'Multi-select',
   render: () => {
-    const [vals, setVals] = React.useState<string[]>(['finance', 'hr']);
+    const [textVals, setTextVals] = React.useState<string[]>(['finance', 'hr']);
+    const [fmtVals, setFmtVals] = React.useState<string[]>(['bold', 'italic']);
     return (
-      <ButtonGroup
-        label="Filter departments"
-        multiple
-        value={vals}
-        onChange={(v) => setVals(v as string[])}
-        hint="Select one or more departments."
-        items={[
-          { value: 'finance', label: 'Finance' },
-          { value: 'hr', label: 'HR' },
-          { value: 'support', label: 'Support' },
-          { value: 'analytics', label: 'Analytics' },
-        ]}
-      />
+      <div className="flex flex-col gap-6">
+        <ButtonGroup
+          label="Filter departments"
+          multiple
+          value={textVals}
+          onChange={(v) => setTextVals(v as string[])}
+          hint="Select one or more departments."
+          items={[
+            { value: 'finance', label: 'Finance' },
+            { value: 'hr', label: 'HR' },
+            { value: 'support', label: 'Support' },
+            { value: 'analytics', label: 'Analytics' },
+          ]}
+        />
+        <ButtonGroup
+          label="Text formatting"
+          multiple
+          value={fmtVals}
+          onChange={(v) => setFmtVals(v as string[])}
+          items={[
+            { value: 'bold', label: 'Bold', icon: <Bold className="w-4 h-4" /> },
+            { value: 'italic', label: 'Italic', icon: <Italic className="w-4 h-4" /> },
+            { value: 'underline', label: 'Underline', icon: <Underline className="w-4 h-4" /> },
+          ]}
+        />
+      </div>
     );
   },
-};
-
-export const MultiSelectIcons: Story = {
-  name: 'Multi-select — icons + text',
-  render: () => {
-    const [vals, setVals] = React.useState<string[]>(['bold', 'italic']);
-    return (
-      <ButtonGroup
-        label="Text formatting"
-        multiple
-        value={vals}
-        onChange={(v) => setVals(v as string[])}
-        items={[
-          { value: 'bold', label: 'Bold', icon: <Bold className="w-4 h-4" /> },
-          { value: 'italic', label: 'Italic', icon: <Italic className="w-4 h-4" /> },
-          { value: 'underline', label: 'Underline', icon: <Underline className="w-4 h-4" /> },
-        ]}
-      />
-    );
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('Finance and HR are initially checked; Support is not', async () => {
+      expect(canvas.getByRole('checkbox', { name: /^finance$/i })).toBeChecked();
+      expect(canvas.getByRole('checkbox', { name: /^hr$/i })).toBeChecked();
+      expect(canvas.getByRole('checkbox', { name: /^support$/i })).not.toBeChecked();
+    });
+    await step('click Support → Support is added to selection', async () => {
+      await user.click(canvas.getByRole('checkbox', { name: /^support$/i }));
+      await waitFor(() => expect(canvas.getByRole('checkbox', { name: /^support$/i })).toBeChecked());
+    });
+    await step('click Finance → Finance is removed from selection', async () => {
+      await user.click(canvas.getByRole('checkbox', { name: /^finance$/i }));
+      await waitFor(() => expect(canvas.getByRole('checkbox', { name: /^finance$/i })).not.toBeChecked());
+    });
   },
 };
 
@@ -164,6 +189,7 @@ export const GhostVariant: Story = {
 // ── Sizes ─────────────────────────────────────────────────
 
 export const AllSizes: Story = {
+  name: 'All sizes',
   render: () => (
     <div className="flex flex-col gap-4 items-start">
       {(['sm', 'md', 'lg'] as const).map((size) => (
@@ -183,45 +209,39 @@ export const AllSizes: Story = {
 
 // ── fullWidth ─────────────────────────────────────────────
 
-export const FullWidthAlways: Story = {
-  name: 'fullWidth — always',
+export const FullWidth: Story = {
+  name: 'Full width',
   render: () => {
-    const [val, setVal] = React.useState('active');
+    const [alwaysVal, setAlwaysVal] = React.useState('active');
+    const [mobileVal, setMobileVal] = React.useState('all');
     return (
-      <ButtonGroup
-        label="Filter by status"
-        fullWidth="always"
-        value={val}
-        onChange={(v) => setVal(v as string)}
-        hint="Fills the container with equal-width options."
-        items={[
-          { value: 'all', label: 'All' },
-          { value: 'active', label: 'Active' },
-          { value: 'draft', label: 'Draft' },
-          { value: 'failed', label: 'Failed' },
-        ]}
-      />
-    );
-  },
-};
-
-export const FullWidthMobile: Story = {
-  name: 'fullWidth — mobile',
-  render: () => {
-    const [val, setVal] = React.useState('all');
-    return (
-      <ButtonGroup
-        label="Filter by status"
-        fullWidth="mobile"
-        value={val}
-        onChange={(v) => setVal(v as string)}
-        hint="Full width on small screens, shrink-wrapped on sm+."
-        items={[
-          { value: 'all', label: 'All' },
-          { value: 'active', label: 'Active' },
-          { value: 'draft', label: 'Draft' },
-        ]}
-      />
+      <div className="flex flex-col gap-6 max-w-sm">
+        <ButtonGroup
+          label="Always full width"
+          fullWidth="always"
+          value={alwaysVal}
+          onChange={(v) => setAlwaysVal(v as string)}
+          hint="Fills the container with equal-width options."
+          items={[
+            { value: 'all', label: 'All' },
+            { value: 'active', label: 'Active' },
+            { value: 'draft', label: 'Draft' },
+            { value: 'failed', label: 'Failed' },
+          ]}
+        />
+        <ButtonGroup
+          label="Mobile full width"
+          fullWidth="mobile"
+          value={mobileVal}
+          onChange={(v) => setMobileVal(v as string)}
+          hint="Full width on small screens, shrink-wrapped on sm+."
+          items={[
+            { value: 'all', label: 'All' },
+            { value: 'active', label: 'Active' },
+            { value: 'draft', label: 'Draft' },
+          ]}
+        />
+      </div>
     );
   },
 };
@@ -263,95 +283,5 @@ export const ToolbarComposition: Story = {
         />
       </div>
     );
-  },
-};
-
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions — single select',
-  render: () => {
-    const [active, setActive] = React.useState('months');
-    return (
-      <div className="flex flex-col gap-4 p-4">
-        <ButtonGroup
-          items={['Years', 'Months', 'Days'].map((p) => ({
-            label: p,
-            active: active === p.toLowerCase(),
-            onClick: () => setActive(p.toLowerCase()),
-          }))}
-        />
-        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="active-period">
-          Active: {active}
-        </p>
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('initial state — Months is active', async () => {
-      expect(canvas.getByTestId('active-period')).toHaveTextContent('months');
-    });
-
-    await step('click Years — becomes active', async () => {
-      await user.click(canvas.getByRole('button', { name: /years/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('active-period')).toHaveTextContent('years');
-      });
-    });
-
-    await step('click Days — becomes active', async () => {
-      await user.click(canvas.getByRole('button', { name: /days/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('active-period')).toHaveTextContent('days');
-      });
-    });
-  },
-};
-
-export const MultiSelectInteractions: Story = {
-  name: 'Interactions — multi select',
-  render: () => {
-    const [selected, setSelected] = React.useState<string[]>(['bold']);
-    return (
-      <div className="flex flex-col gap-4 p-4">
-        <ButtonGroup
-          multiple
-          value={selected}
-          onChange={(v) => setSelected(v as string[])}
-          items={[
-            { label: 'Bold', value: 'bold', icon: <Bold className="w-4 h-4" /> },
-            { label: 'Italic', value: 'italic', icon: <Italic className="w-4 h-4" /> },
-            { label: 'Underline', value: 'underline', icon: <Underline className="w-4 h-4" /> },
-          ]}
-        />
-        <p
-          className="text-xs font-body text-ink-500 dark:text-ink-300"
-          data-testid="selected-formats"
-        >
-          Formats: {selected.join(', ') || 'none'}
-        </p>
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('click Italic — adds to selection', async () => {
-      await user.click(canvas.getByRole('checkbox', { name: /italic/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('selected-formats')).toHaveTextContent('italic');
-      });
-    });
-
-    await step('click Bold again — removes it from selection', async () => {
-      await user.click(canvas.getByRole('checkbox', { name: /bold/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('selected-formats')).not.toHaveTextContent('bold');
-      });
-    });
   },
 };

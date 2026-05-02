@@ -1,3 +1,5 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Plus, FolderOpen, Users, FileText, Search, Inbox, GitBranch } from 'lucide-react';
 import { EmptyState } from '../components/EmptyState';
@@ -34,6 +36,37 @@ export const Playground: Story = {
     },
     secondaryAction: { label: 'Learn more', onClick: () => {} },
     bordered: false,
+  },
+  render: () => {
+    const [clicked, setClicked] = React.useState<string | null>(null);
+    return (
+      <div className="flex flex-col items-start gap-3">
+        <EmptyState
+          icon={<FolderOpen className="w-12 h-12" />}
+          title="No projects"
+          description="Get started by creating your first project."
+          primaryAction={{
+            label: 'New project',
+            onClick: () => setClicked('primary'),
+            icon: <Plus className="w-3.5 h-3.5" />,
+          }}
+          secondaryAction={{ label: 'Learn more', onClick: () => setClicked('secondary') }}
+        />
+        {clicked && <span data-testid="clicked" className="text-xs font-body text-ink-500 dark:text-ink-300">{clicked}</span>}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('click primary action → callback fires', async () => {
+      await user.click(canvas.getByRole('button', { name: /new project/i }));
+      await waitFor(() => expect(canvas.getByTestId('clicked')).toHaveTextContent('primary'));
+    });
+    await step('click secondary action → callback fires', async () => {
+      await user.click(canvas.getByRole('button', { name: /learn more/i }));
+      await waitFor(() => expect(canvas.getByTestId('clicked')).toHaveTextContent('secondary'));
+    });
   },
 };
 

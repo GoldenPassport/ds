@@ -82,78 +82,46 @@ export const Playground: Story = {
   ),
 };
 
-// ── Basic ─────────────────────────────────────────────────
+// ── Alignments (center / bottom / right) ─────────────────
 
-export const Basic: Story = {
-  name: 'Basic',
+export const Alignments: Story = {
+  name: 'Alignments',
   args: { media: null, children: null },
   render: () => (
-    <div className="max-w-lg">
-      <MediaObject media={<PlaceholderImg />}>
-        <Body title="Michael Foster" sub="Product Manager">
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
-            Use this pattern whenever you need to display a media element alongside a block of text
-            content.
-          </p>
-        </Body>
-      </MediaObject>
-    </div>
-  ),
-};
-
-// ── Aligned to center ─────────────────────────────────────
-
-export const AlignedCenter: Story = {
-  name: 'Aligned to center',
-  args: { media: null, children: null },
-  render: () => (
-    <div className="max-w-lg">
-      <MediaObject align="center" media={<PlaceholderImg />}>
-        <Body title="Lindsay Walton" sub="Front-end Developer">
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
-            The media element is vertically centered against the content block, which works well for
-            short labels or meta text.
-          </p>
-        </Body>
-      </MediaObject>
-    </div>
-  ),
-};
-
-// ── Aligned to bottom ─────────────────────────────────────
-
-export const AlignedBottom: Story = {
-  name: 'Aligned to bottom',
-  args: { media: null, children: null },
-  render: () => (
-    <div className="max-w-lg">
-      <MediaObject align="bottom" media={<PlaceholderImg />}>
-        <Body title="Courtney Henry" sub="Designer">
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
-            Aligning to the bottom anchors the media element to the baseline of the content block —
-            useful for signature-style layouts.
-          </p>
-        </Body>
-      </MediaObject>
-    </div>
-  ),
-};
-
-// ── Media on right ────────────────────────────────────────
-
-export const MediaRight: Story = {
-  name: 'Media on right',
-  args: { media: null, children: null },
-  render: () => (
-    <div className="max-w-lg">
-      <MediaObject side="right" align="center" media={<PlaceholderImg />}>
-        <Body title="Tom Cook" sub="Director of Product">
-          <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
-            Flip the media to the right side for alternative layouts like right-aligned avatars or
-            decorative imagery.
-          </p>
-        </Body>
-      </MediaObject>
+    <div className="max-w-lg flex flex-col gap-8">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">align=center</p>
+        <MediaObject align="center" media={<PlaceholderImg />}>
+          <Body title="Lindsay Walton" sub="Front-end Developer">
+            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
+              The media element is vertically centered against the content block, which works well
+              for short labels or meta text.
+            </p>
+          </Body>
+        </MediaObject>
+      </div>
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">align=bottom</p>
+        <MediaObject align="bottom" media={<PlaceholderImg />}>
+          <Body title="Courtney Henry" sub="Designer">
+            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
+              Aligning to the bottom anchors the media element to the baseline of the content block
+              — useful for signature-style layouts.
+            </p>
+          </Body>
+        </MediaObject>
+      </div>
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">side=right</p>
+        <MediaObject side="right" align="center" media={<PlaceholderImg />}>
+          <Body title="Tom Cook" sub="Director of Product">
+            <p className="mt-1 text-sm font-body text-ink-500 dark:text-ink-300">
+              Flip the media to the right side for alternative layouts like right-aligned avatars or
+              decorative imagery.
+            </p>
+          </Body>
+        </MediaObject>
+      </div>
     </div>
   ),
 };
@@ -288,7 +256,7 @@ export const CommentFeed: Story = {
                   <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
                     {c.author}
                   </p>
-                  <p className="text-xs font-body text-ink-400 dark:text-ink-300 shrink-0">
+                  <p className="text-xs font-body text-ink-500 dark:text-ink-300 shrink-0">
                     {c.time}
                   </p>
                 </div>
@@ -296,14 +264,14 @@ export const CommentFeed: Story = {
                 <div className="mt-2 flex gap-4">
                   <button
                     type="button"
-                    className="flex items-center gap-1.5 text-xs font-body text-ink-400 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-200 transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-body text-ink-500 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-200 transition-colors"
                   >
                     <ThumbsUp className="w-3.5 h-3.5" />
                     Like
                   </button>
                   <button
                     type="button"
-                    className="flex items-center gap-1.5 text-xs font-body text-ink-400 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-200 transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-body text-ink-500 hover:text-ink-600 dark:text-ink-300 dark:hover:text-ink-200 transition-colors"
                   >
                     <Reply className="w-3.5 h-3.5" />
                     Reply
@@ -376,7 +344,7 @@ export const ActivityFeed: Story = {
                   {item.text}{' '}
                   <span className="font-medium text-ink-900 dark:text-ink-50">{item.target}</span>
                 </p>
-                <p className="text-xs font-body text-ink-400 dark:text-ink-300 shrink-0">
+                <p className="text-xs font-body text-ink-500 dark:text-ink-300 shrink-0">
                   {item.time}
                 </p>
               </div>
@@ -397,7 +365,7 @@ export const AllAlignments: Story = {
     <div className="max-w-xl flex flex-col gap-6">
       {(['top', 'center', 'bottom'] as const).map((align) => (
         <div key={align} className="flex flex-col gap-1">
-          <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-1">align="{align}"</p>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-1">align="{align}"</p>
           <MediaObject
             align={align}
             media={<PlaceholderImg size={56} rounded="rounded-xl" />}

@@ -39,7 +39,7 @@ export const Playground: Story = {
       setPageSize(args.pageSize);
     }, [args.pageSize]);
     return (
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-2xl flex flex-col gap-3">
         <Pagination
           {...args}
           page={page}
@@ -49,8 +49,48 @@ export const Playground: Story = {
             setPageSize(ps);
           }}
         />
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="page-info">
+          Page {page}, size {pageSize}
+        </p>
       </div>
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('initial state — page 1 is active', async () => {
+      expect(canvas.getByRole('button', { name: /^page 1$/i })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    });
+    await step('click next — advances to page 2', async () => {
+      await user.click(canvas.getByRole('button', { name: /next/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 2');
+      });
+    });
+    await step('click page 3 directly', async () => {
+      await user.click(canvas.getByRole('button', { name: /^page 3$/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 3');
+      });
+    });
+    await step('click previous — goes to page 2', async () => {
+      await user.click(canvas.getByRole('button', { name: /previous/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 2');
+      });
+    });
+    await step('change page size — resets to page 1', async () => {
+      const select = canvas.getByRole('combobox');
+      const options = Array.from(select.querySelectorAll('option')).map((o) => o.value);
+      const nextOption = options.find((o) => o !== '10') ?? options[0];
+      await user.selectOptions(select, nextOption);
+      await waitFor(() => {
+        expect(canvas.getByTestId('page-info')).toHaveTextContent(`size ${nextOption}`);
+      });
+    });
   },
 };
 
@@ -96,43 +136,40 @@ export const ManyPages: Story = {
   },
 };
 
-export const NearStart: Story = {
+export const PageWindow: Story = {
+  name: 'Page window — near start and near end',
   args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
   render: () => {
-    const [page, setPage] = React.useState(2);
-    const [pageSize, setPageSize] = React.useState(10);
+    const [pageA, setPageA] = React.useState(2);
+    const [pageSizeA, setPageSizeA] = React.useState(10);
+    const [pageB, setPageB] = React.useState(29);
+    const [pageSizeB, setPageSizeB] = React.useState(10);
     return (
-      <div className="w-full max-w-2xl">
-        <Pagination
-          page={page}
-          pageSize={pageSize}
-          total={300}
-          onChange={(p, ps) => {
-            setPage(p);
-            setPageSize(ps);
-          }}
-        />
-      </div>
-    );
-  },
-};
-
-export const NearEnd: Story = {
-  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
-  render: () => {
-    const [page, setPage] = React.useState(29);
-    const [pageSize, setPageSize] = React.useState(10);
-    return (
-      <div className="w-full max-w-2xl">
-        <Pagination
-          page={page}
-          pageSize={pageSize}
-          total={300}
-          onChange={(p, ps) => {
-            setPage(p);
-            setPageSize(ps);
-          }}
-        />
+      <div className="w-full max-w-2xl flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">Near start (page 2 of 30)</p>
+          <Pagination
+            page={pageA}
+            pageSize={pageSizeA}
+            total={300}
+            onChange={(p, ps) => {
+              setPageA(p);
+              setPageSizeA(ps);
+            }}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">Near end (page 29 of 30)</p>
+          <Pagination
+            page={pageB}
+            pageSize={pageSizeB}
+            total={300}
+            onChange={(p, ps) => {
+              setPageB(p);
+              setPageSizeB(ps);
+            }}
+          />
+        </div>
       </div>
     );
   },
@@ -187,72 +224,3 @@ export const SinglePage: Story = {
   ),
 };
 
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions',
-  args: { page: 1, pageSize: 10, total: 0, onChange: () => {} },
-  render: () => {
-    const [page, setPage] = React.useState(1);
-    const [pageSize, setPageSize] = React.useState(10);
-    return (
-      <div className="w-full max-w-2xl flex flex-col gap-3">
-        <Pagination
-          page={page}
-          pageSize={pageSize}
-          total={150}
-          pageSizeOptions={[10, 25, 50]}
-          showSummary
-          onChange={(p, ps) => {
-            setPage(p);
-            setPageSize(ps);
-          }}
-        />
-        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="page-info">
-          Page {page}, size {pageSize}
-        </p>
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('initial state — page 1 is active', async () => {
-      expect(canvas.getByRole('button', { name: /^page 1$/i })).toHaveAttribute(
-        'aria-current',
-        'page',
-      );
-    });
-
-    await step('click next — advances to page 2', async () => {
-      await user.click(canvas.getByRole('button', { name: /next/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 2');
-      });
-    });
-
-    await step('click page 3 directly', async () => {
-      // On page 2 the window shows: 1, 2*, 3, …, 15 — click visible Page 3
-      await user.click(canvas.getByRole('button', { name: /^page 3$/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 3');
-      });
-    });
-
-    await step('click previous — goes to page 2', async () => {
-      await user.click(canvas.getByRole('button', { name: /previous/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('page-info')).toHaveTextContent('Page 2');
-      });
-    });
-
-    await step('change page size to 25 — resets to page 1', async () => {
-      const select = canvas.getByRole('combobox');
-      await user.selectOptions(select, '25');
-      await waitFor(() => {
-        expect(canvas.getByTestId('page-info')).toHaveTextContent('size 25');
-      });
-    });
-  },
-};

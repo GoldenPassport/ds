@@ -1,5 +1,5 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
-import gpLogo from '../../assets/gp-logo.png';
 import {
   LayoutDashboard,
   Users,
@@ -169,7 +169,7 @@ export const Simple: Story = {
   name: 'Simple',
   args: { groups: [] },
   render: () => (
-    <div className="bg-white rounded-2xl p-4 w-56">
+    <div className="bg-white dark:bg-ink-800 rounded-2xl p-4 w-56">
       <VerticalNav groups={[{ items: SIMPLE_ITEMS }]} />
     </div>
   ),
@@ -181,7 +181,7 @@ export const WithBadges: Story = {
   name: 'With badges',
   args: { groups: [] },
   render: () => (
-    <div className="bg-white rounded-2xl p-4 w-56">
+    <div className="bg-white dark:bg-ink-800 rounded-2xl p-4 w-56">
       <VerticalNav groups={[{ items: BADGE_ITEMS }]} />
     </div>
   ),
@@ -221,6 +221,26 @@ export const WithSecondaryNav: Story = {
       <VerticalNav groups={SECONDARY_GROUPS} />
     </div>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('"Team" group is collapsed initially', async () => {
+      expect(canvas.getByRole('button', { name: /^team$/i })).toHaveAttribute('aria-expanded', 'false');
+    });
+    await step('click Team → group expands, child items appear', async () => {
+      await user.click(canvas.getByRole('button', { name: /^team$/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /^team$/i })).toHaveAttribute('aria-expanded', 'true');
+        expect(canvas.getByRole('link', { name: /^members$/i })).toBeVisible();
+      });
+    });
+    await step('click Team again → group collapses', async () => {
+      await user.click(canvas.getByRole('button', { name: /^team$/i }));
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /^team$/i })).toHaveAttribute('aria-expanded', 'false'),
+      );
+    });
+  },
 };
 
 // ── With groups ───────────────────────────────────────────
@@ -231,207 +251,6 @@ export const WithGroups: Story = {
   render: () => (
     <div className="bg-white dark:bg-ink-900 rounded-2xl p-4 w-64">
       <VerticalNav groups={GROUPED_GROUPS} />
-    </div>
-  ),
-};
-
-// ── In context — app sidebar ──────────────────────────────
-
-export const InContext: Story = {
-  name: 'In context — app sidebar',
-  args: { groups: [] },
-  render: () => (
-    <div className="min-h-screen flex bg-ink-50 dark:bg-ink-900">
-      {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-ink-200 dark:border-ink-700 bg-ink-50 dark:bg-ink-800">
-        {/* Logo */}
-        <div className="flex items-center h-16 px-6 border-b border-ink-200 dark:border-ink-700 shrink-0">
-          <div className="flex items-center gap-2">
-            <img src={gpLogo} alt="Golden Passport" className="h-6 w-auto" />
-            <span className="text-[15px] font-extrabold font-display text-ink-900 dark:text-ink-50 tracking-tight leading-none">
-              Golden Passport
-            </span>
-          </div>
-        </div>
-        {/* Nav */}
-        <div className="flex-1 overflow-y-auto py-5 px-3">
-          <VerticalNav groups={GROUPED_GROUPS} />
-        </div>
-      </aside>
-
-      {/* Main */}
-      <main className="flex-1 p-8 bg-white dark:bg-ink-900">
-        <p className="text-sm font-body text-ink-400 dark:text-ink-300">Page content goes here</p>
-      </main>
-    </div>
-  ),
-};
-
-// ── All variants ──────────────────────────────────────────
-
-export const AllVariants: Story = {
-  name: 'All variants',
-  args: { groups: [] },
-  render: () => (
-    <div className="flex gap-12 flex-wrap items-start">
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Simple</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52">
-          <VerticalNav groups={[{ items: SIMPLE_ITEMS }]} aria-label="Simple navigation" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">With badges</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52">
-          <VerticalNav groups={[{ items: BADGE_ITEMS }]} aria-label="Navigation with badges" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">With icons</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64">
-          <VerticalNav groups={[{ items: ICON_ITEMS }]} aria-label="Navigation with icons" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Icons + badges</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64">
-          <VerticalNav
-            groups={[{ items: ICON_BADGE_ITEMS }]}
-            aria-label="Navigation with icons and badges"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Secondary nav</p>
-        <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-64">
-          <VerticalNav groups={SECONDARY_GROUPS} aria-label="Secondary navigation" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">On gray</p>
-        <div className="bg-ink-50 dark:bg-ink-900 rounded-2xl p-4 w-64">
-          <VerticalNav groups={[{ items: ICON_BADGE_ITEMS }]} aria-label="Navigation on gray" />
-        </div>
-      </div>
-    </div>
-  ),
-};
-
-// ── Sizes ─────────────────────────────────────────────────
-
-export const Sizes: Story = {
-  name: 'Sizes',
-  args: { groups: [] },
-  render: () => (
-    <div className="flex gap-8 flex-wrap items-start">
-      {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size} className="flex flex-col gap-2">
-          <p className="text-xs font-body text-ink-400 dark:text-ink-300 capitalize">{size}</p>
-          <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-56">
-            <VerticalNav
-              size={size}
-              groups={[{ items: ICON_ITEMS }]}
-              aria-label={`${size} navigation`}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  ),
-};
-
-// ── Spacing ───────────────────────────────────────────────
-
-export const Spacing: Story = {
-  name: 'Spacing',
-  args: { groups: [] },
-  render: () => (
-    <div className="flex gap-8 flex-wrap items-start">
-      {(['none', 'xs', 'sm', 'md'] as const).map((spacing) => (
-        <div key={spacing} className="flex flex-col gap-2">
-          <p className="text-xs font-body text-ink-400 dark:text-ink-300">{spacing}</p>
-          <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52">
-            <VerticalNav
-              spacing={spacing}
-              groups={[{ items: ICON_ITEMS }]}
-              aria-label={`${spacing} spacing navigation`}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  ),
-};
-
-// ── Radius ────────────────────────────────────────────────
-
-export const Radius: Story = {
-  name: 'Radius',
-  args: { groups: [] },
-  render: () => (
-    <div className="flex gap-8 flex-wrap items-start">
-      {(['none', 'sm', 'md', 'lg', 'full'] as const).map((radius) => (
-        <div key={radius} className="flex flex-col gap-2">
-          <p className="text-xs font-body text-ink-400 dark:text-ink-300">{radius}</p>
-          <div className="bg-white dark:bg-ink-900 rounded-2xl p-3 w-52">
-            <VerticalNav
-              radius={radius}
-              groups={[{ items: ICON_ITEMS }]}
-              aria-label={`${radius} radius navigation`}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  ),
-};
-
-// ── Elevation & border ────────────────────────────────────
-
-export const ElevationAndBorder: Story = {
-  name: 'Elevation & border',
-  args: { groups: [] },
-  render: () => (
-    <div className="flex gap-8 flex-wrap items-start">
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Bordered</p>
-        <div className="bg-white dark:bg-ink-900 p-4 w-60">
-          <VerticalNav bordered groups={[{ items: ICON_ITEMS }]} aria-label="Bordered navigation" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Bordered + shadow sm</p>
-        <div className="bg-ink-50 dark:bg-ink-900 p-4 w-60">
-          <VerticalNav
-            bordered
-            shadow="sm"
-            groups={[{ items: ICON_ITEMS }]}
-            aria-label="Shadow sm navigation"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Bordered + shadow md</p>
-        <div className="bg-ink-50 dark:bg-ink-900 p-4 w-60">
-          <VerticalNav
-            bordered
-            shadow="md"
-            groups={[{ items: ICON_ITEMS }]}
-            aria-label="Shadow md navigation"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">Bordered + shadow lg</p>
-        <div className="bg-ink-50 dark:bg-ink-900 p-4 w-60">
-          <VerticalNav
-            bordered
-            shadow="lg"
-            groups={[{ items: ICON_ITEMS }]}
-            aria-label="Shadow lg navigation"
-          />
-        </div>
-      </div>
     </div>
   ),
 };

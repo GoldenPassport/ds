@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
@@ -81,23 +82,6 @@ export const Playground: Story = {
 
 // ── Action groups (uncontrolled / onClick) ────────────────
 
-export const TextOnly: Story = {
-  name: 'Action — text buttons',
-  render: () => {
-    const [active, setActive] = React.useState('months');
-    const periods = ['Years', 'Months', 'Days'] as const;
-    return (
-      <ButtonGroup
-        items={periods.map((p) => ({
-          label: p,
-          active: active === p.toLowerCase(),
-          onClick: () => setActive(p.toLowerCase()),
-        }))}
-      />
-    );
-  },
-};
-
 export const ViewToggle: Story = {
   name: 'Action — view toggle',
   render: () => {
@@ -121,10 +105,64 @@ export const ViewToggle: Story = {
       />
     );
   },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('List is initially active', async () => {
+      expect(canvas.getByRole('button', { name: /list/i })).toHaveAttribute('aria-pressed', 'true');
+      expect(canvas.getByRole('button', { name: /grid/i })).toHaveAttribute('aria-pressed', 'false');
+    });
+    await step('click Grid → Grid becomes active, List inactive', async () => {
+      await user.click(canvas.getByRole('button', { name: /grid/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /grid/i })).toHaveAttribute('aria-pressed', 'true');
+        expect(canvas.getByRole('button', { name: /list/i })).toHaveAttribute('aria-pressed', 'false');
+      });
+    });
+  },
 };
 
-export const IconOnlyFormatting: Story = {
-  name: 'Action — icon only (multi-toggle)',
+export const ActionIconOnly: Story = {
+  name: 'Action — icon only',
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Pagination</p>
+        <ButtonGroup
+          showLabel={false}
+          items={[
+            {
+              label: 'Previous',
+              ariaLabel: 'Previous page',
+              icon: <ChevronLeft className="w-4 h-4" />,
+              onClick: () => {},
+            },
+            {
+              label: 'Next',
+              ariaLabel: 'Next page',
+              icon: <ChevronRight className="w-4 h-4" />,
+              onClick: () => {},
+            },
+          ]}
+        />
+      </div>
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Zoom toolbar</p>
+        <ButtonGroup
+          showLabel={false}
+          items={[
+            { label: 'Zoom in', icon: <ZoomIn className="w-4 h-4" />, onClick: () => {} },
+            { label: 'Zoom out', icon: <ZoomOut className="w-4 h-4" />, onClick: () => {} },
+            { label: 'Reset', icon: <RotateCcw className="w-4 h-4" />, onClick: () => {} },
+          ]}
+        />
+      </div>
+    </div>
+  ),
+};
+
+export const MultiToggle: Story = {
+  name: 'Action — multi-toggle (icon only)',
   render: () => {
     const [fmt, setFmt] = React.useState<string[]>(['bold']);
     const toggle = (v: string) =>
@@ -155,43 +193,29 @@ export const IconOnlyFormatting: Story = {
       />
     );
   },
-};
-
-export const PaginationButtons: Story = {
-  name: 'Action — icon only (pagination)',
-  render: () => (
-    <ButtonGroup
-      showLabel={false}
-      items={[
-        {
-          label: 'Previous',
-          ariaLabel: 'Previous page',
-          icon: <ChevronLeft className="w-4 h-4" />,
-          onClick: () => {},
-        },
-        {
-          label: 'Next',
-          ariaLabel: 'Next page',
-          icon: <ChevronRight className="w-4 h-4" />,
-          onClick: () => {},
-        },
-      ]}
-    />
-  ),
-};
-
-export const ZoomControls: Story = {
-  name: 'Action — icon only (zoom toolbar)',
-  render: () => (
-    <ButtonGroup
-      showLabel={false}
-      items={[
-        { label: 'Zoom in', icon: <ZoomIn className="w-4 h-4" />, onClick: () => {} },
-        { label: 'Zoom out', icon: <ZoomOut className="w-4 h-4" />, onClick: () => {} },
-        { label: 'Reset', icon: <RotateCcw className="w-4 h-4" />, onClick: () => {} },
-      ]}
-    />
-  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('Bold is initially active; Italic and Underline are not', async () => {
+      expect(canvas.getByRole('button', { name: /bold/i })).toHaveAttribute('aria-pressed', 'true');
+      expect(canvas.getByRole('button', { name: /italic/i })).toHaveAttribute('aria-pressed', 'false');
+      expect(canvas.getByRole('button', { name: /underline/i })).toHaveAttribute('aria-pressed', 'false');
+    });
+    await step('click Italic → Italic becomes active, Bold stays active', async () => {
+      await user.click(canvas.getByRole('button', { name: /italic/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /italic/i })).toHaveAttribute('aria-pressed', 'true');
+        expect(canvas.getByRole('button', { name: /bold/i })).toHaveAttribute('aria-pressed', 'true');
+      });
+    });
+    await step('click Bold → Bold deactivates, Italic stays active', async () => {
+      await user.click(canvas.getByRole('button', { name: /bold/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('button', { name: /bold/i })).toHaveAttribute('aria-pressed', 'false');
+        expect(canvas.getByRole('button', { name: /italic/i })).toHaveAttribute('aria-pressed', 'true');
+      });
+    });
+  },
 };
 
 export const WithDisabled: Story = {
@@ -232,24 +256,19 @@ export const SingleSelectText: Story = {
       />
     );
   },
-};
-
-export const SingleSelectIcons: Story = {
-  name: 'Single-select — icons + text',
-  render: () => {
-    const [val, setVal] = React.useState('desktop');
-    return (
-      <ButtonGroup
-        label="Viewport"
-        value={val}
-        onChange={(v) => setVal(v as string)}
-        items={[
-          { value: 'mobile', label: 'Mobile', icon: <Smartphone className="w-4 h-4" /> },
-          { value: 'tablet', label: 'Tablet', icon: <Tablet className="w-4 h-4" /> },
-          { value: 'desktop', label: 'Desktop', icon: <Monitor className="w-4 h-4" /> },
-        ]}
-      />
-    );
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('Active is initially selected', async () => {
+      expect(canvas.getByRole('radio', { name: /^active$/i })).toBeChecked();
+    });
+    await step('click Draft → Draft is selected, Active is deselected', async () => {
+      await user.click(canvas.getByRole('radio', { name: /^draft$/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('radio', { name: /^draft$/i })).toBeChecked();
+        expect(canvas.getByRole('radio', { name: /^active$/i })).not.toBeChecked();
+      });
+    });
   },
 };
 
@@ -267,6 +286,25 @@ export const SingleSelectIconOnly: Story = {
           { value: 'left', label: 'Left', icon: <AlignLeft className="w-4 h-4" /> },
           { value: 'center', label: 'Center', icon: <AlignCenter className="w-4 h-4" /> },
           { value: 'right', label: 'Right', icon: <AlignRight className="w-4 h-4" /> },
+        ]}
+      />
+    );
+  },
+};
+
+export const SingleSelectIcons: Story = {
+  name: 'Single-select — icons + text',
+  render: () => {
+    const [val, setVal] = React.useState('desktop');
+    return (
+      <ButtonGroup
+        label="Viewport"
+        value={val}
+        onChange={(v) => setVal(v as string)}
+        items={[
+          { value: 'mobile', label: 'Mobile', icon: <Smartphone className="w-4 h-4" /> },
+          { value: 'tablet', label: 'Tablet', icon: <Tablet className="w-4 h-4" /> },
+          { value: 'desktop', label: 'Desktop', icon: <Monitor className="w-4 h-4" /> },
         ]}
       />
     );

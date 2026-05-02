@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
-import { Bell, Star, Upload, MessageSquare } from 'lucide-react';
+import { Bell, MessageSquare, Star, Upload } from 'lucide-react';
 import {
   NotificationCard,
   NotificationStack,
@@ -142,93 +142,76 @@ const noop = () => {};
 
 // ── Playground ────────────────────────────────────────────
 
-export const Playground: Story = {};
+export const Playground: Story = {
+  render: () => {
+    const { notifications, add, dismiss } = useNotifications();
+    return (
+      <div className="relative min-h-36">
+        <button
+          onClick={() =>
+            add({ variant: 'success', title: 'Saved', body: 'Workflow saved.', duration: 0 })
+          }
+          className="px-4 py-2 rounded-lg bg-primary-500 text-ink-900 text-sm font-semibold font-body hover:bg-primary-600 transition-colors"
+        >
+          Show notification
+        </button>
+        <NotificationStack notifications={notifications} onDismiss={dismiss} portal={false} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
 
-// ── All variants ──────────────────────────────────────────
+    await step('click button — notification appears', async () => {
+      await user.click(canvas.getByRole('button', { name: /show notification/i }));
+      await waitFor(() => {
+        expect(canvas.getByText('Saved')).toBeVisible();
+      });
+    });
 
-export const AllVariants: Story = {
-  name: 'All variants',
-  render: () => (
-    <div className="flex flex-col gap-3">
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '1',
-          variant: 'default',
-          title: 'Default',
-          body: 'A general-purpose notification with no semantic colour.',
-        }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '2',
-          variant: 'info',
-          title: 'Info',
-          body: 'Your account is pending email verification.',
-        }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '3',
-          variant: 'success',
-          title: 'Success',
-          body: 'Payment of $120.00 was processed successfully.',
-        }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '4',
-          variant: 'warning',
-          title: 'Warning',
-          body: 'Your subscription expires in 3 days.',
-        }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '5',
-          variant: 'error',
-          title: 'Error',
-          body: 'Failed to send the report. Please try again.',
-        }}
-      />
-    </div>
-  ),
+    await step('dismiss button removes the notification', async () => {
+      const dismissBtn = canvas.getByRole('button', { name: /dismiss/i });
+      await user.click(dismissBtn);
+      await waitFor(() => {
+        expect(canvas.queryByText('Saved')).not.toBeInTheDocument();
+      });
+    });
+  },
 };
 
-// ── Title / body only ─────────────────────────────────────
+// ── Content variants ──────────────────────────────────────
 
-export const TitleOnly: Story = {
-  name: 'Title only',
+export const ContentVariants: Story = {
+  name: 'Content variants',
   render: () => (
-    <div className="flex flex-col gap-3">
-      <NotificationCard
-        onDismiss={noop}
-        item={{ id: '1', variant: 'success', title: 'Workflow published' }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{ id: '2', variant: 'error', title: 'Deployment failed' }}
-      />
-    </div>
-  ),
-};
-
-export const BodyOnly: Story = {
-  name: 'Body only — no title',
-  render: () => (
-    <div className="flex flex-col gap-3">
-      <NotificationCard
-        onDismiss={noop}
-        item={{ id: '1', variant: 'info', body: 'A new version of the app is available.' }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{ id: '2', variant: 'warning', body: 'You are running low on storage space.' }}
-      />
+    <div className="flex flex-col gap-6">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Title only</p>
+        <div className="flex flex-col gap-3">
+          <NotificationCard
+            onDismiss={noop}
+            item={{ id: '1', variant: 'success', title: 'Workflow published' }}
+          />
+          <NotificationCard
+            onDismiss={noop}
+            item={{ id: '2', variant: 'error', title: 'Deployment failed' }}
+          />
+        </div>
+      </div>
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Body only — no title</p>
+        <div className="flex flex-col gap-3">
+          <NotificationCard
+            onDismiss={noop}
+            item={{ id: '3', variant: 'info', body: 'A new version of the app is available.' }}
+          />
+          <NotificationCard
+            onDismiss={noop}
+            item={{ id: '4', variant: 'warning', body: 'You are running low on storage space.' }}
+          />
+        </div>
+      </div>
     </div>
   ),
 };
@@ -265,100 +248,118 @@ export const WithAvatar: Story = {
 
 export const WithActions: Story = {
   name: 'With actions',
-  render: () => (
-    <div className="flex flex-col gap-3">
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '1',
-          variant: 'warning',
-          title: 'Subscription expiring',
-          body: 'Your Pro plan expires in 3 days.',
-          actions: [
-            { label: 'Renew now', onClick: () => alert('Renew') },
-            { label: 'Dismiss', onClick: () => alert('Dismiss') },
-          ],
-        }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '2',
-          avatar: { name: 'Alex Rivera' },
-          title: 'Alex Rivera invited you',
-          body: 'Join the "Product Analytics" workspace.',
-          actions: [
-            { label: 'Accept', onClick: () => alert('Accepted') },
-            { label: 'Decline', onClick: () => alert('Declined') },
-          ],
-        }}
-      />
-    </div>
-  ),
+  render: () => {
+    const { notifications, add } = useNotifications();
+    const [lastAction, setLastAction] = React.useState('');
+
+    // Show a notification with action buttons immediately on mount
+    React.useEffect(() => {
+      add({
+        variant: 'warning',
+        title: 'Subscription expiring',
+        body: 'Your plan expires in 3 days.',
+        duration: 0,
+        actions: [
+          { label: 'Renew now', onClick: () => setLastAction('Renew now') },
+          { label: 'Later', onClick: () => setLastAction('Later') },
+        ],
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return (
+      <div className="relative min-h-36">
+        <NotificationStack notifications={notifications} onDismiss={() => {}} portal={false} />
+        {lastAction && (
+          <p data-testid="action-clicked" className="text-xs font-body text-ink-500 dark:text-ink-300 mt-2">
+            Clicked: {lastAction}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('notification with actions is visible', async () => {
+      await waitFor(() => {
+        expect(canvas.getByText('Subscription expiring')).toBeVisible();
+      });
+    });
+
+    await step('click "Renew now" action button → handler fires', async () => {
+      const renewBtn = await canvas.findByRole('button', { name: /renew now/i });
+      await user.click(renewBtn);
+      await waitFor(() => {
+        expect(canvas.getByTestId('action-clicked')).toHaveTextContent('Renew now');
+      });
+    });
+  },
 };
 
-// ── Custom icon ───────────────────────────────────────────
+// ── Icon options ──────────────────────────────────────────
 
-export const CustomIcon: Story = {
-  name: 'Custom icon',
+export const IconOptions: Story = {
+  name: 'Icon options',
   render: () => (
-    <div className="flex flex-col gap-3">
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '1',
-          icon: <Bell className="w-5 h-5 text-primary-500 shrink-0" />,
-          title: 'Reminder',
-          body: 'Your scheduled report runs in 15 minutes.',
-        }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '2',
-          icon: <Upload className="w-5 h-5 text-slate-500 shrink-0" />,
-          title: 'Upload complete',
-          body: 'report-q1-2026.pdf was uploaded successfully.',
-        }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '3',
-          icon: <Star className="w-5 h-5 text-primary-500 shrink-0" />,
-          title: 'Milestone reached',
-          body: 'Your workflow has processed 10,000 records.',
-        }}
-      />
-    </div>
-  ),
-};
-
-// ── No icon ───────────────────────────────────────────────
-
-export const NoIcon: Story = {
-  name: 'No icon',
-  render: () => (
-    <div className="flex flex-col gap-3">
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '1',
-          icon: null,
-          title: 'Scheduled maintenance',
-          body: 'Offline from 02:00–03:00 UTC on Saturday.',
-        }}
-      />
-      <NotificationCard
-        onDismiss={noop}
-        item={{
-          id: '2',
-          icon: null,
-          title: 'Review requested',
-          body: 'PR #207 is ready for your review.',
-          actions: [{ label: 'Open PR', onClick: () => alert('Open') }],
-        }}
-      />
+    <div className="flex flex-col gap-6">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Custom icon</p>
+        <div className="flex flex-col gap-3">
+          <NotificationCard
+            onDismiss={noop}
+            item={{
+              id: '1',
+              icon: <Bell className="w-5 h-5 text-primary-500 shrink-0" />,
+              title: 'Reminder',
+              body: 'Your scheduled report runs in 15 minutes.',
+            }}
+          />
+          <NotificationCard
+            onDismiss={noop}
+            item={{
+              id: '2',
+              icon: <Upload className="w-5 h-5 text-slate-500 shrink-0" />,
+              title: 'Upload complete',
+              body: 'report-q1-2026.pdf was uploaded successfully.',
+            }}
+          />
+          <NotificationCard
+            onDismiss={noop}
+            item={{
+              id: '3',
+              icon: <Star className="w-5 h-5 text-primary-500 shrink-0" />,
+              title: 'Milestone reached',
+              body: 'Your workflow has processed 10,000 records.',
+            }}
+          />
+        </div>
+      </div>
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">No icon</p>
+        <div className="flex flex-col gap-3">
+          <NotificationCard
+            onDismiss={noop}
+            item={{
+              id: '4',
+              icon: null,
+              title: 'Scheduled maintenance',
+              body: 'Offline from 02:00–03:00 UTC on Saturday.',
+            }}
+          />
+          <NotificationCard
+            onDismiss={noop}
+            item={{
+              id: '5',
+              icon: null,
+              title: 'Review requested',
+              body: 'PR #207 is ready for your review.',
+              actions: [{ label: 'Open PR', onClick: () => alert('Open') }],
+            }}
+          />
+        </div>
+      </div>
     </div>
   ),
 };
@@ -432,8 +433,35 @@ function LiveDemoWrapper() {
 }
 
 export const Interactive: Story = {
-  name: 'Interactive — live stack',
+  name: 'Live stack',
   render: () => <LiveDemoWrapper />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('add notification with 5 s timer (duration > 0 branch)', async () => {
+      await user.click(canvas.getByRole('button', { name: /show next notification/i }));
+      await waitFor(() => expect(canvas.getByText('Changes saved')).toBeVisible());
+    });
+
+    await step('dismiss before auto-expiry → if(t) true → clearTimeout fires', async () => {
+      // The notification has an active 5 s timer; manual dismiss must clear it.
+      await user.click(canvas.getByRole('button', { name: /dismiss notification/i }));
+      await waitFor(() =>
+        expect(canvas.queryByText('Changes saved')).not.toBeInTheDocument(),
+      );
+    });
+
+    await step('add two more then dismiss all → dismissAll + forEach callback', async () => {
+      await user.click(canvas.getByRole('button', { name: /show next notification/i }));
+      await user.click(canvas.getByRole('button', { name: /show next notification/i }));
+      await waitFor(() => expect(canvas.getByText('Deployment failed')).toBeVisible());
+      await user.click(canvas.getByRole('button', { name: /dismiss all/i }));
+      await waitFor(() =>
+        expect(canvas.queryByText('Deployment failed')).not.toBeInTheDocument(),
+      );
+    });
+  },
 };
 
 // ── All positions ─────────────────────────────────────────
@@ -464,156 +492,103 @@ export const Positions: Story = {
   ),
 };
 
-// ── Interactions ──────────────────────────────────────────
+// ── Auto-dismiss ──────────────────────────────────────────
+// Covers: setTimeout callback → dismiss(id) fires naturally,
+//         duration > 0 branch, if(t) true branch (timer fires → map entry cleared)
 
-export const Interactions: Story = {
-  name: 'Interactions',
-  args: {
-    variant: 'success',
-    title: 'Saved',
-    body: 'Your workflow has been saved.',
-    position: 'top-right',
-    duration: 0,
-    showActions: false,
-    showDismiss: true,
-  },
+export const AutoDismiss: Story = {
+  name: 'Auto-dismiss (timer fires)',
   render: () => {
     const { notifications, add, dismiss } = useNotifications();
+    React.useEffect(() => {
+      add({ title: 'Auto gone', variant: 'success', duration: 300 });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
-      <div className="relative min-h-36">
-        <button
-          onClick={() =>
-            add({ variant: 'success', title: 'Saved', body: 'Workflow saved.', duration: 0 })
-          }
-          className="px-4 py-2 rounded-lg bg-primary-500 text-ink-900 text-sm font-semibold font-body hover:bg-primary-600 transition-colors"
-        >
-          Show notification
-        </button>
+      <div className="relative min-h-20">
         <NotificationStack notifications={notifications} onDismiss={dismiss} portal={false} />
       </div>
     );
   },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user = userEvent.setup();
 
-    await step('click button — notification appears', async () => {
-      await user.click(canvas.getByRole('button', { name: /show notification/i }));
-      await waitFor(() => {
-        expect(canvas.getByText('Saved')).toBeVisible();
-      });
+    await step('notification appears immediately', async () => {
+      await waitFor(() => expect(canvas.getByText('Auto gone')).toBeVisible());
     });
 
-    await step('dismiss button removes the notification', async () => {
-      const dismissBtn = canvas.getByRole('button', { name: /dismiss/i });
-      await user.click(dismissBtn);
-      await waitFor(() => {
-        expect(canvas.queryByText('Saved')).not.toBeInTheDocument();
-      });
+    await step('auto-dismissed after 300 ms → setTimeout callback executes', async () => {
+      await waitFor(
+        () => expect(canvas.queryByText('Auto gone')).not.toBeInTheDocument(),
+        { timeout: 2000 },
+      );
     });
   },
 };
 
-export const AllVariantsInteraction: Story = {
-  name: 'All variant icons render',
-  args: {
-    variant: 'info',
-    title: 'Info',
-    body: 'Test',
-    position: 'top-right',
-    duration: 0,
-    showActions: false,
-    showDismiss: true,
-  },
+// ── Portal render ─────────────────────────────────────────
+// Covers: portal=true → createPortal(content, document.body) branch,
+//         item.duration ?? 5000 (undefined duration → fallback 5000),
+//         duration > 0 branch, if(t) true → clearTimeout on manual dismiss
+
+export const WithPortal: Story = {
+  name: 'Portal (renders in document.body)',
   render: () => {
-    const noop = () => {};
-    return (
-      <div className="flex flex-col gap-3 p-4">
-        {(['default', 'info', 'success', 'warning', 'error'] as const).map((v) => (
-          <NotificationCard
-            key={v}
-            item={{
-              id: v,
-              variant: v,
-              title: v.charAt(0).toUpperCase() + v.slice(1),
-              body: `A ${v} notification.`,
-              duration: 0,
-            }}
-            onDismiss={noop}
-          />
-        ))}
-      </div>
-    );
+    const { notifications, add, dismiss } = useNotifications();
+    React.useEffect(() => {
+      add({ title: 'Portal notification', variant: 'info' }); // no duration → ?? 5000
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    return <NotificationStack notifications={notifications} onDismiss={dismiss} />;
   },
+  play: async ({ step }) => {
+    const body = within(document.body);
+    const user = userEvent.setup();
+
+    await step('notification appears in document.body via createPortal', async () => {
+      await waitFor(() => expect(body.getByText('Portal notification')).toBeVisible());
+    });
+
+    await step('manual dismiss → if(t) true → clearTimeout clears the 5 s timer', async () => {
+      await user.click(body.getByRole('button', { name: /dismiss notification/i }));
+      await waitFor(() =>
+        expect(body.queryByText('Portal notification')).not.toBeInTheDocument(),
+      );
+    });
+  },
+};
+
+// ── All variants ──────────────────────────────────────────
+
+export const AllVariants: Story = {
+  name: 'All variants',
+  render: () => (
+    <div className="flex flex-col gap-3 p-4">
+      {(['default', 'info', 'success', 'warning', 'error'] as const).map((v) => (
+        <NotificationCard
+          key={v}
+          item={{
+            id: v,
+            variant: v,
+            title: v.charAt(0).toUpperCase() + v.slice(1),
+            body: `A ${v} notification.`,
+            duration: 0,
+          }}
+          onDismiss={noop}
+        />
+      ))}
+    </div>
+  ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
     await step('all 5 variant cards render', async () => {
-      expect(canvas.getByText('Default')).toBeVisible();
-      expect(canvas.getByText('Info')).toBeVisible();
-      expect(canvas.getByText('Success')).toBeVisible();
-      expect(canvas.getByText('Warning')).toBeVisible();
-      expect(canvas.getByText('Error')).toBeVisible();
-    });
-  },
-};
-
-export const ActionsInteraction: Story = {
-  name: 'Interactions — action buttons',
-  args: {
-    variant: 'warning',
-    title: 'Subscription expiring',
-    body: 'Your plan expires in 3 days.',
-    position: 'top-right',
-    duration: 0,
-    showActions: true,
-    showDismiss: true,
-  },
-  render: () => {
-    const { notifications, add } = useNotifications();
-    const [lastAction, setLastAction] = React.useState('');
-
-    // Show a notification with action buttons immediately on mount
-    React.useEffect(() => {
-      add({
-        variant: 'warning',
-        title: 'Subscription expiring',
-        body: 'Your plan expires in 3 days.',
-        duration: 0,
-        actions: [
-          { label: 'Renew now', onClick: () => setLastAction('Renew now') },
-          { label: 'Later', onClick: () => setLastAction('Later') },
-        ],
-      });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    return (
-      <div className="relative min-h-36">
-        <NotificationStack notifications={notifications} onDismiss={() => {}} portal={false} />
-        {lastAction && (
-          <p data-testid="action-clicked" className="text-xs font-body text-ink-500 mt-2">
-            Clicked: {lastAction}
-          </p>
-        )}
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('notification with actions is visible', async () => {
       await waitFor(() => {
-        expect(canvas.getByText('Subscription expiring')).toBeVisible();
-      });
-    });
-
-    await step('click "Renew now" action button → handler fires', async () => {
-      const renewBtn = await canvas.findByRole('button', { name: /renew now/i });
-      await user.click(renewBtn);
-      await waitFor(() => {
-        expect(canvas.getByTestId('action-clicked')).toHaveTextContent('Renew now');
+        expect(canvas.getByText('Default')).toBeVisible();
+        expect(canvas.getByText('Info')).toBeVisible();
+        expect(canvas.getByText('Success')).toBeVisible();
+        expect(canvas.getByText('Warning')).toBeVisible();
+        expect(canvas.getByText('Error')).toBeVisible();
       });
     });
   },

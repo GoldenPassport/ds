@@ -10,13 +10,13 @@ import {
   Users,
   BookOpen,
   LifeBuoy,
-  Settings,
   Layers,
   Bell,
   Lock,
   FileText,
   Headphones,
   Play,
+  Settings,
   Star,
 } from 'lucide-react';
 
@@ -107,6 +107,21 @@ const FOOTER_LINKS: FlyoutMenuAction[] = [
   { label: 'Changelog', href: '#', icon: <FileText className="w-3.5 h-3.5" /> },
 ];
 
+// ── Playground ────────────────────────────────────────────
+
+export const Playground: Story = {
+  name: 'Playground',
+  render: () => (
+    <div className="p-8">
+      <FlyoutMenu
+        trigger={<FlyoutTrigger label="Resources" />}
+        variant="simple"
+        items={SIMPLE_ITEMS}
+      />
+    </div>
+  ),
+};
+
 // ── 1. Simple ─────────────────────────────────────────────
 
 export const Simple: Story = {
@@ -120,6 +135,36 @@ export const Simple: Story = {
       />
     </div>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click trigger → flyout panel opens', async () => {
+      const trigger = canvas.getByRole('button', { name: /resources/i });
+      await user.click(trigger);
+      await waitFor(() => {
+        // Items appear in the portal / popover panel
+        const body = within(document.body);
+        expect(body.getByRole('link', { name: /blog/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('flyout shows all items including badge item', async () => {
+      const body = within(document.body);
+      expect(body.getByRole('link', { name: /changelog/i })).toBeInTheDocument();
+      expect(body.getByText('New')).toBeInTheDocument();
+    });
+
+    await step('click trigger again → flyout closes', async () => {
+      const trigger = canvas.getByRole('button', { name: /resources/i });
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(
+          within(document.body).queryByRole('link', { name: /blog/i }),
+        ).not.toBeInTheDocument();
+      });
+    });
+  },
 };
 
 // ── 2. With descriptions ──────────────────────────────────
@@ -146,10 +191,29 @@ export const WithIcons: Story = {
       <FlyoutMenu
         trigger={<FlyoutTrigger label="Solutions" />}
         variant="icons"
-        items={ICON_ITEMS}
+        items={ICON_ITEMS.slice(0, 3)}
+        footerActions={FOOTER_ACTIONS}
       />
     </div>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click trigger → flyout with icon items opens', async () => {
+      const trigger = canvas.getByRole('button', { name: /solutions/i });
+      await user.click(trigger);
+      await waitFor(() => {
+        const body = within(document.body);
+        expect(body.getByRole('link', { name: /analytics/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('footer actions are rendered', async () => {
+      const body = within(document.body);
+      expect(body.getByRole('link', { name: /view all features/i })).toBeInTheDocument();
+    });
+  },
 };
 
 // ── 4. Two-column grid ────────────────────────────────────
@@ -161,57 +225,80 @@ export const TwoColumn: Story = {
       <FlyoutMenu
         trigger={<FlyoutTrigger label="Platform" />}
         variant="two-column"
-        items={ICON_ITEMS}
-      />
-    </div>
-  ),
-};
-
-// ── 5. With footer actions ────────────────────────────────
-
-export const WithFooterActions: Story = {
-  name: 'With footer actions',
-  render: () => (
-    <div className="p-8">
-      <FlyoutMenu
-        trigger={<FlyoutTrigger label="Solutions" />}
-        variant="icons"
         items={ICON_ITEMS.slice(0, 4)}
+        footerLinks={FOOTER_LINKS}
         footerActions={FOOTER_ACTIONS}
       />
     </div>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click trigger → two-column flyout opens', async () => {
+      await user.click(canvas.getByRole('button', { name: /platform/i }));
+      await waitFor(() => {
+        const body = within(document.body);
+        expect(body.getByRole('link', { name: /analytics/i })).toBeInTheDocument();
+      });
+    });
+
+    await step('footer links are rendered', async () => {
+      const body = within(document.body);
+      expect(body.getByRole('link', { name: /documentation/i })).toBeInTheDocument();
+      expect(body.getByRole('link', { name: /help centre/i })).toBeInTheDocument();
+    });
+
+    await step('footer action links are rendered', async () => {
+      const body = within(document.body);
+      expect(body.getByRole('link', { name: /view all features/i })).toBeInTheDocument();
+    });
+
+    await step('press Escape → flyout closes', async () => {
+      await user.keyboard('{Escape}');
+      await waitFor(() => {
+        expect(
+          within(document.body).queryByRole('link', { name: /analytics/i }),
+        ).not.toBeInTheDocument();
+      });
+    });
+  },
 };
 
-// ── 6. With footer links ──────────────────────────────────
+// ── 5. With footer ────────────────────────────────────────
 
-export const WithFooterLinks: Story = {
-  name: 'With footer links',
+export const WithFooter: Story = {
+  name: 'With footer',
   render: () => (
-    <div className="p-8">
-      <FlyoutMenu
-        trigger={<FlyoutTrigger label="Product" />}
-        variant="descriptions"
-        items={DESC_ITEMS}
-        footerLinks={FOOTER_LINKS}
-      />
-    </div>
-  ),
-};
-
-// ── 7. Two-column + footer ────────────────────────────────
-
-export const TwoColumnWithFooter: Story = {
-  name: 'Two-column + footer',
-  render: () => (
-    <div className="p-8">
-      <FlyoutMenu
-        trigger={<FlyoutTrigger label="Platform" />}
-        variant="two-column"
-        items={ICON_ITEMS}
-        footerActions={FOOTER_ACTIONS}
-        footerLinks={FOOTER_LINKS}
-      />
+    <div className="flex flex-col gap-8 p-8">
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">footer actions</p>
+        <FlyoutMenu
+          trigger={<FlyoutTrigger label="Solutions" />}
+          variant="icons"
+          items={ICON_ITEMS.slice(0, 4)}
+          footerActions={FOOTER_ACTIONS}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">footer links</p>
+        <FlyoutMenu
+          trigger={<FlyoutTrigger label="Product" />}
+          variant="descriptions"
+          items={DESC_ITEMS}
+          footerLinks={FOOTER_LINKS}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">two-column + footer actions + footer links</p>
+        <FlyoutMenu
+          trigger={<FlyoutTrigger label="Platform" />}
+          variant="two-column"
+          items={ICON_ITEMS}
+          footerActions={FOOTER_ACTIONS}
+          footerLinks={FOOTER_LINKS}
+        />
+      </div>
     </div>
   ),
 };
@@ -261,83 +348,6 @@ export const RightAligned: Story = {
       />
     </div>
   ),
-};
-
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions',
-  render: () => (
-    <div className="p-8">
-      <FlyoutMenu
-        trigger={<FlyoutTrigger label="Resources" />}
-        variant="simple"
-        items={SIMPLE_ITEMS}
-      />
-    </div>
-  ),
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('click trigger → flyout panel opens', async () => {
-      const trigger = canvas.getByRole('button', { name: /resources/i });
-      await user.click(trigger);
-      await waitFor(() => {
-        // Items appear in the portal / popover panel
-        const body = within(document.body);
-        expect(body.getByRole('link', { name: /blog/i })).toBeInTheDocument();
-      });
-    });
-
-    await step('flyout shows all items including badge item', async () => {
-      const body = within(document.body);
-      expect(body.getByRole('link', { name: /changelog/i })).toBeInTheDocument();
-      expect(body.getByText('New')).toBeInTheDocument();
-    });
-
-    await step('click trigger again → flyout closes', async () => {
-      const trigger = canvas.getByRole('button', { name: /resources/i });
-      await user.click(trigger);
-      await waitFor(() => {
-        expect(
-          within(document.body).queryByRole('link', { name: /blog/i }),
-        ).not.toBeInTheDocument();
-      });
-    });
-  },
-};
-
-export const InteractionsWithIcons: Story = {
-  name: 'Interactions — icon variant',
-  render: () => (
-    <div className="p-8">
-      <FlyoutMenu
-        trigger={<FlyoutTrigger label="Solutions" />}
-        variant="icons"
-        items={ICON_ITEMS.slice(0, 3)}
-        footerActions={FOOTER_ACTIONS}
-      />
-    </div>
-  ),
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('click trigger → flyout with icon items opens', async () => {
-      const trigger = canvas.getByRole('button', { name: /solutions/i });
-      await user.click(trigger);
-      await waitFor(() => {
-        const body = within(document.body);
-        expect(body.getByRole('link', { name: /analytics/i })).toBeInTheDocument();
-      });
-    });
-
-    await step('footer actions are rendered', async () => {
-      const body = within(document.body);
-      expect(body.getByRole('link', { name: /view all features/i })).toBeInTheDocument();
-    });
-  },
 };
 
 // ── 9. Navbar example ─────────────────────────────────────
@@ -406,10 +416,10 @@ export const NavbarExample: Story = {
   ),
 };
 
-// ── onClick items interaction ─────────────────────────────
+// ── onClick items ─────────────────────────────────────────
 
-export const OnClickInteraction: Story = {
-  name: 'Interactions — onClick items',
+export const WithOnClickItems: Story = {
+  name: 'With onClick items',
   render: () => {
     const [lastClicked, setLastClicked] = React.useState('');
     return (
@@ -472,55 +482,6 @@ export const OnClickInteraction: Story = {
       await user.click(within(document.body).getByRole('button', { name: /delete/i }));
       await waitFor(() => {
         expect(canvas.getByTestId('flyout-clicked')).toHaveTextContent('Delete');
-      });
-    });
-  },
-};
-
-// ── Two-column interaction ────────────────────────────────
-
-export const TwoColumnInteraction: Story = {
-  name: 'Interactions — two-column variant',
-  render: () => (
-    <div className="p-8">
-      <FlyoutMenu
-        trigger={<FlyoutTrigger label="Platform" />}
-        variant="two-column"
-        items={ICON_ITEMS.slice(0, 4)}
-        footerLinks={FOOTER_LINKS}
-        footerActions={FOOTER_ACTIONS}
-      />
-    </div>
-  ),
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('click trigger → two-column flyout opens', async () => {
-      await user.click(canvas.getByRole('button', { name: /platform/i }));
-      await waitFor(() => {
-        const body = within(document.body);
-        expect(body.getByRole('link', { name: /analytics/i })).toBeInTheDocument();
-      });
-    });
-
-    await step('footer links are rendered', async () => {
-      const body = within(document.body);
-      expect(body.getByRole('link', { name: /documentation/i })).toBeInTheDocument();
-      expect(body.getByRole('link', { name: /help centre/i })).toBeInTheDocument();
-    });
-
-    await step('footer action links are rendered', async () => {
-      const body = within(document.body);
-      expect(body.getByRole('link', { name: /view all features/i })).toBeInTheDocument();
-    });
-
-    await step('press Escape → flyout closes', async () => {
-      await user.keyboard('{Escape}');
-      await waitFor(() => {
-        expect(
-          within(document.body).queryByRole('link', { name: /analytics/i }),
-        ).not.toBeInTheDocument();
       });
     });
   },

@@ -25,7 +25,10 @@ export function Checkbox({
   id,
   'aria-label': ariaLabel,
 }: CheckboxProps) {
-  const checkId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
+  // Fall back to React.useId() — never slugify the label, which would collide
+  // whenever two Checkboxes on the same page share a label (axe duplicate-id-aria).
+  const reactId = React.useId();
+  const checkId = id ?? reactId;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!disabled) onChange(e.target.checked);

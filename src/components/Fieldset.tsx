@@ -230,7 +230,7 @@ export function ErrorMessage({ className = '', children }: ErrorMessageProps) {
   return (
     <p
       role="alert"
-      className={['text-xs font-body text-red-600 dark:text-red-400', className].join(' ')}
+      className={['text-xs font-body text-red-700 dark:text-red-400', className].join(' ')}
     >
       {children}
     </p>

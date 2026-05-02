@@ -50,238 +50,6 @@ export const Playground: Story = {
     variant: 'month',
     events: EVENTS,
   },
-};
-
-// ── Month view ────────────────────────────────────────────
-
-function MonthDemo() {
-  const [selected, setSelected] = useState<Date | null>(null);
-  return (
-    <div className="max-w-4xl">
-      <Calendar variant="month" events={EVENTS} selected={selected} onSelect={setSelected} />
-      {selected && (
-        <p className="mt-3 text-sm font-body text-ink-500 dark:text-ink-300">
-          Selected:{' '}
-          <span className="font-semibold text-ink-900 dark:text-ink-50">
-            {selected.toDateString()}
-          </span>
-        </p>
-      )}
-    </div>
-  );
-}
-
-export const MonthView: Story = {
-  name: 'Month view',
-  args: { events: [] },
-  render: () => <MonthDemo />,
-};
-
-// ── Month view — no events ────────────────────────────────
-
-export const MonthNoEvents: Story = {
-  name: 'Month view — no events',
-  args: { events: [] },
-  render: () => (
-    <div className="max-w-4xl">
-      <Calendar variant="month" />
-    </div>
-  ),
-};
-
-// ── Mini ──────────────────────────────────────────────────
-
-function MiniDemo() {
-  const [selected, setSelected] = useState<Date | null>(new Date());
-  return (
-    <div className="flex flex-col gap-3 items-start">
-      <Calendar variant="mini" events={EVENTS} selected={selected} onSelect={setSelected} />
-      {selected && (
-        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
-          Selected:{' '}
-          <span className="font-semibold text-ink-900 dark:text-ink-50">
-            {selected.toDateString()}
-          </span>
-        </p>
-      )}
-    </div>
-  );
-}
-
-export const Mini: Story = {
-  name: 'Mini — compact picker',
-  args: { events: [] },
-  render: () => <MiniDemo />,
-};
-
-// ── Mini bordered ─────────────────────────────────────────
-
-function MiniBorderedDemo() {
-  const [selected, setSelected] = useState<Date | null>(new Date());
-  return (
-    <div className="flex gap-8 items-start flex-wrap">
-      <div className="flex flex-col gap-2 items-start">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">bordered=false (default)</p>
-        <Calendar variant="mini" events={EVENTS} selected={selected} onSelect={setSelected} />
-      </div>
-      <div className="flex flex-col gap-2 items-start">
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">bordered=true</p>
-        <Calendar
-          variant="mini"
-          bordered
-          events={EVENTS}
-          selected={selected}
-          onSelect={setSelected}
-        />
-      </div>
-    </div>
-  );
-}
-
-export const MiniBordered: Story = {
-  name: 'Mini — bordered grid',
-  args: { events: [] },
-  render: () => <MiniBorderedDemo />,
-};
-
-// ── Shade weekends ────────────────────────────────────────
-
-export const ShadeWeekends: Story = {
-  name: 'Shade weekends',
-  args: { events: [] },
-  render: () => (
-    <div className="flex flex-col gap-8">
-      <div>
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-3">
-          Month — shadeWeekends
-        </p>
-        <div className="max-w-4xl">
-          <Calendar variant="month" events={EVENTS} shadeWeekends />
-        </div>
-      </div>
-      <div className="flex gap-8 flex-wrap">
-        <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-3">
-            Mini — shadeWeekends
-          </p>
-          <Calendar variant="mini" events={EVENTS} shadeWeekends />
-        </div>
-        <div>
-          <p className="text-xs font-body text-ink-400 dark:text-ink-300 mb-3">
-            Mini — bordered + shadeWeekends
-          </p>
-          <Calendar variant="mini" bordered events={EVENTS} shadeWeekends />
-        </div>
-      </div>
-    </div>
-  ),
-};
-
-// ── Event colours ─────────────────────────────────────────
-
-export const EventColors: Story = {
-  name: 'Event colour variants',
-  args: { events: [] },
-  render: () => {
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const colored: CalendarEvent[] = [
-      { id: 1, date: `${y}-${m}-04`, title: 'Primary event', color: 'primary' },
-      { id: 2, date: `${y}-${m}-04`, title: 'Slate event', color: 'slate' },
-      { id: 3, date: `${y}-${m}-11`, title: 'Green event', color: 'green' },
-      { id: 4, date: `${y}-${m}-11`, title: 'Red event', color: 'red' },
-      { id: 5, date: `${y}-${m}-18`, title: 'Amber event', color: 'amber' },
-    ];
-    return (
-      <div className="max-w-4xl">
-        <Calendar variant="month" events={colored} />
-      </div>
-    );
-  },
-};
-
-// ── In context — with side panel ──────────────────────────
-
-function WithSidePanelDemo() {
-  const [selected, setSelected] = useState<Date | null>(new Date());
-
-  const selectedISO = selected
-    ? `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')}`
-    : null;
-
-  const dayEvents = EVENTS.filter((e) => e.date === selectedISO);
-
-  return (
-    <div className="min-h-screen bg-ink-50 dark:bg-ink-900 py-8">
-      <div className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8">
-        <div className="flex gap-6">
-          {/* Mini calendar sidebar */}
-          <div className="hidden lg:flex flex-col gap-6">
-            <div className="rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-sm p-4">
-              <Calendar variant="mini" events={EVENTS} selected={selected} onSelect={setSelected} />
-            </div>
-
-            {/* Event list for selected day */}
-            <div className="rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-sm p-4">
-              <p className="text-xs font-semibold font-body uppercase tracking-wider text-ink-400 dark:text-ink-300 mb-3">
-                {selected
-                  ? selected.toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      month: 'short',
-                      day: 'numeric',
-                    })
-                  : 'Select a day'}
-              </p>
-              {dayEvents.length === 0 ? (
-                <p className="text-sm font-body text-ink-400 dark:text-ink-300">No events</p>
-              ) : (
-                <div className="flex flex-col gap-2">
-                  {dayEvents.map((ev) => {
-                    const colours = {
-                      primary: 'bg-primary-500',
-                      slate: 'bg-slate-500',
-                      green: 'bg-green-500',
-                      red: 'bg-red-500',
-                      amber: 'bg-amber-500',
-                    };
-                    return (
-                      <div key={ev.id} className="flex items-center gap-2">
-                        <div
-                          className={`w-2 h-2 rounded-full shrink-0 ${colours[ev.color ?? 'slate']}`}
-                        />
-                        <p className="text-sm font-body text-ink-700 dark:text-ink-200">
-                          {ev.title}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Full month calendar */}
-          <div className="flex-1 rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-sm p-6">
-            <Calendar variant="month" events={EVENTS} selected={selected} onSelect={setSelected} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export const WithSidePanel: Story = {
-  name: 'In context — with side panel',
-  args: { events: [] },
-  render: () => <WithSidePanelDemo />,
-};
-
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions — date selection & month navigation',
-  args: { events: [] },
   render: () => {
     const [selected, setSelected] = useState<Date | null>(null);
     return (
@@ -355,8 +123,47 @@ export const Interactions: Story = {
   },
 };
 
-export const MiniInteractions: Story = {
-  name: 'Interactions — mini variant month/year picker',
+// ── Month view ────────────────────────────────────────────
+
+function MonthDemo() {
+  const [selected, setSelected] = useState<Date | null>(null);
+  return (
+    <div className="max-w-4xl">
+      <Calendar variant="month" events={EVENTS} selected={selected} onSelect={setSelected} />
+      {selected && (
+        <p className="mt-3 text-sm font-body text-ink-500 dark:text-ink-300">
+          Selected:{' '}
+          <span className="font-semibold text-ink-900 dark:text-ink-50">
+            {selected.toDateString()}
+          </span>
+        </p>
+      )}
+    </div>
+  );
+}
+
+export const MonthView: Story = {
+  name: 'Month view',
+  args: { events: [] },
+  render: () => <MonthDemo />,
+};
+
+// ── Month view — no events ────────────────────────────────
+
+export const MonthNoEvents: Story = {
+  name: 'Month view — no events',
+  args: { events: [] },
+  render: () => (
+    <div className="max-w-4xl">
+      <Calendar variant="month" />
+    </div>
+  ),
+};
+
+// ── Mini ──────────────────────────────────────────────────
+
+export const Mini: Story = {
+  name: 'Mini — compact picker',
   args: { events: [] },
   render: () => {
     const [selected, setSelected] = useState<Date | null>(null);
@@ -411,3 +218,167 @@ export const MiniInteractions: Story = {
     });
   },
 };
+
+// ── Mini bordered ─────────────────────────────────────────
+
+function MiniBorderedDemo() {
+  const [selected, setSelected] = useState<Date | null>(new Date());
+  return (
+    <div className="flex gap-8 items-start flex-wrap">
+      <div className="flex flex-col gap-2 items-start">
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300">bordered=false (default)</p>
+        <Calendar variant="mini" events={EVENTS} selected={selected} onSelect={setSelected} />
+      </div>
+      <div className="flex flex-col gap-2 items-start">
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300">bordered=true</p>
+        <Calendar
+          variant="mini"
+          bordered
+          events={EVENTS}
+          selected={selected}
+          onSelect={setSelected}
+        />
+      </div>
+    </div>
+  );
+}
+
+export const MiniBordered: Story = {
+  name: 'Mini — bordered grid',
+  args: { events: [] },
+  render: () => <MiniBorderedDemo />,
+};
+
+// ── Shade weekends ────────────────────────────────────────
+
+export const ShadeWeekends: Story = {
+  name: 'Shade weekends',
+  args: { events: [] },
+  render: () => (
+    <div className="flex flex-col gap-8">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">
+          Month — shadeWeekends
+        </p>
+        <div className="max-w-4xl">
+          <Calendar variant="month" events={EVENTS} shadeWeekends />
+        </div>
+      </div>
+      <div className="flex gap-8 flex-wrap">
+        <div>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">
+            Mini — shadeWeekends
+          </p>
+          <Calendar variant="mini" events={EVENTS} shadeWeekends />
+        </div>
+        <div>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">
+            Mini — bordered + shadeWeekends
+          </p>
+          <Calendar variant="mini" bordered events={EVENTS} shadeWeekends />
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+// ── Event colours ─────────────────────────────────────────
+
+export const EventColors: Story = {
+  name: 'Event colour variants',
+  args: { events: [] },
+  render: () => {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const colored: CalendarEvent[] = [
+      { id: 1, date: `${y}-${m}-04`, title: 'Primary event', color: 'primary' },
+      { id: 2, date: `${y}-${m}-04`, title: 'Slate event', color: 'slate' },
+      { id: 3, date: `${y}-${m}-11`, title: 'Green event', color: 'green' },
+      { id: 4, date: `${y}-${m}-11`, title: 'Red event', color: 'red' },
+      { id: 5, date: `${y}-${m}-18`, title: 'Amber event', color: 'amber' },
+    ];
+    return (
+      <div className="max-w-4xl">
+        <Calendar variant="month" events={colored} />
+      </div>
+    );
+  },
+};
+
+// ── In context — with side panel ──────────────────────────
+
+function WithSidePanelDemo() {
+  const [selected, setSelected] = useState<Date | null>(new Date());
+
+  const selectedISO = selected
+    ? `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')}`
+    : null;
+
+  const dayEvents = EVENTS.filter((e) => e.date === selectedISO);
+
+  return (
+    <div className="min-h-screen bg-ink-50 dark:bg-ink-900 py-8">
+      <div className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8">
+        <div className="flex gap-6">
+          {/* Mini calendar sidebar */}
+          <div className="hidden lg:flex flex-col gap-6">
+            <div className="rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-sm p-4">
+              <Calendar variant="mini" events={EVENTS} selected={selected} onSelect={setSelected} />
+            </div>
+
+            {/* Event list for selected day */}
+            <div className="rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-sm p-4">
+              <p className="text-xs font-semibold font-body uppercase tracking-wider text-ink-500 dark:text-ink-300 mb-3">
+                {selected
+                  ? selected.toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  : 'Select a day'}
+              </p>
+              {dayEvents.length === 0 ? (
+                <p className="text-sm font-body text-ink-500 dark:text-ink-300">No events</p>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {dayEvents.map((ev) => {
+                    const colours = {
+                      primary: 'bg-primary-500',
+                      slate: 'bg-slate-500',
+                      green: 'bg-green-500',
+                      red: 'bg-red-500',
+                      amber: 'bg-amber-500',
+                    };
+                    return (
+                      <div key={ev.id} className="flex items-center gap-2">
+                        <div
+                          className={`w-2 h-2 rounded-full shrink-0 ${colours[ev.color ?? 'slate']}`}
+                        />
+                        <p className="text-sm font-body text-ink-700 dark:text-ink-200">
+                          {ev.title}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Full month calendar */}
+          <div className="flex-1 rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-sm p-6">
+            <Calendar variant="month" events={EVENTS} selected={selected} onSelect={setSelected} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export const WithSidePanel: Story = {
+  name: 'In context — with side panel',
+  args: { events: [] },
+  render: () => <WithSidePanelDemo />,
+};
+

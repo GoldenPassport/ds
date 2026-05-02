@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import {
@@ -77,124 +78,127 @@ export const Playground: Story = {
       )}
     </Demo>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const user = userEvent.setup();
+    await step('click Open drawer → panel appears', async () => {
+      await user.click(canvas.getByRole('button', { name: /open drawer/i }));
+      await waitFor(() => expect(body.getByText('Panel title')).toBeVisible());
+    });
+    await step('click Close → drawer closes', async () => {
+      await user.click(body.getByRole('button', { name: /close drawer/i }));
+      await waitFor(() => expect(body.queryByText('Panel title')).not.toBeInTheDocument());
+    });
+  },
 };
 
-// ── Basic ─────────────────────────────────────────────────
+// ── Variants ──────────────────────────────────────────────
 
-export const Basic: Story = {
-  name: 'Basic',
+export const Variants: Story = {
+  name: 'Variants',
   args: { open: false, onClose: () => {}, children: null },
-  render: () => (
-    <Demo>
-      {(open, setOpen) => (
-        <Drawer open={open} onClose={() => setOpen(false)} title="Notifications">
-          <div className="flex flex-col gap-4">
-            {[
-              'Sprint planning updated',
-              'New comment on PR #482',
-              'Deployment succeeded',
-              'Alex Johnson mentioned you',
-            ].map((n) => (
-              <div key={n} className="flex items-start gap-3">
-                <div className="w-2 h-2 rounded-full bg-primary-500 mt-2 shrink-0" />
-                <p className="text-sm font-body text-ink-700 dark:text-ink-300">{n}</p>
-              </div>
-            ))}
-          </div>
-        </Drawer>
-      )}
-    </Demo>
-  ),
-};
-
-// ── Close button outside ──────────────────────────────────
-
-export const CloseOutside: Story = {
-  name: 'Close button outside',
-  args: { open: false, onClose: () => {}, children: null },
-  render: () => (
-    <Demo label="Close button outside">
-      {(open, setOpen) => (
-        <Drawer
-          open={open}
-          onClose={() => setOpen(false)}
-          title="File details"
-          closeOutside
-          closeButton={false}
-        >
-          <p className="text-sm font-body text-ink-600 dark:text-ink-300">
-            The close button sits outside the panel — common when no header is needed or you want a
-            cleaner panel surface.
-          </p>
-        </Drawer>
-      )}
-    </Demo>
-  ),
-};
-
-// ── No header ─────────────────────────────────────────────
-
-export const NoHeader: Story = {
-  name: 'No header (empty)',
-  args: { open: false, onClose: () => {}, children: null },
-  render: () => (
-    <Demo label="Open (no header)">
-      {(open, setOpen) => (
-        <Drawer open={open} onClose={() => setOpen(false)} closeButton={false}>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="mb-4 text-xs font-body text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 transition-colors"
+  render: () => {
+    const [openBasic, setOpenBasic] = useState(false);
+    const [openCloseOutside, setOpenCloseOutside] = useState(false);
+    const [openNoHeader, setOpenNoHeader] = useState(false);
+    return (
+      <div className="p-8 flex flex-wrap gap-3">
+        <div>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Basic</p>
+          <Button variant="primary" onClick={() => setOpenBasic(true)}>
+            Open drawer
+          </Button>
+          <Drawer open={openBasic} onClose={() => setOpenBasic(false)} title="Notifications">
+            <div className="flex flex-col gap-4">
+              {[
+                'Sprint planning updated',
+                'New comment on PR #482',
+                'Deployment succeeded',
+                'Alex Johnson mentioned you',
+              ].map((n) => (
+                <div key={n} className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-primary-500 mt-2 shrink-0" />
+                  <p className="text-sm font-body text-ink-700 dark:text-ink-300">{n}</p>
+                </div>
+              ))}
+            </div>
+          </Drawer>
+        </div>
+        <div>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">Close button outside</p>
+          <Button variant="primary" onClick={() => setOpenCloseOutside(true)}>
+            Close button outside
+          </Button>
+          <Drawer
+            open={openCloseOutside}
+            onClose={() => setOpenCloseOutside(false)}
+            title="File details"
+            closeOutside
+            closeButton={false}
           >
-            ← Close
-          </button>
-          <p className="text-sm font-body text-ink-600 dark:text-ink-300">
-            No header — the close affordance is left to the content or backdrop click.
-          </p>
-        </Drawer>
-      )}
-    </Demo>
-  ),
+            <p className="text-sm font-body text-ink-600 dark:text-ink-300">
+              The close button sits outside the panel — common when no header is needed or you want a
+              cleaner panel surface.
+            </p>
+          </Drawer>
+        </div>
+        <div>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">No header</p>
+          <Button variant="primary" onClick={() => setOpenNoHeader(true)}>
+            Open (no header)
+          </Button>
+          <Drawer open={openNoHeader} onClose={() => setOpenNoHeader(false)} closeButton={false}>
+            <button
+              type="button"
+              onClick={() => setOpenNoHeader(false)}
+              className="mb-4 text-xs font-body text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-200 transition-colors"
+            >
+              ← Close
+            </button>
+            <p className="text-sm font-body text-ink-600 dark:text-ink-300">
+              No header — the close affordance is left to the content or backdrop click.
+            </p>
+          </Drawer>
+        </div>
+      </div>
+    );
+  },
 };
 
-// ── Wide ─────────────────────────────────────────────────
+// ── Wide & sticky footer ──────────────────────────────────
 
-export const Wide: Story = {
-  name: 'Wide',
+export const SizeAndLayout: Story = {
+  name: 'Wide & sticky footer',
   args: { open: false, onClose: () => {}, children: null },
-  render: () => (
-    <Demo label="Open wide drawer">
-      {(open, setOpen) => (
-        <Drawer open={open} onClose={() => setOpen(false)} title="Analytics overview" size="xl">
+  render: () => {
+    const [openWide, setOpenWide] = useState(false);
+    const [openSticky, setOpenSticky] = useState(false);
+    return (
+      <div className="p-8 flex flex-wrap gap-3">
+        <Button variant="primary" onClick={() => setOpenWide(true)}>
+          Open wide drawer
+        </Button>
+        <Button variant="primary" onClick={() => setOpenSticky(true)}>
+          Open drawer
+        </Button>
+        <Drawer open={openWide} onClose={() => setOpenWide(false)} title="Analytics overview" size="xl">
           <p className="text-sm font-body text-ink-600 dark:text-ink-300">
             A wider drawer gives room for data-dense content like tables, charts, or multi-column
             layouts.
           </p>
         </Drawer>
-      )}
-    </Demo>
-  ),
-};
-
-// ── With sticky footer ────────────────────────────────────
-
-export const StickyFooter: Story = {
-  name: 'With sticky footer',
-  args: { open: false, onClose: () => {}, children: null },
-  render: () => (
-    <Demo>
-      {(open, setOpen) => (
         <Drawer
-          open={open}
-          onClose={() => setOpen(false)}
+          open={openSticky}
+          onClose={() => setOpenSticky(false)}
           title="Edit details"
           description="Changes are saved when you click Update."
           footer={
             <div className="flex justify-end gap-2.5">
-              <Button variant="secondary" onClick={() => setOpen(false)}>
+              <Button variant="secondary" onClick={() => setOpenSticky(false)}>
                 Cancel
               </Button>
-              <Button variant="primary" onClick={() => setOpen(false)}>
+              <Button variant="primary" onClick={() => setOpenSticky(false)}>
                 Update
               </Button>
             </div>
@@ -206,9 +210,9 @@ export const StickyFooter: Story = {
             <Input label="Owner" placeholder="Assign an owner" />
           </div>
         </Drawer>
-      )}
-    </Demo>
-  ),
+      </div>
+    );
+  },
 };
 
 // ── Create project form ───────────────────────────────────

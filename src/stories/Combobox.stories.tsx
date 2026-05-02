@@ -55,82 +55,8 @@ export const Playground: Story = {
   render: (args) => {
     const [val, setVal] = React.useState<string | null>(null);
     return (
-      <div className="w-72">
-        <Combobox {...args} value={val} onChange={setVal} options={USERS} />
-      </div>
-    );
-  },
-};
-
-export const AssignUser: Story = {
-  args: { value: null, onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState<string | null>(null);
-    return (
-      <div className="w-72">
-        <Combobox
-          label="Assign approver"
-          placeholder="Search team members…"
-          value={val}
-          onChange={setVal}
-          options={USERS}
-          hint="This person will be notified when the step runs"
-        />
-      </div>
-    );
-  },
-};
-
-export const SelectIntegration: Story = {
-  args: { value: null, onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState<string | null>('slack');
-    return (
-      <div className="w-72">
-        <Combobox
-          label="Trigger integration"
-          placeholder="Search integrations…"
-          value={val}
-          onChange={setVal}
-          options={INTEGRATIONS}
-        />
-      </div>
-    );
-  },
-};
-
-export const Disabled: Story = {
-  args: { value: null, onChange: () => {}, options: [] },
-  render: () => (
-    <div className="w-72">
-      <Combobox
-        label="Department"
-        value="finance"
-        onChange={() => {}}
-        options={[{ value: 'finance', label: 'Finance' }]}
-        disabled
-        hint="Contact your admin to change department"
-      />
-    </div>
-  ),
-};
-
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions',
-  args: { value: null, onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState<string | null>(null);
-    return (
       <div className="w-72 flex flex-col gap-3">
-        <Combobox
-          label="Assign approver"
-          placeholder="Search team members…"
-          value={val}
-          onChange={setVal}
-          options={USERS}
-        />
+        <Combobox {...args} value={val} onChange={setVal} options={USERS} />
         <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="selected-user">
           Selected: {val ?? 'none'}
         </p>
@@ -192,3 +118,57 @@ export const Interactions: Story = {
     });
   },
 };
+
+export const AssignUser: Story = {
+  args: { value: null, onChange: () => {}, options: [] },
+  render: () => {
+    const [val, setVal] = React.useState<string | null>(null);
+    return (
+      <div className="w-72">
+        <Combobox
+          label="Assign approver"
+          placeholder="Search team members…"
+          value={val}
+          onChange={setVal}
+          options={USERS}
+          hint="This person will be notified when the step runs"
+        />
+      </div>
+    );
+  },
+};
+
+export const SelectIntegration: Story = {
+  args: { value: null, onChange: () => {}, options: [] },
+  render: () => {
+    const [val, setVal] = React.useState<string | null>('slack');
+    return (
+      <div className="w-72">
+        <Combobox
+          label="Trigger integration"
+          placeholder="Search integrations…"
+          value={val}
+          onChange={setVal}
+          options={INTEGRATIONS}
+        />
+      </div>
+    );
+  },
+};
+
+export const Disabled: Story = {
+  args: { value: null, onChange: () => {}, options: [] },
+  render: () => (
+    <div className="w-72">
+      <Combobox
+        label="Department"
+        value="finance"
+        onChange={() => {}}
+        options={[{ value: 'finance', label: 'Finance' }]}
+        disabled
+        hint="Contact your admin to change department"
+      />
+    </div>
+  ),
+};
+

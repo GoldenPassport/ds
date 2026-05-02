@@ -37,7 +37,7 @@ function TokenRow({
         {value}
       </code>
       {description && (
-        <p className="text-xs font-body text-ink-400 dark:text-ink-300">{description}</p>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300">{description}</p>
       )}
     </div>
   );
@@ -79,14 +79,14 @@ export const Tokens = {
               <code className="w-16 shrink-0 text-xs font-mono text-primary-800 dark:text-primary-400">
                 {px}
               </code>
-              <code className="w-16 shrink-0 text-xs font-mono text-ink-400 dark:text-ink-300">
+              <code className="w-16 shrink-0 text-xs font-mono text-ink-500 dark:text-ink-300">
                 {rem}
               </code>
               <div
                 className="h-5 rounded bg-primary-100 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800"
                 style={{ width: `${(parseInt(px) / 1536) * 100}%` }}
               />
-              <p className="text-xs font-body text-ink-400 dark:text-ink-300 hidden lg:block">
+              <p className="text-xs font-body text-ink-500 dark:text-ink-300 hidden lg:block">
                 {desc}
               </p>
             </div>
@@ -113,7 +113,7 @@ export const Tokens = {
                 <p className="text-xs font-mono font-medium text-ink-700 dark:text-ink-200">
                   {name}
                 </p>
-                <p className="text-xs font-mono text-ink-400 dark:text-ink-300">{value}</p>
+                <p className="text-xs font-mono text-ink-500 dark:text-ink-300">{value}</p>
               </div>
             </div>
           ))}
@@ -162,7 +162,7 @@ export const Tokens = {
               <code className="w-16 shrink-0 text-xs font-mono text-primary-800 dark:text-primary-400">
                 {value}
               </code>
-              <code className="w-16 shrink-0 text-xs font-mono text-ink-400 dark:text-ink-300">
+              <code className="w-16 shrink-0 text-xs font-mono text-ink-500 dark:text-ink-300">
                 {rem}
               </code>
               <div
@@ -234,7 +234,7 @@ export const Tokens = {
                 <p className="text-xs font-mono font-medium text-ink-700 dark:text-ink-200">
                   {name}
                 </p>
-                <p className="text-xs font-body text-ink-400 dark:text-ink-300">{desc}</p>
+                <p className="text-xs font-body text-ink-500 dark:text-ink-300">{desc}</p>
               </div>
             </div>
           ))}

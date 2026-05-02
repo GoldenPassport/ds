@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Play, Copy, Trash2, ExternalLink } from 'lucide-react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
+import { Play, Copy, Trash2, ExternalLink, Sparkles } from 'lucide-react';
 import { DataTable } from '../components/DataTable';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
@@ -148,7 +149,7 @@ const columns = [
     render: (row: Workflow) => (
       <div>
         <div className="font-semibold text-ink-900 dark:text-ink-50">{row.name}</div>
-        <div className="text-xs text-ink-400 dark:text-ink-300 mt-0.5">{row.dept}</div>
+        <div className="text-xs text-ink-500 dark:text-ink-300 mt-0.5">{row.dept}</div>
       </div>
     ),
   },
@@ -182,13 +183,43 @@ export const Playground: Story = {
 
 export const Default: Story = {
   args: { columns: [], data: [] },
-  render: () => (
-    <DataTable
-      columns={columns}
-      data={ALL_WORKFLOWS.slice(0, 6)}
-      onRowClick={(row) => alert(`Clicked: ${row.name}`)}
-    />
-  ),
+  render: () => {
+    const [clicked, setClicked] = React.useState('');
+    return (
+      <div>
+        <DataTable
+          columns={columns}
+          data={ALL_WORKFLOWS.slice(0, 6)}
+          onRowClick={(row) => setClicked((row as Workflow).name)}
+        />
+        {clicked && (
+          <p data-testid="clicked-row" className="mt-2 text-sm font-body text-ink-500 dark:text-ink-300">
+            Clicked: {clicked}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('click "Workflow" column header → sorts ascending', async () => {
+      await user.click(canvas.getByRole('columnheader', { name: /workflow/i }));
+      await waitFor(() => {
+        expect(canvas.getAllByRole('row').length).toBeGreaterThan(1);
+      });
+    });
+    await step('click "Workflow" header again → sorts descending', async () => {
+      await user.click(canvas.getByRole('columnheader', { name: /workflow/i }));
+    });
+    await step('click first data row → onRowClick fires', async () => {
+      const rows = canvas.getAllByRole('row');
+      await user.click(rows[1]);
+      await waitFor(() => {
+        expect(canvas.getByTestId('clicked-row')).toBeInTheDocument();
+      });
+    });
+  },
 };
 
 // ── Pagination stories ────────────────────────────────────
@@ -204,6 +235,26 @@ export const ClientSidePagination: Story = {
       onRowClick={(row) => alert(`Clicked: ${row.name}`)}
     />
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('initial render shows first 5 rows', async () => {
+      const rows = canvas.getAllByRole('row');
+      expect(rows).toHaveLength(6); // 1 header + 5 data
+    });
+    await step('click next page → shows next 5 rows', async () => {
+      await user.click(canvas.getByRole('button', { name: /next/i }));
+      await waitFor(() => {
+        expect(canvas.getByText('PTO Request Handler')).toBeInTheDocument();
+      });
+    });
+    await step('click previous page → goes back to first page', async () => {
+      await user.click(canvas.getByRole('button', { name: /previous/i }));
+      await waitFor(() => {
+        expect(canvas.getByText('Invoice Approval')).toBeInTheDocument();
+      });
+    });
+  },
 };
 
 export const CustomPageSizes: Story = {
@@ -242,7 +293,7 @@ export const ServerSidePagination: Story = {
 
     return (
       <div className="space-y-2">
-        <p className="text-xs text-ink-400 dark:text-ink-300 font-body">
+        <p className="text-xs text-ink-500 dark:text-ink-300 font-body">
           Simulates server fetch (400ms delay) on page/size change.
         </p>
         <DataTable
@@ -316,7 +367,7 @@ export const WithActionMenu: Story = {
             trigger={
               <button
                 onClick={(e) => e.stopPropagation()}
-                className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-400 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none"
+                className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none"
               >
                 ···
               </button>
@@ -378,7 +429,7 @@ export const WithBothActions: Story = {
             <Menu
               align="right"
               trigger={
-                <button className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-400 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none">
+                <button className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-ink-500 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-700 hover:text-ink-700 dark:hover:text-ink-200 transition-colors border-0 bg-transparent cursor-pointer text-base leading-none">
                   ···
                 </button>
               }
@@ -407,5 +458,49 @@ export const WithBothActions: Story = {
         onRowClick={(row) => alert(`Row: ${row.name}`)}
       />
     );
+  },
+};
+
+// ── Loading skeleton ──────────────────────────────────────
+
+export const Loading: Story = {
+  name: 'Loading skeleton',
+  args: { columns: [], data: [] },
+  render: () => <DataTable columns={columns} data={[]} loading />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step('loading skeleton rows are rendered', async () => {
+      const rows = canvas.getAllByRole('row');
+      expect(rows.length).toBeGreaterThan(1);
+      expect(canvas.queryByText('Invoice Approval')).not.toBeInTheDocument();
+    });
+  },
+};
+
+// ── Empty state ───────────────────────────────────────────
+
+export const Empty: Story = {
+  name: 'Empty state',
+  args: { columns: [], data: [] },
+  render: () => (
+    <DataTable
+      columns={columns}
+      data={[]}
+      emptyState={
+        <div className="flex flex-col items-center gap-2">
+          <Sparkles className="w-8 h-8 text-ink-300 dark:text-ink-500" aria-hidden="true" />
+          <p className="font-semibold text-ink-700 dark:text-ink-300">No workflows yet</p>
+          <p className="text-ink-500 dark:text-ink-300 text-xs">
+            Create your first workflow to get started
+          </p>
+        </div>
+      }
+    />
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step('empty state is rendered when data is empty', async () => {
+      expect(canvas.getByText('No workflows yet')).toBeInTheDocument();
+    });
   },
 };

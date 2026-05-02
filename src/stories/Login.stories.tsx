@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Eye, EyeOff, Mail, Lock, Phone, ArrowLeft, ShieldCheck } from 'lucide-react';
@@ -27,7 +28,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
     // md+: ink-50 background with a centred floating card.
     <div className="min-h-screen flex flex-col bg-white dark:bg-ink-900 md:bg-ink-50 md:dark:bg-ink-950 md:items-center md:justify-center md:px-4 md:py-16">
       <div className="w-full md:max-w-sm bg-white dark:bg-ink-900 md:rounded-2xl md:shadow-sm md:border md:border-ink-100 md:dark:border-ink-800 overflow-hidden">
-        <div className="flex items-center justify-center gap-3 px-5 py-4 md:py-5 border-b border-ink-100 dark:border-ink-800 bg-ink-50/60 dark:bg-ink-800/40">
+        <div className="flex items-center justify-center gap-3 px-5 py-4 md:py-5 border-b border-ink-100 dark:border-ink-800 bg-ink-50 dark:bg-ink-800">
           <img src={gpLogo} alt="" aria-hidden="true" className="h-7 w-auto" />
           <span className="text-sm font-bold font-display text-ink-900 dark:text-ink-50 tracking-tight">
             Golden Passport
@@ -227,9 +228,33 @@ function StandardLogin() {
   );
 }
 
-export const Standard: Story = {
+export const Playground: Story = {
   name: 'Standard — email + password',
   render: () => <StandardLogin />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('submit with wrong password → error appears', async () => {
+      await user.type(canvas.getByLabelText(/email address/i), 'alex@example.com');
+      await user.type(canvas.getByLabelText(/^password$/i), 'wrongpassword');
+      await user.click(canvas.getByRole('button', { name: /^sign in$/i }));
+      // Server response is simulated with a 1 200 ms setTimeout
+      await waitFor(
+        () => expect(canvas.getByText(/incorrect email or password/i)).toBeInTheDocument(),
+        { timeout: 3000 },
+      );
+    });
+    await step('fix password → submit → success screen', async () => {
+      const pw = canvas.getByLabelText(/^password$/i);
+      await user.clear(pw);
+      await user.type(pw, 'password');
+      await user.click(canvas.getByRole('button', { name: /^sign in$/i }));
+      await waitFor(
+        () => expect(canvas.getByText(/welcome back/i)).toBeInTheDocument(),
+        { timeout: 3000 },
+      );
+    });
+  },
 };
 
 // ═══════════════════════════════════════════════════════════

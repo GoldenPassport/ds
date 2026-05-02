@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Alert } from '../components/Alert';
@@ -119,6 +120,20 @@ export const Dismissible: Story = {
       <p className="text-sm text-ink-500 dark:text-ink-300">Alert dismissed. Refresh to reset.</p>
     );
   },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('alert is visible with title', async () => {
+      expect(canvas.getByText('New feature available')).toBeVisible();
+    });
+    await step('click Dismiss → alert is removed', async () => {
+      await user.click(canvas.getByRole('button', { name: /dismiss/i }));
+      await waitFor(() => {
+        expect(canvas.queryByText('New feature available')).not.toBeInTheDocument();
+        expect(canvas.getByText(/alert dismissed/i)).toBeVisible();
+      });
+    });
+  },
 };
 
 // ── With actions ──────────────────────────────────────────
@@ -154,19 +169,36 @@ export const WithActionsAndDismiss: Story = {
   name: 'With actions + dismiss',
   render: () => {
     const [visible, setVisible] = React.useState(true);
+    const [actionFired, setActionFired] = React.useState(false);
     return visible ? (
       <Alert
         variant="success"
         title="Profile updated"
         onDismiss={() => setVisible(false)}
-        actions={[{ label: 'View profile', onClick: () => alert('View') }]}
+        actions={[{ label: 'View profile', onClick: () => setActionFired(true) }]}
         className="max-w-xl"
       >
         Your changes have been saved and are now live.
+        {actionFired && <span data-testid="action-fired" className="sr-only">action fired</span>}
       </Alert>
     ) : (
       <p className="text-sm text-ink-500 dark:text-ink-300">Alert dismissed. Refresh to reset.</p>
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('click action button → callback fires', async () => {
+      await user.click(canvas.getByRole('button', { name: /view profile/i }));
+      await waitFor(() => expect(canvas.getByTestId('action-fired')).toBeInTheDocument());
+    });
+    await step('click Dismiss → alert is removed', async () => {
+      await user.click(canvas.getByRole('button', { name: /dismiss/i }));
+      await waitFor(() => {
+        expect(canvas.queryByText('Profile updated')).not.toBeInTheDocument();
+        expect(canvas.getByText(/alert dismissed/i)).toBeVisible();
+      });
+    });
   },
 };
 

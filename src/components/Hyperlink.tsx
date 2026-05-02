@@ -36,7 +36,8 @@ const variantCls: Record<HyperlinkVariant, string> = {
   // to tune the shade for intermediate backgrounds.
   default: 'text-[var(--link-primary)] decoration-[var(--link-primary)]',
   muted: 'text-ink-500    dark:text-ink-300  decoration-ink-400/60 dark:decoration-ink-400/60',
-  danger: 'text-red-600    dark:text-red-400  decoration-red-500/60 dark:decoration-red-400/60',
+  // text-red-600 (#E7000B) is 4.45:1 on bg-ink-50 — just under AA. Use red-700 (#C10007 ≈5.9:1).
+  danger: 'text-red-700    dark:text-red-400  decoration-red-500/60 dark:decoration-red-400/60',
 };
 
 const underlineCls: Record<HyperlinkUnderline, string> = {

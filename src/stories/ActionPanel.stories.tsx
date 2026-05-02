@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { ActionPanel } from '../components/ActionPanel';
 import { Button } from '../components/Button';
 import { Toggle } from '../components/Toggle';
@@ -124,6 +125,26 @@ export const WithToggle: Story = {
       </div>
     );
   },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('toggle starts off — click turns it on', async () => {
+      const toggle = canvas.getByRole('switch');
+      expect(toggle).toHaveAttribute('aria-checked', 'false');
+      await user.click(toggle);
+      await waitFor(() => {
+        expect(canvas.getByRole('switch')).toHaveAttribute('aria-checked', 'true');
+      });
+    });
+
+    await step('click again — turns back off', async () => {
+      await user.click(canvas.getByRole('switch'));
+      await waitFor(() => {
+        expect(canvas.getByRole('switch')).toHaveAttribute('aria-checked', 'false');
+      });
+    });
+  },
 };
 
 // ── With button (inline) ──────────────────────────────────
@@ -187,59 +208,3 @@ export const Danger: Story = {
   ),
 };
 
-// ── All layouts ───────────────────────────────────────────
-
-export const AllLayouts: Story = {
-  name: 'All layouts',
-  args: { title: '' },
-  render: () => {
-    const [autoRenew, setAutoRenew] = React.useState(true);
-    const [notifications, setNotifications] = React.useState(false);
-    return (
-      <div className="max-w-2xl flex flex-col gap-5">
-        <ActionPanel
-          title="Need more bandwidth?"
-          description="Talk to our sales team about custom limits and enterprise pricing."
-        >
-          <Button variant="ghost">Contact sales</Button>
-        </ActionPanel>
-
-        <ActionPanel
-          title="Update your email"
-          description="Change the email address you want associated with your account."
-        >
-          <div className="flex items-start gap-3">
-            <Input type="email" placeholder="you@example.com" className="max-w-xs" />
-            <Button variant="primary">Save</Button>
-          </div>
-        </ActionPanel>
-
-        <ActionPanel
-          layout="inline"
-          title="Renew subscription automatically"
-          description="We will automatically charge your payment method on file when your subscription is due for renewal."
-        >
-          <Toggle checked={autoRenew} onChange={setAutoRenew} />
-        </ActionPanel>
-
-        <ActionPanel
-          layout="inline"
-          title="Email notifications"
-          description="Receive a weekly digest of workflow runs and errors directly to your inbox."
-        >
-          <Toggle checked={notifications} onChange={setNotifications} />
-        </ActionPanel>
-
-        <ActionPanel
-          variant="danger"
-          title="Delete account"
-          description="Once you delete your account all your data will be permanently removed. There is no going back."
-        >
-          <Button variant="danger" size="sm">
-            Delete my account
-          </Button>
-        </ActionPanel>
-      </div>
-    );
-  },
-};

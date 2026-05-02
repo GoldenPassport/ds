@@ -47,23 +47,7 @@ export const Playground: Story = {
   ),
 };
 
-// ── Simple ────────────────────────────────────────────────
-
-export const Simple: Story = {
-  name: 'Simple',
-  args: {},
-  render: () => (
-    <div className="max-w-xl flex flex-col gap-8 py-4">
-      <div className="flex flex-col gap-4">
-        <p className="text-sm font-body text-ink-500 dark:text-ink-300">Content above</p>
-        <Divider />
-        <p className="text-sm font-body text-ink-500 dark:text-ink-300">Content below</p>
-      </div>
-    </div>
-  ),
-};
-
-// ── With label ────────────────────────────────────────────
+// ── With label (center / left / right) ───────────────────
 
 export const WithLabel: Story = {
   name: 'With label',
@@ -91,86 +75,25 @@ export const WithLabel: Story = {
   ),
 };
 
-// ── Alignments ────────────────────────────────────────────
+// ── With content (icons + badges) ────────────────────────
 
-export const Alignments: Story = {
-  name: 'Label alignments',
-  args: {},
-  render: () => (
-    <div className="max-w-xl flex flex-col gap-6 py-4">
-      <div>
-        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">
-          Left
-        </p>
-        <Divider
-          align="left"
-          label={
-            <span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">
-              January 2026
-            </span>
-          }
-        />
-      </div>
-      <div>
-        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">
-          Center
-        </p>
-        <Divider
-          align="center"
-          label={
-            <span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">
-              January 2026
-            </span>
-          }
-        />
-      </div>
-      <div>
-        <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 uppercase tracking-wider mb-3">
-          Right
-        </p>
-        <Divider
-          align="right"
-          label={
-            <span className="text-sm font-semibold font-body text-ink-500 dark:text-ink-300">
-              January 2026
-            </span>
-          }
-        />
-      </div>
-    </div>
-  ),
-};
-
-// ── With icon ─────────────────────────────────────────────
-
-export const WithIcon: Story = {
-  name: 'With icon',
+export const WithContent: Story = {
+  name: 'With content',
   args: {},
   render: () => (
     <div className="max-w-xl flex flex-col gap-6 py-4">
       <Divider label={<Settings className="w-4 h-4 text-ink-300 dark:text-ink-600" />} />
       <Divider label={<Plus className="w-4 h-4 text-ink-300 dark:text-ink-600" />} />
-    </div>
-  ),
-};
-
-// ── With badge ────────────────────────────────────────────
-
-export const WithBadge: Story = {
-  name: 'With badge',
-  args: {},
-  render: () => (
-    <div className="max-w-xl flex flex-col gap-6 py-4">
       <Divider label={<Badge label="New" variant="active" />} />
       <Divider align="left" label={<Badge label="3 unread" variant="ai" />} />
     </div>
   ),
 };
 
-// ── With button ───────────────────────────────────────────
+// ── With actions (buttons + toolbars) ────────────────────
 
-export const WithButton: Story = {
-  name: 'With button',
+export const WithActions: Story = {
+  name: 'With actions',
   args: {},
   render: () => (
     <div className="max-w-xl flex flex-col gap-6 py-4">
@@ -191,17 +114,6 @@ export const WithButton: Story = {
           </Button>
         }
       />
-    </div>
-  ),
-};
-
-// ── With toolbar ──────────────────────────────────────────
-
-export const WithToolbar: Story = {
-  name: 'With toolbar',
-  args: {},
-  render: () => (
-    <div className="max-w-xl flex flex-col gap-6 py-4">
       <Divider
         label={
           <span className="flex items-center gap-2">

@@ -82,139 +82,101 @@ export const Simple: Story = {
   ),
 };
 
-// ── With header ───────────────────────────────────────────
+// ── Sections (header-only / footer-only / header+footer) ──
 
-export const WithHeader: Story = {
-  name: 'With header',
+export const Sections: Story = {
+  name: 'Sections',
   args: { children: null },
   render: () => (
-    <div className="max-w-lg flex flex-col gap-6">
-      <Card
-        header={
-          <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
-            Account details
-          </h3>
-        }
-      >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
-          Your account is on the Pro plan. Billing renews on 1 May 2026.
-        </p>
-      </Card>
-
-      <Card
-        header={
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
-                API keys
-              </h3>
-              <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300">
-                Manage keys used to authenticate API requests.
-              </p>
+    <div className="max-w-lg flex flex-col gap-8">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">With header</p>
+        <Card
+          header={
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
+                  API keys
+                </h3>
+                <p className="mt-0.5 text-xs font-body text-ink-500 dark:text-ink-300">
+                  Manage keys used to authenticate API requests.
+                </p>
+              </div>
+              <Button variant="primary" size="sm">
+                <Plus className="w-3.5 h-3.5" aria-hidden="true" />
+                New key
+              </Button>
             </div>
-            <Button variant="primary" size="sm">
-              <Plus className="w-3.5 h-3.5" aria-hidden="true" />
-              New key
-            </Button>
-          </div>
-        }
-      >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
-          You have 2 active API keys. Keys are shown once at creation.
+          }
+        >
+          <p className="text-sm font-body text-ink-500 dark:text-ink-300">
+            You have 2 active API keys. Keys are shown once at creation.
+          </p>
+        </Card>
+      </div>
+
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">With footer</p>
+        <Card
+          footer={
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-xs font-body text-ink-500 dark:text-ink-300">
+                Last updated 2 hours ago
+              </p>
+              <Button variant="ghost" size="sm">
+                <Download className="w-3.5 h-3.5" aria-hidden="true" />
+                Export
+              </Button>
+            </div>
+          }
+        >
+          <p className="text-sm font-body text-ink-500 dark:text-ink-300">
+            Monthly usage report for April 2026. 14,302 API calls across 3 projects.
+          </p>
+        </Card>
+      </div>
+
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-2">
+          With header and footer
         </p>
-      </Card>
-    </div>
-  ),
-};
-
-// ── With footer ───────────────────────────────────────────
-
-export const WithFooter: Story = {
-  name: 'With footer',
-  args: { children: null },
-  render: () => (
-    <div className="max-w-lg flex flex-col gap-6">
-      <Card
-        footer={
-          <div className="flex justify-end gap-3">
-            <Button variant="secondary" size="sm">
-              Cancel
-            </Button>
-            <Button variant="primary" size="sm">
-              Save changes
-            </Button>
+        <Card
+          header={
+            <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
+              Billing information
+            </h3>
+          }
+          footer={
+            <div className="flex justify-end gap-3">
+              <Button variant="secondary" size="sm">
+                Cancel
+              </Button>
+              <Button variant="primary" size="sm">
+                Update billing
+              </Button>
+            </div>
+          }
+        >
+          <div className="flex flex-col gap-3 text-sm font-body">
+            <div className="flex justify-between">
+              <span className="text-ink-500 dark:text-ink-300">Plan</span>
+              <span className="font-medium text-ink-900 dark:text-ink-50">Pro</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-ink-500 dark:text-ink-300">Billing cycle</span>
+              <span className="font-medium text-ink-900 dark:text-ink-50">Monthly</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-ink-500 dark:text-ink-300">Next invoice</span>
+              <span className="font-medium text-ink-900 dark:text-ink-50">1 May 2026</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-ink-500 dark:text-ink-300">Amount</span>
+              <span className="font-medium text-ink-900 dark:text-ink-50">$49 / month</span>
+            </div>
           </div>
-        }
-      >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
-          Update your display name and email address. Changes take effect immediately.
-        </p>
-      </Card>
-
-      <Card
-        footer={
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-xs font-body text-ink-500 dark:text-ink-300">
-              Last updated 2 hours ago
-            </p>
-            <Button variant="ghost" size="sm">
-              <Download className="w-3.5 h-3.5" aria-hidden="true" />
-              Export
-            </Button>
-          </div>
-        }
-      >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
-          Monthly usage report for April 2026. 14,302 API calls across 3 projects.
-        </p>
-      </Card>
-    </div>
-  ),
-};
-
-// ── With header and footer ────────────────────────────────
-
-export const WithHeaderAndFooter: Story = {
-  name: 'With header and footer',
-  args: { children: null },
-  render: () => (
-    <div className="max-w-lg flex flex-col gap-6">
-      <Card
-        header={
-          <h3 className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50">
-            Billing information
-          </h3>
-        }
-        footer={
-          <div className="flex justify-end gap-3">
-            <Button variant="secondary" size="sm">
-              Cancel
-            </Button>
-            <Button variant="primary" size="sm">
-              Update billing
-            </Button>
-          </div>
-        }
-      >
-        <div className="flex flex-col gap-3 text-sm font-body">
-          <div className="flex justify-between">
-            <span className="text-ink-500 dark:text-ink-300">Plan</span>
-            <span className="font-medium text-ink-900 dark:text-ink-50">Pro</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-ink-500 dark:text-ink-300">Billing cycle</span>
-            <span className="font-medium text-ink-900 dark:text-ink-50">Monthly</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-ink-500 dark:text-ink-300">Next invoice</span>
-            <span className="font-medium text-ink-900 dark:text-ink-50">1 May 2026</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-ink-500 dark:text-ink-300">Amount</span>
-            <span className="font-medium text-ink-900 dark:text-ink-50">$49 / month</span>
-          </div>
-        </div>
-      </Card>
+        </Card>
+      </div>
     </div>
   ),
 };
@@ -325,15 +287,15 @@ export const BodyMuted: Story = {
       >
         <div className="flex flex-col gap-2 text-xs font-mono text-ink-600 dark:text-ink-300">
           <div className="flex gap-4">
-            <span className="text-ink-400 dark:text-ink-300 select-none">01</span>{' '}
+            <span className="text-ink-500 dark:text-ink-300 select-none">01</span>{' '}
             DATABASE_URL=postgres://...
           </div>
           <div className="flex gap-4">
-            <span className="text-ink-400 dark:text-ink-300 select-none">02</span>{' '}
+            <span className="text-ink-500 dark:text-ink-300 select-none">02</span>{' '}
             REDIS_URL=redis://...
           </div>
           <div className="flex gap-4">
-            <span className="text-ink-400 dark:text-ink-300 select-none">03</span>{' '}
+            <span className="text-ink-500 dark:text-ink-300 select-none">03</span>{' '}
             SECRET_KEY=••••••••••••
           </div>
         </div>

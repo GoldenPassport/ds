@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ContainerList } from '../components/ContainerList';
 import { Avatar } from '../components/Avatar';
@@ -225,44 +226,6 @@ export const Flush: Story = {
   ),
 };
 
-// ── All four variants ─────────────────────────────────────
-
-export const AllVariants: Story = {
-  name: 'All variants',
-  args: { items: [] },
-  render: () => (
-    <div className="max-w-2xl flex flex-col gap-10">
-      {(['divided', 'bordered', 'cards', 'flush'] as const).map((variant) => (
-        <div key={variant}>
-          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">
-            variant="{variant}"
-          </p>
-          <ContainerList
-            variant={variant}
-            items={
-              variant === 'flush'
-                ? PEOPLE.slice(0, 3).map((p) => (
-                    <div key={p.email} className="flex items-center gap-3 px-4">
-                      <Avatar name={p.name} size={32} />
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
-                          {p.name}
-                        </p>
-                        <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">
-                          {p.role}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                : PEOPLE.slice(0, 3).map((p) => <PersonRow key={p.email} {...p} />)
-            }
-          />
-        </div>
-      ))}
-    </div>
-  ),
-};
-
 // ── No dividers ───────────────────────────────────────────
 
 export const NoDividers: Story = {
@@ -299,6 +262,28 @@ export const SettingsList: Story = {
       </div>
     </div>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    // The toggle renders without a labelled Switch.Label (label text is a plain <p>),
+    // so we query all switches and use positional access. Index 0 = "Email notifications"
+    // (defaultOn: true) in the first (divided) list section.
+    await step('first toggle ("Email notifications") starts on', async () => {
+      expect(canvas.getAllByRole('switch')[0]).toHaveAttribute('aria-checked', 'true');
+    });
+    await step('click it → turns off', async () => {
+      await user.click(canvas.getAllByRole('switch')[0]);
+      await waitFor(() =>
+        expect(canvas.getAllByRole('switch')[0]).toHaveAttribute('aria-checked', 'false'),
+      );
+    });
+    await step('click again → turns back on', async () => {
+      await user.click(canvas.getAllByRole('switch')[0]);
+      await waitFor(() =>
+        expect(canvas.getAllByRole('switch')[0]).toHaveAttribute('aria-checked', 'true'),
+      );
+    });
+  },
 };
 
 // ── Action rows ───────────────────────────────────────────
@@ -316,6 +301,44 @@ export const ActionRows: Story = {
         <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">cards</p>
         <ContainerList variant="cards" items={ACTION_ITEMS} />
       </div>
+    </div>
+  ),
+};
+
+// ── All four variants ─────────────────────────────────────
+
+export const AllVariants: Story = {
+  name: 'All variants',
+  args: { items: [] },
+  render: () => (
+    <div className="max-w-2xl flex flex-col gap-10">
+      {(['divided', 'bordered', 'cards', 'flush'] as const).map((variant) => (
+        <div key={variant}>
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-3">
+            variant="{variant}"
+          </p>
+          <ContainerList
+            variant={variant}
+            items={
+              variant === 'flush'
+                ? PEOPLE.slice(0, 3).map((p) => (
+                    <div key={p.email} className="flex items-center gap-3 px-4">
+                      <Avatar name={p.name} size={32} />
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold font-body text-ink-900 dark:text-ink-50 truncate">
+                          {p.name}
+                        </p>
+                        <p className="text-xs font-body text-ink-500 dark:text-ink-300 truncate">
+                          {p.role}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                : PEOPLE.slice(0, 3).map((p) => <PersonRow key={p.email} {...p} />)
+            }
+          />
+        </div>
+      ))}
     </div>
   ),
 };

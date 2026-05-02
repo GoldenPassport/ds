@@ -368,7 +368,7 @@ function FullRegistrationForm() {
   );
 }
 
-export const FullRegistration: Story = {
+export const Playground: Story = {
   name: 'Full registration',
   render: () => <FullRegistrationForm />,
 };

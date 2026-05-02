@@ -53,10 +53,8 @@ export const Playground: Story = {
     return (
       <>
         <Button onClick={() => setOpen(true)}>Open Dialog</Button>
-        <Dialog {...args} open={open} onClose={setOpen}>
-          <p className="text-ink-600 dark:text-ink-300">
-            This is the dialog body. Use the controls panel to change the title and size.
-          </p>
+        <Dialog {...args} open={open} onClose={setOpen} title="Confirm Action" size="sm">
+          <p className="text-ink-600 dark:text-ink-300">Are you sure you want to proceed?</p>
           <Dialog.Footer>
             <Button variant="ghost" onClick={() => setOpen(false)}>
               Cancel
@@ -68,6 +66,58 @@ export const Playground: Story = {
         </Dialog>
       </>
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    // Helper: waits until the panel content is visible, not just the dialog
+    // wrapper. HeadlessUI applies opacity-0 to HLDialog.Panel (via Transition.Child
+    // as={Fragment}), not to the outer role="dialog" div, so we must wait for
+    // content inside the panel to be visible.
+    const waitForDialogOpen = () =>
+      waitFor(() => {
+        const dialog = within(document.body).getByRole('dialog');
+        expect(within(dialog).getByText('Confirm Action')).toBeVisible();
+      });
+
+    await step('click trigger — dialog opens', async () => {
+      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
+      await waitForDialogOpen();
+    });
+
+    await step('dialog title and body are visible', async () => {
+      const dialog = within(document.body).getByRole('dialog');
+      expect(within(dialog).getByText('Confirm Action')).toBeVisible();
+      expect(within(dialog).getByText(/are you sure/i)).toBeVisible();
+    });
+
+    await step('click Cancel — dialog closes', async () => {
+      const dialog = within(document.body).getByRole('dialog');
+      await user.click(within(dialog).getByRole('button', { name: /cancel/i }));
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+
+    await step('re-open and close via X button', async () => {
+      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
+      await waitForDialogOpen();
+      const dialog = within(document.body).getByRole('dialog');
+      await user.click(within(dialog).getByRole('button', { name: /close/i }));
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+
+    await step('re-open and close with Escape key', async () => {
+      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
+      await waitForDialogOpen();
+      await user.keyboard('{Escape}');
+      await waitFor(() => {
+        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
   },
 };
 
@@ -136,80 +186,6 @@ export const InfoDialog: Story = {
       </Dialog.Footer>
     </DialogDemo>
   ),
-};
-
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions',
-  args: { open: false, onClose: () => {}, children: null },
-  render: () => {
-    const [open, setOpen] = React.useState(false);
-    return (
-      <>
-        <Button onClick={() => setOpen(true)}>Open Dialog</Button>
-        <Dialog open={open} onClose={setOpen} title="Confirm Action" size="sm">
-          <p className="text-ink-600 dark:text-ink-300">Are you sure you want to proceed?</p>
-          <Dialog.Footer>
-            <Button variant="ghost" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={() => setOpen(false)}>
-              Confirm
-            </Button>
-          </Dialog.Footer>
-        </Dialog>
-      </>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('click trigger — dialog opens', async () => {
-      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
-      await waitFor(() => {
-        expect(within(document.body).getByRole('dialog')).toBeInTheDocument();
-      });
-    });
-
-    await step('dialog title and body are visible', async () => {
-      const dialog = within(document.body).getByRole('dialog');
-      expect(within(dialog).getByText('Confirm Action')).toBeVisible();
-      expect(within(dialog).getByText(/are you sure/i)).toBeVisible();
-    });
-
-    await step('click Cancel — dialog closes', async () => {
-      const dialog = within(document.body).getByRole('dialog');
-      await user.click(within(dialog).getByRole('button', { name: /cancel/i }));
-      await waitFor(() => {
-        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
-      });
-    });
-
-    await step('re-open and close via X button', async () => {
-      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
-      await waitFor(() => {
-        expect(within(document.body).getByRole('dialog')).toBeInTheDocument();
-      });
-      const dialog = within(document.body).getByRole('dialog');
-      await user.click(within(dialog).getByRole('button', { name: /close/i }));
-      await waitFor(() => {
-        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
-      });
-    });
-
-    await step('re-open and close with Escape key', async () => {
-      await user.click(canvas.getByRole('button', { name: /open dialog/i }));
-      await waitFor(() => {
-        expect(within(document.body).getByRole('dialog')).toBeInTheDocument();
-      });
-      await user.keyboard('{Escape}');
-      await waitFor(() => {
-        expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
-      });
-    });
-  },
 };
 
 export const LargeDialog: Story = {

@@ -1,3 +1,4 @@
+import { expect, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react';
 import { WifiOff, ShieldOff, ServerCrash, Wrench, AlertTriangle, Lock } from 'lucide-react';
 import { ErrorPage } from '../components/ErrorPage';
@@ -42,6 +43,21 @@ export const Playground: Story = {
     fullScreen: false,
   },
   render: (args) => <ErrorPage {...args} primaryAction={homeAction} secondaryAction={backAction} />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step('error code is displayed', async () => {
+      expect(canvas.getByText('404')).toBeVisible();
+    });
+    await step('page title is visible', async () => {
+      expect(canvas.getByRole('heading', { name: /page not found/i })).toBeVisible();
+    });
+    await step('primary action link is present', async () => {
+      expect(canvas.getByRole('link', { name: /go back home/i })).toBeInTheDocument();
+    });
+    await step('secondary action button is present', async () => {
+      expect(canvas.getByRole('button', { name: /^go back$/i })).toBeInTheDocument();
+    });
+  },
 };
 
 // ── 404 Not Found ─────────────────────────────────────────

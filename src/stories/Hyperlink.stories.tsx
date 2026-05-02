@@ -95,37 +95,6 @@ export const External: Story = {
   ),
 };
 
-// ── Inline in body text ───────────────────────────────────
-
-export const InBodyText: Story = {
-  name: 'In body text',
-  args: { href: '', children: '' },
-  render: () => (
-    <div className="max-w-prose flex flex-col gap-4">
-      <p className="text-base font-body text-ink-700 dark:text-ink-200 leading-relaxed">
-        Golden Passport helps you manage the full applicant lifecycle — from{' '}
-        <Hyperlink href="#">initial submission</Hyperlink> through to{' '}
-        <Hyperlink href="#">document verification</Hyperlink> and final approval. Learn more in our{' '}
-        <Hyperlink href="#" external>
-          knowledge base
-        </Hyperlink>
-        .
-      </p>
-      <p className="text-sm font-body text-ink-500 dark:text-ink-300 leading-relaxed">
-        By continuing you agree to our{' '}
-        <Hyperlink href="#" variant="muted" underline="always">
-          Terms of Service
-        </Hyperlink>{' '}
-        and{' '}
-        <Hyperlink href="#" variant="muted" underline="always">
-          Privacy Policy
-        </Hyperlink>
-        .
-      </p>
-    </div>
-  ),
-};
-
 // ── All variants ──────────────────────────────────────────
 
 export const AllVariants: Story = {
@@ -149,14 +118,14 @@ export const AllVariants: Story = {
         </div>
       ))}
 
-      {/* White background — override --link-primary to use raw primary-500 */}
+      {/* White background — --link-primary auto-darkens primary-500 for contrast safety */}
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-mono text-ink-500 dark:text-ink-400">
-          default — on white (primary-500)
+        <span className="text-xs font-mono text-ink-500 dark:text-ink-300">
+          default — on white (auto-darkened)
         </span>
         <div
           className="flex items-center gap-6 flex-wrap bg-white rounded-xl px-4 py-3"
-          style={{ '--link-primary': 'var(--color-primary-500)' } as React.CSSProperties}
+          style={{ '--link-primary': 'oklch(from var(--color-primary-500) min(l, 0.45) c h)' } as React.CSSProperties}
         >
           {(['hover', 'always', 'none'] as const).map((u) => (
             <Hyperlink key={u} href="#" underline={u}>

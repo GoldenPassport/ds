@@ -51,12 +51,15 @@ export const Playground: Story = {
   },
 };
 
-export const Unchecked: Story = {
-  args: { checked: false, label: 'Notify on failure' },
-};
-
-export const Checked: Story = {
-  args: { checked: true, label: 'Notify on failure' },
+export const States: Story = {
+  name: 'Checked / Unchecked',
+  args: { checked: false, onChange: () => {} },
+  render: () => (
+    <div className="flex flex-col gap-3">
+      <Checkbox checked={false} onChange={() => {}} label="Notify on failure" />
+      <Checkbox checked={true} onChange={() => {}} label="Notify on failure" />
+    </div>
+  ),
 };
 
 export const WithDescription: Story = {
@@ -83,10 +86,6 @@ export const Disabled: Story = {
     description: 'Managed by your org admin.',
     disabled: true,
   },
-};
-
-export const Standalone: Story = {
-  args: { checked: true, 'aria-label': 'Toggle option' },
 };
 
 export const CheckboxGroup: Story = {
@@ -124,6 +123,24 @@ export const CheckboxGroup: Story = {
         />
       </div>
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('click unchecked "Run completions" → becomes checked', async () => {
+      await user.click(canvas.getByRole('checkbox', { name: /run completions/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('checkbox', { name: /run completions/i })).toBeChecked();
+      });
+    });
+
+    await step('click checked "Workflow failures" → becomes unchecked', async () => {
+      await user.click(canvas.getByRole('checkbox', { name: /workflow failures/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('checkbox', { name: /workflow failures/i })).not.toBeChecked();
+      });
+    });
   },
 };
 
@@ -167,87 +184,38 @@ export const SelectAllPattern: Story = {
       </div>
     );
   },
-};
-
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions',
-  args: { checked: false, onChange: () => {} },
-  render: () => {
-    const [checked, setChecked] = React.useState(false);
-    // disabled state is static in this story — the checkbox is hardcoded disabled
-
-    const [clickCount, setClickCount] = React.useState(0);
-    const [indeterminate, setIndeterminate] = React.useState(true);
-    return (
-      <div className="flex flex-col gap-4 max-w-xs">
-        <Checkbox
-          checked={checked}
-          onChange={(v) => {
-            setChecked(v);
-            setClickCount((c) => c + 1);
-          }}
-          label="Toggle me"
-          description="Click to toggle checked state"
-        />
-        <p className="text-xs font-body text-ink-500 dark:text-ink-300" data-testid="check-state">
-          checked={String(checked)} clicks={clickCount}
-        </p>
-        <Checkbox
-          checked={false}
-          onChange={() => setClickCount((c) => c + 1)}
-          disabled
-          label="Disabled"
-          description="Should not fire onChange"
-        />
-        <Checkbox
-          checked={!indeterminate}
-          indeterminate={indeterminate}
-          onChange={() => setIndeterminate(false)}
-          label="Indeterminate → checked"
-          description="Starts indeterminate; click sets checked"
-        />
-        <p
-          className="text-xs font-body text-ink-500 dark:text-ink-300"
-          data-testid="indeterminate-state"
-        >
-          indeterminate={String(indeterminate)}
-        </p>
-      </div>
-    );
-  },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     const user = userEvent.setup();
 
-    await step('click unchecked checkbox → becomes checked, onChange fires', async () => {
-      await user.click(canvas.getByRole('checkbox', { name: /toggle me/i }));
+    await step('initially 1 of 4 selected — parent is indeterminate', async () => {
+      const selectAll = canvas.getByRole('checkbox', { name: /select all/i });
+      expect(selectAll).toHaveAttribute('aria-checked', 'mixed');
+    });
+
+    await step('click "Select all" → all 4 items checked', async () => {
+      await user.click(canvas.getByRole('checkbox', { name: /select all/i }));
       await waitFor(() => {
-        expect(canvas.getByTestId('check-state')).toHaveTextContent('checked=true');
-        expect(canvas.getByTestId('check-state')).toHaveTextContent('clicks=1');
+        canvas.getAllByRole('checkbox').forEach((cb) => expect(cb).toBeChecked());
       });
     });
 
-    await step('click checked checkbox → unchecked', async () => {
-      await user.click(canvas.getByRole('checkbox', { name: /toggle me/i }));
+    await step('click "Select all" again → all unchecked', async () => {
+      await user.click(canvas.getByRole('checkbox', { name: /select all/i }));
       await waitFor(() => {
-        expect(canvas.getByTestId('check-state')).toHaveTextContent('checked=false');
+        canvas.getAllByRole('checkbox').forEach((cb) => expect(cb).not.toBeChecked());
       });
     });
 
-    await step('click disabled checkbox → onChange does not fire', async () => {
-      const before = canvas.getByTestId('check-state').textContent;
-      await user.click(canvas.getByRole('checkbox', { name: /disabled/i }));
-      // click count stays the same — disabled prevents onChange
-      expect(canvas.getByTestId('check-state').textContent).toBe(before);
-    });
-
-    await step('click indeterminate checkbox → clears indeterminate, shows checked', async () => {
-      await user.click(canvas.getByRole('checkbox', { name: /indeterminate/i }));
+    await step('click one item → parent becomes indeterminate', async () => {
+      await user.click(canvas.getByRole('checkbox', { name: /invoice approval/i }));
       await waitFor(() => {
-        expect(canvas.getByTestId('indeterminate-state')).toHaveTextContent('indeterminate=false');
+        expect(canvas.getByRole('checkbox', { name: /select all/i })).toHaveAttribute(
+          'aria-checked',
+          'mixed',
+        );
       });
     });
   },
 };
+

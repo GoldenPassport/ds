@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import {
   Fieldset,
   Legend,
@@ -27,10 +28,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// ── Basic ─────────────────────────────────────────────────
+// ── Playground ────────────────────────────────────────────
 
-export const Basic: Story = {
-  name: 'Basic',
+export const Playground: Story = {
+  name: 'Playground',
   render: () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -300,6 +301,33 @@ export const WithErrors: Story = {
         </Fieldset>
       </div>
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('errors are visible on initial load', async () => {
+      await waitFor(() => {
+        expect(canvas.getByText('Full name is required')).toBeVisible();
+        expect(canvas.getByText('Enter a valid email address')).toBeVisible();
+      });
+    });
+
+    await step('type a name → name error clears', async () => {
+      await user.type(canvas.getByPlaceholderText('Alex Morgan'), 'Jordan');
+      await waitFor(() => {
+        expect(canvas.queryByText('Full name is required')).not.toBeInTheDocument();
+      });
+    });
+
+    await step('fix the email → email error clears', async () => {
+      const emailInput = canvas.getByPlaceholderText('alex@example.com');
+      await user.clear(emailInput);
+      await user.type(emailInput, 'jordan@example.com');
+      await waitFor(() => {
+        expect(canvas.queryByText('Enter a valid email address')).not.toBeInTheDocument();
+      });
+    });
   },
 };
 

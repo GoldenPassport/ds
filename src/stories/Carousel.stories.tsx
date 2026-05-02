@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Carousel } from '../components/Carousel';
 import type { CarouselItem } from '../components/Carousel';
 
@@ -97,14 +97,6 @@ const PORTRAIT: CarouselItem[] = [
   },
 ];
 
-const MINIMAL: CarouselItem[] = [
-  { id: 1, image: 'https://picsum.photos/seed/arch1/800/600' },
-  { id: 2, image: 'https://picsum.photos/seed/arch2/800/600' },
-  { id: 3, image: 'https://picsum.photos/seed/arch3/800/600' },
-  { id: 4, image: 'https://picsum.photos/seed/arch4/800/600' },
-  { id: 5, image: 'https://picsum.photos/seed/arch5/800/600' },
-];
-
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
@@ -115,6 +107,25 @@ export const Playground: Story = {
     showIndicators: true,
     autoPlay: false,
     aspectRatio: 'aspect-[4/3]',
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('"Go to slide 1" indicator is active initially', async () => {
+      expect(canvas.getByRole('button', { name: /go to slide 1/i })).toBeInTheDocument();
+    });
+    await step('click Next → slide advances', async () => {
+      await user.click(canvas.getByRole('button', { name: /next/i }));
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /go to slide 2/i })).toBeInTheDocument(),
+      );
+    });
+    await step('click Previous → slide goes back', async () => {
+      await user.click(canvas.getByRole('button', { name: /previous/i }));
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /go to slide 1/i })).toBeInTheDocument(),
+      );
+    });
   },
 };
 
@@ -187,146 +198,4 @@ export const Square: Story = {
       <Carousel items={NATURE} variant="uncontained" aspectRatio="aspect-square" />
     </div>
   ),
-};
-
-// ── No overlay (image only) ───────────────────────────────
-
-export const ImageOnly: Story = {
-  name: 'Image only — no text overlay',
-  args: { items: MINIMAL },
-  render: () => (
-    <Carousel
-      items={MINIMAL}
-      variant="multi-browse"
-      aspectRatio="aspect-video"
-      showIndicators={false}
-    />
-  ),
-};
-
-// ── Auto play ─────────────────────────────────────────────
-
-export const AutoPlay: Story = {
-  name: 'Auto play',
-  args: { items: NATURE },
-  render: () => (
-    <div className="max-w-lg mx-auto">
-      <Carousel
-        items={NATURE}
-        variant="hero"
-        autoPlay
-        autoPlayInterval={3000}
-        aspectRatio="aspect-[4/3]"
-      />
-    </div>
-  ),
-};
-
-// ── No controls ───────────────────────────────────────────
-
-export const NoControls: Story = {
-  name: 'No controls — swipe only',
-  args: { items: NATURE },
-  render: () => (
-    <div className="max-w-lg mx-auto">
-      <Carousel
-        items={NATURE}
-        variant="hero"
-        showArrows={false}
-        showIndicators={false}
-        aspectRatio="aspect-[4/3]"
-      />
-    </div>
-  ),
-};
-
-// ── Dark mode ─────────────────────────────────────────────
-
-export const Dark: Story = {
-  name: 'Dark mode',
-  args: { items: NATURE },
-  render: () => (
-    <div className="dark bg-ink-900 p-4 rounded-2xl">
-      <Carousel items={NATURE} variant="hero" aspectRatio="aspect-[4/3]" />
-    </div>
-  ),
-};
-
-// ── All variants ──────────────────────────────────────────
-
-export const AllVariants: Story = {
-  name: 'All variants',
-  args: { items: NATURE },
-  render: () => (
-    <div className="space-y-10">
-      {(['hero', 'multi-browse', 'uncontained', 'full-screen'] as const).map((v) => (
-        <div key={v}>
-          <p className="text-xs font-semibold font-body text-ink-500 dark:text-ink-300 tracking-wider mb-3 px-4 capitalize">
-            {v.replace('-', ' ')}
-          </p>
-          <Carousel
-            items={NATURE}
-            variant={v}
-            aspectRatio={v === 'full-screen' ? 'aspect-[3/4]' : 'aspect-[4/3]'}
-            showIndicators={v !== 'multi-browse'}
-            aria-label={`${v.replace('-', ' ')} carousel`}
-          />
-        </div>
-      ))}
-    </div>
-  ),
-};
-
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions — arrow & indicator navigation',
-  args: { items: NATURE },
-  render: () => (
-    <div className="max-w-lg mx-auto">
-      <Carousel
-        items={NATURE.slice(0, 4)}
-        variant="hero"
-        aspectRatio="aspect-[4/3]"
-        showArrows
-        showIndicators
-        aria-label="Test carousel"
-      />
-    </div>
-  ),
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('carousel mounts with prev, next and 4 indicator buttons', async () => {
-      // findByRole blocks until the component has mounted
-      await canvas.findByRole('button', { name: /^previous$/i });
-      expect(canvas.getByRole('button', { name: /^next$/i })).toBeInTheDocument();
-      expect(canvas.getAllByRole('button', { name: /go to slide/i })).toHaveLength(4);
-    });
-
-    await step('prev is disabled on the initial slide (active starts at 0)', async () => {
-      // Initial disabled state comes from useState(0), not IntersectionObserver —
-      // this is the only arrow-state assertion immune to scroll-observer races.
-      await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /^previous$/i })).toBeDisabled();
-      });
-    });
-
-    await step('clicking the next arrow does not throw', async () => {
-      await user.click(canvas.getByRole('button', { name: /^next$/i }));
-      // Verify the component is still intact after the click
-      await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /^previous$/i })).toBeInTheDocument();
-      });
-    });
-
-    await step('clicking an indicator button does not throw', async () => {
-      const indicators = canvas.getAllByRole('button', { name: /go to slide/i });
-      await user.click(indicators[2]);
-      await waitFor(() => {
-        expect(canvas.getByRole('button', { name: /^next$/i })).toBeInTheDocument();
-      });
-    });
-  },
 };

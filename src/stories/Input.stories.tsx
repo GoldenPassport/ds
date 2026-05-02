@@ -1,14 +1,7 @@
 import React from 'react';
-import {
-  Eye,
-  EyeOff,
-  Search as SearchIcon,
-  Mail,
-  User,
-  Lock,
-  Globe,
-} from 'lucide-react';
+import { Eye, EyeOff, Search as SearchIcon, Mail, User, Lock, Globe } from 'lucide-react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { Input } from '../components/Input';
 
 const meta = {
@@ -91,31 +84,6 @@ export const WithIcon: Story = {
   ),
 };
 
-// ── Text ──────────────────────────────────────────────────
-
-export const Text: Story = {
-  name: 'Type — text',
-  args: {
-    type: 'text',
-    label: 'Full name',
-    placeholder: 'Alex Morgan',
-    hint: 'As it appears on your account',
-  },
-};
-
-// ── Email ─────────────────────────────────────────────────
-
-export const Email: Story = {
-  name: 'Type — email',
-  args: {
-    type: 'email',
-    label: 'Email address',
-    placeholder: 'alex@company.com',
-    hint: "We'll send notifications here",
-    autoComplete: 'email',
-  },
-};
-
 // ── Password ──────────────────────────────────────────────
 
 export const Password: Story = {
@@ -145,6 +113,28 @@ export const Password: Story = {
       </div>
     );
   },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('input type is "password" by default', async () => {
+      expect(canvas.getByLabelText('Password')).toHaveAttribute('type', 'password');
+    });
+
+    await step('click Show password → type becomes "text"', async () => {
+      await user.click(canvas.getByRole('button', { name: /show password/i }));
+      await waitFor(() => {
+        expect(canvas.getByLabelText('Password')).toHaveAttribute('type', 'text');
+      });
+    });
+
+    await step('click Hide password → type reverts to "password"', async () => {
+      await user.click(canvas.getByRole('button', { name: /hide password/i }));
+      await waitFor(() => {
+        expect(canvas.getByLabelText('Password')).toHaveAttribute('type', 'password');
+      });
+    });
+  },
 };
 
 // ── Number ────────────────────────────────────────────────
@@ -159,40 +149,5 @@ export const NumberInput: Story = {
     max: 10,
     step: 1,
     hint: 'Max retries before the step is marked as failed',
-  },
-};
-
-// ── Tel ───────────────────────────────────────────────────
-
-export const Tel: Story = {
-  name: 'Type — tel',
-  args: {
-    type: 'tel',
-    label: 'Phone number',
-    placeholder: '+1 (555) 000-0000',
-    autoComplete: 'tel',
-    hint: 'Used for SMS alerts',
-  },
-};
-
-// ── URL ───────────────────────────────────────────────────
-
-export const Url: Story = {
-  name: 'Type — url',
-  args: {
-    type: 'url',
-    label: 'Webhook URL',
-    placeholder: 'https://hooks.example.com/workflow',
-    hint: 'POST requests are sent here on each run',
-  },
-};
-
-// ── Search ────────────────────────────────────────────────
-
-export const Search: Story = {
-  name: 'Type — search',
-  args: {
-    type: 'search',
-    placeholder: 'Search workflows…',
   },
 };

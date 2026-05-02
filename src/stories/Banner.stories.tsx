@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Banner } from '../components/Banner';
@@ -112,6 +113,24 @@ function DismissibleDemo() {
 export const Dismissible: Story = {
   name: 'Dismissible',
   render: () => <DismissibleDemo />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('banner is visible with title', async () => {
+      expect(canvas.getByText('Golden Passport v3')).toBeVisible();
+    });
+    await step('click Dismiss → banner is hidden, restore button appears', async () => {
+      await user.click(canvas.getByRole('button', { name: /dismiss/i }));
+      await waitFor(() => {
+        expect(canvas.queryByText('Golden Passport v3')).not.toBeInTheDocument();
+        expect(canvas.getByRole('button', { name: /restore banner/i })).toBeVisible();
+      });
+    });
+    await step('click Restore banner → banner comes back', async () => {
+      await user.click(canvas.getByRole('button', { name: /restore banner/i }));
+      await waitFor(() => expect(canvas.getByText('Golden Passport v3')).toBeVisible());
+    });
+  },
 };
 
 // ── No action ─────────────────────────────────────────────

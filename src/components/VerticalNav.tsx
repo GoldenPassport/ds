@@ -52,7 +52,7 @@ const tokens = {
   icon: 'text-ink-500 dark:text-ink-300',
   iconActive: 'text-primary-500 dark:text-primary-400',
   badge: 'bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300',
-  groupLabel: 'text-ink-500 dark:text-ink-400',
+  groupLabel: 'text-ink-500 dark:text-ink-300',
   childItem:
     'font-medium text-ink-500 dark:text-ink-300 hover:text-ink-700 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-700',
   childActive: 'font-medium text-ink-700 dark:text-ink-100 bg-ink-100 dark:bg-ink-700',

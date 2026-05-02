@@ -74,61 +74,116 @@ export const Playground: Story = {
     position: 'bottom-right',
     fixed: false,
   },
-  render: (args) => (
-    <Demo>
-      <FabMenu {...args} />
-    </Demo>
-  ),
+  render: () => {
+    const [lastClicked, setLastClicked] = React.useState('');
+    return (
+      <div className="relative h-64 bg-ink-50 dark:bg-ink-900 rounded-2xl overflow-hidden border border-ink-200 dark:border-ink-800">
+        <FabMenu
+          icon={<Plus className="w-5 h-5" />}
+          items={[
+            {
+              label: 'Share',
+              icon: <Share2 className="w-4 h-4" />,
+              onClick: () => setLastClicked('Share'),
+            },
+            {
+              label: 'Edit',
+              icon: <Pencil className="w-4 h-4" />,
+              onClick: () => setLastClicked('Edit'),
+            },
+            {
+              label: 'Delete',
+              icon: <Trash2 className="w-4 h-4" />,
+              onClick: () => setLastClicked('Delete'),
+            },
+          ]}
+          position="bottom-right"
+          fixed={false}
+        />
+        {lastClicked && (
+          <p
+            className="absolute top-4 left-4 text-sm font-body text-ink-700 dark:text-ink-300"
+            data-testid="fab-clicked"
+          >
+            Clicked: {lastClicked}
+          </p>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    // findByRole retries until the element appears — handles the race between
+    // the runner firing play() and the first React render committing.
+    const trigger = await canvas.findByRole('button', { name: /open menu/i });
+
+    await step('open — click FAB trigger, aria-expanded becomes true', async () => {
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      });
+      // All three action items are now in the document
+      expect(canvas.getByRole('button', { name: /share/i })).toBeInTheDocument();
+      expect(canvas.getByRole('button', { name: /edit/i })).toBeInTheDocument();
+      expect(canvas.getByRole('button', { name: /delete/i })).toBeInTheDocument();
+    });
+
+    await step('item click — fires handler and closes menu', async () => {
+      await user.click(canvas.getByRole('button', { name: /edit/i }));
+      await waitFor(() => {
+        expect(canvas.getByTestId('fab-clicked')).toHaveTextContent('Edit');
+      });
+      // Menu collapses after item selection
+      await waitFor(() => {
+        expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      });
+    });
+
+    await step('re-open then close with FAB — aria-expanded toggles', async () => {
+      // Re-open
+      await user.click(trigger);
+      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+
+      // Close via the same trigger (label flips to "Close menu" when open)
+      const closeBtn = canvas.getByRole('button', { name: /close menu/i });
+      await user.click(closeBtn);
+      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+    });
+  },
 };
 
-// ── Variants ──────────────────────────────────────────────
+// ── All sizes ─────────────────────────────────────────────
 
 const STUB_ARGS = { icon: <Plus className="w-5 h-5" />, items: EDIT_ITEMS };
 
-export const Regular: Story = {
-  name: 'Regular (56dp)',
+export const AllSizes: Story = {
+  name: 'All sizes',
   args: STUB_ARGS,
   render: () => (
-    <Demo>
-      <FabMenu
-        icon={<Plus className="w-5 h-5" />}
-        items={EDIT_ITEMS}
-        position="bottom-right"
-        fixed={false}
-      />
-    </Demo>
-  ),
-};
-
-export const Small: Story = {
-  name: 'Small (40dp)',
-  args: STUB_ARGS,
-  render: () => (
-    <Demo>
-      <FabMenu
-        icon={<Plus className="w-4 h-4" />}
-        items={EDIT_ITEMS}
-        variant="small"
-        position="bottom-right"
-        fixed={false}
-      />
-    </Demo>
-  ),
-};
-
-export const Large: Story = {
-  name: 'Large (96dp)',
-  args: STUB_ARGS,
-  render: () => (
-    <Demo>
-      <FabMenu
-        icon={<Plus className="w-7 h-7" />}
-        items={EDIT_ITEMS}
-        variant="large"
-        position="bottom-right"
-        fixed={false}
-      />
-    </Demo>
+    <div className="grid grid-cols-3 gap-4">
+      {(
+        [
+          { label: 'Small (40dp)', variant: 'small', iconSize: 'w-4 h-4' },
+          { label: 'Regular (56dp)', variant: 'regular', iconSize: 'w-5 h-5' },
+          { label: 'Large (96dp)', variant: 'large', iconSize: 'w-7 h-7' },
+        ] as const
+      ).map(({ label, variant, iconSize }) => (
+        <div key={variant} className="flex flex-col gap-2">
+          <p className="text-xs font-body text-ink-500 dark:text-ink-300">{label}</p>
+          <div className="relative h-64 bg-ink-100 dark:bg-ink-800 rounded-2xl overflow-hidden">
+            <FabMenu
+              icon={<Plus className={iconSize} />}
+              items={EDIT_ITEMS}
+              variant={variant}
+              position="bottom-right"
+              fixed={false}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
   ),
 };
 
@@ -242,87 +297,3 @@ export const Dark: Story = {
   ),
 };
 
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions',
-  args: { icon: null, items: [] },
-  render: () => {
-    const [lastClicked, setLastClicked] = React.useState('');
-    return (
-      <div className="relative h-64 bg-ink-50 dark:bg-ink-900 rounded-2xl overflow-hidden border border-ink-200 dark:border-ink-800">
-        <FabMenu
-          icon={<Plus className="w-5 h-5" />}
-          items={[
-            {
-              label: 'Share',
-              icon: <Share2 className="w-4 h-4" />,
-              onClick: () => setLastClicked('Share'),
-            },
-            {
-              label: 'Edit',
-              icon: <Pencil className="w-4 h-4" />,
-              onClick: () => setLastClicked('Edit'),
-            },
-            {
-              label: 'Delete',
-              icon: <Trash2 className="w-4 h-4" />,
-              onClick: () => setLastClicked('Delete'),
-            },
-          ]}
-          position="bottom-right"
-          fixed={false}
-        />
-        {lastClicked && (
-          <p
-            className="absolute top-4 left-4 text-sm font-body text-ink-700 dark:text-ink-300"
-            data-testid="fab-clicked"
-          >
-            Clicked: {lastClicked}
-          </p>
-        )}
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    // findByRole retries until the element appears — handles the race between
-    // the runner firing play() and the first React render committing.
-    const trigger = await canvas.findByRole('button', { name: /open menu/i });
-
-    await step('open — click FAB trigger, aria-expanded becomes true', async () => {
-      await user.click(trigger);
-      await waitFor(() => {
-        expect(trigger).toHaveAttribute('aria-expanded', 'true');
-      });
-      // All three action items are now in the document
-      expect(canvas.getByRole('button', { name: /share/i })).toBeInTheDocument();
-      expect(canvas.getByRole('button', { name: /edit/i })).toBeInTheDocument();
-      expect(canvas.getByRole('button', { name: /delete/i })).toBeInTheDocument();
-    });
-
-    await step('item click — fires handler and closes menu', async () => {
-      await user.click(canvas.getByRole('button', { name: /edit/i }));
-      await waitFor(() => {
-        expect(canvas.getByTestId('fab-clicked')).toHaveTextContent('Edit');
-      });
-      // Menu collapses after item selection
-      await waitFor(() => {
-        expect(trigger).toHaveAttribute('aria-expanded', 'false');
-      });
-    });
-
-    await step('re-open then close with FAB — aria-expanded toggles', async () => {
-      // Re-open
-      await user.click(trigger);
-      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
-
-      // Close via the same trigger (label flips to "Close menu" when open)
-      const closeBtn = canvas.getByRole('button', { name: /close menu/i });
-      await user.click(closeBtn);
-      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
-    });
-  },
-};

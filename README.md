@@ -123,6 +123,29 @@ pnpm build-storybook
 # outputs to storybook-static/ — deploy to any static host
 ```
 
+### Component tests
+
+Every story is covered by interaction tests (play functions) and WCAG 2.x accessibility scans (axe-core). Tests run in a headless Chromium browser via Vitest + Playwright.
+
+```bash
+pnpm test-storybook          # light mode  (475 tests)
+pnpm test-storybook:dark     # dark mode   (475 tests, separate Vitest config)
+pnpm test-storybook:all      # both passes — full gate
+pnpm test-storybook:coverage # light mode with V8 coverage report
+```
+
+**Why two separate commands?**
+
+The Storybook GUI's ▷ "Run component tests" button always uses `vitest.config.ts`, which renders stories in light mode. There is no built-in way to make the GUI runner switch configs. Dark-mode testing requires `vitest.config.dark.ts`, which injects `STORYBOOK_THEME=Dark` at the Vite build level so every story renders with the `.dark` class applied before the first paint.
+
+| Command | Renders as | Intended use |
+|---|---|---|
+| GUI ▷ / `pnpm test-storybook` | Light | Fast feedback during development |
+| `pnpm test-storybook:dark` | Dark | Pre-ship or CI dark-mode a11y gate |
+| `pnpm test-storybook:all` | Both | Full CI gate |
+
+> **Note** — changing the theme in the Storybook toolbar (`globals=theme:Dark` in the URL) only affects the visual preview; it has no effect on what the test runner renders.
+
 ---
 
 ## Usage examples

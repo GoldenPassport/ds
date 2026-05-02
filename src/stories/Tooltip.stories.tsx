@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Info, Trash2, Copy, Play } from 'lucide-react';
@@ -46,41 +47,57 @@ export const Playground: Story = {
       </Tooltip>
     </div>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const user = userEvent.setup();
+    await step('hover trigger → tooltip appears', async () => {
+      await user.hover(canvas.getByRole('button', { name: /deploy/i }));
+      await waitFor(() => expect(body.getByRole('tooltip')).toBeVisible());
+    });
+    await step('unhover → tooltip disappears', async () => {
+      await user.unhover(canvas.getByRole('button', { name: /deploy/i }));
+      await waitFor(() => expect(body.queryByRole('tooltip')).not.toBeInTheDocument());
+    });
+  },
 };
 
-export const OnButton: Story = {
+export const TriggerTypes: Story = {
+  name: 'Trigger types',
   args: { content: null, children: React.createElement('span') },
   render: () => (
-    <div className="flex justify-center pt-16">
-      <Tooltip content="Run this workflow immediately" placement="top">
-        <Button variant="primary">
-          <Play className="w-4 h-4" /> Deploy
-        </Button>
-      </Tooltip>
-    </div>
-  ),
-};
-
-export const OnIconButton: Story = {
-  args: { content: null, children: React.createElement('span') },
-  render: () => (
-    <div className="flex justify-center gap-4 pt-16">
-      <Tooltip content="Copy workflow" placement="top">
-        <button
-          aria-label="Copy workflow"
-          className="w-9 h-9 flex items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-600 transition-colors border-0 cursor-pointer"
-        >
-          <Copy className="w-4 h-4" aria-hidden="true" />
-        </button>
-      </Tooltip>
-      <Tooltip content="Delete permanently" placement="top">
-        <button
-          aria-label="Delete permanently"
-          className="w-9 h-9 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100 transition-colors border-0 cursor-pointer"
-        >
-          <Trash2 className="w-4 h-4" aria-hidden="true" />
-        </button>
-      </Tooltip>
+    <div className="flex flex-col items-center gap-8 pt-16">
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-4 text-center">On button</p>
+        <div className="flex justify-center">
+          <Tooltip content="Run this workflow immediately" placement="top">
+            <Button variant="primary">
+              <Play className="w-4 h-4" /> Deploy
+            </Button>
+          </Tooltip>
+        </div>
+      </div>
+      <div>
+        <p className="text-xs font-body text-ink-500 dark:text-ink-300 mb-4 text-center">On icon button</p>
+        <div className="flex justify-center gap-4">
+          <Tooltip content="Copy workflow" placement="top">
+            <button
+              aria-label="Copy workflow"
+              className="w-9 h-9 flex items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-700 text-ink-500 dark:text-ink-300 hover:bg-ink-200 dark:hover:bg-ink-600 transition-colors border-0 cursor-pointer"
+            >
+              <Copy className="w-4 h-4" aria-hidden="true" />
+            </button>
+          </Tooltip>
+          <Tooltip content="Delete permanently" placement="top">
+            <button
+              aria-label="Delete permanently"
+              className="w-9 h-9 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100 transition-colors border-0 cursor-pointer"
+            >
+              <Trash2 className="w-4 h-4" aria-hidden="true" />
+            </button>
+          </Tooltip>
+        </div>
+      </div>
     </div>
   ),
 };

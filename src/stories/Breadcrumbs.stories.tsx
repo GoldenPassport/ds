@@ -43,28 +43,27 @@ export const Playground: Story = {
   },
 };
 
-// ── Chevron separator ─────────────────────────────────────
+// ── Separators ────────────────────────────────────────────
 
-export const ChevronSeparator: Story = {
-  name: 'Chevron separator',
+export const Separators: Story = {
+  name: 'Separators',
   args: { items: [] },
   render: () => (
-    <div className="flex flex-col gap-6">
-      <Breadcrumbs items={ITEMS} separator="chevron" ariaLabel="Breadcrumb" />
-      <Breadcrumbs items={DEEP} separator="chevron" ariaLabel="Deep breadcrumb" />
-    </div>
-  ),
-};
-
-// ── Slash separator ───────────────────────────────────────
-
-export const SlashSeparator: Story = {
-  name: 'Slash separator',
-  args: { items: [] },
-  render: () => (
-    <div className="flex flex-col gap-6">
-      <Breadcrumbs items={ITEMS} separator="slash" ariaLabel="Breadcrumb" />
-      <Breadcrumbs items={DEEP} separator="slash" ariaLabel="Deep breadcrumb" />
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">chevron</p>
+        <div className="flex flex-col gap-6">
+          <Breadcrumbs items={ITEMS} separator="chevron" ariaLabel="Breadcrumb" />
+          <Breadcrumbs items={DEEP} separator="chevron" ariaLabel="Deep breadcrumb" />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-mono text-ink-500 dark:text-ink-300">slash</p>
+        <div className="flex flex-col gap-6">
+          <Breadcrumbs items={ITEMS} separator="slash" ariaLabel="Breadcrumb" />
+          <Breadcrumbs items={DEEP} separator="slash" ariaLabel="Deep breadcrumb" />
+        </div>
+      </div>
     </div>
   ),
 };

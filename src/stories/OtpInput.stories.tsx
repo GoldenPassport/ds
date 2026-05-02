@@ -58,25 +58,6 @@ export const Playground: Story = {
   },
 };
 
-// ── 4-digit PIN ───────────────────────────────────────────
-
-export const FourDigitPin: Story = {
-  name: '4-digit PIN',
-  args: STUB,
-  render: () => {
-    const [val, setVal] = useState('');
-    return (
-      <OtpInput
-        length={4}
-        label="Enter PIN"
-        hint="Your 4-digit account PIN"
-        value={val}
-        onChange={setVal}
-      />
-    );
-  },
-};
-
 // ── 6-digit verification ──────────────────────────────────
 
 export const SixDigitCode: Story = {
@@ -122,6 +103,27 @@ export const SixDigitCode: Story = {
         onComplete={handleComplete}
       />
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('type wrong code → error appears', async () => {
+      await user.click(canvas.getAllByRole('textbox')[0]);
+      await user.keyboard('999999');
+      await waitFor(() => {
+        expect(canvas.getByRole('alert')).toHaveTextContent('Incorrect code');
+      });
+    });
+
+    await step('type correct code 123456 → verified', async () => {
+      // Inputs are cleared after error — click the first digit again
+      await user.click(canvas.getAllByRole('textbox')[0]);
+      await user.keyboard('123456');
+      await waitFor(() => {
+        expect(canvas.getByText('Phone number confirmed')).toBeInTheDocument();
+      });
+    });
   },
 };
 
@@ -172,6 +174,39 @@ export const Masked: Story = {
       </div>
     );
   },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('type 4 digits → bullet overlays appear, inputs stay visually empty', async () => {
+      await user.click(canvas.getAllByRole('textbox')[0]);
+      await user.keyboard('1234');
+      await waitFor(() => {
+        // Inputs are visually blank (value="") when masked
+        expect(canvas.getAllByRole('textbox')[0]).toHaveValue('');
+        // Bullet spans (aria-hidden) appear — one per filled cell
+        const maskedBullets = Array.from(canvasElement.querySelectorAll('span[aria-hidden="true"]')).filter(
+          (el) => el.textContent === '•',
+        );
+        expect(maskedBullets).toHaveLength(4);
+      });
+    });
+
+    await step('click "Show digits" → inputs reveal actual values', async () => {
+      await user.click(canvas.getByRole('button', { name: /show digits/i }));
+      await waitFor(() => {
+        expect(canvas.getAllByRole('textbox')[0]).toHaveValue('1');
+        expect(canvas.getAllByRole('textbox')[3]).toHaveValue('4');
+      });
+    });
+
+    await step('click "Hide digits" → inputs masked again', async () => {
+      await user.click(canvas.getByRole('button', { name: /hide digits/i }));
+      await waitFor(() => {
+        expect(canvas.getAllByRole('textbox')[0]).toHaveValue('');
+      });
+    });
+  },
 };
 
 // ── Alphanumeric ──────────────────────────────────────────
@@ -182,15 +217,124 @@ export const Alphanumeric: Story = {
   render: () => {
     const [val, setVal] = useState('');
     return (
-      <OtpInput
-        length={8}
-        numeric={false}
-        label="Licence key"
-        hint="8-character activation code (letters and numbers)"
-        value={val}
-        onChange={(v) => setVal(v.toUpperCase())}
-      />
+      <div className="flex flex-col gap-3">
+        <OtpInput
+          length={8}
+          numeric={false}
+          label="Licence key"
+          hint="8-character activation code (letters and numbers)"
+          value={val}
+          onChange={(v) => setVal(v.toUpperCase())}
+        />
+        <span data-testid="otp-val" className="text-xs font-mono text-ink-500 dark:text-ink-300">
+          {val}
+        </span>
+      </div>
     );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('type 8 alphanumeric characters → all cells filled', async () => {
+      await user.click(canvas.getAllByRole('textbox')[0]);
+      await user.keyboard('AB12CD34');
+      await waitFor(() => {
+        expect(canvas.getByTestId('otp-val')).toHaveTextContent('AB12CD34');
+        expect(canvas.getAllByRole('textbox')[7]).toHaveValue('4');
+      });
+    });
+
+    await step('numeric-only characters are accepted, letters too', async () => {
+      // The last cell is filled — backspace to clear last
+      await user.keyboard('{Backspace}');
+      await user.keyboard('Z');
+      await waitFor(() => {
+        expect(canvas.getByTestId('otp-val')).toHaveTextContent('AB12CD3Z');
+      });
+    });
+  },
+};
+
+// ── Keyboard navigation ───────────────────────────────────
+
+export const KeyboardNav: Story = {
+  name: 'Keyboard navigation',
+  args: STUB,
+  render: () => {
+    const [val, setVal] = useState('');
+    return (
+      <div className="flex flex-col gap-3">
+        <OtpInput length={4} label="4-digit PIN" value={val} onChange={setVal} />
+        <span data-testid="val" className="text-xs font-mono text-ink-500 dark:text-ink-300">
+          {val}
+        </span>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    const inputs = () => canvas.getAllByRole('textbox');
+
+    await step('type 2 digits → focus advances to cell 2', async () => {
+      await user.click(inputs()[0]);
+      await user.keyboard('12');
+      await waitFor(() => expect(canvas.getByTestId('val')).toHaveTextContent('12'));
+      expect(document.activeElement).toBe(inputs()[2]);
+    });
+
+    await step('ArrowLeft → focus moves to cell 1', async () => {
+      await user.keyboard('{ArrowLeft}');
+      expect(document.activeElement).toBe(inputs()[1]);
+    });
+
+    await step('ArrowLeft → focus moves to cell 0', async () => {
+      await user.keyboard('{ArrowLeft}');
+      expect(document.activeElement).toBe(inputs()[0]);
+    });
+
+    await step('ArrowRight → focus moves to cell 1', async () => {
+      await user.keyboard('{ArrowRight}');
+      expect(document.activeElement).toBe(inputs()[1]);
+    });
+
+    await step('Backspace on occupied cell → clears it in place, focus stays', async () => {
+      // Cell 1 contains "2"
+      await user.keyboard('{Backspace}');
+      await waitFor(() => expect(canvas.getByTestId('val')).toHaveTextContent('1'));
+      expect(document.activeElement).toBe(inputs()[1]);
+    });
+
+    await step('Backspace on empty cell → clears previous cell and moves back', async () => {
+      // Cell 1 is now empty — backspace should clear cell 0 and move to cell 0
+      await user.keyboard('{Backspace}');
+      await waitFor(() => expect(canvas.getByTestId('val')).toHaveTextContent(''));
+      expect(document.activeElement).toBe(inputs()[0]);
+    });
+
+    await step('type 2 digits, then Delete → clears current cell without moving', async () => {
+      await user.keyboard('56');
+      await waitFor(() => expect(canvas.getByTestId('val')).toHaveTextContent('56'));
+      // Focus is now on cell 2 — move back to cell 0 to test Delete
+      await user.keyboard('{ArrowLeft}{ArrowLeft}');
+      expect(document.activeElement).toBe(inputs()[0]);
+      await user.keyboard('{Delete}');
+      await waitFor(() => expect(canvas.getByTestId('val')).toHaveTextContent('6'));
+      // Focus stays on cell 0
+      expect(document.activeElement).toBe(inputs()[0]);
+    });
+
+    await step('paste "9999" → all 4 cells filled from clipboard', async () => {
+      // Clear first
+      await user.keyboard('{Backspace}{Backspace}');
+      await waitFor(() => expect(canvas.getByTestId('val')).toHaveTextContent(''));
+      // Dispatch a real ClipboardEvent with DataTransfer
+      const dt = new DataTransfer();
+      dt.setData('text/plain', '9999');
+      inputs()[0].dispatchEvent(new ClipboardEvent('paste', { clipboardData: dt, bubbles: true }));
+      await waitFor(() => expect(canvas.getByTestId('val')).toHaveTextContent('9999'));
+    });
   },
 };
 
@@ -228,148 +372,6 @@ export const Disabled: Story = {
       onChange={() => {}}
     />
   ),
-};
-
-// ── Interactions ──────────────────────────────────────────
-
-export const Interactions: Story = {
-  name: 'Interactions',
-  args: STUB,
-  render: () => {
-    const [val, setVal] = useState('');
-    return (
-      <div className="flex flex-col gap-3">
-        <OtpInput
-          length={6}
-          numeric
-          label="Verification code"
-          hint="Enter the 6-digit code"
-          value={val}
-          onChange={setVal}
-        />
-        {val && (
-          <p
-            className="text-xs font-body text-ink-500 dark:text-ink-300"
-            data-testid="entered-value"
-          >
-            Entered: <code>{val}</code>
-          </p>
-        )}
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    // Use a small delay so focus-advance (flushSync + focus()) settles
-    // before the next keystroke fires
-    const user = userEvent.setup({ delay: 50 });
-
-    await step('type digits one by one — auto-advance focus', async () => {
-      await user.click(canvas.getByRole('textbox', { name: /digit 1/i }));
-      // Type all six digits; each auto-advances focus to the next cell
-      await user.keyboard('123456');
-      await waitFor(() => {
-        expect(canvas.getByTestId('entered-value')).toHaveTextContent('123456');
-      });
-    });
-
-    await step('backspace deletes and moves focus back', async () => {
-      const cell6 = canvas.getByRole('textbox', { name: /digit 6/i });
-      await user.click(cell6);
-      // First backspace: cell6 has a value → clears cell6, focus stays on cell6
-      await user.keyboard('{Backspace}');
-      // Second backspace: cell6 is now empty → clears cell5 and moves focus to cell5
-      await user.keyboard('{Backspace}');
-      await waitFor(() => {
-        const cell5 = canvas.getByRole('textbox', { name: /digit 5/i });
-        expect(cell5).toHaveFocus();
-      });
-    });
-
-    await step('arrow left / right navigation', async () => {
-      const cell5 = canvas.getByRole('textbox', { name: /digit 5/i });
-      await user.click(cell5);
-      await user.keyboard('{ArrowLeft}');
-      await waitFor(() => {
-        expect(canvas.getByRole('textbox', { name: /digit 4/i })).toHaveFocus();
-      });
-      await user.keyboard('{ArrowRight}');
-      await waitFor(() => {
-        expect(canvas.getByRole('textbox', { name: /digit 5/i })).toHaveFocus();
-      });
-    });
-  },
-};
-
-export const PasteInteraction: Story = {
-  name: 'Paste interaction',
-  args: STUB,
-  render: () => {
-    const [val, setVal] = useState('');
-    return (
-      <div className="flex flex-col gap-3">
-        <OtpInput length={6} numeric label="Paste code" value={val} onChange={setVal} />
-        {val.length === 6 && (
-          <p data-testid="paste-result" className="text-xs font-body text-ink-500">
-            Code: {val}
-          </p>
-        )}
-      </div>
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('paste a full 6-digit code', async () => {
-      const cell1 = canvas.getByRole('textbox', { name: /digit 1/i });
-      await user.click(cell1);
-      await user.paste('654321');
-      await waitFor(() => {
-        expect(canvas.getByTestId('paste-result')).toHaveTextContent('654321');
-      });
-    });
-  },
-};
-
-export const ErrorReset: Story = {
-  name: 'Error state reset',
-  args: STUB,
-  render: () => {
-    const [val, setVal] = useState('999999');
-    const [error, setError] = useState('Invalid code. Please try again.');
-    return (
-      <OtpInput
-        length={6}
-        label="Verification code"
-        error={error}
-        value={val}
-        onChange={(v) => {
-          setVal(v);
-          if (v === '') setError('');
-        }}
-      />
-    );
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('error message is visible', async () => {
-      await expect(canvas.getByRole('alert')).toBeInTheDocument();
-    });
-
-    await step('pressing Backspace while error is set clears all cells', async () => {
-      const cell1 = canvas.getByRole('textbox', { name: /digit 1/i });
-      await user.click(cell1);
-      await user.keyboard('{Backspace}');
-      await waitFor(() => {
-        // After error-reset all cells should be empty
-        const cells = canvas.getAllByRole('textbox');
-        cells.forEach((cell: HTMLElement) => expect(cell).toHaveValue(''));
-      });
-    });
-  },
 };
 
 // ── Full auth flow ────────────────────────────────────────

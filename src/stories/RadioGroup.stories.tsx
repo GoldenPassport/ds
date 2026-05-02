@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { RadioGroup } from '../components/RadioGroup';
 
 const meta = {
@@ -84,13 +85,6 @@ const NOTIFY_OPTIONS = [
   { value: 'none', label: 'None', description: 'No email notifications' },
 ];
 
-const REGION_OPTIONS = [
-  { value: 'us-east', label: 'US East (Virginia)' },
-  { value: 'us-west', label: 'US West (Oregon)' },
-  { value: 'eu-central', label: 'EU Central (Frankfurt)' },
-  { value: 'ap-south', label: 'AP South (Singapore)' },
-];
-
 const MAILING_OPTIONS = [
   {
     value: 'newsletter',
@@ -161,24 +155,28 @@ export const List: Story = {
       </div>
     );
   },
-};
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
 
-export const ListNoDescription: Story = {
-  name: 'List — no descriptions',
-  args: { value: null, onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState<string | null>('us-east');
-    return (
-      <div className="max-w-xs">
-        <RadioGroup
-          variant="list"
-          label="Deployment region"
-          options={REGION_OPTIONS}
-          value={val}
-          onChange={setVal}
-        />
-      </div>
-    );
+    await step('initial selection is "Failures only"', async () => {
+      expect(canvas.getByRole('radio', { name: /failures only/i })).toBeChecked();
+    });
+
+    await step('click "All activity" → becomes selected', async () => {
+      await user.click(canvas.getByRole('radio', { name: /all activity/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('radio', { name: /all activity/i })).toBeChecked();
+      });
+    });
+
+    await step('click "None" → becomes selected; All activity deselected', async () => {
+      await user.click(canvas.getByRole('radio', { name: /^none/i }));
+      await waitFor(() => {
+        expect(canvas.getByRole('radio', { name: /^none/i })).toBeChecked();
+        expect(canvas.getByRole('radio', { name: /all activity/i })).not.toBeChecked();
+      });
+    });
   },
 };
 
@@ -195,25 +193,6 @@ export const Cards: Story = {
           variant="cards"
           label="Server size"
           options={PLAN_OPTIONS}
-          value={val}
-          onChange={setVal}
-        />
-      </div>
-    );
-  },
-};
-
-export const CardsNoTrailing: Story = {
-  name: 'Cards — no trailing',
-  args: { value: null, onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState<string | null>('us-east');
-    return (
-      <div className="max-w-sm">
-        <RadioGroup
-          variant="cards"
-          label="Deployment region"
-          options={REGION_OPTIONS}
           value={val}
           onChange={setVal}
         />
@@ -302,21 +281,3 @@ export const Minicards: Story = {
   },
 };
 
-export const MinicardsRegion: Story = {
-  name: 'Minicards — regions',
-  args: { value: null, onChange: () => {}, options: [] },
-  render: () => {
-    const [val, setVal] = React.useState<string | null>('us-east');
-    return (
-      <div className="max-w-lg">
-        <RadioGroup
-          variant="minicards"
-          label="Deployment region"
-          options={REGION_OPTIONS}
-          value={val}
-          onChange={setVal}
-        />
-      </div>
-    );
-  },
-};

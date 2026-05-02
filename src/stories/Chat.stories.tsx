@@ -1,3 +1,4 @@
+import { expect, userEvent, within, waitFor, fireEvent } from 'storybook/test';
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Chat } from '../components/Chat';
@@ -626,6 +627,32 @@ export const ImageLightbox: Story = {
       />
     </ChatFrame>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const user = userEvent.setup();
+
+    await step('click an image → lightbox dialog opens', async () => {
+      const images = canvas.getAllByRole('img');
+      await user.click(images[0]);
+      await waitFor(() => expect(body.getByRole('dialog')).toBeVisible());
+    });
+
+    await step('click Close → lightbox closes', async () => {
+      await user.click(body.getByRole('button', { name: /close image/i }));
+      await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument());
+    });
+
+    await step('open lightbox again → click backdrop → lightbox closes', async () => {
+      const images = canvas.getAllByRole('img');
+      await user.click(images[0]);
+      await waitFor(() => expect(body.getByRole('dialog')).toBeVisible());
+      // fireEvent dispatches directly on the backdrop element, bypassing the
+      // inner stopPropagation so setViewingImage(null) fires correctly.
+      fireEvent.click(body.getByRole('dialog'));
+      await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument());
+    });
+  },
 };
 
 // ── Typing indicator ──────────────────────────────────────
@@ -658,4 +685,171 @@ export const TypingIndicator: Story = {
       />
     </ChatFrame>
   ),
+};
+
+// ── Emoji reactions ───────────────────────────────────────
+// Long-press any bubble to open the quick-reaction picker.
+
+export const EmojiReactions: Story = {
+  name: 'Emoji reactions — long-press',
+  args: { messages: [] },
+  render: () => (
+    <ChatFrame height={420}>
+      <Chat
+        className="h-full"
+        messages={[
+          {
+            id: 'msg1',
+            side: 'received',
+            content: 'Long-press me to react!',
+            // sender.avatar covers the image-avatar branch of SenderAvatar
+            sender: {
+              name: 'Priya',
+              avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=56&h=56&q=80&fit=crop',
+            },
+            timestamp: t(5),
+          },
+          {
+            id: 'msg2',
+            side: 'sent',
+            content: 'Long-press me too',
+            timestamp: t(4),
+            status: 'sent',
+          },
+        ]}
+      />
+    </ChatFrame>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    // Helper: simulate a long-press by dispatching pointerdown directly on the
+    // bubble-column div (a non-interactive element) and waiting for the 500 ms timer.
+    async function longPress(el: HTMLElement) {
+      fireEvent.pointerDown(el, { clientX: 10, clientY: 10, pointerId: 1 });
+      await new Promise((r) => setTimeout(r, 600));
+    }
+    function releasePress(el: HTMLElement) {
+      fireEvent.pointerUp(el, { pointerId: 1 });
+    }
+
+    await step('long-press received bubble → emoji picker appears', async () => {
+      // getByText returns the text-bubble div; .parentElement is the bubble column
+      const bubble = canvas.getByText('Long-press me to react!').parentElement!;
+      await longPress(bubble);
+      releasePress(bubble);
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /react with ❤️/i })).toBeVisible(),
+      );
+    });
+
+    await step('click ❤️ → reaction added below bubble, picker closes', async () => {
+      await user.click(canvas.getByRole('button', { name: /react with ❤️/i }));
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /remove ❤️ reaction/i })).toBeVisible(),
+      );
+      expect(canvas.queryByRole('button', { name: /react with ❤️/i })).not.toBeInTheDocument();
+    });
+
+    await step('click reaction bubble again → reaction removed', async () => {
+      await user.click(canvas.getByRole('button', { name: /remove ❤️ reaction/i }));
+      await waitFor(() =>
+        expect(
+          canvas.queryByRole('button', { name: /remove ❤️ reaction/i }),
+        ).not.toBeInTheDocument(),
+      );
+    });
+
+    await step('long-press sent bubble → Escape closes the picker', async () => {
+      const sentBubble = canvas.getByText('Long-press me too').parentElement!;
+      await longPress(sentBubble);
+      releasePress(sentBubble);
+      await waitFor(() =>
+        // Use a specific emoji so the query matches exactly one button
+        expect(canvas.getByRole('button', { name: /react with ❤️/i })).toBeVisible(),
+      );
+      await user.keyboard('{Escape}');
+      await waitFor(() =>
+        expect(
+          canvas.queryByRole('button', { name: /react with ❤️/i }),
+        ).not.toBeInTheDocument(),
+      );
+    });
+
+    await step('long-press again → mousedown outside → picker closes', async () => {
+      const bubble = canvas.getByText('Long-press me to react!').parentElement!;
+      await longPress(bubble);
+      releasePress(bubble);
+      await waitFor(() =>
+        expect(canvas.getByRole('button', { name: /react with ❤️/i })).toBeVisible(),
+      );
+      // The outside-click effect listens for mousedown on document (capture).
+      // Dispatch mousedown on the log area (outside the picker) to close it.
+      fireEvent.mouseDown(canvas.getByRole('log', { name: /chat messages/i }));
+      await waitFor(() =>
+        expect(
+          canvas.queryByRole('button', { name: /react with ❤️/i }),
+        ).not.toBeInTheDocument(),
+      );
+    });
+  },
+};
+
+// ── Controlled input ──────────────────────────────────────
+// Tests the isControlled=true branches in handleChange and handleSend.
+
+export const ControlledInput: Story = {
+  name: 'Controlled input',
+  args: { messages: [] },
+  render: () => {
+    const [value, setValue] = useState('');
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    return (
+      <ChatFrame height={400}>
+        <Chat
+          className="h-full"
+          messages={messages}
+          value={value}
+          onChange={setValue}
+          onSend={(text) => {
+            setValue(''); // external state clears input (controlled pattern)
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: Date.now().toString(),
+                side: 'sent',
+                content: text,
+                status: 'sent' as const,
+              },
+            ]);
+          }}
+          placeholder="Controlled input…"
+        />
+      </ChatFrame>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    await step('type in controlled input → value controlled externally', async () => {
+      const input = canvas.getByRole('textbox', { name: /message input/i });
+      await user.click(input);
+      await user.type(input, 'Controlled message');
+      await waitFor(() => expect(input).toHaveValue('Controlled message'));
+    });
+
+    await step('click send → message appears in log, external onChange clears input', async () => {
+      await user.click(canvas.getByRole('button', { name: /send message/i }));
+      await waitFor(() =>
+        expect(canvas.getByRole('log')).toHaveTextContent('Controlled message'),
+      );
+      // In controlled mode the component does NOT clear internal state — the
+      // external setValue('') call (in onSend above) clears the input.
+      await waitFor(() =>
+        expect(canvas.getByRole('textbox', { name: /message input/i })).toHaveValue(''),
+      );
+    });
+  },
 };

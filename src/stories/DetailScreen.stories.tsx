@@ -243,7 +243,7 @@ function DetailActions() {
 
 // ── 1. Stacked layout ─────────────────────────────────────
 
-export const Stacked: Story = {
+export const Playground: Story = {
   name: 'Stacked layout',
   render: () => (
     <div className="min-h-screen bg-ink-50 dark:bg-ink-800 flex flex-col">
