@@ -23,7 +23,7 @@ jobs:
     name: Dependency audit (pnpm)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: pnpm/action-setup@v4
 
@@ -56,7 +56,7 @@ jobs:
       security-events: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Initialise CodeQL
         uses: github/codeql-action/init@v4
