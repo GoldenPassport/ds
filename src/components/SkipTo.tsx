@@ -347,11 +347,13 @@ export function SkipTo({
         {label}
       </button>
 
-      {/* ── Dropdown menu ── */}
+      {/* ── Dropdown panel ── */}
       {open && (
+        // Outer wrapper is a plain div — not role="menu" — so it can hold
+        // the section headers (aria-hidden visual labels) and the footer
+        // button without triggering aria-required-children violations.
+        // The actual menu semantics live on the inner div.
         <div
-          role="menu"
-          aria-label="Skip to"
           className={[
             'mt-0.5 w-72',
             'bg-white dark:bg-ink-800',
@@ -361,102 +363,116 @@ export function SkipTo({
             'text-sm font-body',
           ].join(' ')}
         >
-          {/* Landmark Regions */}
-          {landmarks.length > 0 && (
-            <section aria-label="Landmark regions">
-              <p className="px-3 py-1.5 text-xs font-semibold font-display text-ink-900 dark:text-ink-50 bg-ink-100 dark:bg-ink-700/60 border-b border-ink-200 dark:border-ink-700">
-                Landmark Regions ({landmarks.length})
-              </p>
-              <ul role="none">
+          {/* role="menu" owns only role="group" and role="menuitem" children — ARIA-valid */}
+          <div role="menu" aria-label="Skip to">
+
+            {/* Landmark Regions ── role="group" is a permitted child of role="menu" */}
+            {landmarks.length > 0 && (
+              <div role="group" aria-label={`Landmark Regions, ${landmarks.length} items`}>
+                {/* Visual heading: aria-hidden because the group's aria-label already
+                    announces "Landmark Regions, N items" to screen readers. */}
+                <div
+                  aria-hidden="true"
+                  className="px-3 py-1.5 text-xs font-semibold font-display text-ink-900 dark:text-ink-50 bg-ink-100 dark:bg-ink-700/60 border-b border-ink-200 dark:border-ink-700"
+                >
+                  Landmark Regions ({landmarks.length})
+                </div>
                 {landmarks.map((item, i) => (
-                  <li key={i} role="none">
+                  <a
+                    key={i}
+                    ref={(el) => { if (el) itemsRef.current[i] = el; }}
+                    role="menuitem"
+                    href="#"
+                    onClick={(e) => activate(e, item)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') activate(e, item);
+                    }}
+                    className={[
+                      'block px-3 py-1.5',
+                      'text-ink-700 dark:text-ink-300',
+                      'hover:bg-primary-500/10 dark:hover:bg-primary-500/15',
+                      'focus:bg-primary-500 focus:text-ink-900',
+                      'outline-none transition-colors duration-75',
+                      'underline underline-offset-2',
+                    ].join(' ')}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {/* Headings ── role="group" is a permitted child of role="menu" */}
+            {headings.length > 0 && (
+              <div role="group" aria-label={`Headings in Main Region, ${headings.length} items`}>
+                <div
+                  aria-hidden="true"
+                  className="px-3 py-1.5 text-xs font-semibold font-display text-ink-900 dark:text-ink-50 bg-ink-100 dark:bg-ink-700/60 border-y border-ink-200 dark:border-ink-700"
+                >
+                  Headings in Main Region ({headings.length})
+                </div>
+                {headings.map((item, i) => {
+                  const refIdx = landmarks.length + i;
+                  const indent = (item.level - 1) * 12;
+                  return (
                     <a
-                      ref={(el) => { if (el) itemsRef.current[i] = el; }}
+                      key={i}
+                      ref={(el) => { if (el) itemsRef.current[refIdx] = el; }}
                       role="menuitem"
                       href="#"
                       onClick={(e) => activate(e, item)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') activate(e, item);
                       }}
+                      style={{ paddingLeft: `${12 + indent}px` }}
                       className={[
-                        'block px-3 py-1.5',
+                        'block py-1.5 pr-3',
                         'text-ink-700 dark:text-ink-300',
                         'hover:bg-primary-500/10 dark:hover:bg-primary-500/15',
                         'focus:bg-primary-500 focus:text-ink-900',
-                        'outline-none',
-                        'transition-colors duration-75',
+                        'outline-none transition-colors duration-75',
                         'underline underline-offset-2',
                       ].join(' ')}
                     >
-                      {item.label}
+                      <span className="text-ink-400 dark:text-ink-500 mr-1.5 font-mono text-xs">
+                        {item.level})
+                      </span>
+                      {item.text}
                     </a>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {/* Headings */}
-          {headings.length > 0 && (
-            <section aria-label="Headings in main region">
-              <p className="px-3 py-1.5 text-xs font-semibold font-display text-ink-900 dark:text-ink-50 bg-ink-100 dark:bg-ink-700/60 border-y border-ink-200 dark:border-ink-700">
-                Headings in Main Region ({headings.length})
-              </p>
-              <ul role="none">
-                {headings.map((item, i) => {
-                  const refIdx = landmarks.length + i;
-                  // Indent h2+ proportionally
-                  const indent = (item.level - 1) * 12;
-                  return (
-                    <li key={i} role="none">
-                      <a
-                        ref={(el) => { if (el) itemsRef.current[refIdx] = el; }}
-                        role="menuitem"
-                        href="#"
-                        onClick={(e) => activate(e, item)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') activate(e, item);
-                        }}
-                        style={{ paddingLeft: `${12 + indent}px` }}
-                        className={[
-                          'block py-1.5 pr-3',
-                          'text-ink-700 dark:text-ink-300',
-                          'hover:bg-primary-500/10 dark:hover:bg-primary-500/15',
-                          'focus:bg-primary-500 focus:text-ink-900',
-                          'outline-none',
-                          'transition-colors duration-75',
-                          'underline underline-offset-2',
-                        ].join(' ')}
-                      >
-                        <span className="text-ink-400 dark:text-ink-500 mr-1.5 font-mono text-xs not-underline">
-                          {item.level})
-                        </span>
-                        {item.text}
-                      </a>
-                    </li>
                   );
                 })}
-              </ul>
-            </section>
-          )}
+              </div>
+            )}
 
-          {/* No content fallback */}
-          {landmarks.length === 0 && headings.length === 0 && (
-            <p className="px-3 py-3 text-ink-500 dark:text-ink-400 text-xs italic">
-              No landmarks or headings found on this page.
-            </p>
-          )}
+            {/* No content fallback — role="menuitem" so it's a valid menu child */}
+            {landmarks.length === 0 && headings.length === 0 && (
+              <a
+                role="menuitem"
+                href="#"
+                tabIndex={-1}
+                onClick={(e) => e.preventDefault()}
+                className="block px-3 py-3 text-ink-500 dark:text-ink-400 text-xs italic outline-none"
+                aria-disabled="true"
+              >
+                No landmarks or headings found on this page.
+              </a>
+            )}
 
-          {/* Footer */}
+          </div>{/* end role="menu" */}
+
+          {/* Footer lives OUTSIDE role="menu" so <button> doesn't violate
+              aria-required-children. A plain div has no owned-element rules. */}
           <div className="border-t border-ink-200 dark:border-ink-700 px-3 py-2 flex items-center justify-between">
-            <span className="text-xs text-ink-400 dark:text-ink-500">
-              Shortcut:{' '}
-              <kbd className="font-mono text-ink-600 dark:text-ink-300">{shortcutHint}</kbd>
-            </span>
+            {shortcutHint && (
+              <span className="text-xs text-ink-400 dark:text-ink-500">
+                Shortcut:{' '}
+                <kbd className="font-mono text-ink-600 dark:text-ink-300">{shortcutHint}</kbd>
+              </span>
+            )}
             <button
               type="button"
               onClick={() => closeMenu()}
-              className="text-xs text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-300 outline-none focus:underline"
+              className="ml-auto text-xs text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-300 outline-none focus:underline"
             >
               Close
             </button>
