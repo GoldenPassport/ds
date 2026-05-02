@@ -23,9 +23,6 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Remove legacy auth token placeholder (use OIDC instead)
-        run: npm config delete //registry.npmjs.org/:_authToken || true
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -34,3 +31,5 @@ jobs:
 
       - name: Publish
         run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
