@@ -434,7 +434,7 @@ export function SkipTo({
                         'underline underline-offset-2',
                       ].join(' ')}
                     >
-                      <span className="text-ink-400 dark:text-ink-500 mr-1.5 font-mono text-xs">
+                      <span className="text-ink-500 dark:text-ink-400 mr-1.5 font-mono text-xs">
                         {item.level})
                       </span>
                       {item.text}
