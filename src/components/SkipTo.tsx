@@ -274,23 +274,19 @@ export function SkipTo({
     return () => document.removeEventListener('mousedown', handler);
   }, [open, closeMenu]);
 
-  // ── Focus first item when menu opens ──────────────────
-
-  useEffect(() => {
-    if (open) {
-      // Tick so items are rendered
-      requestAnimationFrame(() => {
-        itemsRef.current[0]?.focus();
-      });
-    }
-  }, [open]);
-
   // ── Arrow-key navigation inside menu ──────────────────
+  // Focus stays on the trigger button when the menu first opens.
+  // ArrowDown/Up moves focus into the item list (idx === -1 when button
+  // is focused, so ArrowDown lands on items[0] and ArrowUp on the last).
+  // Tab is only intercepted when a menu item already has focus; if the
+  // button itself is focused, Tab propagates naturally so the user can
+  // leave without interacting with the menu.
 
   function handleMenuKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     const items  = itemsRef.current.filter(Boolean);
     const active = document.activeElement;
     const idx    = items.findIndex((el) => el === active);
+    const isInItems = idx !== -1;
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -298,10 +294,15 @@ export function SkipTo({
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       items[(idx - 1 + items.length) % items.length]?.focus();
-    } else if (e.key === 'Escape' || e.key === 'Tab') {
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      closeMenu();
+    } else if (e.key === 'Tab' && isInItems) {
+      // Tab from inside the list closes and returns focus to button.
       e.preventDefault();
       closeMenu();
     }
+    // Tab while button is focused: let it propagate — closes via onBlur below.
   }
 
   // ── Activate an item ───────────────────────────────────
@@ -321,6 +322,12 @@ export function SkipTo({
       ref={menuRef}
       className={['fixed top-0 left-0 z-[9999]', className].filter(Boolean).join(' ')}
       onKeyDown={handleMenuKeyDown}
+      onBlur={(e) => {
+        // Close when focus leaves the entire widget (not just moves between children).
+        if (!menuRef.current?.contains(e.relatedTarget as Node)) {
+          closeMenu(false);
+        }
+      }}
     >
       {/* ── Trigger button ── */}
       <button

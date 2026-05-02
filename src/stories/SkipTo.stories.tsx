@@ -100,14 +100,13 @@ export const Default: Story = {
       expect(btn).toHaveClass('-translate-y-full');
     });
 
-    await step('Tab → button receives focus and menu opens', async () => {
+    await step('Tab → button receives focus; menu opens; focus stays on button', async () => {
       await user.tab();
       await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
-      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+      expect(canvas.getByRole('menu')).toBeInTheDocument();
     });
 
     await step('menu lists landmark regions', async () => {
-      // Banner, Main Menu nav, Site search, Main, Notifications aside, Footer
       const menu = canvas.getByRole('menu');
       expect(within(menu).getByText(/Landmark Regions/)).toBeInTheDocument();
       expect(within(menu).getByRole('menuitem', { name: /Main/i })).toBeInTheDocument();
@@ -121,11 +120,15 @@ export const Default: Story = {
       expect(within(menu).getByRole('menuitem', { name: /Deployments/i })).toBeInTheDocument();
     });
 
-    await step('ArrowDown moves focus through menu items', async () => {
+    await step('ArrowDown from button → first menu item focused', async () => {
       const menu  = canvas.getByRole('menu');
       const items = within(menu).getAllByRole('menuitem');
-      // Focus starts on first item after menu opens
+      await user.keyboard('{ArrowDown}');
       await waitFor(() => expect(items[0]).toHaveFocus());
+    });
+
+    await step('ArrowDown → second item focused', async () => {
+      const items = within(canvas.getByRole('menu')).getAllByRole('menuitem');
       await user.keyboard('{ArrowDown}');
       await waitFor(() => expect(items[1]).toHaveFocus());
     });
@@ -137,7 +140,7 @@ export const Default: Story = {
     });
 
     await step('click "Main" landmark → #main-content receives focus', async () => {
-      // Re-open
+      // Re-open via Enter
       await user.keyboard('{Enter}');
       await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
       const mainItem = within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Main' });
