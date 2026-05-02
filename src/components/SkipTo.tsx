@@ -464,7 +464,7 @@ export function SkipTo({
               aria-required-children. A plain div has no owned-element rules. */}
           <div className="border-t border-ink-200 dark:border-ink-700 px-3 py-2 flex items-center justify-between">
             {shortcutHint && (
-              <span className="text-xs text-ink-400 dark:text-ink-500">
+              <span className="text-xs text-ink-500 dark:text-ink-400">
                 Shortcut:{' '}
                 <kbd className="font-mono text-ink-600 dark:text-ink-300">{shortcutHint}</kbd>
               </span>
@@ -472,7 +472,7 @@ export function SkipTo({
             <button
               type="button"
               onClick={() => closeMenu()}
-              className="ml-auto text-xs text-ink-400 dark:text-ink-500 hover:text-ink-700 dark:hover:text-ink-300 outline-none focus:underline"
+              className="ml-auto text-xs text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-300 outline-none focus:underline"
             >
               Close
             </button>
