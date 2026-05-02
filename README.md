@@ -2,6 +2,9 @@
 
 Golden Passport Design System — React component library built on **Tailwind CSS v4**, **Headless UI v2**, and **Lucide icons**.
 
+[![CI](https://github.com/GoldenPassport/ds/actions/workflows/ci.yml/badge.svg)](https://github.com/GoldenPassport/ds/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 ---
 
 ## Contents
@@ -20,7 +23,7 @@ Golden Passport Design System — React component library built on **Tailwind CS
 ## Install
 
 ```bash
-pnpm add @golden-passport/ds @headlessui/react lucide-react
+pnpm add @golden-passport/ds @headlessui/react @floating-ui/react lucide-react
 ```
 
 **Peer dependencies** — install in your app if not already present:
@@ -29,7 +32,7 @@ pnpm add @golden-passport/ds @headlessui/react lucide-react
 pnpm add react react-dom tailwindcss
 ```
 
-> Requires React ≥ 18, Tailwind CSS ≥ 4, Headless UI ≥ 2.
+> Requires React ≥ 18, Tailwind CSS ≥ 4, Headless UI ≥ 2, Floating UI ≥ 0.26.
 
 ---
 
@@ -128,8 +131,8 @@ pnpm build-storybook
 Every story is covered by interaction tests (play functions) and WCAG 2.x accessibility scans (axe-core). Tests run in a headless Chromium browser via Vitest + Playwright.
 
 ```bash
-pnpm test-storybook          # light mode  (475 tests)
-pnpm test-storybook:dark     # dark mode   (475 tests, separate Vitest config)
+pnpm test-storybook:light    # light mode  (487 tests)
+pnpm test-storybook:dark     # dark mode   (487 tests, separate Vitest config)
 pnpm test-storybook:all      # both passes — full gate
 pnpm test-storybook:coverage # light mode with V8 coverage report
 ```
@@ -140,7 +143,7 @@ The Storybook GUI's ▷ "Run component tests" button always uses `vitest.config.
 
 | Command | Renders as | Intended use |
 |---|---|---|
-| GUI ▷ / `pnpm test-storybook` | Light | Fast feedback during development |
+| GUI ▷ / `pnpm test-storybook:light` | Light | Fast feedback during development |
 | `pnpm test-storybook:dark` | Dark | Pre-ship or CI dark-mode a11y gate |
 | `pnpm test-storybook:all` | Both | Full CI gate |
 
@@ -449,7 +452,7 @@ All stories are browsable in Storybook. Each entry has a **Playground** story wi
 | Overlays | Dialog | `Dialog` | Modal with focus trap, backdrop, animated entry · sm / md / lg / xl sizes |
 | Overlays | Drawer | `Dialog` | Slide-in panel — left / right / bottom placements, configurable sizes |
 | Overlays | Notifications | — | Toast notification stack — info, success, warning, error; auto-dismiss; position variants |
-| Overlays | Tooltip | — | Hover/focus label — configurable placement, radius, and max-width (Tippy.js) |
+| Overlays | Tooltip | — | Hover/focus label — configurable placement, radius, and max-width (Floating UI) |
 | Feedback | Alert | — | Inline alert — info, success, warning, error; dismissible; with-actions variant |
 | Feedback | EmptyState | — | Zero-state placeholder with icon, heading, body, and primary / secondary actions |
 | Feedback | ErrorPage | — | Full-page error states — 404, 500, 403, 503; icon or large code display |
@@ -459,6 +462,21 @@ All stories are browsable in Storybook. Each entry has a **Playground** story wi
 | Example Pages | HomeScreen | — | Dashboard with sidebar (deployments + activity) or stacked (cashflow + transactions) layout |
 | Example Pages | Login | — | Standard email + password, passwordless OTP, and email + 2FA authenticator login flows |
 | Example Pages | Register | — | Single-step and multi-step (with OTP verification) registration flows |
+
+---
+
+## Contributing
+
+PRs and issues are welcome. The CI gate runs TypeScript, build, and interaction tests in both light and dark mode on every push and PR.
+
+```bash
+pnpm storybook              # develop with hot reload
+pnpm test-storybook:light   # run tests locally (light)
+pnpm test-storybook:dark    # run tests locally (dark)
+pnpm typecheck              # type-check
+```
+
+> **Logo** — `assets/gp-logo.*` is proprietary and excluded from the MIT licence. All other files are MIT.
 
 ---
 
