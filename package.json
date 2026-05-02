@@ -7,7 +7,7 @@
   "homepage": "https://github.com/GoldenPassport/ds#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoldenPassport/ds.git"
+    "url": "git+https://github.com/GoldenPassport/ds.git"
   },
   "bugs": {
     "url": "https://github.com/GoldenPassport/ds/issues"
@@ -108,5 +108,8 @@
     "@tippyjs/react": "^4.2.6",
     "tippy.js": "^6.3.7"
   },
-  "pnpm": {}
+  "pnpm": {
+    "shamefullyHoist": true,
+    "autoInstallPeers": true
+  }
 }
