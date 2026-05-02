@@ -4,7 +4,7 @@ import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { SkipTo } from '../components/SkipTo';
 
 const meta = {
-  title: 'Accessibility/SkipTo',
+  title: 'Navigation/SkipTo',
   component: SkipTo,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },

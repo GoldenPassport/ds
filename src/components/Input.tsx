@@ -40,6 +40,13 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
    * When unset the component behaves as before: only the `error` prop is displayed.
    */
   validate?: 'onBlur' | 'onSubmit' | 'both';
+  /**
+   * Reserve the hint/error line height even when no hint or error is present.
+   * Keeps stacked form fields from shifting when messages appear.
+   * Default `true`. Set to `false` when using Input standalone (e.g. inside a panel)
+   * so the invisible spacer does not unbalance surrounding padding.
+   */
+  reserveHintSpace?: boolean;
 }
 
 export function Input({
@@ -57,6 +64,7 @@ export function Input({
   className = '',
   id,
   validate,
+  reserveHintSpace = true,
   onBlur: userOnBlur,
   onChange: userOnChange,
   ...props
@@ -248,19 +256,22 @@ export function Input({
       {inputRow}
 
       {/*
-        Always rendered so the line height is permanently reserved — errors
-        appearing or disappearing never shift other fields down the page.
+        Rendered to reserve line height so errors/hints appearing never shift
+        other fields. Opt out via reserveHintSpace={false} for standalone inputs
+        (e.g. inside panels) where the invisible spacer would unbalance padding.
       */}
-      <p
-        id={error ? `${inputId}-error` : `${inputId}-hint`}
-        role={error ? 'alert' : undefined}
-        className={[
-          'min-h-4 text-xs font-body leading-none',
-          error ? 'text-red-700 dark:text-red-400' : 'text-ink-500 dark:text-ink-300',
-        ].join(' ')}
-      >
-        {error || hint || ''}
-      </p>
+      {(reserveHintSpace || error || hint) && (
+        <p
+          id={error ? `${inputId}-error` : `${inputId}-hint`}
+          role={error ? 'alert' : undefined}
+          className={[
+            'min-h-4 text-xs font-body leading-none',
+            error ? 'text-red-700 dark:text-red-400' : 'text-ink-500 dark:text-ink-300',
+          ].join(' ')}
+        >
+          {error || hint || ''}
+        </p>
+      )}
     </div>
   );
 }

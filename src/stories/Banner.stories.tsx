@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Banner } from '../components/Banner';
 
 const meta = {
-  title: 'Marketing/Banner',
+  title: 'Forms/Banner',
   component: Banner,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },

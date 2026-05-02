@@ -97,6 +97,7 @@ export const WithInput: Story = {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="max-w-xs"
+              reserveHintSpace={false}
             />
             <Button variant="primary">Save</Button>
           </div>

@@ -91,6 +91,26 @@ export const Typefaces = {
         ))}
       </Section>
 
+      {/* Headings */}
+      <Section title="Headings">
+        {(
+          [
+            { tag: 'h1', cls: 'text-5xl font-bold font-display tracking-tight',     token: 'text-5xl · 3rem · 48px' },
+            { tag: 'h2', cls: 'text-4xl font-bold font-display tracking-tight',     token: 'text-4xl · 2.25rem · 36px' },
+            { tag: 'h3', cls: 'text-3xl font-bold font-display tracking-tight',     token: 'text-3xl · 1.875rem · 30px' },
+            { tag: 'h4', cls: 'text-2xl font-semibold font-display tracking-tight', token: 'text-2xl · 1.5rem · 24px' },
+            { tag: 'h5', cls: 'text-xl font-semibold font-display',                 token: 'text-xl · 1.25rem · 20px' },
+            { tag: 'h6', cls: 'text-lg font-semibold font-display',                 token: 'text-lg · 1.125rem · 18px' },
+          ] as { tag: 'h1'|'h2'|'h3'|'h4'|'h5'|'h6'; cls: string; token: string }[]
+        ).map(({ tag: Tag, cls, token }) => (
+          <Row key={Tag} label={`<${Tag}>  ·  ${token}`}>
+            <Tag className={`${cls} text-ink-900 dark:text-ink-50 leading-tight`}>
+              The quick brown fox
+            </Tag>
+          </Row>
+        ))}
+      </Section>
+
       {/* Font weights */}
       <Section title="Font Weights">
         {[

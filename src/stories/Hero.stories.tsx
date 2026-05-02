@@ -5,7 +5,7 @@ import gpLogo from '../../assets/gp-logo.png';
 import { Button } from '../components/Button';
 
 const meta = {
-  title: 'Page Sections/Hero',
+  title: 'Example Sections/Hero',
   parameters: { layout: 'fullscreen' },
 } satisfies Meta;
 

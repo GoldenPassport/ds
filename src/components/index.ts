@@ -21,6 +21,7 @@ export { Hyperlink } from './Hyperlink';
 export { Alert } from './Alert';
 export { ErrorPage } from './ErrorPage';
 export { Divider } from './Divider';
+export { Blockquote } from './Blockquote';
 export { Button } from './Button';
 export { Banner } from './Banner';
 export { Badge } from './Badge';
@@ -110,6 +111,7 @@ export type { ErrorPageProps, ErrorPageVariant, ErrorPageAction } from './ErrorP
 export type { DividerProps, DividerOrientation, DividerAlign } from './Divider';
 export type { ButtonProps, ButtonVariant, ButtonSize, ButtonRadius } from './Button';
 export type { BannerProps, BannerVariant, BannerAction } from './Banner';
+export type { BlockquoteProps, BlockquoteVariant, BlockquoteSize } from './Blockquote';
 export type { BadgeProps, BadgeVariant } from './Badge';
 export type { AvatarProps } from './Avatar';
 export type { InputProps } from './Input';

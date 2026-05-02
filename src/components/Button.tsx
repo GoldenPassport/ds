@@ -29,7 +29,7 @@ const variantClasses: Record<ButtonVariant, string> = {
 // Padding + font size only — no rounded (applied separately via radius)
 const sizeClasses: Record<ButtonSize, string> = {
   sm: 'px-3.5 py-1.5 text-xs gap-1',
-  md: 'px-[18px] py-[9px] text-sm gap-1.5',
+  md: 'px-[18px] py-2.5 text-sm gap-1.5',
   lg: 'px-6 py-3.5 text-base gap-2',
 };
 

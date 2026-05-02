@@ -5,7 +5,7 @@ import { Chat } from '../components/Chat';
 import type { ChatMessage } from '../components/Chat';
 
 const meta = {
-  title: 'Messaging/Chat',
+  title: 'Lists/Chat',
   component: Chat,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
