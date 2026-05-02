@@ -76,10 +76,11 @@ function PageScaffold({
 
 export const Playground: Story = {
   render: (args) => (
-    <PageScaffold skipTo={<SkipTo {...args} shortcut="" />} />
+    <PageScaffold skipTo={<SkipTo {...args} />} />
   ),
   args: {
     label:         'Skip To…',
+    shortcut:      'alt+0',
     headingLevels: [1, 2, 3],
   },
 };
@@ -144,11 +145,21 @@ export const Default: Story = {
       await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
     });
 
-    await step('Enter reopens; click "Main: Main content" → focus jumps to #main-content', async () => {
+    await step('Enter reopens; navigate to "Main: Main content" with Enter → focus jumps to #main-content, menu closes', async () => {
       await user.keyboard('{Enter}');
       await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
-      const mainItem = within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Main: Main content' });
-      await user.click(mainItem);
+      // Arrow down to the "Main: Main content" item (index 3 in landmark group).
+      await user.keyboard('{ArrowDown}'); // Banner
+      await user.keyboard('{ArrowDown}'); // Navigation: Main Menu
+      await user.keyboard('{ArrowDown}'); // Search: Site search
+      await user.keyboard('{ArrowDown}'); // Main: Main content
+      await waitFor(() =>
+        expect(within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Main: Main content' })).toHaveFocus()
+      );
+      await user.keyboard('{Enter}');
+      // Menu must close on activation.
+      await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+      // Focus must land on the target page element.
       await waitFor(() => {
         const mainEl = canvasElement.querySelector<HTMLElement>('#main-content');
         expect(document.activeElement).toBe(mainEl);

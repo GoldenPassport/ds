@@ -1,7 +1,3 @@
-# Logo — proprietary, not covered by the MIT licence
-assets/gp-logo.png
-assets/gp-logo-2x.png
-
 node_modules/
 dist/
 storybook-static/
