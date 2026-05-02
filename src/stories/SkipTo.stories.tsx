@@ -1,3 +1,4 @@
+import React, { useRef, useState, useEffect } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { SkipTo } from '../components/SkipTo';
@@ -184,10 +185,15 @@ export const CustomLabelShortcut: Story = {
 export const NoLandmarks: Story = {
   name: 'Fallback — no landmarks found',
   render: () => {
-    // A minimal container with no semantic landmarks so the fallback message shows.
+    // Scope the scan to this container so Storybook's own injected headings
+    // (e.g. <h1>No Preview</h1>) don't appear in the menu.
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [root, setRoot] = useState<HTMLElement | null>(null);
+    useEffect(() => { setRoot(containerRef.current); }, []);
+
     return (
-      <div className="p-8 bg-ink-50 dark:bg-ink-900 min-h-[200px]">
-        <SkipTo shortcut="" />
+      <div ref={containerRef} className="p-8 bg-ink-50 dark:bg-ink-900 min-h-[200px]">
+        <SkipTo shortcut="" root={root} />
         <p className="text-sm text-ink-500 dark:text-ink-300">
           This page has no landmark regions or headings — the menu shows the empty state.
         </p>
