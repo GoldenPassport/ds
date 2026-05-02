@@ -101,10 +101,15 @@ export const Default: Story = {
       expect(btn).toHaveClass('-translate-y-full');
     });
 
-    await step('Tab → button receives focus; menu opens; focus stays on button', async () => {
+    await step('Tab → button slides into view; menu stays closed', async () => {
       await user.tab();
       await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
-      expect(canvas.getByRole('menu')).toBeInTheDocument();
+      expect(canvas.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    await step('Enter → submenu opens', async () => {
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
     });
 
     await step('menu lists landmark regions', async () => {
@@ -121,9 +126,8 @@ export const Default: Story = {
       expect(within(menu).getByRole('menuitem', { name: 'Deployments' })).toBeInTheDocument();
     });
 
-    await step('ArrowDown from button → first menu item focused', async () => {
-      const menu  = canvas.getByRole('menu');
-      const items = within(menu).getAllByRole('menuitem');
+    await step('ArrowDown → first menu item focused', async () => {
+      const items = within(canvas.getByRole('menu')).getAllByRole('menuitem');
       await user.keyboard('{ArrowDown}');
       await waitFor(() => expect(items[0]).toHaveFocus());
     });
@@ -134,14 +138,13 @@ export const Default: Story = {
       await waitFor(() => expect(items[1]).toHaveFocus());
     });
 
-    await step('Escape closes menu and returns focus to button', async () => {
+    await step('Escape → closes submenu, returns focus to button', async () => {
       await user.keyboard('{Escape}');
       await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
       await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
     });
 
-    await step('click "Main" landmark → #main-content receives focus', async () => {
-      // Re-open via Enter
+    await step('Enter reopens; click "Main: Main content" → focus jumps to #main-content', async () => {
       await user.keyboard('{Enter}');
       await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
       const mainItem = within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Main: Main content' });
@@ -204,12 +207,15 @@ export const NoLandmarks: Story = {
     const canvas = within(canvasElement);
     const user   = userEvent.setup();
 
-    await step('Tab opens the menu', async () => {
+    await step('Tab → button visible, menu closed', async () => {
       await user.tab();
-      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+      expect(canvas.queryByRole('menu')).not.toBeInTheDocument();
     });
 
-    await step('fallback message is shown', async () => {
+    await step('Enter → menu opens with fallback message', async () => {
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
       expect(canvas.getByText(/no landmarks or headings found/i)).toBeInTheDocument();
     });
   },

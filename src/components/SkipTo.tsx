@@ -285,8 +285,7 @@ export function SkipTo({
   function handleMenuKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     const items  = itemsRef.current.filter(Boolean);
     const active = document.activeElement;
-    const idx    = items.findIndex((el) => el === active);
-    const isInItems = idx !== -1;
+    const idx = items.findIndex((el) => el === active);
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -297,12 +296,11 @@ export function SkipTo({
     } else if (e.key === 'Escape') {
       e.preventDefault();
       closeMenu();
-    } else if (e.key === 'Tab' && isInItems) {
-      // Tab from inside the list closes and returns focus to button.
-      e.preventDefault();
-      closeMenu();
+    } else if (e.key === 'Tab') {
+      // Tab always propagates so the browser moves focus to the next element.
+      // Close the menu without stealing focus — onBlur handles cleanup too.
+      if (open) closeMenu(false);
     }
-    // Tab while button is focused: let it propagate — closes via onBlur below.
   }
 
   // ── Activate an item ───────────────────────────────────
@@ -336,7 +334,6 @@ export function SkipTo({
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => (open ? closeMenu() : openMenu())}
-        onFocus={() => { if (!open) openMenu(); }}
         className={[
           // Off-screen until focused
           '-translate-y-full focus:translate-y-0',
