@@ -8,7 +8,16 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   splitting: false,
-  external: ['react', 'react-dom', '@headlessui/react', 'tailwindcss'],
+  external: [
+    'react',
+    'react-dom',
+    '@headlessui/react',
+    '@floating-ui/react',
+    'lucide-react',
+    '@tippyjs/react',
+    'tippy.js',
+    'tailwindcss',
+  ],
   esbuildOptions(options, context) {
     if (context.format === 'esm') {
       options.banner = { js: '"use client";' };
