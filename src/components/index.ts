@@ -1,6 +1,6 @@
 // Primitive components
 export { SkipTo } from './SkipTo';
-export type { SkipToProps, SkipLink } from './SkipTo';
+export type { SkipToProps } from './SkipTo';
 export { ActionPanel } from './ActionPanel';
 export { ListCard } from './ListCard';
 export { SectionHeader } from './SectionHeader';

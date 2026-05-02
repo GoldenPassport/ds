@@ -8,212 +8,200 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
-    links: { control: false },
+    label:         { control: 'text' },
+    shortcut:      { control: 'text' },
+    headingLevels: { control: false },
+    root:          { control: false },
   },
 } satisfies Meta<typeof SkipTo>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// ── Shared page scaffold ──────────────────────────────────
+
+function PageScaffold({
+  children,
+  skipTo,
+}: {
+  children?: React.ReactNode;
+  skipTo?: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen flex flex-col bg-ink-50 dark:bg-ink-900 font-body">
+      {skipTo}
+
+      <header role="banner" className="px-6 py-3 bg-white dark:bg-ink-800 border-b border-ink-200 dark:border-ink-700 flex items-center justify-between">
+        <span className="font-bold font-display text-sm text-ink-900 dark:text-ink-50">Golden Passport</span>
+        <nav id="site-nav" aria-label="Main Menu">
+          {['Dashboard', 'Workflows', 'Team', 'Settings'].map((item) => (
+            <a key={item} href="#" className="ml-4 text-sm text-ink-500 dark:text-ink-300 hover:underline">{item}</a>
+          ))}
+        </nav>
+        <div role="search" aria-label="Site search">
+          <input
+            type="search"
+            placeholder="Search…"
+            aria-label="Search"
+            className="text-xs border border-ink-200 dark:border-ink-700 rounded-lg px-2 py-1 bg-white dark:bg-ink-900 text-ink-700 dark:text-ink-300 outline-none focus:ring-1 focus:ring-primary-500"
+          />
+        </div>
+      </header>
+
+      <main id="main-content" className="flex-1 p-8 outline-none" tabIndex={-1} aria-label="Main content">
+        <h1 className="text-2xl font-bold font-display text-ink-900 dark:text-ink-50">Dashboard</h1>
+
+        <h2 className="mt-6 text-lg font-semibold font-display text-ink-900 dark:text-ink-50">Recent activity</h2>
+        <p className="mt-1 text-sm text-ink-500 dark:text-ink-300">Your last 7 days at a glance.</p>
+
+        <h2 className="mt-6 text-lg font-semibold font-display text-ink-900 dark:text-ink-50">Deployments</h2>
+        <h3 className="mt-3 text-base font-semibold font-display text-ink-700 dark:text-ink-200">Production</h3>
+        <p className="mt-1 text-sm text-ink-500 dark:text-ink-300">4 deployments this week.</p>
+        <h3 className="mt-3 text-base font-semibold font-display text-ink-700 dark:text-ink-200">Staging</h3>
+        <p className="mt-1 text-sm text-ink-500 dark:text-ink-300">12 deployments this week.</p>
+
+        {children}
+      </main>
+
+      <aside aria-label="Notifications" className="hidden">Aside content</aside>
+      <footer role="contentinfo" className="px-6 py-3 border-t border-ink-200 dark:border-ink-700 text-xs text-ink-400 dark:text-ink-500">
+        © 2025 Golden Passport
+      </footer>
+    </div>
+  );
+}
+
 // ── Playground ────────────────────────────────────────────
 
 export const Playground: Story = {
-  render: () => (
-    <div className="min-h-screen bg-ink-50 dark:bg-ink-900">
-      <SkipTo />
-      <nav
-        id="site-nav"
-        tabIndex={-1}
-        className="px-6 py-4 bg-white dark:bg-ink-800 border-b border-ink-200 dark:border-ink-700 flex items-center gap-4"
-      >
-        <span className="font-semibold font-display text-ink-900 dark:text-ink-50 text-sm">
-          My App
-        </span>
-        <a href="#" className="text-sm font-body text-ink-500 dark:text-ink-300 hover:underline">Dashboard</a>
-        <a href="#" className="text-sm font-body text-ink-500 dark:text-ink-300 hover:underline">Settings</a>
-      </nav>
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="p-8 outline-none"
-      >
-        <p className="text-sm font-body text-ink-500 dark:text-ink-300">
-          Press <kbd className="px-1.5 py-0.5 rounded bg-ink-100 dark:bg-ink-700 font-mono text-xs text-ink-700 dark:text-ink-300">Tab</kbd> to reveal the skip link, then <kbd className="px-1.5 py-0.5 rounded bg-ink-100 dark:bg-ink-700 font-mono text-xs text-ink-700 dark:text-ink-300">Enter</kbd> to activate it.
-        </p>
-        <h1 className="mt-4 text-2xl font-bold font-display text-ink-900 dark:text-ink-50">
-          Main content
-        </h1>
-        <p className="mt-2 text-sm font-body text-ink-500 dark:text-ink-300">
-          Focus lands here when the skip link is activated.
-        </p>
-      </main>
-    </div>
+  render: (args) => (
+    <PageScaffold skipTo={<SkipTo {...args} shortcut="" />} />
   ),
+  args: {
+    label:         'Skip To…',
+    headingLevels: [1, 2, 3],
+  },
 };
 
-// ── Default — single link ─────────────────────────────────
+// ── Default ───────────────────────────────────────────────
 
 export const Default: Story = {
-  name: 'Default (single link)',
+  name: 'Default',
   render: () => (
-    <div className="min-h-[200px] bg-ink-50 dark:bg-ink-900 relative">
-      <SkipTo />
-      <div className="pt-12 px-6">
-        <p className="text-xs font-body text-ink-500 dark:text-ink-300">
-          Tab into this frame to reveal the skip link at the top.
-        </p>
-        <main id="main-content" tabIndex={-1} className="mt-4 outline-none">
-          <p data-testid="main-label" className="text-xs font-mono text-ink-500 dark:text-ink-300">
-            #main-content
-          </p>
-        </main>
-      </div>
-    </div>
+    <PageScaffold skipTo={<SkipTo shortcut="" />} />
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const user = userEvent.setup();
+    const user   = userEvent.setup();
 
-    await step('link is initially off-screen (translate-y-full)', async () => {
-      const link = canvas.getByRole('link', { name: 'Skip to main content' });
-      // Element is in DOM and accessible tree but shifted out of viewport
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveClass('-translate-y-full');
+    await step('button is off-screen before Tab', async () => {
+      const btn = canvas.getByRole('button', { name: /skip to/i });
+      expect(btn).toBeInTheDocument();
+      expect(btn).toHaveClass('-translate-y-full');
     });
 
-    await step('Tab → link receives focus → slides into view', async () => {
+    await step('Tab → button receives focus and menu opens', async () => {
       await user.tab();
-      const link = canvas.getByRole('link', { name: 'Skip to main content' });
-      await waitFor(() => expect(link).toHaveFocus());
-      // focus:translate-y-0 is applied via Tailwind's focus variant
-      expect(link).toHaveAttribute('href', '#main-content');
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
     });
 
-    await step('Enter → focus moves to #main-content', async () => {
+    await step('menu lists landmark regions', async () => {
+      // Banner, Main Menu nav, Site search, Main, Notifications aside, Footer
+      const menu = canvas.getByRole('menu');
+      expect(within(menu).getByText(/Landmark Regions/)).toBeInTheDocument();
+      expect(within(menu).getByRole('menuitem', { name: /Main/i })).toBeInTheDocument();
+      expect(within(menu).getByRole('menuitem', { name: /Main Menu/i })).toBeInTheDocument();
+    });
+
+    await step('menu lists headings in main region', async () => {
+      const menu = canvas.getByRole('menu');
+      expect(within(menu).getByText(/Headings in Main Region/)).toBeInTheDocument();
+      expect(within(menu).getByRole('menuitem', { name: /Dashboard/i })).toBeInTheDocument();
+      expect(within(menu).getByRole('menuitem', { name: /Deployments/i })).toBeInTheDocument();
+    });
+
+    await step('ArrowDown moves focus through menu items', async () => {
+      const menu  = canvas.getByRole('menu');
+      const items = within(menu).getAllByRole('menuitem');
+      // Focus starts on first item after menu opens
+      await waitFor(() => expect(items[0]).toHaveFocus());
+      await user.keyboard('{ArrowDown}');
+      await waitFor(() => expect(items[1]).toHaveFocus());
+    });
+
+    await step('Escape closes menu and returns focus to button', async () => {
+      await user.keyboard('{Escape}');
+      await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeInTheDocument());
+      await waitFor(() => expect(canvas.getByRole('button', { name: /skip to/i })).toHaveFocus());
+    });
+
+    await step('click "Main" landmark → #main-content receives focus', async () => {
+      // Re-open
       await user.keyboard('{Enter}');
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+      const mainItem = within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Main' });
+      await user.click(mainItem);
       await waitFor(() => {
-        const main = canvasElement.querySelector('#main-content') as HTMLElement;
-        expect(document.activeElement).toBe(main);
+        const mainEl = canvasElement.querySelector<HTMLElement>('#main-content');
+        expect(document.activeElement).toBe(mainEl);
       });
     });
   },
 };
 
-// ── Multiple skip targets ─────────────────────────────────
+// ── Multiple heading levels ───────────────────────────────
 
-export const MultipleLinks: Story = {
-  name: 'Multiple skip targets',
+export const AllHeadingLevels: Story = {
+  name: 'All heading levels (h1–h6)',
   render: () => (
-    <div className="min-h-[200px] bg-ink-50 dark:bg-ink-900 relative">
-      <SkipTo
-        links={[
-          { label: 'Skip to main content', target: '#main-content' },
-          { label: 'Skip to navigation',   target: '#site-nav' },
-          { label: 'Skip to search',        target: '#search' },
-        ]}
-      />
-      <div className="pt-12 px-6 flex flex-col gap-3">
-        <nav id="site-nav" tabIndex={-1} className="outline-none">
-          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">#site-nav</p>
-        </nav>
-        <div id="search" tabIndex={-1} className="outline-none">
-          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">#search</p>
-        </div>
-        <main id="main-content" tabIndex={-1} className="outline-none">
-          <p className="text-xs font-mono text-ink-500 dark:text-ink-300">#main-content</p>
-        </main>
-      </div>
-    </div>
+    <PageScaffold
+      skipTo={<SkipTo shortcut="" headingLevels={[1, 2, 3, 4, 5, 6]} />}
+    >
+      <h4 className="mt-4 text-sm font-semibold font-display text-ink-700 dark:text-ink-200">Canary</h4>
+      <h5 className="mt-2 text-sm font-medium font-display text-ink-600 dark:text-ink-300">Region A</h5>
+      <h6 className="mt-1 text-xs font-medium font-display text-ink-500 dark:text-ink-400">Sub-region A.1</h6>
+    </PageScaffold>
   ),
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const user = userEvent.setup();
-
-    await step('all three skip links are in the DOM', async () => {
-      expect(canvas.getByRole('link', { name: 'Skip to main content' })).toBeInTheDocument();
-      expect(canvas.getByRole('link', { name: 'Skip to navigation' })).toBeInTheDocument();
-      expect(canvas.getByRole('link', { name: 'Skip to search' })).toBeInTheDocument();
-    });
-
-    await step('Tab → first link focused', async () => {
-      await user.tab();
-      await waitFor(() =>
-        expect(canvas.getByRole('link', { name: 'Skip to main content' })).toHaveFocus(),
-      );
-    });
-
-    await step('Tab → second link focused', async () => {
-      await user.tab();
-      await waitFor(() =>
-        expect(canvas.getByRole('link', { name: 'Skip to navigation' })).toHaveFocus(),
-      );
-    });
-
-    await step('Tab → third link focused', async () => {
-      await user.tab();
-      await waitFor(() =>
-        expect(canvas.getByRole('link', { name: 'Skip to search' })).toHaveFocus(),
-      );
-    });
-
-    await step('Enter on "Skip to search" → #search receives focus', async () => {
-      await user.keyboard('{Enter}');
-      await waitFor(() => {
-        const target = canvasElement.querySelector('#search') as HTMLElement;
-        expect(document.activeElement).toBe(target);
-      });
-    });
-  },
 };
 
-// ── In-page layout context ────────────────────────────────
-// Shows SkipTo as it would appear in a real app — Navbar, sidebar, main.
+// ── Custom label & shortcut ───────────────────────────────
 
-export const InPageLayout: Story = {
-  name: 'In-page layout',
+export const CustomLabelShortcut: Story = {
+  name: 'Custom label & shortcut',
   render: () => (
-    <div className="min-h-screen flex flex-col bg-ink-50 dark:bg-ink-900">
-      <SkipTo
-        links={[
-          { label: 'Skip to main content', target: '#main-content' },
-          { label: 'Skip to navigation',   target: '#site-nav' },
-        ]}
-      />
-
-      {/* Top navigation */}
-      <header className="bg-white dark:bg-ink-800 border-b border-ink-200 dark:border-ink-700 px-6 py-3 flex items-center justify-between">
-        <span className="font-bold font-display text-ink-900 dark:text-ink-50 text-sm">
-          Golden Passport
-        </span>
-        <nav id="site-nav" tabIndex={-1} className="flex gap-4 outline-none" aria-label="Site navigation">
-          {['Dashboard', 'Workflows', 'Team', 'Settings'].map((item) => (
-            <a
-              key={item}
-              href="#"
-              className="text-sm font-body text-ink-500 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50 hover:underline"
-            >
-              {item}
-            </a>
-          ))}
-        </nav>
-      </header>
-
-      {/* Page body */}
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="flex-1 p-8 outline-none"
-        aria-label="Main content"
-      >
-        <h1 className="text-xl font-bold font-display text-ink-900 dark:text-ink-50">
-          Dashboard
-        </h1>
-        <p className="mt-2 text-sm font-body text-ink-500 dark:text-ink-300 max-w-prose">
-          Keyboard users can press <kbd className="px-1.5 py-0.5 rounded bg-ink-100 dark:bg-ink-700 font-mono text-xs text-ink-700 dark:text-ink-300">Tab</kbd> to
-          reveal skip links at the top of the page, bypassing repeated navigation
-          on every page load — satisfying WCAG 2.4.1 Bypass Blocks (Level A).
-        </p>
-      </main>
-    </div>
+    <PageScaffold
+      skipTo={<SkipTo label="Navigate to…" shortcut="alt+1" />}
+    />
   ),
+};
+
+// ── No landmarks fallback ─────────────────────────────────
+
+export const NoLandmarks: Story = {
+  name: 'Fallback — no landmarks found',
+  render: () => {
+    // A minimal container with no semantic landmarks so the fallback message shows.
+    return (
+      <div className="p-8 bg-ink-50 dark:bg-ink-900 min-h-[200px]">
+        <SkipTo shortcut="" />
+        <p className="text-sm text-ink-500 dark:text-ink-300">
+          This page has no landmark regions or headings — the menu shows the empty state.
+        </p>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const user   = userEvent.setup();
+
+    await step('Tab opens the menu', async () => {
+      await user.tab();
+      await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
+    });
+
+    await step('fallback message is shown', async () => {
+      expect(canvas.getByText(/no landmarks or headings found/i)).toBeInTheDocument();
+    });
+  },
 };
