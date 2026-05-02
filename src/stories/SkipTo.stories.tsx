@@ -109,15 +109,15 @@ export const Default: Story = {
     await step('menu lists landmark regions', async () => {
       const menu = canvas.getByRole('menu');
       expect(within(menu).getByText(/Landmark Regions/)).toBeInTheDocument();
-      expect(within(menu).getByRole('menuitem', { name: /Main/i })).toBeInTheDocument();
-      expect(within(menu).getByRole('menuitem', { name: /Main Menu/i })).toBeInTheDocument();
+      expect(within(menu).getByRole('menuitem', { name: 'Main: Main content' })).toBeInTheDocument();
+      expect(within(menu).getByRole('menuitem', { name: 'Navigation: Main Menu' })).toBeInTheDocument();
     });
 
     await step('menu lists headings in main region', async () => {
       const menu = canvas.getByRole('menu');
       expect(within(menu).getByText(/Headings in Main Region/)).toBeInTheDocument();
-      expect(within(menu).getByRole('menuitem', { name: /Dashboard/i })).toBeInTheDocument();
-      expect(within(menu).getByRole('menuitem', { name: /Deployments/i })).toBeInTheDocument();
+      expect(within(menu).getByRole('menuitem', { name: 'Dashboard' })).toBeInTheDocument();
+      expect(within(menu).getByRole('menuitem', { name: 'Deployments' })).toBeInTheDocument();
     });
 
     await step('ArrowDown from button → first menu item focused', async () => {
@@ -143,7 +143,7 @@ export const Default: Story = {
       // Re-open via Enter
       await user.keyboard('{Enter}');
       await waitFor(() => expect(canvas.getByRole('menu')).toBeInTheDocument());
-      const mainItem = within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Main' });
+      const mainItem = within(canvas.getByRole('menu')).getByRole('menuitem', { name: 'Main: Main content' });
       await user.click(mainItem);
       await waitFor(() => {
         const mainEl = canvasElement.querySelector<HTMLElement>('#main-content');
